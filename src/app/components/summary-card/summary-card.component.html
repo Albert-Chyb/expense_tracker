@@ -1,0 +1,17 @@
+<section class="summary" [ngClass]="classes">
+	<h2 class="summary__title">
+		<ng-content select=".title"></ng-content>
+	</h2>
+
+	<p class="summary__amount">
+		<ng-content select=".amount"></ng-content>
+	</p>
+
+	<span class="summary__currency">
+		<ng-content select=".currency"></ng-content>
+	</span>
+
+	<span class="summary__icon">
+		<ng-content select=".icon"></ng-content>
+	</span>
+</section>

@@ -1,0 +1,89 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+.summary {
+  border-radius: rem(25px);
+  box-shadow: rem(-3px) rem(4px) rem(7px) rgba(0, 0, 0, 0.25);
+  display: grid;
+
+  &--big {
+    grid-template-areas:
+      'title currency'
+      'amount currency'
+    ;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    column-gap: rem(25px);
+    padding: rem(30px);
+
+    & .summary__icon {
+      display: none;
+    }
+  }
+
+  &--small {
+    grid-template-areas:
+      'icon title'
+      'icon amount'
+    ;
+    grid-template-columns: rem(50px) minmax(rem(90px), 6fr);
+    grid-template-rows: repeat(2, 1fr);
+    row-gap: rem(5px);
+    column-gap: rem(10px);
+    padding: rem(15px) rem(10px);
+
+    & .summary__currency {
+      display: none;
+    }
+
+    & .summary__amount {
+      font-size: rem(20px);
+    }
+  }
+
+  &--primary {
+    @include summaryCardTheme($colorPrimary, $textOnPrimaryColor, #6C6C6C);
+  }
+
+  &--secondary {
+    @include summaryCardTheme($colorSecondary, $textOnSecondaryColor, #F8F1FE);
+  }
+
+  &--danger {
+    @include summaryCardTheme($colorDanger, $textOnDangerColor, #F8F1FE);
+  }
+
+  &--success {
+    @include summaryCardTheme($colorSuccess, $textOnSuccessColor, #F8F1FE);
+  }
+
+  &--warning {
+    @include summaryCardTheme($colorWarning, $textOnWarning, $textOnWarning);
+  }
+
+  &__title {
+    grid-area: title;
+    font-size: rem(16px);
+    font-weight: normal;
+  }
+
+  &__amount {
+    grid-area: amount;
+    font-size: rem(30px);
+    font-weight: bold;
+    @include ellipsis();
+  }
+
+  &__currency {
+    grid-area: currency;
+    font-size: rem(40px);
+    place-self: center;
+  }
+
+  &__icon {
+    grid-area: icon;
+    place-self: center;
+    font-size: rem(26px);
+  }
+}

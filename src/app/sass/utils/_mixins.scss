@@ -1,0 +1,23 @@
+@mixin summaryCardTheme($bgColor, $textColor, $subtleTextColor) {
+  background-color: $bgColor;
+  color: $textColor;
+
+  & .summary__title {
+    color: $subtleTextColor;
+  }
+
+  & .summary__icon {
+    color: $subtleTextColor;
+  }
+
+  & .summary__currency {
+    color: $subtleTextColor;
+
+  }
+}
+
+@mixin ellipsis() {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

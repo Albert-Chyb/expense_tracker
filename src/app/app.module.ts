@@ -6,9 +6,11 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HomeComponent } from './pages/home/home.component';
+import { SummaryCardComponent } from './components/summary-card/summary-card.component';
 
 @NgModule({
-	declarations: [AppComponent],
+	declarations: [AppComponent, HomeComponent, SummaryCardComponent],
 	imports: [
 		BrowserModule,
 		AppRoutingModule,
