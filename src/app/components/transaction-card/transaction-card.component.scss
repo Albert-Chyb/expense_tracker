@@ -4,13 +4,13 @@
 
 .transaction {
   display: grid;
-  grid-template-columns: rem(50px) auto rem(60px);
+  grid-template-columns: rem(50px) auto minmax(rem(60px), rem(80px));
   grid-template-rows: repeat(2, 1fr);
   grid-template-areas:
     'icon title amount'
     'icon description amount'
   ;
-  column-gap: rem(20px);
+  column-gap: rem(10px);
   background-color: #F3F3F3;
   padding: rem(15px);
   border-radius: rem(15px);

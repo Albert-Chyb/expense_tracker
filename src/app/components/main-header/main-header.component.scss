@@ -5,13 +5,16 @@
 .header {
   display: grid;
   grid-template-columns: rem(50px) auto rem(40px);
-  margin: rem(15px) 0px;
+  padding: rem(15px) 0px;
   font-size: rem(26px);
-  position: sticky;
+  position: fixed;
   top: 0px;
+  left: 0px;
   z-index: 99;
   background-color: #FFF;
   padding: rem(20px) rem(30px);
+  width: 100vw;
+  height: rem(72px);
 
   &__icon {
 
