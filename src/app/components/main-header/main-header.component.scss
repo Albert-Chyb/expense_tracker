@@ -1,0 +1,31 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+.header {
+  display: grid;
+  grid-template-columns: rem(50px) auto rem(40px);
+  margin: rem(15px) 0px;
+  font-size: rem(26px);
+  position: sticky;
+  top: 0px;
+  z-index: 99;
+  background-color: #FFF;
+  padding: rem(20px) rem(30px);
+
+  &__icon {
+
+    &:last-child {
+      justify-self: end;
+    }
+  }
+
+  &__heading {
+    font-weight: bold;
+    font-size: inherit;
+  }
+
+  @media screen and (max-width: 375px) {
+    font-size: rem(24px);
+  }
+}

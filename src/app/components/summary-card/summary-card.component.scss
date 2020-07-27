@@ -6,6 +6,7 @@
   border-radius: rem(25px);
   box-shadow: rem(-3px) rem(4px) rem(7px) rgba(0, 0, 0, 0.25);
   display: grid;
+  font-size: 1rem;
 
   &--big {
     grid-template-areas:
@@ -27,7 +28,7 @@
       'icon title'
       'icon amount'
     ;
-    grid-template-columns: rem(50px) minmax(rem(90px), 6fr);
+    grid-template-columns: rem(35px) minmax(rem(90px), auto);
     grid-template-rows: repeat(2, 1fr);
     row-gap: rem(5px);
     column-gap: rem(10px);
@@ -38,7 +39,7 @@
     }
 
     & .summary__amount {
-      font-size: rem(20px);
+      font-size: rem(16px);
     }
   }
 
@@ -64,7 +65,7 @@
 
   &__title {
     grid-area: title;
-    font-size: rem(16px);
+    font-size: rem(14px);
     font-weight: normal;
   }
 

@@ -1,0 +1,61 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+.transaction {
+  display: grid;
+  grid-template-columns: rem(50px) auto rem(60px);
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-areas:
+    'icon title amount'
+    'icon description amount'
+  ;
+  column-gap: rem(20px);
+  background-color: #F3F3F3;
+  padding: rem(15px);
+  border-radius: rem(15px);
+
+  &__icon-container {
+    grid-area: icon;
+    place-items: center;
+  }
+
+  &__icon {
+    border-radius: rem(15px);
+    width: rem(50px);
+    height: rem(50px);
+    text-align: center;
+    line-height: rem(50px);
+    font-size: rem(20px);
+    color: #F8F1FE;
+
+    &--income {
+      background-color: $colorSuccess;
+    }
+
+    &--outcome {
+      background-color: $colorDanger;
+    }
+  }
+
+  &__title {
+    grid-area: title;
+    align-self: center;
+    font-size: rem(14px);
+    font-weight: bold;
+  }
+
+  &__description {
+    grid-area: description;
+    color: #8C8C8C;
+    font-size: rem(12px);
+    align-self: center;
+    @include ellipsis();
+  }
+
+  &__amount {
+    grid-area: amount;
+    place-self: center;
+    font-weight: bold;
+  }
+}

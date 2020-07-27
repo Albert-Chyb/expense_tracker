@@ -1,0 +1,11 @@
+<section class="transaction">
+	<div class="transaction__icon-container">
+		<i class="fas fa-coins transaction__icon" [ngClass]="iconClasses"></i>
+	</div>
+
+	<h3 class="transaction__title">{{ transaction.group.name }}</h3>
+
+	<p class="transaction__description">{{ transaction.description }}</p>
+
+	<p class="transaction__amount">{{ transaction.amount | currency: 'PLN' }}</p>
+</section>

@@ -1,16 +1,13 @@
 <div class="summary-cards">
 	<summary-card theme="primary" type="big" class="summary-cards__balance">
 		<span class="title">Aktualny balans</span>
-		<span class="amount">12 000.35</span>
+		<span class="amount">{{ 12000.35 | currency: ' ' }}</span>
 		<span class="currency">PLN</span>
-		<span class="icon">
-			<i class="fas fa-coins"></i>
-		</span>
 	</summary-card>
 
 	<summary-card theme="danger" type="small" class="summary-cards__outcomes">
 		<span class="title">Wydatki</span>
-		<span class="amount">1689.33</span>
+		<span class="amount">{{ 1689.33 | currency: ' ' }}</span>
 		<span class="currency">PLN</span>
 		<span class="icon">
 			<i class="fas fa-long-arrow-alt-down"></i>
@@ -19,7 +16,7 @@
 
 	<summary-card theme="success" type="small" class="summary-cards__incomes">
 		<span class="title">Przychody</span>
-		<span class="amount">2634.33</span>
+		<span class="amount">{{ 2634.33 | currency: ' ' }}</span>
 		<span class="currency">PLN</span>
 		<span class="icon">
 			<i class="fas fa-long-arrow-alt-up"></i>
@@ -28,10 +25,42 @@
 
 	<summary-card theme="secondary" type="small" class="summary-cards__savings">
 		<span class="title">Zaoszczędzono</span>
-		<span class="amount">945.00</span>
+		<span class="amount">{{ 945.0 | currency: ' ' }}</span>
 		<span class="currency">PLN</span>
 		<span class="icon">
 			<i class="fas fa-piggy-bank"></i>
 		</span>
 	</summary-card>
 </div>
+
+<section class="transactions">
+	<h2 class="transactions__heading">Ostatnie wydatki</h2>
+
+	<section class="transactions__group">
+		<h3 class="transactions__heading">Dzisiaj</h3>
+
+		<ul>
+			<li
+				class="transactions__transaction"
+				*ngFor="let transaction of transactions"
+			>
+				<transaction-card [transaction]="transaction"></transaction-card>
+			</li>
+		</ul>
+	</section>
+
+	<section class="transactions__group">
+		<h3 class="transactions__heading">Wczoraj</h3>
+
+		<ul>
+			<li
+				class="transactions__transaction"
+				*ngFor="let transaction of transactions"
+			>
+				<transaction-card [transaction]="transaction"></transaction-card>
+			</li>
+		</ul>
+	</section>
+</section>
+
+<a class="btn btn--circle home__add-transaction">+</a>

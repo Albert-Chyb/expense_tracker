@@ -13,7 +13,7 @@ export interface ITransaction {
 	/**
 	 * Date of when transaction was made.
 	 */
-	data: number;
+	date: any;
 
 	/**
 	 * Description of transaction.
