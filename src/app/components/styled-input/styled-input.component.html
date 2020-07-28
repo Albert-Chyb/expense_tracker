@@ -1,0 +1,13 @@
+<div class="container">
+	<label class="styled-input" [ngClass]="classes">
+		<ng-content select="[styledInput]"></ng-content>
+
+		<span class="styled-input__label">
+			<ng-content select=".label"></ng-content>
+		</span>
+
+		<span class="styled-input__suffix">
+			<ng-content select=".suffix"></ng-content>
+		</span>
+	</label>
+</div>

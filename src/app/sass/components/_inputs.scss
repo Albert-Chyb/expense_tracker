@@ -1,0 +1,77 @@
+.styled-input {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  border-radius: rem(7px);
+  padding: rem(15px);
+  padding-left: rem(25px);
+
+  &--outline {
+    border: rem(2px) solid #E0E0E0;
+  }
+
+  &--filled {
+    background-color: #F3F3F3;
+
+    .styled-input__input:focus+.styled-input__label,
+    .styled-input__input:not(:placeholder-shown)+.styled-input__label {
+      top: rem(7px);
+    }
+
+    .styled-input__input {
+      padding-top: rem(15px);
+    }
+
+    .styled-input__label {
+      background-color: #F3F3F3;
+    }
+  }
+
+  &__suffix {
+    padding-left: rem(10px);
+    color: #909090;
+    font-weight: bold;
+  }
+
+  &__input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: rem(16px);
+    width: 100%;
+    height: 100%;
+
+    &::placeholder {
+      color: transparent;
+    }
+
+    &:focus::placeholder,
+    &:not(:placeholder-shown)::placeholder {
+      color: inherit;
+    }
+
+    &:focus+.styled-input__label,
+    &:not(:placeholder-shown)+.styled-input__label {
+      transition: .2s ease-out;
+      transform: scale(.8);
+      top: rem(-10px);
+    }
+  }
+
+  &__label {
+    position: absolute;
+    top: 50%;
+    left: 0px;
+    color: #909090;
+    background-color: #FFF;
+    margin-left: rem(25px);
+    transition-property: transform top;
+    transform: translateY(-50%);
+    transform-origin: left top;
+    transition: .2s ease-in;
+  }
+
+  textarea {
+    font-family: inherit;
+  }
+}

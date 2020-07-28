@@ -6,7 +6,7 @@
 
   &--circle {
     background-color: $colorPrimary;
-    color: $textOnPrimaryColor;
+    color: $textOnPrimaryColor !important;
     width: rem(65px);
     height: rem(65px);
     border-radius: 100%;

@@ -13,3 +13,10 @@ ul,
 ol {
   list-style-type: none;
 }
+
+a,
+a:link,
+a:visited {
+  color: currentColor;
+  text-decoration: none;
+}

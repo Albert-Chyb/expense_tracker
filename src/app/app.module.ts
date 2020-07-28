@@ -10,6 +10,9 @@ import { HomeComponent } from './pages/home/home.component';
 import { SummaryCardComponent } from './components/summary-card/summary-card.component';
 import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
+import { ManageTransactionComponent } from './pages/manage-transaction/manage-transaction.component';
+import { StyledInputComponent } from './components/styled-input/styled-input.component';
+import { StyledInputDirective } from './directives/styled-input/styled-input.directive';
 
 @NgModule({
 	declarations: [
@@ -18,6 +21,9 @@ import { MainHeaderComponent } from './components/main-header/main-header.compon
 		SummaryCardComponent,
 		TransactionCardComponent,
 		MainHeaderComponent,
+		ManageTransactionComponent,
+		StyledInputComponent,
+		StyledInputDirective,
 	],
 	imports: [
 		BrowserModule,
