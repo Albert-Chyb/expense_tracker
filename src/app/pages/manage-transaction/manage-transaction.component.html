@@ -11,12 +11,15 @@
 
 <br />
 
-<app-select>
-	<app-select-item
-		*ngFor="let group of groups"
-		[value]="group"
-		[viewValue]="'Jedzenie ' + group"
-	>
-		<transaction-group onElement="true"></transaction-group>
-	</app-select-item>
-</app-select>
+<form [formGroup]="form">
+	<app-select formControlName="group">
+		<app-select-item
+			*ngFor="let group of groups"
+			[value]="group.id"
+			[viewValue]="group.name"
+		>
+			<transaction-group onElement="true" [group]="group"></transaction-group>
+		</app-select-item>
+	</app-select>
+</form>
+{{ form.value | json }}

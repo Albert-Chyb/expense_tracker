@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControlDirective, FormControl } from '@angular/forms';
+
+import { ITransactionGroup } from './../../common/models/group';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
 	templateUrl: './manage-transaction.component.html',
@@ -9,10 +11,35 @@ export class ManageTransactionComponent implements OnInit {
 	constructor() {}
 
 	form = new FormGroup({
-		group: new FormControl(1),
+		group: new FormControl(2),
 	});
 
-	groups = [1, 2, 3];
+	groups: ITransactionGroup[] = [
+		{
+			name: 'Jedzenie',
+			id: '1',
+			icon: {
+				name: 'fa-utensils',
+				type: 'fas',
+			},
+		},
+		{
+			name: 'Weterynarz',
+			id: '2',
+			icon: {
+				name: 'fa-paw',
+				type: 'fas',
+			},
+		},
+		{
+			name: 'Pensja',
+			id: '3',
+			icon: {
+				name: 'fa-coins',
+				type: 'fas',
+			},
+		},
+	];
 
 	ngOnInit() {}
 }

@@ -97,8 +97,9 @@ export class SelectComponent
 			this.waitingOptionValue = value;
 			return;
 		}
-		const { item } = this.options.find(option => option.value === value);
-		this.selectOption(item || this.options.first.item);
+		const { item } =
+			this.options.find(option => option.value === value) || this.options.first;
+		this.selectOption(item);
 	}
 
 	registerOnChange(fn: any): void {

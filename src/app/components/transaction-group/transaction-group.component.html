@@ -1,15 +1,9 @@
 <section class="group" [ngClass]="{ 'group--on-element': onElement }">
 	<div class="group__icon">
-		<group-icon
-			[icon]="{
-				name: 'fa-coins',
-				type: 'fas'
-			}"
-			type="neutral"
-		></group-icon>
+		<group-icon [icon]="group.icon" type="neutral"></group-icon>
 	</div>
 
-	<div class="group__name">Jedzenie</div>
+	<div class="group__name">{{ group.name }}</div>
 
 	<div class="group__actions" *ngIf="isEditable">
 		<button class="btn">
