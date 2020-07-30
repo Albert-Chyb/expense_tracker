@@ -1,6 +1,6 @@
-<styled-input appearance="filled">
+<styled-input appearance="outline">
 	<input styledInput type="text" />
-	<span class="suffix">PLN</span>
+	<span styledInputSuffix>PLN</span>
 	<span class="label">Wartość</span>
 </styled-input>
 
@@ -8,3 +8,15 @@
 	<textarea styledInput type="text"></textarea>
 	<span class="label">Opis transakcji</span>
 </styled-input>
+
+<br />
+
+<app-select>
+	<app-select-item
+		*ngFor="let group of groups"
+		[value]="group"
+		[viewValue]="'Jedzenie ' + group"
+	>
+		<transaction-group onElement="true"></transaction-group>
+	</app-select-item>
+</app-select>

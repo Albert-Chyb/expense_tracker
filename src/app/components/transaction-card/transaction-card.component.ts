@@ -13,13 +13,4 @@ export class TransactionCardComponent implements OnInit {
 	@Input('transaction') transaction: ITransaction;
 
 	ngOnInit() {}
-
-	get iconClasses() {
-		return {
-			'transaction__icon--income': this.transaction.amount > 0,
-			'transaction__icon--outcome': this.transaction.amount < 0,
-			[this.transaction.group.icon.type]: true,
-			[this.transaction.group.icon.name]: true,
-		};
-	}
 }

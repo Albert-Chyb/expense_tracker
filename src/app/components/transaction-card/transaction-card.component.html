@@ -1,6 +1,9 @@
 <section class="transaction">
-	<div class="transaction__icon-container">
-		<i class="fas fa-coins transaction__icon" [ngClass]="iconClasses"></i>
+	<div class="transaction__icon">
+		<group-icon
+			[icon]="transaction.group.icon"
+			[type]="transaction.amount < 0 ? 'outcome' : 'income'"
+		></group-icon>
 	</div>
 
 	<h3 class="transaction__title">{{ transaction.group.name }}</h3>

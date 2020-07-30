@@ -1,0 +1,44 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+.group {
+  display: grid;
+  grid-template-areas:
+    'icon name actions'
+  ;
+  grid-template-rows: 1fr;
+  grid-template-columns: rem(50px) auto rem(25px);
+  column-gap: rem(25px);
+  align-items: center;
+
+  background-color: #F3F3F3;
+  border-radius: rem(15px);
+  padding: rem(15px);
+
+  &--on-element {
+    background-color: #CFCFCF;
+  }
+
+  &__icon {
+    grid-area: icon;
+  }
+
+  &__name {
+    grid-area: name;
+    font-weight: bold;
+  }
+
+  &__actions {
+    grid-area: actions;
+    justify-self: center;
+  }
+
+  &__action {
+    cursor: pointer;
+
+    &--danger {
+      color: $colorDanger;
+    }
+  }
+}

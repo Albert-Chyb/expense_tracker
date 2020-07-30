@@ -1,0 +1,50 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+.select {
+  background-color: #F3F3F3;
+  border-radius: rem(7px);
+  padding: rem(15px);
+  overflow-y: hidden;
+
+  &__header {
+    display: grid;
+    grid-template-rows: rem(20px) auto;
+    grid-template-columns: auto rem(25px);
+    grid-template-areas:
+      'label icon'
+      'selected icon'
+    ;
+    cursor: pointer;
+  }
+
+  &__label {
+    grid-area: label;
+    font-weight: 500;
+    font-size: rem(12px);
+    color: #909090;
+  }
+
+  &__selected-item {
+    grid-area: selected;
+    color: $colorPrimary;
+    font-weight: 500;
+  }
+
+  &__icon {
+    place-self: center;
+    grid-area: icon;
+    color: #909090;
+  }
+
+  &__items {
+    grid-area: items;
+    margin-top: rem(20px);
+
+    .select--hidden & {
+      transform: translateY(20px);
+      margin-top: 0px;
+    }
+  }
+}

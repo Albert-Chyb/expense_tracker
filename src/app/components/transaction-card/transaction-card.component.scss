@@ -15,27 +15,9 @@
   padding: rem(15px);
   border-radius: rem(15px);
 
-  &__icon-container {
+  &__icon {
     grid-area: icon;
     place-items: center;
-  }
-
-  &__icon {
-    border-radius: rem(15px);
-    width: rem(50px);
-    height: rem(50px);
-    text-align: center;
-    line-height: rem(50px);
-    font-size: rem(20px);
-    color: #F8F1FE;
-
-    &--income {
-      background-color: $colorSuccess;
-    }
-
-    &--outcome {
-      background-color: $colorDanger;
-    }
   }
 
   &__title {

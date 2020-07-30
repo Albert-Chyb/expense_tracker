@@ -34,6 +34,26 @@
       grid-column: span 2;
     }
   }
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+
+    &__balance {
+      grid-column: span 3;
+    }
+
+    &__incomes {
+      grid-column: span 1;
+    }
+
+    &__outcomes {
+      grid-column: span 1;
+    }
+
+    &__savings {
+      grid-column: span 1;
+    }
+  }
 }
 
 .transactions {
