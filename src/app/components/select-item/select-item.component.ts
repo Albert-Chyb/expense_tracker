@@ -1,4 +1,4 @@
-import { SelectItem } from './../../common/models/selectItem';
+import { SelectOption } from './../../common/models/selectItem';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
@@ -11,7 +11,7 @@ export class SelectItemComponent implements OnInit {
 
 	@Input('value') value: string;
 	@Input('viewValue') viewValue: string;
-	@Output('onSelect') onSelectEmitter = new EventEmitter<SelectItem>();
+	@Output('onSelect') onSelectEmitter = new EventEmitter<SelectOption>();
 
 	ngOnInit() {}
 

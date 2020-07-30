@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { SelectItem } from './../../common/models/selectItem';
+import { SelectOption } from './../../common/models/selectItem';
 import { SelectItemComponent } from './../select-item/select-item.component';
 
 @Component({
@@ -55,7 +55,7 @@ export class SelectComponent
 
 	isExpanded: boolean = false;
 	isDisabled: boolean = false;
-	selectedOption: SelectItem;
+	selectedOption: SelectOption;
 	private waitingOptionValue: string = '';
 
 	onChange: (newValue: any) => {};
@@ -75,7 +75,7 @@ export class SelectComponent
 		this.onTouched && this.onTouched();
 	}
 
-	selectOption(option: SelectItem) {
+	selectOption(option: SelectOption) {
 		this.selectedOption = option;
 		this.onChange && this.onChange(option.value);
 		this.closeSelect();
