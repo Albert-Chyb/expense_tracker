@@ -98,7 +98,7 @@ export class SelectComponent
 			return;
 		}
 		const { item } = this.options.find(option => option.value === value);
-		this.selectOption(item);
+		this.selectOption(item || this.options.first.item);
 	}
 
 	registerOnChange(fn: any): void {
