@@ -11,7 +11,10 @@ export class ManageTransactionComponent implements OnInit {
 	constructor() {}
 
 	form = new FormGroup({
-		group: new FormControl(2),
+		group: new FormControl('5'),
+		amount: new FormControl(),
+		date: new FormControl(),
+		description: new FormControl(),
 	});
 
 	groups: ITransactionGroup[] = [

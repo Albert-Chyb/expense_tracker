@@ -21,6 +21,15 @@ import { GroupIconComponent } from './components/group-icon/group-icon.component
 import { SelectComponent } from './components/select/select.component';
 import { SelectItemComponent } from './components/select-item/select-item.component';
 
+/*
+	Angular Material is used only for date picker.
+	TODO: When app is ready, consider building custom date picker. 
+*/
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -44,8 +53,12 @@ import { SelectItemComponent } from './components/select-item/select-item.compon
 		AngularFirestoreModule,
 		BrowserAnimationsModule,
 		ReactiveFormsModule,
+		MatDatepickerModule,
+		MatFormFieldModule,
+		MatNativeDateModule,
+		MatInputModule,
 	],
-	providers: [{ provide: LOCALE_ID, useValue: 'pl-PL' }],
+	providers: [{ provide: LOCALE_ID, useValue: 'pl-PL' }, MatDatepickerModule],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}

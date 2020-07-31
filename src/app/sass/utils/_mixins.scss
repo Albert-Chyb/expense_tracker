@@ -12,7 +12,29 @@
 
   & .summary__currency {
     color: $subtleTextColor;
+  }
+}
 
+@mixin buttonTheme($bgColor, $textColor) {
+  background-color: $bgColor;
+  color: $textColor;
+  padding: rem(15px) rem(20px);
+  border-radius: rem(30px);
+  font-weight: 500;
+  font-size: rem(18px);
+  min-width: rem(100px);
+
+  &:hover {
+    background-color: lighten($color: $bgColor, $amount: 5);
+  }
+
+  &:not(:disabled):active {
+    transform: scale(.95);
+  }
+
+  &:disabled {
+    opacity: .7;
+    cursor: default;
   }
 }
 

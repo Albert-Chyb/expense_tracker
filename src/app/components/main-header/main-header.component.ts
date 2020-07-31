@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivationEnd, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
 	selector: 'main-header',
@@ -6,7 +9,14 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./main-header.component.scss'],
 })
 export class MainHeaderComponent implements OnInit {
-	constructor() {}
+	constructor(private readonly router: Router) {}
 
-	ngOnInit() {}
+	pageName$: Observable<string>;
+
+	ngOnInit() {
+		this.pageName$ = this.router.events.pipe(
+			filter(event => event instanceof ActivationEnd),
+			map((event: ActivationEnd) => (event.snapshot.data.name as string) || '')
+		);
+	}
 }

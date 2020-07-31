@@ -1,18 +1,11 @@
-<styled-input appearance="outline">
-	<input styledInput type="text" />
-	<span styledInputSuffix>PLN</span>
-	<span class="label">Wartość</span>
-</styled-input>
+<form [formGroup]="form" class="transaction">
+	<styled-input class="transaction__detail" appearance="filled">
+		<input styledInput type="text" formControlName="amount" />
+		<span styledInputSuffix>PLN</span>
+		<span class="label">Wartość</span>
+	</styled-input>
 
-<styled-input appearance="filled">
-	<textarea styledInput type="text"></textarea>
-	<span class="label">Opis transakcji</span>
-</styled-input>
-
-<br />
-
-<form [formGroup]="form">
-	<app-select formControlName="group">
+	<app-select class="transaction__detail" formControlName="group">
 		<app-select-item
 			*ngFor="let group of groups"
 			[value]="group.id"
@@ -21,5 +14,29 @@
 			<transaction-group onElement="true" [group]="group"></transaction-group>
 		</app-select-item>
 	</app-select>
+
+	<mat-form-field class="transaction__detail" appearance="fill">
+		<mat-label>Wybierz datę</mat-label>
+		<input matInput [matDatepicker]="picker" formControlName="date" />
+		<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+		<mat-datepicker #picker></mat-datepicker>
+	</mat-form-field>
+
+	<styled-input class="transaction__detail" appearance="filled">
+		<textarea styledInput type="text" formControlName="description"></textarea>
+		<span class="label">Opis transakcji</span>
+	</styled-input>
+
+	<div class="transaction__actions">
+		<button class="btn btn--secondary btn--block transaction__action">
+			Zapisz
+		</button>
+
+		<button
+			type="button"
+			class="btn btn--danger btn--block transaction__action"
+		>
+			Usuń
+		</button>
+	</div>
 </form>
-{{ form.value | json }}

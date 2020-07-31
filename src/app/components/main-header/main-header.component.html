@@ -1,5 +1,5 @@
 <header class="header">
 	<a routerLink="/"><i class="fas fa-home header__icon"></i></a>
-	<h1 class="header__heading">Strona główna</h1>
+	<h1 class="header__heading">{{ pageName$ | async }}</h1>
 	<i class="fas fa-user-circle header__icon"></i>
 </header>

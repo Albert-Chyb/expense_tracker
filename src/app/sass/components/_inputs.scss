@@ -12,6 +12,7 @@
 
   &--filled {
     background-color: #F3F3F3;
+    margin-top: rem(-10px);
 
     .styled-input__input:focus+.styled-input__label,
     .styled-input__input:not(:placeholder-shown)+.styled-input__label {

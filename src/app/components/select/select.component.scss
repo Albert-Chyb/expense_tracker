@@ -2,6 +2,10 @@
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
 
+:host {
+  display: block;
+}
+
 .select {
   background-color: #F3F3F3;
   border-radius: rem(7px);

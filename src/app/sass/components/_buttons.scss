@@ -4,13 +4,25 @@
   outline: none;
   cursor: pointer;
 
+  &--block {
+    width: 100%;
+  }
+
+  &--secondary {
+    @include buttonTheme($colorSecondary, $textOnSecondaryColor)
+  }
+
+  &--danger {
+    @include buttonTheme($colorDanger, $textOnDangerColor)
+  }
+
   &--circle {
     background-color: $colorPrimary;
     color: $textOnPrimaryColor !important;
     width: rem(65px);
     height: rem(65px);
     border-radius: 100%;
-    filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0px rem(4px) rem(10px) rgba(0, 0, 0, 0.25));
     text-align: center;
     line-height: rem(65px);
     font-size: rem(48px);
