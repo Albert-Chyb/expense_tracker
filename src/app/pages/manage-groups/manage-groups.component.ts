@@ -10,27 +10,25 @@ export class ManageGroupsComponent implements OnInit {
 
 	groups: ITransactionGroup[] = [
 		{
-			name: 'Imprezy',
-			icon: {
-				name: 'fa-coins',
-				type: 'fas',
-			},
-		},
-
-		{
-			name: 'Weterynarz',
-			icon: {
-				name: 'fa-paw',
-				type: 'fas',
-			},
-		},
-
-		{
 			name: 'Pensja',
 			icon: {
 				name: 'fa-coins',
 				type: 'fas',
 			},
+		},
+		{
+			name: 'Jedzenie',
+			icon: {
+				name: 'fa-utensils',
+				type: 'fas',
+			},
+		},
+		{
+			icon: {
+				type: 'fas',
+				name: 'fa-paw',
+			},
+			name: 'Weterynarz',
 		},
 	];
 
