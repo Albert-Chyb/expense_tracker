@@ -33,6 +33,7 @@ import { AddGroupComponent } from './pages/add-group/add-group.component';
 import { ManageGroupsComponent } from './pages/manage-groups/manage-groups.component';
 import { AppSettingsComponent } from './pages/app-settings/app-settings.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { PeriodsComponent } from './pages/periods/periods.component';
 
 @NgModule({
 	declarations: [
@@ -53,6 +54,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 		ManageGroupsComponent,
 		AppSettingsComponent,
 		ProfileComponent,
+		PeriodsComponent,
 	],
 	imports: [
 		BrowserModule,

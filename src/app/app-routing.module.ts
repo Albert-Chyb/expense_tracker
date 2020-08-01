@@ -1,3 +1,4 @@
+import { PeriodsComponent } from './pages/periods/periods.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { AppSettingsComponent } from './pages/app-settings/app-settings.component';
 import { ManageGroupsComponent } from './pages/manage-groups/manage-groups.component';
@@ -33,6 +34,11 @@ const routes: Routes = [
 		path: 'profile',
 		component: ProfileComponent,
 		data: { name: 'Profil' },
+	},
+	{
+		path: 'periods',
+		component: PeriodsComponent,
+		data: { name: 'Okresy rozliczeniowe' },
 	},
 ];
 
