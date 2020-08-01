@@ -1,0 +1,16 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+.group {
+
+  &__heading {
+    margin: rem(20px) 0px;
+    font-size: rem(18px);
+    font-weight: 500;
+  }
+
+  &__transaction-preview {
+    margin: rem(20px) 0px;
+  }
+}

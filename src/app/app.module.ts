@@ -29,6 +29,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { AddGroupComponent } from './pages/add-group/add-group.component';
+import { ManageGroupsComponent } from './pages/manage-groups/manage-groups.component';
 
 @NgModule({
 	declarations: [
@@ -45,6 +47,8 @@ import { MatInputModule } from '@angular/material/input';
 		GroupIconComponent,
 		SelectComponent,
 		SelectItemComponent,
+		AddGroupComponent,
+		ManageGroupsComponent,
 	],
 	imports: [
 		BrowserModule,

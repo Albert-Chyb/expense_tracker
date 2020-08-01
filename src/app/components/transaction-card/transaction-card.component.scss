@@ -2,6 +2,10 @@
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
 
+:host {
+  display: block;
+}
+
 .transaction {
   display: grid;
   grid-template-columns: rem(50px) auto minmax(rem(60px), rem(80px));

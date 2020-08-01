@@ -1,0 +1,20 @@
+<form [formGroup]="form" class="group">
+	<styled-input>
+		<input styledInput type="text" formControlName="name" />
+		<span class="label">Nazwa</span>
+	</styled-input>
+
+	<styled-input>
+		<input styledInput type="text" formControlName="icon" />
+		<span class="label">Ikona</span>
+	</styled-input>
+
+	<h2 class="group__heading">Podgląd</h2>
+
+	<transaction-card
+		class="group__transaction-preview"
+		[transaction]="transaction"
+	></transaction-card>
+
+	<button class="btn btn--secondary btn--block">Zapisz</button>
+</form>

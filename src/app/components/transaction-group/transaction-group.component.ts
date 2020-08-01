@@ -1,5 +1,6 @@
+import { Component, Input, OnInit } from '@angular/core';
+
 import { ITransactionGroup } from './../../common/models/group';
-import { Component, OnInit, Input, HostBinding } from '@angular/core';
 
 @Component({
 	selector: 'transaction-group',
