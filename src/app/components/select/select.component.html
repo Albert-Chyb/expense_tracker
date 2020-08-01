@@ -2,10 +2,12 @@
 	class="select"
 	[ngClass]="isExpanded ? 'select--expanded' : 'select--hidden'"
 >
-	<header class="select__header" (click)="toggleSelect()">
-		<h2 class="select__label">Grupa transakcji</h2>
+	<div class="select__header" (click)="toggleSelect()">
+		<span class="select__label"><ng-content select=".label"></ng-content></span>
 
-		<span class="select__selected-item">{{ selectedOption?.view }}</span>
+		<button class="btn select__selected-item">
+			{{ selectedOption?.view }}
+		</button>
 
 		<div
 			class="select__icon"
@@ -13,7 +15,7 @@
 		>
 			<i class="fas fa-arrow-down"></i>
 		</div>
-	</header>
+	</div>
 
 	<main>
 		<ul

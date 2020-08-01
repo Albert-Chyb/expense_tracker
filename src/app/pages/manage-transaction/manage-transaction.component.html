@@ -6,6 +6,7 @@
 	</styled-input>
 
 	<app-select class="transaction__detail" formControlName="group">
+		<span class="label">Grupa transakcji</span>
 		<app-select-item
 			*ngFor="let group of groups"
 			[value]="group.id"
