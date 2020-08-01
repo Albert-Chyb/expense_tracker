@@ -12,6 +12,7 @@ import {
 	forwardRef,
 	OnInit,
 	QueryList,
+	HostListener,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
