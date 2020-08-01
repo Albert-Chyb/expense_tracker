@@ -1,0 +1,17 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+.settings {
+
+  &__description {
+    color: $textLighterColor;
+    font-size: rem(12px);
+    font-weight: 500;
+    margin-bottom: rem(20px);
+  }
+
+  &__item {
+    margin-top: rem(10px);
+  }
+}

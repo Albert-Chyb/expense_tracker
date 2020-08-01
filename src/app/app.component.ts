@@ -12,5 +12,9 @@ export class AppComponent implements OnInit {
 
 	ngOnInit() {
 		registerLocaleData(localePL);
+
+		(window as any).FontAwesomeConfig = {
+			searchPseudoElements: true,
+		};
 	}
 }

@@ -1,9 +1,9 @@
 <header class="header">
-	<a routerLink="/" aria-label="Home"
-		><i class="fas fa-home header__icon"></i
+	<a routerLink="/" aria-label="Home" class="header__icon"
+		><i class="fas fa-home"></i
 	></a>
 	<h1 class="header__heading">{{ pageName$ | async }}</h1>
-	<a href="#" aria-label="Profile">
-		<i class="fas fa-user-circle header__icon"></i>
+	<a routerLink="/app-settings" aria-label="Profile" class="header__icon">
+		<i class="fas fa-user-circle"></i>
 	</a>
 </header>

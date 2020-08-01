@@ -1,14 +1,16 @@
+import { FormGroup, FormControl } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  templateUrl: './app-settings.component.html',
-  styleUrls: ['./app-settings.component.scss']
+	templateUrl: './app-settings.component.html',
+	styleUrls: ['./app-settings.component.scss'],
 })
 export class AppSettingsComponent implements OnInit {
+	constructor() {}
 
-  constructor() { }
+	form = new FormGroup({
+		autoEndAfter: new FormControl(),
+	});
 
-  ngOnInit() {
-  }
-
+	ngOnInit() {}
 }

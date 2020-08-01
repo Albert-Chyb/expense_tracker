@@ -1,1 +1,24 @@
-<p>app-settings works!</p>
+<form [formGroup]="form" class="settings">
+	<app-select class="settings__item" formControlName="autoEndAfter">
+		<span class="label">Automatycznie zakończ za</span>
+		<app-select-item value="7" viewValue="Tydzień">
+			Tydzień
+		</app-select-item>
+		<app-select-item value="30" viewValue="Miesiąc">
+			Miesiąc
+		</app-select-item>
+	</app-select>
+
+	<p class="settings__description settings__item">
+		Okres zostanie automatycznie zakończony za wybraną ilość dni, licząc od daty
+		rozpoczęcia obecnego
+	</p>
+
+	<a class="settings__item link" routerLink="/manage-groups"
+		>Zarządzaj grupami</a
+	>
+
+	<p class="settings__description settings__item">
+		Dodawaj i usuwaj grupy transakcji.
+	</p>
+</form>

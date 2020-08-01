@@ -1,0 +1,22 @@
+.link {
+  display: block;
+  background-color: $bgColorDarker;
+  color: $textLighterColor !important;
+  font-weight: 500;
+  padding: rem(20px);
+  border-radius: rem(7px);
+  position: relative;
+
+  &:hover {
+    background-color: darken($bgColorDarker, 3);
+  }
+
+  &::after {
+    @include fontAwesomeInPseudoElement('\f054', 'free', 'solid');
+
+    position: absolute;
+    right: rem(20px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

@@ -43,3 +43,30 @@
   white-space: nowrap;
   overflow: hidden;
 }
+
+@mixin fontAwesomeInPseudoElement($unicode, $fontGroup, $iconGroup) {
+  $fonts: ('free': 'Font Awesome 5 Free',
+      'brand': 'Font Awesome 5 Brand',
+      'pro': 'Font Awesome 5 Pro',
+    );
+
+  $weight: ('regular': 400,
+      'brand': 400,
+      'solid': 900,
+      'light': 300,
+    );
+
+  @if(not map-has-key($fonts, $fontGroup)) {
+    @error "Invalid font group ! Available: #{map-keys($fonts)}";
+  }
+
+  @if(not map-has-key($weight, $iconGroup)) {
+    @error "Invalid icon group ! Available: #{map-keys($weight)}";
+  }
+
+  font-family: map-get($fonts, $fontGroup);
+  font-weight: map-get($weight, $iconGroup);
+  content: $unicode;
+
+
+}
