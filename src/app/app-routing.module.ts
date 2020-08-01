@@ -1,3 +1,4 @@
+import { ProfileComponent } from './pages/profile/profile.component';
 import { AppSettingsComponent } from './pages/app-settings/app-settings.component';
 import { ManageGroupsComponent } from './pages/manage-groups/manage-groups.component';
 import { AddGroupComponent } from './pages/add-group/add-group.component';
@@ -27,6 +28,11 @@ const routes: Routes = [
 		path: 'app-settings',
 		component: AppSettingsComponent,
 		data: { name: 'Ustawienia' },
+	},
+	{
+		path: 'profile',
+		component: ProfileComponent,
+		data: { name: 'Profil' },
 	},
 ];
 
