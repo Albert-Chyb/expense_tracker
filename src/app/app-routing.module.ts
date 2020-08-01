@@ -1,3 +1,4 @@
+import { LoginComponent } from './pages/login/login.component';
 import { PeriodsComponent } from './pages/periods/periods.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { AppSettingsComponent } from './pages/app-settings/app-settings.component';
@@ -9,7 +10,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
-	{ path: '', component: HomeComponent, data: { name: 'Strona główna' } },
+	{
+		path: '',
+		component: HomeComponent,
+		data: { name: 'Strona główna' },
+	},
 	{
 		path: 'manage-transaction',
 		component: ManageTransactionComponent,
@@ -39,6 +44,11 @@ const routes: Routes = [
 		path: 'periods',
 		component: PeriodsComponent,
 		data: { name: 'Okresy rozliczeniowe' },
+	},
+	{
+		path: 'login',
+		component: LoginComponent,
+		data: { name: 'Zaloguj się' },
 	},
 ];
 

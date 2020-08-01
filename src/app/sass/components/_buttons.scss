@@ -16,6 +16,29 @@
     @include buttonTheme($colorDanger, $textOnDangerColor)
   }
 
+  &--google {
+    background-color: #4285F4;
+    border-radius: rem(3px);
+    height: rem(60px);
+    color: #FFF;
+    font-size: rem(18px);
+    font-weight: 500;
+    position: relative;
+
+    &::after {
+      content: '';
+      background-image: url('./assets/images/google_logo.png');
+      height: rem(50px);
+      width: rem(50px);
+      position: absolute;
+      top: rem(5px);
+      left: rem(5px);
+      background-color: #FFF;
+      background-size: contain;
+      border-radius: rem(3px);
+    }
+  }
+
   &--circle {
     background-color: $colorPrimary;
     color: $textOnPrimaryColor !important;

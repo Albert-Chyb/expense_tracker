@@ -1,0 +1,21 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+.login {
+  max-width: 500px;
+  margin: 0px auto;
+
+  &__heading {
+    margin-top: rem(30px);
+    margin-bottom: rem(40px);
+    font-size: rem(26px);
+  }
+
+  &__description {
+    margin-top: rem(10px);
+    color: $textLighterColor;
+    font-weight: 500;
+    font-size: rem(14px);
+  }
+}
