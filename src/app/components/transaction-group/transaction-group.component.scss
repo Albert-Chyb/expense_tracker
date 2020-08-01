@@ -2,6 +2,10 @@
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
 
+:host {
+  display: block;
+}
+
 .group {
   display: grid;
   grid-template-areas:
@@ -12,12 +16,12 @@
   column-gap: rem(25px);
   align-items: center;
 
-  background-color: #F3F3F3;
+  background-color: $bgColorDarker;
   border-radius: rem(15px);
   padding: rem(15px);
 
   &--on-element {
-    background-color: #CFCFCF;
+    background-color: $bgColorDark;
   }
 
   &__icon {

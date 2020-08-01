@@ -15,7 +15,7 @@
     'icon description amount'
   ;
   column-gap: rem(10px);
-  background-color: #F3F3F3;
+  background-color: $bgColorDarker;
   padding: rem(15px);
   border-radius: rem(15px);
 
@@ -33,7 +33,7 @@
 
   &__description {
     grid-area: description;
-    color: #8C8C8C;
+    color: $textLighterColor;
     font-size: rem(12px);
     align-self: center;
     @include ellipsis();

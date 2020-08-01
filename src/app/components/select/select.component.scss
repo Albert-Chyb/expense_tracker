@@ -7,7 +7,7 @@
 }
 
 .select {
-  background-color: #F3F3F3;
+  background-color: $bgColorDarker;
   border-radius: rem(7px);
   padding: rem(15px);
   overflow-y: hidden;
@@ -27,7 +27,7 @@
     grid-area: label;
     font-weight: 500;
     font-size: rem(12px);
-    color: #909090;
+    color: $textLighterColor;
   }
 
   &__selected-item {
@@ -42,7 +42,7 @@
   &__icon {
     place-self: center;
     grid-area: icon;
-    color: #909090;
+    color: $textLighterColor;
   }
 
   &__items {

@@ -7,11 +7,11 @@
   padding-left: rem(25px);
 
   &--outline {
-    border: rem(2px) solid #E0E0E0;
+    border: rem(2px) solid $bgColorDark;
   }
 
   &--filled {
-    background-color: #F3F3F3;
+    background-color: $bgColorDarker;
     margin-top: rem(-10px);
 
     .styled-input__input:focus+.styled-input__label,
@@ -24,13 +24,13 @@
     }
 
     .styled-input__label {
-      background-color: #F3F3F3;
+      background-color: $bgColorDarker;
     }
   }
 
   &__suffix {
     padding-left: rem(10px);
-    color: #909090;
+    color: $textLighterColor;
     font-weight: bold;
     height: fit-content;
   }
@@ -64,8 +64,8 @@
     position: absolute;
     top: 50%;
     left: 0px;
-    color: #909090;
-    background-color: #FFF;
+    color: $textLighterColor;
+    background-color: $bgColor;
     font-weight: 500;
     margin-left: rem(25px);
     transition-property: transform top;

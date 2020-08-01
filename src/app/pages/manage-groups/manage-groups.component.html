@@ -1,1 +1,12 @@
-<p>manage-groups works!</p>
+<ul class="groups">
+	<li class="groups__group" *ngFor="let group of groups">
+		<transaction-group [group]="group" isEditable="true"></transaction-group>
+	</li>
+</ul>
+
+<a
+	aria-label="Dodaj nową grupę"
+	class="btn btn--circle groups__add"
+	routerLink="/add-group"
+	>+</a
+>

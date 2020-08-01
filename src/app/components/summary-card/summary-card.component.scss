@@ -48,15 +48,15 @@
   }
 
   &--secondary {
-    @include summaryCardTheme($colorSecondary, $textOnSecondaryColor, #F8F1FE);
+    @include summaryCardTheme($colorSecondary, $textOnSecondaryColor, $bgColorDarker);
   }
 
   &--danger {
-    @include summaryCardTheme($colorDanger, $textOnDangerColor, #F8F1FE);
+    @include summaryCardTheme($colorDanger, $textOnDangerColor, $bgColorDarker);
   }
 
   &--success {
-    @include summaryCardTheme($colorSuccess, $textOnSuccessColor, #F8F1FE);
+    @include summaryCardTheme($colorSuccess, $textOnSuccessColor, $bgColorDarker);
   }
 
   &--warning {

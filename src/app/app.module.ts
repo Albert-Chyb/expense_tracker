@@ -31,6 +31,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { AddGroupComponent } from './pages/add-group/add-group.component';
 import { ManageGroupsComponent } from './pages/manage-groups/manage-groups.component';
+import { AppSettingsComponent } from './pages/app-settings/app-settings.component';
 
 @NgModule({
 	declarations: [
@@ -49,6 +50,7 @@ import { ManageGroupsComponent } from './pages/manage-groups/manage-groups.compo
 		SelectItemComponent,
 		AddGroupComponent,
 		ManageGroupsComponent,
+		AppSettingsComponent,
 	],
 	imports: [
 		BrowserModule,

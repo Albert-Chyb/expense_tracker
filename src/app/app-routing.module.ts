@@ -1,3 +1,5 @@
+import { AppSettingsComponent } from './pages/app-settings/app-settings.component';
+import { ManageGroupsComponent } from './pages/manage-groups/manage-groups.component';
 import { AddGroupComponent } from './pages/add-group/add-group.component';
 import { ManageTransactionComponent } from './pages/manage-transaction/manage-transaction.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -15,6 +17,16 @@ const routes: Routes = [
 		path: 'add-group',
 		component: AddGroupComponent,
 		data: { name: 'Dodaj nową grupę' },
+	},
+	{
+		path: 'manage-groups',
+		component: ManageGroupsComponent,
+		data: { name: 'Zarządzaj grupami' },
+	},
+	{
+		path: 'app-settings',
+		component: AppSettingsComponent,
+		data: { name: 'Ustawienia' },
 	},
 ];
 
