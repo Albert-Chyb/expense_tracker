@@ -12,11 +12,6 @@
       margin-top: rem(30px);
       margin-bottom: rem(40px);
     }
-
-    &:is(h3) {
-      color: $textLighterColor;
-      margin-bottom: rem(20px);
-    }
   }
 
   &__description {
