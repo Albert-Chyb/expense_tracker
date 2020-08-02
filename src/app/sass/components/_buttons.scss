@@ -4,6 +4,11 @@
   outline: none;
   cursor: pointer;
 
+  &:disabled {
+    opacity: .7;
+    cursor: default;
+  }
+
   &--block {
     width: 100%;
   }

@@ -32,10 +32,7 @@
     transform: scale(.95);
   }
 
-  &:disabled {
-    opacity: .7;
-    cursor: default;
-  }
+
 }
 
 @mixin ellipsis() {

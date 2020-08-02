@@ -7,13 +7,21 @@
   margin: 0px auto;
 
   &__heading {
-    margin-top: rem(30px);
-    margin-bottom: rem(40px);
-    font-size: rem(26px);
+    &:is(h2) {
+      font-size: rem(26px);
+      margin-top: rem(30px);
+      margin-bottom: rem(40px);
+    }
+
+    &:is(h3) {
+      color: $textLighterColor;
+      margin-bottom: rem(20px);
+    }
   }
 
   &__description {
     margin-top: rem(10px);
+    margin-bottom: rem(20px);
     color: $textLighterColor;
     font-weight: 500;
     font-size: rem(14px);

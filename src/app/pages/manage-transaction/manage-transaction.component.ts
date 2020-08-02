@@ -13,7 +13,7 @@ export class ManageTransactionComponent implements OnInit {
 	form = new FormGroup({
 		group: new FormControl('5'),
 		amount: new FormControl(),
-		date: new FormControl(),
+		date: new FormControl(new Date()),
 		description: new FormControl(),
 	});
 
