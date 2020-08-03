@@ -5,6 +5,8 @@
 .header {
   display: grid;
   grid-template-columns: rem(50px) auto rem(40px);
+  align-items: center;
+
   padding: rem(15px) 0px;
   font-size: rem(26px);
   position: fixed;
@@ -28,7 +30,10 @@
     font-size: inherit;
   }
 
-  @media screen and (max-width: 375px) {
-    font-size: rem(24px);
+  @media screen and (max-width: 425px) {
+
+    &__heading {
+      font-size: rem(18px);
+    }
   }
 }

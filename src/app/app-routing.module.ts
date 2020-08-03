@@ -43,7 +43,7 @@ const routes: Routes = [
 	{
 		path: 'periods',
 		component: PeriodsComponent,
-		data: { name: 'Okresy rozliczeniowe' },
+		data: { name: 'Okresy' },
 	},
 	{
 		path: 'login',
