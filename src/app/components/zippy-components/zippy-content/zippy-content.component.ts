@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
 import {
-	trigger,
+	animate,
 	state,
 	style,
 	transition,
-	animate,
+	trigger,
 } from '@angular/animations';
+import { Component } from '@angular/core';
 
 @Component({
 	selector: 'zippy-content',
@@ -20,22 +20,24 @@ import {
 		]),
 	],
 })
-export class ZippyContentComponent implements OnInit {
+export class ZippyContentComponent {
 	constructor() {}
 
-	isExpanded = false;
+	private _isExpanded = false;
 
 	toggle() {
-		this.isExpanded = !this.isExpanded;
+		this._isExpanded = !this._isExpanded;
 	}
 
 	expand() {
-		this.isExpanded = true;
+		this._isExpanded = true;
 	}
 
 	collapse() {
-		this.isExpanded = false;
+		this._isExpanded = false;
 	}
 
-	ngOnInit() {}
+	get isExpanded() {
+		return this._isExpanded;
+	}
 }

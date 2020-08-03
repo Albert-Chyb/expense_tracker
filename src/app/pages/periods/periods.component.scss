@@ -1,0 +1,48 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+.period {
+  background-color: $colorPrimary;
+  border-radius: rem(10px);
+  color: $textOnPrimaryColor;
+  padding: rem(20px);
+  margin-top: rem(20px);
+
+  &--expanded {
+    padding-top: rem(10px);
+  }
+
+  &__date {
+    font-weight: 500;
+    font-size: rem(18px);
+    margin-bottom: rem(10px);
+    text-align: center;
+  }
+
+  &__icon {
+    text-align: center;
+    transition: transform .2s ease-in-out;
+
+    &--expanded {
+      transform: rotate(180deg);
+    }
+
+    &--collapsed {
+      transform: rotate(0deg);
+    }
+  }
+
+  &__details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: rem(20px);
+    row-gap: rem(20px);
+  }
+
+  @media only screen and (max-width: 425px) {
+    &__details {
+      grid-template-columns: 1fr;
+    }
+  }
+}

@@ -1,28 +1,27 @@
+import { AfterContentInit, Component, ContentChild } from '@angular/core';
+
 import { ZippyContentComponent } from './../zippy-content/zippy-content.component';
 import { ZippyStaticComponent } from './../zippy-static/zippy-static.component';
-import {
-	Component,
-	OnInit,
-	ContentChild,
-	AfterContentInit,
-} from '@angular/core';
 
 @Component({
 	selector: 'zippy',
-	templateUrl: './zippy.component.html',
 	styleUrls: ['./zippy.component.scss'],
+	template: `
+		<ng-content select="zippy-static"></ng-content>
+		<ng-content select="zippy-content"></ng-content>
+	`,
 })
-export class ZippyComponent implements OnInit, AfterContentInit {
+export class ZippyComponent implements AfterContentInit {
 	constructor() {}
 
 	@ContentChild(ZippyStaticComponent, { static: false })
 	static: ZippyStaticComponent;
+
 	@ContentChild(ZippyContentComponent, { static: false })
 	content: ZippyContentComponent;
 
-	ngOnInit() {}
-
 	ngAfterContentInit() {
-		this.static.onClick.subscribe($event => this.content.toggle());
+		this.static.zippyRef = this;
+		this.static.onClick.subscribe(() => this.content.toggle());
 	}
 }

@@ -1,69 +1,71 @@
-<section class="period">
-	<zippy>
-		<zippy-static>
-			<h2 class="period__date">13.06.2020 - 13.07.2020</h2>
+<zippy-list>
+	<ul>
+		<li *ngFor="let period of periods">
+			<section class="period">
+				<zippy>
+					<zippy-static>
+						<h2 class="period__date">
+							{{ period.date.start | date }} -
+							{{ period.date.end | date }}
+						</h2>
 
-			<button class="btn">
-				<i class="fas fa-chevron-down fa-lg"></i>
-			</button>
-		</zippy-static>
-		<zippy-content>
-			<ul>
-				<li>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
-					obcaecati numquam harum dolorem consequuntur molestias explicabo
-					beatae reprehenderit iure libero fugit. Dolorem fugiat laborum
-					temporibus nemo obcaecati placeat labore totam?
-				</li>
-				<li>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
-					obcaecati numquam harum dolorem consequuntur molestias explicabo
-					beatae reprehenderit iure libero fugit. Dolorem fugiat laborum
-					temporibus nemo obcaecati placeat labore totam?
-				</li>
-				<li>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
-					obcaecati numquam harum dolorem consequuntur molestias explicabo
-					beatae reprehenderit iure libero fugit. Dolorem fugiat laborum
-					temporibus nemo obcaecati placeat labore totam?
-				</li>
-				<li>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
-					obcaecati numquam harum dolorem consequuntur molestias explicabo
-					beatae reprehenderit iure libero fugit. Dolorem fugiat laborum
-					temporibus nemo obcaecati placeat labore totam?
-				</li>
-				<li>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
-					obcaecati numquam harum dolorem consequuntur molestias explicabo
-					beatae reprehenderit iure libero fugit. Dolorem fugiat laborum
-					temporibus nemo obcaecati placeat labore totam?
-				</li>
-				<li>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
-					obcaecati numquam harum dolorem consequuntur molestias explicabo
-					beatae reprehenderit iure libero fugit. Dolorem fugiat laborum
-					temporibus nemo obcaecati placeat labore totam?
-				</li>
-				<li>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
-					obcaecati numquam harum dolorem consequuntur molestias explicabo
-					beatae reprehenderit iure libero fugit. Dolorem fugiat laborum
-					temporibus nemo obcaecati placeat labore totam?
-				</li>
-				<li>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
-					obcaecati numquam harum dolorem consequuntur molestias explicabo
-					beatae reprehenderit iure libero fugit. Dolorem fugiat laborum
-					temporibus nemo obcaecati placeat labore totam?
-				</li>
-				<li>
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae,
-					obcaecati numquam harum dolorem consequuntur molestias explicabo
-					beatae reprehenderit iure libero fugit. Dolorem fugiat laborum
-					temporibus nemo obcaecati placeat labore totam?
-				</li>
-			</ul>
-		</zippy-content>
-	</zippy>
-</section>
+						<button
+							class="btn btn--block period__icon"
+							[ngClass]="
+								zippy.isExpanded
+									? 'period__icon--expanded'
+									: 'period__icon--collapsed'
+							"
+						>
+							<i class="fas fa-chevron-down fa-lg"></i>
+						</button>
+					</zippy-static>
+					<zippy-content
+						#zippy
+						[ngClass]="{ 'period--expanded': zippy.isExpanded }"
+					>
+						<ul class="period__details">
+							<li>
+								<summary-card type="small" theme="danger">
+									<span class="title">Wydatki</span>
+									<span class="amount">{{ period.spent }}</span>
+									<span class="icon">
+										<i class="fas fa-long-arrow-alt-down"></i>
+									</span>
+								</summary-card>
+							</li>
+
+							<li>
+								<summary-card type="small" theme="success">
+									<span class="title">Przychody</span>
+									<span class="amount">{{ period.saved }}</span>
+									<span class="icon">
+										<i class="fas fa-long-arrow-alt-up"></i>
+									</span>
+								</summary-card>
+							</li>
+
+							<summary-card type="small" theme="secondary">
+								<span class="title">Zaoszczędzono</span>
+								<span class="amount">{{ period.saved - period.spent }}</span>
+								<span class="icon">
+									<i class="fas fa-piggy-bank"></i>
+								</span>
+							</summary-card>
+
+							<li>
+								<summary-card type="small" theme="warning">
+									<span class="title">Balans</span>
+									<span class="amount">{{ period.balance }}</span>
+									<span class="icon">
+										<i class="fas fa-coins"></i>
+									</span>
+								</summary-card>
+							</li>
+						</ul>
+					</zippy-content>
+				</zippy>
+			</section>
+		</li>
+	</ul>
+</zippy-list>
