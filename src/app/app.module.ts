@@ -35,6 +35,9 @@ import { AppSettingsComponent } from './pages/app-settings/app-settings.componen
 import { ProfileComponent } from './pages/profile/profile.component';
 import { PeriodsComponent } from './pages/periods/periods.component';
 import { LoginComponent } from './pages/login/login.component';
+import { ZippyComponent } from './components/zippy/zippy.component';
+import { ZippyStaticComponent } from './components/zippy-static/zippy-static.component';
+import { ZippyContentComponent } from './components/zippy-content/zippy-content.component';
 
 @NgModule({
 	declarations: [
@@ -57,6 +60,9 @@ import { LoginComponent } from './pages/login/login.component';
 		ProfileComponent,
 		PeriodsComponent,
 		LoginComponent,
+		ZippyComponent,
+		ZippyStaticComponent,
+		ZippyContentComponent,
 	],
 	imports: [
 		BrowserModule,
