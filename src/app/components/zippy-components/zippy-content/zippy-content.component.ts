@@ -7,6 +7,10 @@ import {
 } from '@angular/animations';
 import { Component } from '@angular/core';
 
+/**
+ * Content that will be expanded or collapsed.
+ */
+
 @Component({
 	selector: 'zippy-content',
 	templateUrl: './zippy-content.component.html',
@@ -25,18 +29,22 @@ export class ZippyContentComponent {
 
 	private _isExpanded = false;
 
+	/** Toggles current status of zippy-content */
 	toggle() {
 		this._isExpanded = !this._isExpanded;
 	}
 
+	/** Expands zippy-content */
 	expand() {
 		this._isExpanded = true;
 	}
 
+	/** Collapses zippy-content */
 	collapse() {
 		this._isExpanded = false;
 	}
 
+	/** Informs about current state of zippy-content */
 	get isExpanded() {
 		return this._isExpanded;
 	}

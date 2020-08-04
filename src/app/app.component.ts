@@ -1,3 +1,4 @@
+import { UserService } from './services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localePL from '@angular/common/locales/pl';
@@ -8,13 +9,14 @@ import localePL from '@angular/common/locales/pl';
 	styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-	constructor() {}
+	/*
+		! Do not remove unused dependencies from constructor.
+		! Theirs constructors may contain logic that is required as soon as possible.
+		! This is why, they have to be initialized here.
+	*/
+	constructor(private readonly _user: UserService) {}
 
 	ngOnInit() {
 		registerLocaleData(localePL);
-
-		(window as any).FontAwesomeConfig = {
-			searchPseudoElements: true,
-		};
 	}
 }

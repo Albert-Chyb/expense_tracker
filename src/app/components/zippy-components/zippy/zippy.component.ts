@@ -3,6 +3,10 @@ import { AfterContentInit, Component, ContentChild } from '@angular/core';
 import { ZippyContentComponent } from './../zippy-content/zippy-content.component';
 import { ZippyStaticComponent } from './../zippy-static/zippy-static.component';
 
+/**
+ * Container for zippy-static and zippy-content.
+ */
+
 @Component({
 	selector: 'zippy',
 	styleUrls: ['./zippy.component.scss'],
