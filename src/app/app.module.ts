@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -39,6 +40,8 @@ import { ZippyComponent } from './components/zippy-components/zippy/zippy.compon
 import { ZippyStaticComponent } from './components/zippy-components/zippy-static/zippy-static.component';
 import { ZippyContentComponent } from './components/zippy-components/zippy-content/zippy-content.component';
 import { ZippyListComponent } from './components/zippy-components/zippy-list/zippy-list.component';
+import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
+import { RippleDirective } from './directives/ripple/ripple.directive';
 
 @NgModule({
 	declarations: [
@@ -65,12 +68,15 @@ import { ZippyListComponent } from './components/zippy-components/zippy-list/zip
 		ZippyStaticComponent,
 		ZippyContentComponent,
 		ZippyListComponent,
+		SetupAccountComponent,
+		RippleDirective,
 	],
 	imports: [
 		BrowserModule,
 		AppRoutingModule,
 		AngularFireModule.initializeApp(environment.firebase),
 		AngularFirestoreModule,
+		AngularFireAuthModule,
 		BrowserAnimationsModule,
 		ReactiveFormsModule,
 		MatDatepickerModule,

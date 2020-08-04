@@ -14,4 +14,14 @@ export interface IUser {
 	 * User settings.
 	 */
 	settings: ISettings;
+
+	/**
+	 * User's current money balance.
+	 */
+	balance: number;
+
+	/**
+	 * Id of an user
+	 */
+	uid?: string;
 }

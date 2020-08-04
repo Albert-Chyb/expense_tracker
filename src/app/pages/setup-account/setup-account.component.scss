@@ -1,0 +1,17 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+
+.complete-login {
+
+  &__section {
+    margin-bottom: rem(40px);
+  }
+
+  &__description {
+    font-size: rem(14px);
+    margin-top: rem(10px);
+    color: $textLighterColor;
+  }
+}

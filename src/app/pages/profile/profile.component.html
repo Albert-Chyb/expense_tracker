@@ -1,5 +1,5 @@
-<section class="profile">
-	<h2 class="profile__heading">Witaj, Albert !</h2>
+<section class="profile" *ngIf="user.user$ | async as currentUser">
+	<h2 class="profile__heading">Witaj, {{ currentUser.name }} !</h2>
 
 	<section class="profile__section">
 		<h3 class="profile__heading">Zakończ obecny okres rozliczeniowy.</h3>

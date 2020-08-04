@@ -1,3 +1,4 @@
+import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
 import { LoginComponent } from './pages/login/login.component';
 import { PeriodsComponent } from './pages/periods/periods.component';
 import { ProfileComponent } from './pages/profile/profile.component';
@@ -49,6 +50,11 @@ const routes: Routes = [
 		path: 'login',
 		component: LoginComponent,
 		data: { name: 'Zaloguj się' },
+	},
+	{
+		path: 'setup-account',
+		component: SetupAccountComponent,
+		data: { name: 'Zakończ rejestrację' },
 	},
 ];
 

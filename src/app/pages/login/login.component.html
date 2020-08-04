@@ -1,7 +1,7 @@
 <section class="login">
 	<h2 class="login__heading">Witaj w naszej aplikacji.</h2>
 
-	<button class="btn btn--block btn--google">
+	<button class="btn btn--block btn--google" (click)="loginWithGoogle()">
 		Zaloguj sie z Google
 	</button>
 
@@ -10,3 +10,5 @@
 		ekranie.
 	</p>
 </section>
+
+<button (click)="logout()">Wyloguj</button>
