@@ -36,26 +36,18 @@
 <section class="transactions">
 	<h2 class="transactions__heading">Ostatnie wydatki</h2>
 
-	<section class="transactions__group">
-		<h3 class="transactions__heading">Dzisiaj</h3>
+	<section
+		class="transactions__group"
+		*ngFor="let transactions of groupedTransactions"
+	>
+		<h3 class="transactions__heading">
+			{{ isToday(transactions[0]) ? 'Dzisiaj' : (transactions[0] | date) }}
+		</h3>
 
 		<ul>
 			<li
 				class="transactions__transaction"
-				*ngFor="let transaction of transactions"
-			>
-				<transaction-card [transaction]="transaction"></transaction-card>
-			</li>
-		</ul>
-	</section>
-
-	<section class="transactions__group">
-		<h3 class="transactions__heading">Wczoraj</h3>
-
-		<ul>
-			<li
-				class="transactions__transaction"
-				*ngFor="let transaction of transactions"
+				*ngFor="let transaction of transactions[1]"
 			>
 				<transaction-card [transaction]="transaction"></transaction-card>
 			</li>

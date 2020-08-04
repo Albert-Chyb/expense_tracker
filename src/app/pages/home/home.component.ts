@@ -1,5 +1,7 @@
 import { ITransaction } from './../../common/models/transaction';
 import { Component, OnInit } from '@angular/core';
+import groupBy from 'src/app/common/helpers/groupBy';
+import isToday from 'src/app/common/helpers/isToday';
 
 @Component({
 	templateUrl: './home.component.html',
@@ -8,13 +10,14 @@ import { Component, OnInit } from '@angular/core';
 export class HomeComponent implements OnInit {
 	constructor() {}
 
-	transactions: ITransaction[];
+	private _groupedTransactions: Map<string, ITransaction[]>;
+	isToday = isToday;
 
 	ngOnInit() {
-		this.transactions = [
+		const data: ITransaction[] = [
 			{
 				amount: -13.0,
-				date: Date.now(),
+				date: new Date('2020/09/13').getTime(),
 				description: 'Wyjście ze znajomymi',
 				group: {
 					name: 'Jedzenie',
@@ -26,7 +29,7 @@ export class HomeComponent implements OnInit {
 			},
 			{
 				amount: -43.73,
-				date: Date.now(),
+				date: new Date('2020/09/13').getTime(),
 				description: 'Coroczne szczepienie psa',
 				group: {
 					name: 'Weterynarz',
@@ -38,7 +41,7 @@ export class HomeComponent implements OnInit {
 			},
 			{
 				amount: 3600.0,
-				date: Date.now(),
+				date: new Date('2020/08/04').getTime(),
 				description: 'Głowna wypłata z pracy',
 				group: {
 					name: 'Pensja',
@@ -48,6 +51,26 @@ export class HomeComponent implements OnInit {
 					},
 				},
 			},
+			{
+				amount: 25.99,
+				date: new Date('2020/08/04').getTime(),
+				description: 'Naprawa okularów',
+				group: {
+					name: 'Osobiste',
+					icon: {
+						name: 'fa-glasses',
+						type: 'fas',
+					},
+				},
+			},
 		];
+
+		this._groupedTransactions = groupBy<ITransaction>(data, 'date');
+	}
+
+	get groupedTransactions() {
+		return Array.from(this._groupedTransactions).sort(
+			(a: any, b: any) => a[0] - b[0]
+		);
 	}
 }
