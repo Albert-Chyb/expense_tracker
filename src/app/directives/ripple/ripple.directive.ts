@@ -21,6 +21,6 @@ export class RippleDirective {
 		this.isRippling = true;
 		setTimeout(() => (this.isRippling = false), 500);
 	}
-	@HostBinding('class.ripple--is-rippling') private isRippling: boolean = false;
+	@HostBinding('class.ripple--is-rippling') isRippling: boolean = false;
 	@HostBinding('class.ripple') isEnabled: boolean = true;
 }
