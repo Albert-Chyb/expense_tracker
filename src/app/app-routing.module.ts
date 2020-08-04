@@ -1,3 +1,4 @@
+import { UnAuthGuard } from './guards/un-auth/un-auth.guard';
 import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
 import { LoginComponent } from './pages/login/login.component';
 import { PeriodsComponent } from './pages/periods/periods.component';
@@ -15,6 +16,7 @@ const routes: Routes = [
 		path: '',
 		component: HomeComponent,
 		data: { name: 'Strona główna' },
+		canActivate: [UnAuthGuard],
 	},
 	{
 		path: 'manage-transaction',

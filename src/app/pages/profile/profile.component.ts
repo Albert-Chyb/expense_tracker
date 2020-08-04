@@ -1,3 +1,6 @@
+import { tap } from 'rxjs/operators';
+import { IUser } from './../../common/models/user';
+import { Observable } from 'rxjs';
 import { UserService } from './../../services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -6,7 +9,11 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-	constructor(public readonly user: UserService) {}
+	constructor(private readonly _user: UserService) {}
 
-	ngOnInit() {}
+	user$: Observable<IUser>;
+
+	ngOnInit() {
+		this.user$ = this._user.user$;
+	}
 }

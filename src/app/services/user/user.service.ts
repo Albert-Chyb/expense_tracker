@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { switchMap, map, tap } from 'rxjs/operators';
 
 import { IUser } from './../../common/models/user';
+import { User } from 'firebase';
 
 /**
  * Handles user's data.
@@ -30,10 +31,7 @@ export class UserService {
 	 */
 
 	update(user: Partial<IUser>): Promise<void> {
-		return this._db
-			.collection<IUser[]>('users')
-			.doc<IUser>(this.userId)
-			.update(user);
+		return this._db.collection('users').doc<IUser>(this.userId).update(user);
 	}
 
 	/**
@@ -48,27 +46,6 @@ export class UserService {
 	}
 
 	/**
-	 * Initialization logic
-	 */
-
-	private init() {
-		this._user$ = this._afAuth.authState.pipe(
-			switchMap(user => {
-				if (user)
-					return this._db
-						.collection<IUser[]>('users')
-						.doc<IUser>(user.uid)
-						.valueChanges()
-						.pipe(
-							map(doc => ({ uid: user.uid, ...doc })),
-							tap(doc => this.update({ name: user.displayName }))
-						);
-				else return of(false as any);
-			})
-		);
-	}
-
-	/**
 	 * Returns user data from database.
 	 */
 
@@ -77,7 +54,7 @@ export class UserService {
 	}
 
 	/**
-	 * Returns currently logged in user's id
+	 * Returns currently logged in user's id.
 	 */
 
 	get userId(): string {
@@ -89,8 +66,8 @@ export class UserService {
 	 */
 	get isSetUpFully(): Promise<boolean> {
 		return this._db
-			.collection<IUser[]>('users')
-			.doc(this.userId)
+			.collection('users')
+			.doc<IUser>(this.userId)
 			.ref.get()
 			.then(doc => doc.exists);
 	}
@@ -101,5 +78,31 @@ export class UserService {
 
 	get isLoggedIn$(): Observable<boolean> {
 		return this._user$.pipe(map(user => !!user));
+	}
+
+	/**
+	 * Initialization logic.
+	 */
+
+	private init() {
+		this._user$ = this._afAuth.authState.pipe(
+			tap(this.updateUserCredentials.bind(this)),
+			switchMap(this.switchToUserFromDatabase.bind(this))
+		);
+	}
+
+	private updateUserCredentials(user: User) {
+		if (!user) return null;
+		this.update({ name: user.displayName });
+	}
+
+	private switchToUserFromDatabase(user: User) {
+		if (user)
+			return this._db
+				.collection('users')
+				.doc<IUser>(user.uid)
+				.valueChanges()
+				.pipe(map(doc => ({ uid: user.uid, ...doc })));
+		else return of(false as any);
 	}
 }

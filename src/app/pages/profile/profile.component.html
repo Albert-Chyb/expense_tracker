@@ -1,4 +1,4 @@
-<section class="profile" *ngIf="user.user$ | async as currentUser">
+<section class="profile" *ngIf="user$ | async as currentUser">
 	<h2 class="profile__heading">Witaj, {{ currentUser.name }} !</h2>
 
 	<section class="profile__section">

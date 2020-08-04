@@ -5,7 +5,12 @@
 
 	<h1 class="header__heading">{{ pageName$ | async }}</h1>
 
-	<a routerLink="/profile" aria-label="Profile" class="header__icon">
+	<a
+		routerLink="/profile"
+		aria-label="Profile"
+		class="header__icon"
+		*ngIf="isLoggedIn$ | async"
+	>
 		<i class="fas fa-user-circle"></i>
 	</a>
 </header>
