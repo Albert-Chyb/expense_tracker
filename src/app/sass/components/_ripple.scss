@@ -1,0 +1,36 @@
+.ripple {
+  position: relative;
+  overflow: hidden;
+  --ripple-x-pos: 0px;
+  --ripple-y-pos: 0px;
+
+  &::before {
+    top: var(--ripple-y-pos);
+    left: var(--ripple-x-pos);
+    position: absolute;
+    content: '';
+    width: rem(50px);
+    height: rem(50px);
+    background-color: #FFF;
+    opacity: .0;
+    border-radius: 100%;
+    z-index: -1;
+  }
+
+  &--is-rippling::before {
+    animation: ripple .5s ease-out;
+  }
+}
+
+@keyframes ripple {
+  from {
+    z-index: 0;
+    transform: scale(1);
+    opacity: .3;
+  }
+
+  to {
+    transform: scale(20);
+    opacity: 0;
+  }
+}

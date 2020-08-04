@@ -1,22 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+
+// Angular Material theme
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+// Sass utils
 @import './app/sass/utils/variables';
 @import './app/sass/utils/functions';
-
 @import './app/sass/utils/mixins';
+
+// Sass base styles
 @import './app/sass/base/reset';
 @import './app/sass/base/typography';
 
+// Sass components
 @import './app/sass/components/buttons';
 @import './app/sass/components/inputs';
 @import './app/sass/components/links';
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
+@import './app/sass/components/ripple';
