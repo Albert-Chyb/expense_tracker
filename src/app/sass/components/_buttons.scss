@@ -15,11 +15,19 @@
   }
 
   &--secondary {
-    @include buttonTheme($colorSecondary, $textOnSecondaryColor)
+    @include buttonTheme($colorSecondary, $textOnSecondaryColor);
   }
 
   &--danger {
-    @include buttonTheme($colorDanger, $textOnDangerColor)
+    @include buttonTheme($colorDanger, $textOnDangerColor);
+  }
+
+  &--success {
+    @include buttonTheme($colorSuccess, $textOnSuccessColor);
+  }
+
+  &--warning {
+    @include buttonTheme($colorWarning, $textOnWarningColor);
   }
 
   &--google {

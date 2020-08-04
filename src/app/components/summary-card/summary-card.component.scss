@@ -60,7 +60,7 @@
   }
 
   &--warning {
-    @include summaryCardTheme($colorWarning, $textOnWarning, $textOnWarning);
+    @include summaryCardTheme($colorWarning, $textOnWarningColor, $textOnWarningColor);
   }
 
   &__title {

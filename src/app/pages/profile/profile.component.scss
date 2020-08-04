@@ -5,7 +5,6 @@
 
 .profile {
 
-
   &__heading {
     margin: rem(20px) 0px;
     font-weight: 500;
@@ -17,15 +16,13 @@
     &:is(h3) {
       color: $textLighterColor;
       font-weight: rem(18px);
-
     }
   }
 
   &__description {
     margin-bottom: rem(20px);
     color: $textLighterColor;
-    font-weight: rem(14px);
-
+    font-size: rem(14px);
   }
 
   &__section {
