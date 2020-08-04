@@ -26,8 +26,4 @@ export class LoginComponent implements OnInit {
 			console.log(error);
 		}
 	}
-
-	async logout() {
-		await this._auth.logout();
-	}
 }

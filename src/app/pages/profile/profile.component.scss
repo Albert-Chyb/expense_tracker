@@ -8,15 +8,15 @@
   &__heading {
     margin: rem(20px) 0px;
     font-weight: 500;
+  }
 
-    &:is(h2) {
-      font-weight: rem(24px);
-    }
+  h2.profile__heading {
+    font-size: rem(24px);
+  }
 
-    &:is(h3) {
-      color: $textLighterColor;
-      font-weight: rem(18px);
-    }
+  h3.profile__heading {
+    color: $textLighterColor;
+    font-size: rem(18px);
   }
 
   &__description {
