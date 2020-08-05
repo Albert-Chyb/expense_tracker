@@ -1,3 +1,5 @@
+import { firestore } from 'firebase/app';
+import { IPeriod } from './../../common/models/period';
 import { ICompletingData } from './../../common/models/completingData';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -40,9 +42,16 @@ export class UserService {
 	 * @param data Completing data that is required to complete account.
 	 */
 
-	completeCreatingAccount(data: ICompletingData): Promise<void> {
+	completeCreatingAccount(data: ICompletingData) {
+		const userRef = this._db.collection('users').doc(this.id);
 		data.name = this._afAuth.auth.currentUser.displayName;
-		return this._db.collection('users').doc(this.id).set(data);
+		userRef.set(data);
+		return userRef.collection<IPeriod>('periods').add({
+			date: {
+				start: firestore.FieldValue.serverTimestamp() as any,
+			},
+			isClosed: false,
+		});
 	}
 
 	/**
@@ -106,10 +115,20 @@ export class UserService {
 		);
 	}
 
-	private updateUserCredentials(user: User) {
-		if (!user) return null;
+	/**
+	 * Updates user's credentials in firestore.
+	 * @param user Firebase user.
+	 */
+
+	private async updateUserCredentials(user: User) {
+		if (!user || !(await this.isSetUpFully)) return null;
 		this.update({ name: user.displayName });
 	}
+
+	/**
+	 * Returns observable of user from database instead of default firebase user.
+	 * @param user Firebase user.
+	 */
 
 	private switchToUserFromDatabase(user: User) {
 		if (user)
