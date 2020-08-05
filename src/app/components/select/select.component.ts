@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import {
 	animate,
 	state,
@@ -13,6 +14,7 @@ import {
 	OnInit,
 	QueryList,
 	HostListener,
+	OnDestroy,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -49,7 +51,7 @@ import { SelectItemComponent } from './../select-item/select-item.component';
 	],
 })
 export class SelectComponent
-	implements OnInit, AfterContentInit, ControlValueAccessor {
+	implements AfterContentInit, ControlValueAccessor, OnDestroy {
 	constructor() {}
 
 	@ContentChildren(SelectItemComponent) options: QueryList<SelectItemComponent>;
@@ -58,6 +60,7 @@ export class SelectComponent
 	isDisabled: boolean = false;
 	selectedOption: SelectOption;
 	private waitingOptionValue: string = '';
+	private subscriptions = new Subscription();
 
 	onChange: (newValue: any) => {};
 	onTouched: () => {};
@@ -83,15 +86,18 @@ export class SelectComponent
 	}
 
 	ngAfterContentInit() {
-		this.options.forEach(item =>
-			item.onSelectEmitter.subscribe(this.selectOption.bind(this))
+		this.subscriptions.add(
+			this.options.changes.subscribe(this.bindListeners.bind(this))
 		);
+		this.bindListeners();
 
 		if (this.waitingOptionValue) this.writeValue(this.waitingOptionValue);
 		else this.selectOption(this.options.first.item);
 	}
 
-	ngOnInit() {}
+	ngOnDestroy() {
+		this.subscriptions.unsubscribe();
+	}
 
 	writeValue(value: string): void {
 		if (!this.options) {
@@ -113,5 +119,11 @@ export class SelectComponent
 
 	setDisabledState?(isDisabled: boolean): void {
 		this.isDisabled = isDisabled;
+	}
+
+	private bindListeners() {
+		this.options.forEach(item =>
+			item.onSelectEmitter.subscribe(this.selectOption.bind(this))
+		);
 	}
 }

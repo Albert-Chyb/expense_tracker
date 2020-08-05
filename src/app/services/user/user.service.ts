@@ -31,7 +31,7 @@ export class UserService {
 	 */
 
 	update(user: Partial<IUser>): Promise<void> {
-		return this._db.collection('users').doc<IUser>(this.userId).update(user);
+		return this._db.collection('users').doc<IUser>(this.id).update(user);
 	}
 
 	/**
@@ -42,7 +42,7 @@ export class UserService {
 
 	completeCreatingAccount(data: ICompletingData): Promise<void> {
 		data.name = this._afAuth.auth.currentUser.displayName;
-		return this._db.collection('users').doc(this.userId).set(data);
+		return this._db.collection('users').doc(this.id).set(data);
 	}
 
 	/**
@@ -57,7 +57,7 @@ export class UserService {
 	 * Returns currently logged in user's id.
 	 */
 
-	get userId(): string {
+	get id(): string {
 		return this._afAuth.auth.currentUser.uid || '';
 	}
 
@@ -67,7 +67,7 @@ export class UserService {
 	get isSetUpFully(): Promise<boolean> {
 		return this._db
 			.collection('users')
-			.doc<IUser>(this.userId)
+			.doc<IUser>(this.id)
 			.ref.get()
 			.then(doc => doc.exists);
 	}

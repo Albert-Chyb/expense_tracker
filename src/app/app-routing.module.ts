@@ -22,6 +22,7 @@ const routes: Routes = [
 		path: 'manage-transaction',
 		component: ManageTransactionComponent,
 		data: { name: 'Zarządzaj transakcją' },
+		canActivate: [UnAuthGuard],
 	},
 	{
 		path: 'add-group',

@@ -1,76 +1,76 @@
-import { ITransaction } from './../../common/models/transaction';
 import { Component, OnInit } from '@angular/core';
+import { combineLatest, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import groupBy from 'src/app/common/helpers/groupBy';
 import isToday from 'src/app/common/helpers/isToday';
+
+import { ITransaction } from './../../common/models/transaction';
+import { IUser } from './../../common/models/user';
+import { TransactionsService } from './../../services/transactions/transactions.service';
+import { UserService } from './../../services/user/user.service';
 
 @Component({
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-	constructor() {}
+	constructor(
+		private readonly _transactions: TransactionsService,
+		private readonly _user: UserService
+	) {}
 
-	private _groupedTransactions: Map<string, ITransaction[]>;
+	data$: Observable<{
+		transactions: [string, ITransaction[]][];
+		user: IUser;
+	}>;
+	incomes: number = 0;
+	outcomes: number = 0;
+
 	isToday = isToday;
 
 	ngOnInit() {
-		const data: ITransaction[] = [
-			{
-				amount: -13.0,
-				date: new Date('2020/09/13').getTime(),
-				description: 'Wyjście ze znajomymi',
-				group: {
-					name: 'Jedzenie',
-					icon: {
-						name: 'fa-utensils',
-						type: 'fas',
-					},
-				},
-			},
-			{
-				amount: -43.73,
-				date: new Date('2020/09/13').getTime(),
-				description: 'Coroczne szczepienie psa',
-				group: {
-					name: 'Weterynarz',
-					icon: {
-						name: 'fa-paw',
-						type: 'fas',
-					},
-				},
-			},
-			{
-				amount: 3600.0,
-				date: new Date('2020/08/04').getTime(),
-				description: 'Głowna wypłata z pracy',
-				group: {
-					name: 'Pensja',
-					icon: {
-						name: 'fa-coins',
-						type: 'fas',
-					},
-				},
-			},
-			{
-				amount: 25.99,
-				date: new Date('2020/08/04').getTime(),
-				description: 'Naprawa okularów',
-				group: {
-					name: 'Osobiste',
-					icon: {
-						name: 'fa-glasses',
-						type: 'fas',
-					},
-				},
-			},
-		];
-
-		this._groupedTransactions = groupBy<ITransaction>(data, 'date');
+		this.setupData();
 	}
 
-	get groupedTransactions() {
-		return Array.from(this._groupedTransactions).sort(
-			(a: any, b: any) => a[0] - b[0]
+	get savings(): number {
+		return this.incomes - this.outcomes;
+	}
+
+	private setupData() {
+		const groupedTransactions$ = this._transactions.getAllCurrent().pipe(
+			tap(this.calculateStatistics.bind(this)),
+			map(transactions =>
+				groupBy(transactions, 'date', this.dateNormalizer.bind(this))
+			),
+			map(transactions =>
+				Array.from(transactions).sort((a: any, b: any) => b[0] - a[0])
+			)
 		);
+		const user$ = this._user.user$;
+
+		this.data$ = combineLatest([groupedTransactions$, user$]).pipe(
+			map(([transactions, user]) => ({ transactions, user }))
+		);
+	}
+
+	private dateNormalizer(data: Date): number {
+		return data.setHours(0, 0, 0, 0);
+	}
+
+	private calculateStatistics(transactions: ITransaction[]) {
+		const statistics = {
+			incomes: 0,
+			outcomes: 0,
+		};
+
+		transactions.forEach(transaction => {
+			const type = transaction.amount > 0 ? 'incomes' : 'outcomes';
+			statistics[type] += transaction.amount;
+
+			return statistics;
+		});
+
+		this.incomes = statistics.incomes;
+		this.outcomes = statistics.outcomes * -1;
 	}
 }

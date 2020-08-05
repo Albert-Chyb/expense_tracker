@@ -1,63 +1,65 @@
-<div class="summary-cards">
-	<summary-card theme="primary" type="big" class="summary-cards__balance">
-		<span class="title">Aktualny balans</span>
-		<span class="amount">{{ 12000.35 | currency: ' ' }}</span>
-		<span class="currency">PLN</span>
-	</summary-card>
+<div *ngIf="data$ | async as data">
+	<div class="summary-cards">
+		<summary-card theme="primary" type="big" class="summary-cards__balance">
+			<span class="title">Aktualny balans</span>
+			<span class="amount">{{ data.user.balance | currency: ' ' }}</span>
+			<span class="currency">PLN</span>
+		</summary-card>
 
-	<summary-card theme="danger" type="small" class="summary-cards__outcomes">
-		<span class="title">Wydatki</span>
-		<span class="amount">{{ 1689.33 | currency: ' ' }}</span>
-		<span class="currency">PLN</span>
-		<span class="icon">
-			<i class="fas fa-long-arrow-alt-down"></i>
-		</span>
-	</summary-card>
+		<summary-card theme="danger" type="small" class="summary-cards__outcomes">
+			<span class="title">Wydatki</span>
+			<span class="amount">{{ outcomes | currency: ' ' }}</span>
+			<span class="currency">PLN</span>
+			<span class="icon">
+				<i class="fas fa-long-arrow-alt-down"></i>
+			</span>
+		</summary-card>
 
-	<summary-card theme="success" type="small" class="summary-cards__incomes">
-		<span class="title">Przychody</span>
-		<span class="amount">{{ 2634.33 | currency: ' ' }}</span>
-		<span class="currency">PLN</span>
-		<span class="icon">
-			<i class="fas fa-long-arrow-alt-up"></i>
-		</span>
-	</summary-card>
+		<summary-card theme="success" type="small" class="summary-cards__incomes">
+			<span class="title">Przychody</span>
+			<span class="amount">{{ incomes | currency: ' ' }}</span>
+			<span class="currency">PLN</span>
+			<span class="icon">
+				<i class="fas fa-long-arrow-alt-up"></i>
+			</span>
+		</summary-card>
 
-	<summary-card theme="secondary" type="small" class="summary-cards__savings">
-		<span class="title">Zaoszczędzono</span>
-		<span class="amount">{{ 945.0 | currency: ' ' }}</span>
-		<span class="currency">PLN</span>
-		<span class="icon">
-			<i class="fas fa-piggy-bank"></i>
-		</span>
-	</summary-card>
-</div>
+		<summary-card theme="secondary" type="small" class="summary-cards__savings">
+			<span class="title">Zaoszczędzono</span>
+			<span class="amount">{{ savings | currency: ' ' }}</span>
+			<span class="currency">PLN</span>
+			<span class="icon">
+				<i class="fas fa-piggy-bank"></i>
+			</span>
+		</summary-card>
+	</div>
 
-<section class="transactions">
-	<h2 class="transactions__heading">Ostatnie wydatki</h2>
+	<section class="transactions">
+		<h2 class="transactions__heading">Ostatnie wydatki</h2>
 
-	<section
-		class="transactions__group"
-		*ngFor="let transactions of groupedTransactions"
-	>
-		<h3 class="transactions__heading">
-			{{ isToday(transactions[0]) ? 'Dzisiaj' : (transactions[0] | date) }}
-		</h3>
+		<section
+			class="transactions__group"
+			*ngFor="let transactions of data.transactions"
+		>
+			<h3 class="transactions__heading">
+				{{ isToday(transactions[0]) ? 'Dzisiaj' : (transactions[0] | date) }}
+			</h3>
 
-		<ul>
-			<li
-				class="transactions__transaction"
-				*ngFor="let transaction of transactions[1]"
-			>
-				<transaction-card [transaction]="transaction"></transaction-card>
-			</li>
-		</ul>
+			<ul>
+				<li
+					class="transactions__transaction"
+					*ngFor="let transaction of transactions[1]"
+				>
+					<transaction-card [transaction]="transaction"></transaction-card>
+				</li>
+			</ul>
+		</section>
 	</section>
-</section>
 
-<a
-	aria-label="Dodaj nową transakcje"
-	class="btn btn--circle home__add-transaction"
-	routerLink="/manage-transaction"
-	>+</a
->
+	<a
+		aria-label="Dodaj nową transakcje"
+		class="btn btn--circle home__add-transaction"
+		routerLink="/manage-transaction"
+		>+</a
+	>
+</div>

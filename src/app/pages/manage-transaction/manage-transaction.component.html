@@ -1,6 +1,6 @@
-<form [formGroup]="form" class="transaction">
+<form [formGroup]="form" class="transaction" *ngIf="groups$ | async as groups">
 	<styled-input class="transaction__detail" appearance="filled">
-		<input styledInput type="text" formControlName="amount" />
+		<input styledInput type="number" formControlName="amount" />
 		<span styledInputSuffix>PLN</span>
 		<span class="label">Wartość</span>
 	</styled-input>
@@ -29,7 +29,10 @@
 	</styled-input>
 
 	<div class="transaction__actions">
-		<button class="btn btn--secondary btn--block transaction__action">
+		<button
+			(click)="addTransaction()"
+			class="btn btn--secondary btn--block transaction__action"
+		>
 			Zapisz
 		</button>
 
