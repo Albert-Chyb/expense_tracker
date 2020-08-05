@@ -37,7 +37,7 @@ export class TransactionsService {
 					.collection('users')
 					.doc(this._user.id)
 					.collection<ITransaction>('transactions', ref =>
-						ref.where('date', '>=', period.date.start)
+						ref.where('date', '>=', period.date.start).orderBy('date', 'desc')
 					)
 					.valueChanges()
 					.pipe(
