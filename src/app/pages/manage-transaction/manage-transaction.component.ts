@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { ITransactionGroup } from './../../common/models/group';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { blackListValidator } from 'src/app/common/validators/blackListValidator';
 
 @Component({
 	templateUrl: './manage-transaction.component.html',
@@ -20,10 +21,13 @@ export class ManageTransactionComponent implements OnInit {
 	) {}
 
 	form = new FormGroup({
-		group: new FormControl(),
-		amount: new FormControl(),
-		date: new FormControl(new Date()),
-		description: new FormControl(),
+		group: new FormControl('', Validators.required),
+		amount: new FormControl(0, [Validators.required, blackListValidator(0)]),
+		date: new FormControl(new Date(), Validators.required),
+		description: new FormControl('', [
+			Validators.required,
+			Validators.maxLength(255),
+		]),
 	});
 
 	groups$: Observable<ITransactionGroup[]>;
