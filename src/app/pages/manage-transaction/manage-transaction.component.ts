@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { ITransaction } from './../../common/models/transaction';
 import { Observable } from 'rxjs';
 import { TransactionsGroupsService } from './../../services/transactions-groups/transactions-groups.service';
@@ -14,7 +15,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class ManageTransactionComponent implements OnInit {
 	constructor(
 		private readonly _transactions: TransactionsService,
-		private readonly _groups: TransactionsGroupsService
+		private readonly _groups: TransactionsGroupsService,
+		private readonly _router: Router
 	) {}
 
 	form = new FormGroup({
@@ -30,7 +32,8 @@ export class ManageTransactionComponent implements OnInit {
 		this.groups$ = this._groups.getAll();
 	}
 
-	addTransaction() {
-		this._transactions.add(this.form.value);
+	async addTransaction() {
+		await this._transactions.add(this.form.value);
+		this._router.navigateByUrl('/');
 	}
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
-import { switchMap, map, tap } from 'rxjs/operators';
+import { switchMap, map, tap, take } from 'rxjs/operators';
 
 import { IUser } from './../../common/models/user';
 import { User } from 'firebase';
@@ -43,6 +43,21 @@ export class UserService {
 	completeCreatingAccount(data: ICompletingData): Promise<void> {
 		data.name = this._afAuth.auth.currentUser.displayName;
 		return this._db.collection('users').doc(this.id).set(data);
+	}
+
+	/**
+	 * Updates users' balance based on passed amount.
+	 * For example - if you want to decrease balance by 200 you pass -200 number in amount param.
+	 * If amount is 0 then nothing happens.
+	 * @param amount Amount
+	 */
+
+	async updateBalance(amount: number) {
+		if (amount === 0) return null;
+		const user = await this._user$.pipe(take(1)).toPromise();
+		let balance = user.balance + amount;
+
+		return this.update({ balance });
 	}
 
 	/**

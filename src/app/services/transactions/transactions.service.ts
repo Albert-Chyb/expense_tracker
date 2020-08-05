@@ -50,6 +50,7 @@ export class TransactionsService {
 	/**
 	 * Saves transaction on the server.
 	 * Automatically replaces transaction id in group field with actual data of the group.
+	 * Also it changes main balance based on amount of the transaction.
 	 * @param transaction Transaction object to save on the server
 	 */
 
@@ -58,9 +59,21 @@ export class TransactionsService {
 			.get((transaction.group as any) as string)
 			.pipe(take(1))
 			.toPromise();
-		// TODO: Make firebase functions that will add group on the server.
+
 		transaction.group = group;
-		return this._transactionsRef.add(transaction);
+		await this._transactionsRef.add(transaction);
+		return this.manageMainBalance(transaction);
+	}
+
+	/**
+	 * Initialization logic
+	 */
+
+	private init() {
+		this._transactionsRef = this._afStore
+			.collection('users')
+			.doc(this._user.id)
+			.collection<ITransaction>('transactions');
 	}
 
 	private normalizeTransactionsDate(
@@ -72,10 +85,7 @@ export class TransactionsService {
 		});
 	}
 
-	init() {
-		this._transactionsRef = this._afStore
-			.collection('users')
-			.doc(this._user.id)
-			.collection<ITransaction>('transactions');
+	private async manageMainBalance(transaction: ITransaction) {
+		this._user.updateBalance(transaction.amount);
 	}
 }
