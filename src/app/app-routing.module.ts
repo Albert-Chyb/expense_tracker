@@ -10,6 +10,7 @@ import { ManageTransactionComponent } from './pages/manage-transaction/manage-tr
 import { HomeComponent } from './pages/home/home.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './guards/auth/auth.guard';
 
 const routes: Routes = [
 	{
@@ -19,40 +20,52 @@ const routes: Routes = [
 		canActivate: [UnAuthGuard],
 	},
 	{
-		path: 'manage-transaction',
+		path: 'manage-transaction/:id',
 		component: ManageTransactionComponent,
 		data: { name: 'Zarządzaj transakcją' },
+		canActivate: [UnAuthGuard],
+	},
+	{
+		path: 'manage-transaction',
+		component: ManageTransactionComponent,
+		data: { name: 'Dodaj transakcję' },
 		canActivate: [UnAuthGuard],
 	},
 	{
 		path: 'add-group',
 		component: AddGroupComponent,
 		data: { name: 'Dodaj nową grupę' },
+		canActivate: [UnAuthGuard],
 	},
 	{
 		path: 'manage-groups',
 		component: ManageGroupsComponent,
 		data: { name: 'Zarządzaj grupami' },
+		canActivate: [UnAuthGuard],
 	},
 	{
 		path: 'app-settings',
 		component: AppSettingsComponent,
 		data: { name: 'Ustawienia' },
+		canActivate: [UnAuthGuard],
 	},
 	{
 		path: 'profile',
 		component: ProfileComponent,
 		data: { name: 'Profil' },
+		canActivate: [UnAuthGuard],
 	},
 	{
 		path: 'periods',
 		component: PeriodsComponent,
 		data: { name: 'Okresy' },
+		canActivate: [UnAuthGuard],
 	},
 	{
 		path: 'login',
 		component: LoginComponent,
 		data: { name: 'Zaloguj się' },
+		canActivate: [AuthGuard],
 	},
 	{
 		path: 'setup-account',

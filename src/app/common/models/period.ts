@@ -12,12 +12,12 @@ export interface IPeriod {
 		 * Date when period was ended.
 		 * Present only in ended period.
 		 */
-		end?: number;
+		end?: Date;
 
 		/**
 		 * Date when period was started.
 		 */
-		start: number;
+		start: Date;
 	};
 
 	/**
