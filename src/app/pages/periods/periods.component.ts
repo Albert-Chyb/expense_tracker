@@ -12,8 +12,8 @@ export class PeriodsComponent implements OnInit {
 	periods: IPeriod[] = [
 		{
 			date: {
-				start: new Date('2020/06/13').getTime(),
-				end: new Date('2020/07/13').getTime(),
+				start: new Date('2020/06/13'),
+				end: new Date('2020/07/13'),
 			},
 			isClosed: true,
 			saved: 400.63,
@@ -22,8 +22,8 @@ export class PeriodsComponent implements OnInit {
 		},
 		{
 			date: {
-				start: new Date('2020/07/14').getTime(),
-				end: new Date('2020/08/14').getTime(),
+				start: new Date('2020/07/14'),
+				end: new Date('2020/08/14'),
 			},
 			isClosed: true,
 			saved: 700.34,
@@ -32,8 +32,8 @@ export class PeriodsComponent implements OnInit {
 		},
 		{
 			date: {
-				start: new Date('2020/08/15').getTime(),
-				end: new Date('2020/09/15').getTime(),
+				start: new Date('2020/08/15'),
+				end: new Date('2020/09/15'),
 			},
 			isClosed: true,
 			saved: 125.34,
