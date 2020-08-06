@@ -1,3 +1,4 @@
+import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { ITransactionGroup } from './../../common/models/group';
 import {
@@ -18,20 +19,20 @@ export class TransactionsGroupsService {
 	constructor(
 		private readonly _user: UserService,
 		private readonly _afStore: AngularFirestore
-	) {
-		this.init();
-	}
-
-	private _groupsRef: AngularFirestoreCollection<ITransactionGroup>;
+	) {}
 
 	/** Gets all transactions groups that user currently have. */
 
 	getAll(): Observable<ITransactionGroup[]> {
-		return this._groupsRef.snapshotChanges().pipe(
-			map(docs => {
-				return docs.map(this.includeDocId.bind(this));
-			})
-		);
+		return this._afStore
+			.doc(`users/${this._user.id}`)
+			.collection<ITransactionGroup>('groups')
+			.snapshotChanges()
+			.pipe(
+				map(docs => {
+					return docs.map(this.includeDocId.bind(this));
+				})
+			);
 	}
 
 	/**
@@ -40,21 +41,10 @@ export class TransactionsGroupsService {
 	 */
 
 	get(id: string): Observable<ITransactionGroup> {
-		return this._groupsRef
-			.doc<ITransactionGroup>(id)
+		return this._afStore
+			.doc<ITransactionGroup>(`users/${this._user.id}/groups/${id}`)
 			.snapshotChanges()
 			.pipe(map(doc => ({ ...doc.payload.data(), id: doc.payload.id })));
-	}
-
-	private init() {
-		console.warn(
-			'TRANSACTION-GROUPS => Update this reference every time user changes account'
-		);
-		// ! Update this reference every time user changes account !
-		this._groupsRef = this._afStore
-			.collection('users')
-			.doc(this._user.id)
-			.collection('groups');
 	}
 
 	private includeDocId<T>(doc: DocumentChangeAction<T>) {

@@ -1,3 +1,4 @@
+import { AngularFireAuth } from '@angular/fire/auth';
 import { TransactionsGroupsService } from './../transactions-groups/transactions-groups.service';
 import { Injectable } from '@angular/core';
 import {
@@ -20,11 +21,7 @@ export class TransactionsService {
 		private readonly _user: UserService,
 		private readonly _periods: PeriodsService,
 		private readonly _groups: TransactionsGroupsService
-	) {
-		this.init();
-	}
-
-	private _transactionsRef: AngularFirestoreCollection<ITransaction>;
+	) {}
 
 	/**
 	 * Gets all transactions in current period of currently logged in user.
@@ -34,8 +31,7 @@ export class TransactionsService {
 		return this._periods.getCurrent().pipe(
 			switchMap(period =>
 				this._afStore
-					.collection('users')
-					.doc(this._user.id)
+					.doc(`users/${this._user.id}`)
 					.collection<ITransaction>('transactions', ref =>
 						ref.where('date', '>=', period.date.start).orderBy('date', 'desc')
 					)
@@ -51,28 +47,24 @@ export class TransactionsService {
 	 * Saves transaction on the server.
 	 * Automatically replaces transaction id in group field with actual data of the group.
 	 * @param transaction Transaction object to save on the server
+	 * @param populateLocally If true - group field will be populated before data is sent to database, if false - cloud function will take care of this.
 	 */
 
-	async add(transaction: ITransaction) {
-		const group = await this._groups
-			.get((transaction.group as any) as string)
-			.pipe(take(1))
-			.toPromise();
+	async add(transaction: ITransaction, populateLocally = true) {
+		if (populateLocally) {
+			const group = await this._groups
+				.get((transaction.group as any) as string)
+				.pipe(take(1))
+				.toPromise();
 
-		transaction.group = group;
-		return this._transactionsRef.add(transaction);
-	}
+			transaction.group = group;
+		}
 
-	/**
-	 * Initialization logic
-	 */
-
-	private init() {
-		console.warn('TRANSACTION SERVICE => this reference is no dynamic !');
-		this._transactionsRef = this._afStore
+		return this._afStore
 			.collection('users')
 			.doc(this._user.id)
-			.collection<ITransaction>('transactions');
+			.collection<ITransaction>('transactions')
+			.add(transaction);
 	}
 
 	private normalizeTransactionsDate(

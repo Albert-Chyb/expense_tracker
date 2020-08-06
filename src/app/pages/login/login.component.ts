@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
 		try {
 			const credentials = await this._auth.loginWithGoogle();
 
-			if (await this._user.isSetUpFully) this._router.navigateByUrl('/');
+			if (await this._user.hasCreatedData) this._router.navigateByUrl('/');
 			else this._router.navigateByUrl('/setup-account');
 		} catch (error) {
 			console.log(error);

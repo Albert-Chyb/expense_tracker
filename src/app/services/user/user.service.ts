@@ -33,7 +33,7 @@ export class UserService {
 	 */
 
 	update(user: Partial<IUser>): Promise<void> {
-		return this._db.collection('users').doc<IUser>(this.id).update(user);
+		return this._db.doc(`users/${this.id}`).update(user);
 	}
 
 	/**
@@ -43,32 +43,20 @@ export class UserService {
 	 */
 
 	completeCreatingAccount(data: ICompletingData) {
-		const userRef = this._db.collection('users').doc(this.id);
-
-		data.name = this._afAuth.auth.currentUser.displayName;
-
-		userRef.set(data);
-		return userRef.collection<IPeriod>('periods').add({
+		const userRef = this._db.doc(`users/${this.id}`);
+		const period = {
 			date: {
 				start: firestore.FieldValue.serverTimestamp() as any,
 			},
 			isClosed: false,
-		});
-	}
+		};
 
-	/**
-	 * Updates users' balance based on passed amount.
-	 * For example - if you want to decrease balance by 200 you pass -200 number in amount param.
-	 * If amount is 0 then nothing happens.
-	 * @param amount Amount
-	 */
+		data.name = this._afAuth.auth.currentUser.displayName;
 
-	async updateBalance(amount: number) {
-		if (amount === 0) return null;
-		const user = await this._user$.pipe(take(1)).toPromise();
-		let balance = user.balance + amount;
+		const userPromise = userRef.set(data);
+		const periodsPromise = userRef.collection<IPeriod>('periods').add(period);
 
-		return this.update({ balance });
+		return Promise.all([userPromise, periodsPromise]);
 	}
 
 	/**
@@ -90,10 +78,9 @@ export class UserService {
 	/**
 	 * Checks if user completed creating account by creating data in database.
 	 */
-	get isSetUpFully(): Promise<boolean> {
+	get hasCreatedData(): Promise<boolean> {
 		return this._db
-			.collection('users')
-			.doc<IUser>(this.id)
+			.doc<IUser>(`users/${this.id}`)
 			.ref.get()
 			.then(doc => doc.exists);
 	}
@@ -123,7 +110,7 @@ export class UserService {
 	 */
 
 	private async updateUserCredentials(user: User) {
-		if (!user || !(await this.isSetUpFully)) return null;
+		if (!user || !(await this.hasCreatedData)) return null;
 		this.update({ name: user.displayName });
 	}
 
@@ -135,8 +122,7 @@ export class UserService {
 	private switchToUserFromDatabase(user: User) {
 		if (user)
 			return this._db
-				.collection('users')
-				.doc<IUser>(user.uid)
+				.doc<IUser>(`users/${user.uid}`)
 				.valueChanges()
 				.pipe(map(doc => ({ uid: user.uid, ...doc })));
 		else return of(false as any);

@@ -1,0 +1,16 @@
+[debug] [2020-08-06T21:12:47.224Z] ----------------------------------------------------------------------
+[debug] [2020-08-06T21:12:47.226Z] Command:       E:\PROGRAMY\NodeJS\node.exe C:\Users\alber\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js functions:log
+[debug] [2020-08-06T21:12:47.226Z] CLI Version:   8.5.0
+[debug] [2020-08-06T21:12:47.226Z] Platform:      win32
+[debug] [2020-08-06T21:12:47.226Z] Node Version:  v12.16.3
+[debug] [2020-08-06T21:12:47.227Z] Time:          Thu Aug 06 2020 23:12:47 GMT+0200 (GMT+02:00)
+[debug] [2020-08-06T21:12:47.227Z] ----------------------------------------------------------------------
+[debug] [2020-08-06T21:12:47.227Z] 
+[debug] [2020-08-06T21:12:47.234Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-08-06T21:12:47.234Z] > authorizing via signed-in user
+[debug] [2020-08-06T21:12:47.236Z] [iam] checking project expense-tracker-bf5ac for permissions ["firebase.projects.get","logging.logEntries.list","logging.logs.list"]
+[debug] [2020-08-06T21:12:47.238Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/expense-tracker-bf5ac:testIamPermissions  
+ {"permissions":["firebase.projects.get","logging.logEntries.list","logging.logs.list"]}
+[debug] [2020-08-06T21:12:48.039Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 06 Aug 2020 21:12:46 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=631","alt-svc":"h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-08-06T21:12:48.041Z] >>> HTTP REQUEST POST https://logging.googleapis.com/v2beta1/entries:list  
+ {"projectIds":["expense-tracker-bf5ac"],"filter":"resource.type=\"cloud_function\"","orderBy":"timestamp desc","pageSize":35}

@@ -6,6 +6,13 @@
   padding: rem(15px);
   padding-left: rem(25px);
 
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    display: none;
+  }
+
   &--outline {
     border: rem(2px) solid $bgColorDark;
   }
@@ -42,6 +49,10 @@
     font-size: rem(16px);
     width: 100%;
     height: 100%;
+
+    &.ng-touched.ng-invalid {
+      color: $colorDanger;
+    }
 
     &::placeholder {
       color: transparent;
