@@ -28,8 +28,6 @@ import { StyledInputDirective } from './directives/styled-input/styled-input.dir
 import { StyledInputSuffixDirective } from './directives/styled-input-suffix/styled-input-suffix.directive';
 import { TransactionGroupComponent } from './components/transaction-group/transaction-group.component';
 import { GroupIconComponent } from './components/group-icon/group-icon.component';
-import { SelectComponent } from './components/select/select.component';
-import { SelectItemComponent } from './components/select-item/select-item.component';
 import { AddGroupComponent } from './pages/add-group/add-group.component';
 import { ManageGroupsComponent } from './pages/manage-groups/manage-groups.component';
 import { AppSettingsComponent } from './pages/app-settings/app-settings.component';
@@ -56,8 +54,6 @@ import { RippleDirective } from './directives/ripple/ripple.directive';
 		StyledInputSuffixDirective,
 		TransactionGroupComponent,
 		GroupIconComponent,
-		SelectComponent,
-		SelectItemComponent,
 		AddGroupComponent,
 		ManageGroupsComponent,
 		AppSettingsComponent,
