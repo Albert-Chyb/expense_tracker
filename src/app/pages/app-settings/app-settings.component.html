@@ -1,13 +1,12 @@
 <form [formGroup]="form" class="settings">
-	<app-select class="settings__item" formControlName="autoEndAfter">
-		<span class="label">Automatycznie zakończ za</span>
-		<app-select-item value="7" viewValue="Tydzień">
-			Tydzień
-		</app-select-item>
-		<app-select-item value="30" viewValue="Miesiąc">
-			Miesiąc
-		</app-select-item>
-	</app-select>
+	<mat-form-field class="settings__select" appearance="fill">
+		<mat-label>Automatycznie zakończ za</mat-label>
+		<mat-select formControlName="autoEndAfter">
+			<mat-option> Wybierz </mat-option>
+			<mat-option value="7"> Tydzień </mat-option>
+			<mat-option value="30"> Miesiąc </mat-option>
+		</mat-select>
+	</mat-form-field>
 
 	<p class="settings__description settings__item">
 		Okres zostanie automatycznie zakończony za wybraną ilość dni, licząc od daty

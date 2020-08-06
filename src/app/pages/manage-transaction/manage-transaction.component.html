@@ -5,16 +5,15 @@
 		<span class="label">Wartość</span>
 	</styled-input>
 
-	<app-select class="transaction__detail" formControlName="group">
-		<span class="label">Grupa transakcji</span>
-		<app-select-item
-			*ngFor="let group of groups"
-			[value]="group.id"
-			[viewValue]="group.name"
-		>
-			<transaction-group onElement="true" [group]="group"></transaction-group>
-		</app-select-item>
-	</app-select>
+	<mat-form-field class="transaction__detail" appearance="fill">
+		<mat-label>Grupa</mat-label>
+		<mat-select formControlName="group">
+			<mat-option> Wybierz </mat-option>
+			<mat-option *ngFor="let group of groups" [value]="group.id">
+				{{ group.name }}
+			</mat-option>
+		</mat-select>
+	</mat-form-field>
 
 	<mat-form-field class="transaction__detail" appearance="fill">
 		<mat-label>Wybierz datę</mat-label>

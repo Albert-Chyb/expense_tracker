@@ -8,13 +8,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 
 /*
-	Angular Material is used only for date picker.
-	TODO: When app is ready, consider building your own date picker. 
+	Angular Material is used only for date picker and select.
 */
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -83,6 +83,7 @@ import { RippleDirective } from './directives/ripple/ripple.directive';
 		MatFormFieldModule,
 		MatNativeDateModule,
 		MatInputModule,
+		MatSelectModule,
 	],
 	providers: [{ provide: LOCALE_ID, useValue: 'pl-PL' }, MatDatepickerModule],
 	bootstrap: [AppComponent],

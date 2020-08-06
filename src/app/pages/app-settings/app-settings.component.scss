@@ -7,11 +7,15 @@
   &__description {
     color: $textLighterColor;
     font-size: rem(12px);
-    font-weight: 500;
+    font-weight: 400;
     margin-bottom: rem(20px);
   }
 
   &__item {
     margin-top: rem(10px);
+  }
+
+  &__select {
+    width: 100%;
   }
 }
