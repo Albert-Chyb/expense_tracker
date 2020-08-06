@@ -8,7 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 
 /*
-	Angular Material is used only for date picker and select.
+	To speed up development process, app uses date picker and select component from Angular Material.
+	Once app is ready custom components should be made.
 */
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
