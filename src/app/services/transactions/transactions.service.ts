@@ -50,7 +50,6 @@ export class TransactionsService {
 	/**
 	 * Saves transaction on the server.
 	 * Automatically replaces transaction id in group field with actual data of the group.
-	 * Also it changes main balance based on amount of the transaction.
 	 * @param transaction Transaction object to save on the server
 	 */
 
@@ -61,8 +60,7 @@ export class TransactionsService {
 			.toPromise();
 
 		transaction.group = group;
-		await this._transactionsRef.add(transaction);
-		return this.manageMainBalance(transaction);
+		return this._transactionsRef.add(transaction);
 	}
 
 	/**
@@ -70,6 +68,7 @@ export class TransactionsService {
 	 */
 
 	private init() {
+		console.warn('TRANSACTION SERVICE => this reference is no dynamic !');
 		this._transactionsRef = this._afStore
 			.collection('users')
 			.doc(this._user.id)
@@ -83,9 +82,5 @@ export class TransactionsService {
 			transaction.date = (transaction.date as any).toDate();
 			return transaction;
 		});
-	}
-
-	private async manageMainBalance(transaction: ITransaction) {
-		this._user.updateBalance(transaction.amount);
 	}
 }

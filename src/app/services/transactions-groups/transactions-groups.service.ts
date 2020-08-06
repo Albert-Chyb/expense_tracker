@@ -47,6 +47,10 @@ export class TransactionsGroupsService {
 	}
 
 	private init() {
+		console.warn(
+			'TRANSACTION-GROUPS => Update this reference every time user changes account'
+		);
+		// ! Update this reference every time user changes account !
 		this._groupsRef = this._afStore
 			.collection('users')
 			.doc(this._user.id)

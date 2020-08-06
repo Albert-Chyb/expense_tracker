@@ -2,7 +2,7 @@ import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -82,7 +82,16 @@ import { RippleDirective } from './directives/ripple/ripple.directive';
 		MatInputModule,
 		MatSelectModule,
 	],
-	providers: [{ provide: LOCALE_ID, useValue: 'pl-PL' }, MatDatepickerModule],
+	providers: [
+		{ provide: LOCALE_ID, useValue: 'pl-PL' },
+		MatDatepickerModule,
+		{
+			provide: SETTINGS,
+			useValue: environment.firebaseEmulators.enabled
+				? environment.firebaseEmulators.firestore
+				: undefined,
+		},
+	],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}

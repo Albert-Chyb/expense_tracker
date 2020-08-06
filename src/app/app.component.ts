@@ -1,7 +1,10 @@
+import { AngularFirestore } from '@angular/fire/firestore';
 import { UserService } from './services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localePL from '@angular/common/locales/pl';
+import { environment } from 'src/environments/environment';
+import * as firebase from 'firebase';
 
 @Component({
 	selector: 'app-root',
@@ -18,5 +21,9 @@ export class AppComponent implements OnInit {
 
 	ngOnInit() {
 		registerLocaleData(localePL);
+
+		// Change to local cloud functions in development environment.
+		if (environment.firebaseEmulators.enabled)
+			firebase.functions().useFunctionsEmulator('http://localhost:5001');
 	}
 }

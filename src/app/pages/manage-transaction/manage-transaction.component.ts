@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 import { ITransactionGroup } from './../../common/models/group';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { blackListValidator } from 'src/app/common/validators/blackListValidator';
+import { tap } from 'rxjs/operators';
 
 @Component({
 	templateUrl: './manage-transaction.component.html',

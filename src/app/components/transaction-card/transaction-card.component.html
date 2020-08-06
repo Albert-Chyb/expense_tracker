@@ -1,4 +1,4 @@
-<section class="transaction">
+<section class="transaction" *ngIf="transaction.group.icon">
 	<div class="transaction__icon">
 		<group-icon
 			[icon]="transaction.group.icon"
@@ -6,7 +6,9 @@
 		></group-icon>
 	</div>
 
-	<h3 class="transaction__title">{{ transaction.group.name }}</h3>
+	<h3 class="transaction__title">
+		{{ transaction.group.name }}
+	</h3>
 
 	<p class="transaction__description">{{ transaction.description }}</p>
 
