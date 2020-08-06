@@ -44,7 +44,9 @@ export class UserService {
 
 	completeCreatingAccount(data: ICompletingData) {
 		const userRef = this._db.collection('users').doc(this.id);
+
 		data.name = this._afAuth.auth.currentUser.displayName;
+
 		userRef.set(data);
 		return userRef.collection<IPeriod>('periods').add({
 			date: {
@@ -101,7 +103,7 @@ export class UserService {
 	 */
 
 	get isLoggedIn$(): Observable<boolean> {
-		return this._user$.pipe(map(user => !!user));
+		return this._afAuth.authState.pipe(map(user => !!user));
 	}
 
 	/**
