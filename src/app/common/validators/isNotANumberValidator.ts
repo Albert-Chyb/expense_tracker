@@ -5,8 +5,6 @@ import { ValidatorFn, FormControl, ValidationErrors } from '@angular/forms';
  */
 
 export function isNotANumber(control: FormControl): ValidationErrors | null {
-	if (!control.value) return null;
-
 	const isValid = typeof control.value === 'number';
 
 	return isValid ? null : { isNaN: true };
