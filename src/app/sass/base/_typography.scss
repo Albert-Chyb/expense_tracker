@@ -1,6 +1,13 @@
+:root {
+  font-size: 100%;
+
+  @supports (font-size: clamp(1rem, 1vw, 2rem)) {
+    font-size: clamp(1rem, 1vw, 2rem);
+  }
+}
+
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
-
 }
 
 h1 {
@@ -17,4 +24,11 @@ h3 {
 
 textarea {
   font-family: inherit;
+}
+
+a,
+a:link,
+a:visited {
+  color: currentColor;
+  text-decoration: none;
 }
