@@ -1,3 +1,5 @@
+import { FormErrorsDirective } from './directives/form-errors/form-errors.directive';
+import { FormErrorsComponent } from './components/form-errors/form-errors.component';
 import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
@@ -69,6 +71,8 @@ import { AddTransactionComponent } from './pages/add-transaction/add-transaction
 		SetupAccountComponent,
 		RippleDirective,
 		AddTransactionComponent,
+		FormErrorsComponent,
+		FormErrorsDirective,
 	],
 	imports: [
 		BrowserModule,

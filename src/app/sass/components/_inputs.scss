@@ -6,8 +6,8 @@
   padding: rem(15px);
   padding-left: rem(25px);
 
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button {
+  &[type=number]::-webkit-inner-spin-button,
+  &[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
     display: none;
@@ -51,7 +51,7 @@
     height: 100%;
 
     &.ng-touched.ng-invalid {
-      color: $colorDanger;
+      color: $colorError;
     }
 
     &::placeholder {

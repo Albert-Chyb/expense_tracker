@@ -1,3 +1,4 @@
+import { NgControl } from '@angular/forms';
 import {
 	Directive,
 	HostBinding,
@@ -10,14 +11,21 @@ import {
 	selector: '[styledInput]',
 })
 export class StyledInputDirective implements OnInit {
-	constructor(private readonly host: ElementRef<HTMLInputElement>) {}
+	constructor(
+		private readonly _host: ElementRef<HTMLInputElement>,
+		private readonly _control: NgControl
+	) {}
 
 	@Input('placeholder') set placeholder(value: string) {
-		this.host.nativeElement.placeholder = value || ' ';
+		this._host.nativeElement.placeholder = value || ' ';
 	}
 	@HostBinding('class.styled-input__input') true = true;
 
 	ngOnInit() {
-		if (!this.host.nativeElement.placeholder) this.placeholder = ' ';
+		if (!this._host.nativeElement.placeholder) this.placeholder = ' ';
+	}
+
+	get control() {
+		return this._control;
 	}
 }

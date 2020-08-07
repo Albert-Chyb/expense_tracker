@@ -1,0 +1,12 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+:host p {
+  margin-bottom: 10px;
+}
+
+.form__error {
+  color: $colorError;
+  font-size: rem(14px);
+}

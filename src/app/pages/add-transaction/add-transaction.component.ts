@@ -7,6 +7,7 @@ import { blackListValidator } from 'src/app/common/validators/blackListValidator
 import { ITransactionGroup } from './../../common/models/group';
 import { TransactionsGroupsService } from './../../services/transactions-groups/transactions-groups.service';
 import { TransactionsService } from './../../services/transactions/transactions.service';
+import { isNotANumber } from 'src/app/common/validators/isNotANumberValidator';
 
 @Component({
 	templateUrl: './add-transaction.component.html',
@@ -21,7 +22,11 @@ export class AddTransactionComponent implements OnInit {
 
 	form = new FormGroup({
 		group: new FormControl('', Validators.required),
-		amount: new FormControl(0, [Validators.required, blackListValidator(0)]),
+		amount: new FormControl(null, [
+			Validators.required,
+			blackListValidator(0),
+			isNotANumber,
+		]),
 		date: new FormControl(new Date(), Validators.required),
 		description: new FormControl('', [
 			Validators.required,
