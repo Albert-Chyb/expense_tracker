@@ -2,6 +2,10 @@
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
 
+:host {
+  display: block;
+}
+
 :host p {
   margin-bottom: 10px;
 }

@@ -5,14 +5,25 @@
 >
 	<section class="complete-login__section">
 		<styled-input>
-			<input styledInput type="number" formControlName="balance" />
+			<input
+				styledInput
+				formErrors
+				type="number"
+				inputmode="numeric"
+				formControlName="balance"
+			/>
 
 			<span class="label">Aktualny balans pieniędzy</span>
 		</styled-input>
 
+		<form-errors
+			class="complete-login__errors"
+			[control]="form.get('balance')"
+		></form-errors>
+
 		<p class="complete-login__description">
 			Wartości tej nie można potem zmienić ! Upewnij się że została podana
-			prawidłowa wartość
+			prawidłowa wartość.
 		</p>
 	</section>
 
@@ -40,12 +51,11 @@
 
 			<zippy-content #zippy>
 				<section class="complete-login__section">
-					<mat-form-field class="settings__select" appearance="fill">
+					<mat-form-field class="complete-login__select" appearance="fill">
 						<mat-label>Automatycznie zakończ za</mat-label>
 						<mat-select formControlName="autoEndAfter">
-							<mat-option> Wybierz </mat-option>
-							<mat-option value="7"> Tydzień </mat-option>
-							<mat-option value="30"> Miesiąc </mat-option>
+							<mat-option [value]="7"> Tydzień </mat-option>
+							<mat-option [value]="30"> Miesiąc </mat-option>
 						</mat-select>
 					</mat-form-field>
 
@@ -57,6 +67,11 @@
 		</zippy>
 	</section>
 
-	<button type="submit" class="btn btn--block btn--secondary">Zapisz</button>
+	<button
+		[disabled]="form.invalid"
+		type="submit"
+		class="btn btn--block btn--secondary"
+	>
+		Zapisz
+	</button>
 </form>
-{{ form.value | json }}

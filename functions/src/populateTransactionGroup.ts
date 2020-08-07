@@ -9,7 +9,7 @@ const transactionRef = functions.firestore.document(
  * If group property of an transaction contains id of a group, then populate it with actual group data.
  */
 
-export const populateTransactionGroup = transactionRef.onCreate(
+export const populateNewTransactionGroup = transactionRef.onCreate(
 	async (snap, context) => {
 		const transaction = snap.data() as any;
 
@@ -22,9 +22,34 @@ export const populateTransactionGroup = transactionRef.onCreate(
 			.collection('groups')
 			.doc(transaction.group)
 			.get();
+
 		// If there is no group with given ID, then something went wrong.
 		if (!group.exists) return console.error('No group with given ID !');
 
 		return snap.ref.set({ group: group.data() }, { merge: true });
+	}
+);
+
+export const populateUpdatedTransactionGroup = transactionRef.onUpdate(
+	async (change, context) => {
+		const transactionAfter = change.after.data();
+		const transactionBefore = change.before.data();
+
+		if (
+			typeof transactionAfter.group !== 'string' ||
+			transactionAfter.group === transactionBefore.group.id
+		)
+			return console.log('NO ACTIONS NEEDED');
+
+		const group = await db
+			.collection('users')
+			.doc(context.params.userId)
+			.collection('groups')
+			.doc(transactionAfter.group)
+			.get();
+
+		if (!group.exists) return console.error('No group with given ID !');
+
+		return change.after.ref.set({ group: group.data() }, { merge: true });
 	}
 );

@@ -50,7 +50,9 @@
 					class="transactions__transaction"
 					*ngFor="let transaction of transactions[1]"
 				>
-					<transaction-card [transaction]="transaction"></transaction-card>
+					<a [routerLink]="['/manage-transaction', transaction.id]"
+						><transaction-card [transaction]="transaction"></transaction-card
+					></a>
 				</li>
 			</ul>
 		</section>

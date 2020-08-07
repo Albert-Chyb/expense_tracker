@@ -25,4 +25,7 @@ export interface ITransaction {
 	 * Group that transaction belongs to.
 	 */
 	group: ITransactionGroup;
+
+	/** Id of the transaction */
+	id?: string;
 }

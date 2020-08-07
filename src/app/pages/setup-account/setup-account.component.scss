@@ -14,4 +14,12 @@
     margin-top: rem(10px);
     color: $textLighterColor;
   }
+
+  &__select {
+    width: 100%;
+  }
+
+  &__errors {
+    margin-top: rem(10px);
+  }
 }

@@ -1,20 +1,13 @@
-import { PeriodsService } from './../../services/periods/periods.service';
-import { IPeriod } from './../../common/models/period';
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { blackListValidator } from 'src/app/common/validators/blackListValidator';
+import { isNotANumber } from 'src/app/common/validators/isNotANumberValidator';
 
 import { ITransactionGroup } from './../../common/models/group';
 import { TransactionsGroupsService } from './../../services/transactions-groups/transactions-groups.service';
 import { TransactionsService } from './../../services/transactions/transactions.service';
-import { isNotANumber } from 'src/app/common/validators/isNotANumberValidator';
-import { take } from 'rxjs/operators';
-import {
-	MatDatepicker,
-	MatDatepickerInput,
-} from '@angular/material/datepicker';
 
 @Component({
 	templateUrl: './add-transaction.component.html',
@@ -24,8 +17,7 @@ export class AddTransactionComponent implements OnInit {
 	constructor(
 		private readonly _transactions: TransactionsService,
 		private readonly _groups: TransactionsGroupsService,
-		private readonly _router: Router,
-		private readonly _periods: PeriodsService
+		private readonly _router: Router
 	) {}
 
 	form = new FormGroup({
