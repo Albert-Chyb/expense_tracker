@@ -1,3 +1,4 @@
+import { AddTransactionComponent } from './pages/add-transaction/add-transaction.component';
 import { UnAuthGuard } from './guards/un-auth/un-auth.guard';
 import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -26,8 +27,8 @@ const routes: Routes = [
 		canActivate: [UnAuthGuard],
 	},
 	{
-		path: 'manage-transaction',
-		component: ManageTransactionComponent,
+		path: 'add-transaction',
+		component: AddTransactionComponent,
 		data: { name: 'Dodaj transakcję' },
 		canActivate: [UnAuthGuard],
 	},

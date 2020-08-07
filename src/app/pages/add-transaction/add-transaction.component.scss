@@ -1,0 +1,22 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+.transaction {
+  &__detail {
+    margin-bottom: rem(20px);
+    width: 100%;
+  }
+
+  &__actions {
+    margin-top: rem(50px);
+  }
+
+  &__action {
+    margin-bottom: rem(20px);
+  }
+}
+
+::ng-deep .mat-form-field-wrapper {
+  margin-bottom: -1.25em;
+}

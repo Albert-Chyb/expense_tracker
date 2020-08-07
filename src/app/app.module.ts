@@ -41,6 +41,7 @@ import { ZippyContentComponent } from './components/zippy-components/zippy-conte
 import { ZippyListComponent } from './components/zippy-components/zippy-list/zippy-list.component';
 import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
 import { RippleDirective } from './directives/ripple/ripple.directive';
+import { AddTransactionComponent } from './pages/add-transaction/add-transaction.component';
 
 @NgModule({
 	declarations: [
@@ -67,6 +68,7 @@ import { RippleDirective } from './directives/ripple/ripple.directive';
 		ZippyListComponent,
 		SetupAccountComponent,
 		RippleDirective,
+		AddTransactionComponent,
 	],
 	imports: [
 		BrowserModule,
