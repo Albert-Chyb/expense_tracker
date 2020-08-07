@@ -1,57 +1,56 @@
 .styled-input {
+  --border-color: #{$bgColorDark};
+  --border-size: #{rem(1px)};
+
+  @include hideNumberInputArrows();
+
   display: flex;
   align-items: center;
   position: relative;
-  border-radius: rem(4px) rem(4px) 0 0;
+  border-radius: rem(4px);
   padding: rem(15px);
   padding-left: rem(25px);
+  background-color: $bgColorDarker;
+  margin-top: rem(2px);
+  box-shadow: 0px 0px 0px var(--border-size) var(--border-color);
+  color: $textLighterColor;
+  transition: box-shadow .1s linear;
 
-  &[type=number]::-webkit-inner-spin-button,
-  &[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-    display: none;
+  &--focused {
+    --border-size: #{rem(3px)};
   }
 
-  &--outline {
-    border: rem(2px) solid $bgColorDark;
+  &--valid#{&}--touched {
+    color: $colorSuccess;
+    --border-color: #{$colorSuccess};
   }
 
-  &--filled {
-    background-color: $bgColorDarker;
-    margin-top: rem(-10px);
-
-    .styled-input__input:focus+.styled-input__label,
-    .styled-input__input:not(:placeholder-shown)+.styled-input__label {
-      top: rem(7px);
-    }
-
-    .styled-input__input {
-      padding-top: rem(15px);
-    }
-
-    .styled-input__label {
-      background-color: $bgColorDarker;
-    }
+  &--invalid#{&}--touched {
+    --border-color: #{$colorError};
+    color: $colorError;
   }
 
   &__suffix {
     padding-left: rem(10px);
-    color: $textLighterColor;
     font-weight: bold;
     height: fit-content;
   }
 
   &__input {
+    @include square();
+
     background-color: transparent;
     border: none;
     outline: none;
-    font-size: rem(16px);
-    width: 100%;
-    height: 100%;
+    padding-top: rem(15px);
+
+    font: {
+      size: rem(16px);
+      weight: 500;
+    }
 
     &.ng-touched.ng-invalid {
-      color: $colorError;
+      color: inherit;
     }
 
     &::placeholder {
@@ -67,26 +66,18 @@
     &:not(:placeholder-shown)+.styled-input__label {
       transition: .2s ease-out;
       transform: scale(.8);
-      top: rem(-10px);
+      top: rem(7px);
     }
   }
 
   &__label {
-    position: absolute;
-    top: 50%;
-    left: 0px;
-    color: $textLighterColor;
-    background-color: $bgColor;
+    @include centerElementAbsolute('vertically');
+
     font-weight: 500;
     margin-left: rem(25px);
     transition-property: transform top;
-    transform: translateY(-50%);
-    transform-origin: left top;
     transition: .2s ease-in;
+    transform-origin: left top;
     cursor: text;
-  }
-
-  textarea {
-    font-family: inherit;
   }
 }

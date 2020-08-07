@@ -20,9 +20,12 @@
   color: $textColor;
   padding: rem(15px) rem(20px);
   border-radius: rem(30px);
-  font-weight: 500;
-  font-size: rem(18px);
   min-width: rem(100px);
+
+  font: {
+    weight: 500;
+    size: rem(18px);
+  }
 
   &:not(:disabled):hover {
     background-color: lighten($color: $bgColor, $amount: 5);
@@ -62,6 +65,41 @@
   font-family: map-get($fonts, $fontGroup);
   font-weight: map-get($weight, $iconGroup);
   content: $unicode;
+}
 
+@mixin hideNumberInputArrows() {
 
+  &[type=number]::-webkit-inner-spin-button,
+  &[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    display: none;
+  }
+}
+
+@mixin square($size: 100%) {
+  width: $size;
+  height: $size;
+}
+
+@mixin centerElementAbsolute($direction) {
+  position: absolute;
+
+  @if($direction=='vertically') {
+    top: 50%;
+    left: 0px;
+    transform: translateY(-50%);
+  }
+
+  @else if($direction=='horizontally') {
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  @else {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
