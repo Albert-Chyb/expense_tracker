@@ -1,4 +1,4 @@
-<form [formGroup]="form" class="transaction" *ngIf="groups$ | async as groups">
+<form [formGroup]="form" class="transaction" *ngIf="data$ | async as data">
 	<styled-input class="transaction__detail" appearance="filled">
 		<input formErrors styledInput type="number" formControlName="amount" />
 		<span styledInputSuffix>PLN</span>
@@ -14,7 +14,7 @@
 		<mat-label>Grupa</mat-label>
 		<mat-select formControlName="group">
 			<mat-option> Wybierz </mat-option>
-			<mat-option *ngFor="let group of groups" [value]="group.id">
+			<mat-option *ngFor="let group of data.groups" [value]="group.id">
 				{{ group.name }}
 			</mat-option>
 		</mat-select>

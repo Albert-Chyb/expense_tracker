@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { ITransactionGroup } from 'src/app/common/models/group';
+import { ITransaction } from 'src/app/common/models/transaction';
 import { blackListValidator } from 'src/app/common/validators/blackListValidator';
 import { isNotANumber } from 'src/app/common/validators/isNotANumberValidator';
 import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
@@ -13,7 +14,7 @@ import { TransactionsService } from 'src/app/services/transactions/transactions.
 	templateUrl: './manage-transaction.component.html',
 	styleUrls: ['./manage-transaction.component.scss'],
 })
-export class ManageTransactionComponent implements OnInit, OnDestroy {
+export class ManageTransactionComponent implements OnInit {
 	constructor(
 		private readonly _transactions: TransactionsService,
 		private readonly _groups: TransactionsGroupsService,
@@ -34,27 +35,24 @@ export class ManageTransactionComponent implements OnInit, OnDestroy {
 			Validators.maxLength(255),
 		]),
 	});
-	groups$: Observable<ITransactionGroup[]>;
-	private _subscriptions = new Subscription();
+	data$: Observable<{
+		groups: ITransactionGroup[];
+		transaction: ITransaction;
+	}>;
 
 	ngOnInit() {
-		this.groups$ = this._groups.getAll();
-		this._subscriptions.add(
-			this._transactions
-				.get(this._route.snapshot.params.id)
-				.pipe(
-					map(transaction => {
-						const data = transaction;
-						data.group = data.group.id as any;
-						return data;
-					})
-				)
-				.subscribe(transaction => this.form.patchValue(transaction))
+		const groups$ = this._groups.getAll();
+		const transactions$ = this._transactions.get(this.transactionId).pipe(
+			map(transaction => {
+				transaction.group = transaction.group.id as any;
+				return transaction;
+			})
 		);
-	}
 
-	ngOnDestroy() {
-		this._subscriptions.unsubscribe();
+		this.data$ = combineLatest([groups$, transactions$]).pipe(
+			map(([groups, transaction]) => ({ groups, transaction })),
+			tap(data => this.form.patchValue(data.transaction))
+		);
 	}
 
 	async update() {
