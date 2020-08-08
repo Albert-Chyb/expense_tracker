@@ -20,11 +20,11 @@ export class StyledInputDirective implements OnInit {
 	@Input('placeholder') set placeholder(value: string) {
 		this._host.nativeElement.placeholder = value || ' ';
 	}
-	@HostBinding('class') private hostClass = 'styled-input__input';
-	@HostListener('blur') private onBlur() {
+	@HostBinding('class') hostClass = 'styled-input__input';
+	@HostListener('blur') onBlur() {
 		this.isFocused = false;
 	}
-	@HostListener('focus') private onFocus() {
+	@HostListener('focus') onFocus() {
 		this.isFocused = true;
 	}
 
