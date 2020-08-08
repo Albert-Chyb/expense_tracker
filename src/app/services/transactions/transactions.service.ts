@@ -7,6 +7,7 @@ import { ITransaction } from './../../common/models/transaction';
 import { PeriodsService } from './../periods/periods.service';
 import { TransactionsGroupsService } from './../transactions-groups/transactions-groups.service';
 import { UserService } from './../user/user.service';
+import { includeDocsIds } from 'src/app/common/helpers/includeDocsIds';
 
 @Injectable({
 	providedIn: 'root',
@@ -33,12 +34,7 @@ export class TransactionsService {
 					)
 					.snapshotChanges()
 					.pipe(
-						map(transactions =>
-							transactions.map(transaction => ({
-								...transaction.payload.doc.data(),
-								id: transaction.payload.doc.id,
-							}))
-						),
+						includeDocsIds(),
 						map(transactions => this.normalizeTransactionsDate(transactions))
 					)
 			)
@@ -68,9 +64,8 @@ export class TransactionsService {
 
 	async add(transaction: ITransaction, populateLocally = true) {
 		let data: ITransaction = transaction;
-		if (populateLocally) {
+		if (populateLocally)
 			data = await this.populateTransactionGroup(transaction);
-		}
 
 		return this._afStore
 			.collection('users')
@@ -88,9 +83,8 @@ export class TransactionsService {
 
 	async update(id: string, transaction: ITransaction, populateLocally = true) {
 		let data: ITransaction = transaction;
-		if (populateLocally) {
+		if (populateLocally)
 			data = await this.populateTransactionGroup(transaction);
-		}
 
 		return this._afStore
 			.doc(`users/${this._user.id}/transactions/${id}`)
