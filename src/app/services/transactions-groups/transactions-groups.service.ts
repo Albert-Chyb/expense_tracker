@@ -6,6 +6,7 @@ import { includeDocsIds } from 'src/app/common/helpers/includeDocsIds';
 
 import { ITransactionGroup } from './../../common/models/group';
 import { UserService } from './../user/user.service';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root',

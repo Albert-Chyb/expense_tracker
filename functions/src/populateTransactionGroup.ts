@@ -13,8 +13,9 @@ export const populateNewTransactionGroup = transactionRef.onCreate(
 	async (snap, context) => {
 		const transaction = snap.data() as any;
 
-		// If group property is not a string id, then do nothing.
-		if (typeof transaction.group !== 'string') return null;
+		// If group property is not a string id or is not present, then do nothing.
+		if (!transaction.group || typeof transaction.group !== 'string')
+			return null;
 
 		const group = await db
 			.collection('users')
@@ -39,7 +40,7 @@ export const populateUpdatedTransactionGroup = transactionRef.onUpdate(
 			typeof transactionAfter.group !== 'string' ||
 			transactionAfter.group === transactionBefore.group.id
 		)
-			return console.log('NO ACTIONS NEEDED');
+			return null;
 
 		const group = await db
 			.collection('users')

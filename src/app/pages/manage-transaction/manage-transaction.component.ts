@@ -39,11 +39,13 @@ export class ManageTransactionComponent implements OnInit {
 		groups: ITransactionGroup[];
 		transaction: ITransaction;
 	}>;
+	private originalTransaction: ITransaction;
 
 	ngOnInit() {
 		const groups$ = this._groups.getAll();
 		const transactions$ = this._transactions.get(this.transactionId).pipe(
 			map(transaction => {
+				this.originalTransaction = { ...transaction };
 				transaction.group = transaction.group.id as any;
 				return transaction;
 			})
@@ -56,7 +58,25 @@ export class ManageTransactionComponent implements OnInit {
 	}
 
 	async update() {
-		await this._transactions.update(this.transactionId, this.form.value);
+		// Contains transaction data from form.
+		const newTransaction = this.form.value;
+
+		// Indicates if user has changed transaction group.
+		const isTheSameGroup =
+			this.originalTransaction.group.id === newTransaction.group;
+
+		// If user hasn't changed the group, then replace group property of new transaction with original transaction.
+		if (isTheSameGroup) newTransaction.group = this.originalTransaction.group;
+
+		// If user hasn't changed the group, then there is no need for populating transaction group.
+		// This is important because a transaction can have a group that was previously deleted from database.
+		await this._transactions.update(
+			this.transactionId,
+			this.form.value,
+			!isTheSameGroup
+		);
+
+		// After a transaction has been updated, return to home page.
 		this._router.navigateByUrl('/');
 	}
 
