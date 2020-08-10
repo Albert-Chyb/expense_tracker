@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 
 import { ITransaction } from './../../common/models/transaction';
 import { PeriodsService } from './../periods/periods.service';
@@ -75,9 +75,9 @@ export class TransactionsService {
 	}
 
 	/**
-	 * Updates a transaction in database
+	 * Updates a transaction in the database
 	 * @param id Id of the transaction
-	 * @param transaction New data
+	 * @param transaction New transaction
 	 * @param populateLocally If true (default) - group field will be populated before data is sent to database, if false - cloud function will take care of this.
 	 */
 
@@ -91,6 +91,22 @@ export class TransactionsService {
 			.update(data);
 	}
 
+	/**
+	 * Deletes transaction from database.
+	 * @param id Id of an transaction
+	 */
+
+	delete(id: string): Promise<void> {
+		return this._afStore
+			.doc(`users/${this._user.id}/transactions/${id}`)
+			.delete();
+	}
+
+	/**
+	 * Changes firestore date format to JavaScript Date object.
+	 * @param transactions Transactions to normalize.
+	 */
+
 	private normalizeTransactionsDate(
 		transactions: ITransaction[]
 	): ITransaction[] {
@@ -99,6 +115,11 @@ export class TransactionsService {
 			return transaction;
 		});
 	}
+
+	/**
+	 * Replaces group field that contains id of an group with actual group data.
+	 * @param transaction Transaction to populate.
+	 */
 
 	private async populateTransactionGroup(transaction: ITransaction) {
 		const group = await this._groups

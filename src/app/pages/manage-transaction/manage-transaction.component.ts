@@ -60,6 +60,11 @@ export class ManageTransactionComponent implements OnInit {
 		this._router.navigateByUrl('/');
 	}
 
+	async delete() {
+		await this._transactions.delete(this.transactionId);
+		this._router.navigateByUrl('/');
+	}
+
 	private get transactionId(): string {
 		return this._route.snapshot.params.id;
 	}
