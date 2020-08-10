@@ -4,7 +4,7 @@ import { ValidationErrors, AbstractControl } from '@angular/forms';
  * Checks if control contains a valid font awesome icon template, like `<i class="fal fa-ad"></i>`;
  */
 
-export function fontAwesomeIconTemplate(
+export function fontAwesomeIconTemplateValidator(
 	control: AbstractControl
 ): ValidationErrors | null {
 	if (!control.value) return null;

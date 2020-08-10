@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { blackListValidator } from 'src/app/common/validators/blackListValidator';
-import { isNotANumber } from 'src/app/common/validators/isNotANumberValidator';
+import { isNotANumberValidator } from 'src/app/common/validators/isNotANumberValidator';
 
 import { ITransactionGroup } from './../../common/models/group';
 import { TransactionsGroupsService } from './../../services/transactions-groups/transactions-groups.service';
@@ -25,7 +25,7 @@ export class AddTransactionComponent implements OnInit {
 		amount: new FormControl(null, [
 			Validators.required,
 			blackListValidator(0),
-			isNotANumber,
+			isNotANumberValidator,
 		]),
 		date: new FormControl(new Date(), Validators.required),
 		description: new FormControl('', [

@@ -6,7 +6,7 @@ import { map, tap } from 'rxjs/operators';
 import { ITransactionGroup } from 'src/app/common/models/group';
 import { ITransaction } from 'src/app/common/models/transaction';
 import { blackListValidator } from 'src/app/common/validators/blackListValidator';
-import { isNotANumber } from 'src/app/common/validators/isNotANumberValidator';
+import { isNotANumberValidator } from 'src/app/common/validators/isNotANumberValidator';
 import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
 import { TransactionsService } from 'src/app/services/transactions/transactions.service';
 
@@ -27,7 +27,7 @@ export class ManageTransactionComponent implements OnInit {
 		amount: new FormControl(null, [
 			Validators.required,
 			blackListValidator(0),
-			isNotANumber,
+			isNotANumberValidator,
 		]),
 		date: new FormControl(new Date(), Validators.required),
 		description: new FormControl('', [
