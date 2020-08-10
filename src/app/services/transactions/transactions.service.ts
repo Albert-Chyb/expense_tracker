@@ -119,7 +119,7 @@ export class TransactionsService {
 	}
 
 	/**
-	 * Replaces group field that contains id of an group with actual group data.
+	 * Replaces group property that contains id of an group with actual group data.
 	 * @param transaction Transaction to populate.
 	 */
 
