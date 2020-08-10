@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { fontAwesomeIconTemplate } from 'src/app/common/validators/fontAwesomeIconTemplate';
+import { fontAwesomeIconTemplate } from 'src/app/common/validators/fontAwesomeIconTemplateValidator';
 
 import { IFontAwesomeStylePrefix } from './../../common/models/group';
 import { ITransaction } from './../../common/models/transaction';
