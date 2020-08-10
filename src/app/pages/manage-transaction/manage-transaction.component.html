@@ -1,12 +1,6 @@
 <form [formGroup]="form" class="transaction" *ngIf="data$ | async as data">
 	<styled-input class="transaction__detail" appearance="filled">
-		<input
-			formErrors
-			styledInput
-			type="number"
-			inputmode="numeric"
-			formControlName="amount"
-		/>
+		<input formErrors styledInput type="number" formControlName="amount" />
 		<span styledInputSuffix>PLN</span>
 		<span class="label">Wartość</span>
 	</styled-input>
