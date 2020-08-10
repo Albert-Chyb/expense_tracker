@@ -1,4 +1,5 @@
-import { TransactionsService } from './../../services/transactions/transactions.service';
+import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
+import { Observable } from 'rxjs';
 import { ITransactionGroup } from './../../common/models/group';
 import { Component, OnInit } from '@angular/core';
 
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./manage-groups.component.scss'],
 })
 export class ManageGroupsComponent implements OnInit {
-	constructor() {}
+	constructor(private readonly _groups: TransactionsGroupsService) {}
 
 	groups: ITransactionGroup[] = [
 		{
@@ -33,5 +34,9 @@ export class ManageGroupsComponent implements OnInit {
 		},
 	];
 
-	ngOnInit() {}
+	groups$: Observable<ITransactionGroup[]>;
+
+	ngOnInit() {
+		this.groups$ = this._groups.getAll();
+	}
 }

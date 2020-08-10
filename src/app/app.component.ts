@@ -32,8 +32,12 @@ export class AppComponent implements OnInit {
 
 		this._formErrors
 			.add('required', 'To pole jest wymagane')
-			.add('blackList', 'Ta wartość nie jest właściwa')
-			.add('maxlength', 'Za długi tekst.')
-			.add('isNaN', 'Wartośc nie jest liczbą');
+			.add('blackList', 'Podana wartość nie jest właściwa')
+			.add('maxlength', 'Za długi tekst')
+			.add('isNaN', 'Podana wartośc nie jest liczbą')
+			.add(
+				'invalidFontAwesomeTemplate',
+				'Podana wartośc nie jest poprawnym schematem ikony'
+			);
 	}
 }

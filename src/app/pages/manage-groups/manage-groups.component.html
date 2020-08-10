@@ -1,5 +1,5 @@
 <ul class="groups">
-	<li class="groups__group" *ngFor="let group of groups">
+	<li class="groups__group" *ngFor="let group of groups$ | async">
 		<transaction-group [group]="group" isEditable="true"></transaction-group>
 	</li>
 </ul>
