@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
 	incomes: number = 0;
 	outcomes: number = 0;
 
-	isToday = isToday;
+	readonly isToday = isToday;
 
 	ngOnInit() {
 		this.setupData();
