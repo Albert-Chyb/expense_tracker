@@ -11,7 +11,7 @@ import {
 import { Observable } from 'rxjs';
 
 /**
- * Prevents authenticated users from accessing the route.
+ * Gives access only authenticates users to the route.
  */
 
 @Injectable({
@@ -32,10 +32,11 @@ export class AuthGuard implements CanActivate {
 		| boolean
 		| UrlTree {
 		return this._user.isLoggedIn$.pipe(
-			map(status => !status),
-			tap(canActivate => {
-				if (!canActivate) this._router.navigateByUrl('/');
-			})
+			tap(this.redirectOnGuardReject.bind(this))
 		);
+	}
+
+	private redirectOnGuardReject(isLoggedIn: boolean): void {
+		if (!isLoggedIn) this._router.navigateByUrl('/login');
 	}
 }
