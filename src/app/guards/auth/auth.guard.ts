@@ -11,7 +11,7 @@ import {
 import { Observable } from 'rxjs';
 
 /**
- * Gives access only authenticates users to the route.
+ * Gives access only to authenticates users.
  */
 
 @Injectable({

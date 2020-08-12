@@ -72,7 +72,9 @@ export class UserService {
 	 */
 
 	get id(): string {
-		return this._afAuth.auth.currentUser.uid || '';
+		return this._afAuth.auth.currentUser
+			? this._afAuth.auth.currentUser.uid
+			: '';
 	}
 
 	/**
