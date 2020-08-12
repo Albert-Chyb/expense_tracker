@@ -9,12 +9,15 @@
   font-size: 1rem;
 
   &--big {
-    grid-template-areas:
-      'title currency'
-      'amount currency'
-    ;
-    grid-template-columns: 3fr 1fr;
-    grid-template-rows: repeat(2, 1fr);
+    grid-template: {
+      areas:
+        'title currency'
+        'amount currency'
+      ;
+      rows: repeat(2, 1fr);
+      columns: 3fr 1fr;
+    }
+
     column-gap: rem(25px);
     padding: rem(30px);
 
@@ -24,12 +27,15 @@
   }
 
   &--small {
-    grid-template-areas:
-      'icon title'
-      'icon amount'
-    ;
-    grid-template-columns: rem(35px) minmax(rem(90px), auto);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template: {
+      areas:
+        'icon title'
+        'icon amount'
+      ;
+      rows: repeat(2, 1fr);
+      columns: rem(35px) minmax(rem(90px), auto);
+    }
+
     row-gap: rem(5px);
     column-gap: rem(10px);
     padding: rem(15px) rem(10px);
@@ -65,15 +71,21 @@
 
   &__title {
     grid-area: title;
-    font-size: rem(14px);
-    font-weight: normal;
+
+    font: {
+      size: rem(14px);
+      weight: normal;
+    }
   }
 
   &__amount {
-    grid-area: amount;
-    font-size: rem(30px);
-    font-weight: bold;
     @include ellipsis();
+    grid-area: amount;
+
+    font: {
+      size: rem(30px);
+      weight: bold;
+    }
   }
 
   &__currency {

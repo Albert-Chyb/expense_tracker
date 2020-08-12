@@ -70,12 +70,12 @@
     margin-bottom: rem(10px);
   }
 
-  h2.transactions__heading {
+  h2#{&}__heading {
     margin-bottom: rem(30px);
     font-weight: 500;
   }
 
-  h3.transactions__heading {
+  h3#{&}__heading {
     color: $textLighterColor;
 
     font: {

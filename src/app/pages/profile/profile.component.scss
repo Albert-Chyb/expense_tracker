@@ -10,11 +10,11 @@
     font-weight: 500;
   }
 
-  h2.profile__heading {
+  h2#{&}__heading {
     font-size: rem(24px);
   }
 
-  h3.profile__heading {
+  h3#{&}__heading {
     font-size: rem(18px);
   }
 

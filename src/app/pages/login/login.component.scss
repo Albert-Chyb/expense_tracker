@@ -6,7 +6,7 @@
   max-width: 500px;
   margin: 0px auto;
 
-  h2.login__heading {
+  h2#{&}__heading {
     font-size: rem(26px);
     margin-top: rem(30px);
     margin-bottom: rem(40px);
