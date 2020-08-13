@@ -1,10 +1,10 @@
-import { Router } from '@angular/router';
-import { AuthService } from './../../services/auth/auth.service';
-import { tap } from 'rxjs/operators';
-import { IUser } from './../../common/models/user';
-import { Observable } from 'rxjs';
-import { UserService } from './../../services/user/user.service';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+
+import { IUser } from './../../common/models/user';
+import { AuthService } from './../../services/auth/auth.service';
+import { UserService } from './../../services/user/user.service';
 
 @Component({
 	templateUrl: './profile.component.html',

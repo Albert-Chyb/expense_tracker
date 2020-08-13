@@ -35,8 +35,6 @@
 						type="checkbox"
 						id="autoEndPeriod"
 						formControlName="autoEndPeriod"
-						#autoEndPeriod
-						(input)="autoEndPeriod.checked ? zippy.expand() : zippy.collapse()"
 					/>
 					<label for="autoEndPeriod"
 						>&nbsp; Automatyczne zakańczanie okresu</label
@@ -49,7 +47,7 @@
 				</section>
 			</zippy-static>
 
-			<zippy-content #zippy>
+			<zippy-content [state]="form.get('settings.autoEndPeriod').value">
 				<section class="complete-login__section">
 					<mat-form-field class="complete-login__select" appearance="fill">
 						<mat-label>Automatycznie zakończ za</mat-label>

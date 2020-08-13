@@ -1,16 +1,44 @@
-import { FormGroup, FormControl } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { whiteListValidator } from 'src/app/common/validators/whiteListValidator';
+import { UserService } from 'src/app/services/user/user.service';
+
+import { IUser } from './../../common/models/user';
 
 @Component({
 	templateUrl: './app-settings.component.html',
 	styleUrls: ['./app-settings.component.scss'],
 })
-export class AppSettingsComponent implements OnInit {
-	constructor() {}
+export class AppSettingsComponent implements OnInit, OnDestroy {
+	constructor(private readonly _user: UserService) {}
 
 	form = new FormGroup({
-		autoEndAfter: new FormControl(),
+		autoEndAfter: new FormControl(30, [
+			Validators.required,
+			whiteListValidator(7, 30),
+		]),
+		autoEndPeriod: new FormControl(false, [Validators.required]),
 	});
+	subscriptions = new Subscription();
+	user$: Observable<IUser>;
 
-	ngOnInit() {}
+	updateSettings() {
+		this._user.updateSettings(this.form.value);
+	}
+
+	ngOnInit() {
+		this.user$ = this._user.user$.pipe(
+			tap(user => this.form.patchValue(user.settings))
+		);
+
+		this.subscriptions.add(
+			this.form.valueChanges.subscribe(this.updateSettings.bind(this))
+		);
+	}
+
+	ngOnDestroy() {
+		this.subscriptions.unsubscribe();
+	}
 }

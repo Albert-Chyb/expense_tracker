@@ -5,7 +5,7 @@ import {
 	transition,
 	trigger,
 } from '@angular/animations';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 /**
  * Content that will be expanded or collapsed.
@@ -28,6 +28,14 @@ export class ZippyContentComponent {
 	constructor() {}
 
 	private _isExpanded = false;
+
+	/**
+	 * Sets the state of the zippy.
+	 */
+
+	@Input('state') set state(state: boolean) {
+		this._isExpanded = state;
+	}
 
 	/** Toggles current status of zippy-content */
 	toggle() {

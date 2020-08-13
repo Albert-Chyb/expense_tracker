@@ -9,13 +9,28 @@
     font-size: rem(12px);
     font-weight: 400;
     margin-bottom: rem(20px);
+    display: block;
   }
 
-  &__item {
+  p#{&}__item,
+  h3#{&}__item {
     margin-top: rem(10px);
+  }
+
+  label#{&}__item {
+    display: block;
+    margin-bottom: rem(20px);
+  }
+
+  button#{&}__item {
+    margin-bottom: rem(20px);
   }
 
   &__select {
     width: 100%;
   }
+}
+
+::ng-deep .mat-form-field-wrapper {
+  margin-bottom: -1.25em;
 }

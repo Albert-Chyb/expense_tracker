@@ -1,3 +1,4 @@
+import { ISettings } from './../../common/models/settings';
 import { firestore } from 'firebase/app';
 import { IPeriod } from './../../common/models/period';
 import { ICompletingData } from './../../common/models/completingData';
@@ -37,12 +38,21 @@ export class UserService {
 	}
 
 	/**
+	 * Updates user's settings
+	 * @param settings New settings
+	 */
+
+	updateSettings(settings: ISettings): Promise<void> {
+		return this._db.doc(`users/${this.id}`).update({ settings });
+	}
+
+	/**
 	 * Completes creating user's account by creating data in database.
 	 * Do not use it for other purposes.
 	 * @param data Completing data that is required to complete account.
 	 */
 
-	completeCreatingAccount(data: ICompletingData) {
+	createData(data: ICompletingData) {
 		const userRef = this._db.doc(`users/${this.id}`);
 		const period = {
 			date: {

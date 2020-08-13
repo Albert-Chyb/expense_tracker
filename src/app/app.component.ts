@@ -38,6 +38,7 @@ export class AppComponent implements OnInit {
 			.add(
 				'invalidFontAwesomeTemplate',
 				'Podana wartośc nie jest poprawnym schematem ikony'
-			);
+			)
+			.add('whiteList', 'Podana wartośc nie jest właściwa');
 	}
 }

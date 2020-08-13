@@ -26,7 +26,7 @@ export class SetupAccountComponent {
 	async completeCreatingAccount() {
 		const data: ICompletingData = this.form.value;
 
-		await this._user.completeCreatingAccount(data);
+		await this._user.createData(data);
 		this._router.navigateByUrl('/');
 	}
 }

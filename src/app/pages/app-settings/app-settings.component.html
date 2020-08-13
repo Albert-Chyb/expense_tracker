@@ -1,23 +1,38 @@
-<form [formGroup]="form" class="settings">
-	<mat-form-field class="settings__select" appearance="fill">
-		<mat-label>Automatycznie zakończ za</mat-label>
-		<mat-select formControlName="autoEndAfter">
-			<mat-option> Wybierz </mat-option>
-			<mat-option value="7"> Tydzień </mat-option>
-			<mat-option value="30"> Miesiąc </mat-option>
-		</mat-select>
-	</mat-form-field>
+<div *ngIf="user$ | async as user">
+	<form [formGroup]="form" class="settings" (ngSubmit)="updateSettings()">
+		<zippy>
+			<zippy-static toggleOnClick="false">
+				<label class="settings__item">
+					<input type="checkbox" formControlName="autoEndPeriod" />
+					Automatycznie zakańczaj bierzące okresy.
+				</label>
+			</zippy-static>
 
-	<p class="settings__description settings__item">
-		Okres zostanie automatycznie zakończony za wybraną ilość dni, licząc od daty
-		rozpoczęcia obecnego
-	</p>
+			<zippy-content [state]="form.get('autoEndPeriod').value">
+				<mat-form-field class="settings__select" appearance="fill">
+					<mat-label>Automatycznie zakończ za</mat-label>
+					<mat-select formControlName="autoEndAfter">
+						<mat-option> Wybierz </mat-option>
+						<mat-option [value]="7"> Tydzień </mat-option>
+						<mat-option [value]="30"> Miesiąc </mat-option>
+					</mat-select>
+				</mat-form-field>
 
-	<a class="settings__item link" routerLink="/manage-groups"
-		>Zarządzaj grupami</a
-	>
+				<p class="settings__description settings__item">
+					Okres zostanie automatycznie zakończony za wybraną ilość dni, licząc
+					od daty rozpoczęcia obecnego
+				</p>
+			</zippy-content>
+		</zippy>
+	</form>
 
-	<p class="settings__description settings__item">
-		Dodawaj i usuwaj grupy transakcji.
-	</p>
-</form>
+	<section class="settings">
+		<a class="settings__item link" routerLink="/manage-groups"
+			>Zarządzaj grupami</a
+		>
+
+		<h3 class="settings__description settings__item">
+			Dodawaj i usuwaj grupy transakcji.
+		</h3>
+	</section>
+</div>
