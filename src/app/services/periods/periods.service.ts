@@ -22,6 +22,12 @@ export class PeriodsService {
 			.doc(this._user.id)
 			.collection<IPeriod>('periods', ref => ref.where('isClosed', '==', false))
 			.valueChanges()
-			.pipe(map(periods => periods[0]));
+			.pipe(
+				map(periods => periods[0]),
+				map(period => {
+					period.date.start = (period.date.start as any).toDate();
+					return period;
+				})
+			);
 	}
 }

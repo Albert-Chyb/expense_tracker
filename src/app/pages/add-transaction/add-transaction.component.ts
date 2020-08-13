@@ -1,7 +1,10 @@
+import { map } from 'rxjs/internal/operators/map';
+import { PeriodsService } from './../../services/periods/periods.service';
+import { IPeriod } from './../../common/models/period';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest, pipe } from 'rxjs';
 import { blackListValidator } from 'src/app/common/validators/blackListValidator';
 import { isNotANumberValidator } from 'src/app/common/validators/isNotANumberValidator';
 
@@ -17,7 +20,8 @@ export class AddTransactionComponent implements OnInit {
 	constructor(
 		private readonly _transactions: TransactionsService,
 		private readonly _groups: TransactionsGroupsService,
-		private readonly _router: Router
+		private readonly _router: Router,
+		private readonly _periods: PeriodsService
 	) {}
 
 	form = new FormGroup({
@@ -34,9 +38,18 @@ export class AddTransactionComponent implements OnInit {
 		]),
 	});
 	groups$: Observable<ITransactionGroup[]>;
+	data$: Observable<{
+		groups: ITransactionGroup[];
+		period: IPeriod;
+	}>;
 
 	ngOnInit() {
-		this.groups$ = this._groups.getAll();
+		const groups$ = this._groups.getAll();
+		const period$ = this._periods.getCurrent();
+
+		this.data$ = combineLatest([groups$, period$]).pipe(
+			map(([groups, period]) => ({ groups, period }))
+		);
 	}
 
 	async addTransaction() {
