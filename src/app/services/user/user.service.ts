@@ -63,7 +63,7 @@ export class UserService {
 
 		data.name = this._afAuth.auth.currentUser.displayName;
 
-		const userPromise = userRef.set(data);
+		const userPromise = userRef.set({ ...data, startingBalance: data.balance });
 		const periodsPromise = userRef.collection<IPeriod>('periods').add(period);
 
 		return Promise.all([userPromise, periodsPromise]);

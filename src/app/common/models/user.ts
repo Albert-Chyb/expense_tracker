@@ -21,6 +21,12 @@ export interface IUser {
 	balance: number;
 
 	/**
+	 * Balance when user firstly created data.
+	 */
+
+	startingBalance: number;
+
+	/**
 	 * Id of an user
 	 */
 	uid?: string;
