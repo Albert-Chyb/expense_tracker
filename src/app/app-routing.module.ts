@@ -1,3 +1,4 @@
+import { DataAvailableGuard } from './guards/data-available/data-available.guard';
 import { AddTransactionComponent } from './pages/add-transaction/add-transaction.component';
 import { UnAuthGuard } from './guards/un-auth/un-auth.guard';
 import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
@@ -18,49 +19,49 @@ const routes: Routes = [
 		path: '',
 		component: HomeComponent,
 		data: { name: 'Strona główna' },
-		canActivate: [AuthGuard],
+		canActivate: [AuthGuard, DataAvailableGuard],
 	},
 	{
 		path: 'manage-transaction/:id',
 		component: ManageTransactionComponent,
 		data: { name: 'Zarządzaj transakcją' },
-		canActivate: [AuthGuard],
+		canActivate: [AuthGuard, DataAvailableGuard],
 	},
 	{
 		path: 'add-transaction',
 		component: AddTransactionComponent,
 		data: { name: 'Dodaj transakcję' },
-		canActivate: [AuthGuard],
+		canActivate: [AuthGuard, DataAvailableGuard],
 	},
 	{
 		path: 'add-group',
 		component: AddGroupComponent,
 		data: { name: 'Dodaj nową grupę' },
-		canActivate: [AuthGuard],
+		canActivate: [AuthGuard, DataAvailableGuard],
 	},
 	{
 		path: 'manage-groups',
 		component: ManageGroupsComponent,
 		data: { name: 'Zarządzaj grupami' },
-		canActivate: [AuthGuard],
+		canActivate: [AuthGuard, DataAvailableGuard],
 	},
 	{
 		path: 'app-settings',
 		component: AppSettingsComponent,
 		data: { name: 'Ustawienia' },
-		canActivate: [AuthGuard],
+		canActivate: [AuthGuard, DataAvailableGuard],
 	},
 	{
 		path: 'profile',
 		component: ProfileComponent,
 		data: { name: 'Profil' },
-		canActivate: [AuthGuard],
+		canActivate: [AuthGuard, DataAvailableGuard],
 	},
 	{
 		path: 'periods',
 		component: PeriodsComponent,
 		data: { name: 'Okresy' },
-		canActivate: [AuthGuard],
+		canActivate: [AuthGuard, DataAvailableGuard],
 	},
 	{
 		path: 'login',

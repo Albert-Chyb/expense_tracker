@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
-import { switchMap, map, tap, take } from 'rxjs/operators';
+import { switchMap, map, tap, take, first } from 'rxjs/operators';
 
 import { IUser } from './../../common/models/user';
 import { User } from 'firebase';
@@ -81,10 +81,19 @@ export class UserService {
 	 * Checks if user completed creating account by creating data in database.
 	 */
 	get hasCreatedData(): Promise<boolean> {
-		return this._db
-			.doc<IUser>(`users/${this.id}`)
-			.ref.get()
-			.then(doc => doc.exists);
+		return this._afAuth.authState
+			.pipe(
+				take(1),
+				switchMap(user => {
+					if (user)
+						return this._db
+							.doc<IUser>(`users/${user.uid}`)
+							.ref.get()
+							.then(doc => doc.exists);
+					else return of(false);
+				})
+			)
+			.toPromise();
 	}
 
 	/**
