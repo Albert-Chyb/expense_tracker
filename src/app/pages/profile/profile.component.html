@@ -78,7 +78,9 @@
 			usunięciem konta zewnętrznego dostawcy (np: Google).
 		</p>
 
-		<button class="btn btn--danger btn--block">Usuń</button>
+		<button (click)="deleteUserAccount()" class="btn btn--danger btn--block">
+			Usuń
+		</button>
 	</section>
 
 	<section class="profile__section">
@@ -89,6 +91,8 @@
 			przycisk poniżej. Ta operacja jest <strong>nieodwracalna</strong>.
 		</p>
 
-		<button class="btn btn--danger btn--block">Usuń</button>
+		<button (click)="deleteUserData()" class="btn btn--danger btn--block">
+			Usuń
+		</button>
 	</section>
 </section>

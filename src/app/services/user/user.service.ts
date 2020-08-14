@@ -78,6 +78,15 @@ export class UserService {
 	}
 
 	/**
+	 * Deletes all user data in database and deletes user account.
+	 */
+
+	async delete(): Promise<void> {
+		await this.deleteData();
+		return this._afAuth.auth.currentUser.delete();
+	}
+
+	/**
 	 * Returns user data from database.
 	 */
 

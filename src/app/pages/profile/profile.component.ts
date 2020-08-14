@@ -43,6 +43,16 @@ export class ProfileComponent implements OnInit {
 		this._periods.openCurrent();
 	}
 
+	async deleteUserData() {
+		await this._user.deleteData();
+		this._router.navigateByUrl('/setup-account');
+	}
+
+	async deleteUserAccount() {
+		await this._user.delete();
+		this._router.navigateByUrl('/login');
+	}
+
 	async logOut() {
 		await this._auth.logout();
 		this._router.navigateByUrl('/login');
