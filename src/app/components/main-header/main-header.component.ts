@@ -1,8 +1,9 @@
-import { UserService } from './../../services/user/user.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
+
+import { UserService } from './../../services/user/user.service';
 
 @Component({
 	selector: 'main-header',
