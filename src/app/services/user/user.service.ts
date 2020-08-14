@@ -20,7 +20,7 @@ import { User } from 'firebase';
 })
 export class UserService {
 	constructor(
-		private readonly _db: AngularFirestore,
+		private readonly _afStore: AngularFirestore,
 		private readonly _afAuth: AngularFireAuth
 	) {
 		this.init();
@@ -34,7 +34,7 @@ export class UserService {
 	 */
 
 	update(user: Partial<IUser>): Promise<void> {
-		return this._db.doc(`users/${this.id}`).update(user);
+		return this._afStore.doc(`users/${this.id}`).update(user);
 	}
 
 	/**
@@ -43,7 +43,7 @@ export class UserService {
 	 */
 
 	updateSettings(settings: ISettings): Promise<void> {
-		return this._db.doc(`users/${this.id}`).update({ settings });
+		return this._afStore.doc(`users/${this.id}`).update({ settings });
 	}
 
 	/**
@@ -53,7 +53,7 @@ export class UserService {
 	 */
 
 	createData(data: ICompletingData) {
-		const userRef = this._db.doc(`users/${this.id}`);
+		const userRef = this._afStore.doc(`users/${this.id}`);
 		const period = {
 			date: {
 				start: firestore.FieldValue.serverTimestamp() as any,
@@ -67,6 +67,14 @@ export class UserService {
 		const periodsPromise = userRef.collection<IPeriod>('periods').add(period);
 
 		return Promise.all([userPromise, periodsPromise]);
+	}
+
+	/**
+	 * Deletes all user data in database without deleting account.
+	 */
+
+	deleteData(): Promise<void> {
+		return this._afStore.doc(`users/${this.id}`).delete();
 	}
 
 	/**
@@ -96,7 +104,7 @@ export class UserService {
 				take(1),
 				switchMap(user => {
 					if (user)
-						return this._db
+						return this._afStore
 							.doc<IUser>(`users/${user.uid}`)
 							.ref.get()
 							.then(doc => doc.exists);
@@ -132,7 +140,12 @@ export class UserService {
 
 	private async updateUserCredentials(user: User) {
 		if (!user || !(await this.hasCreatedData)) return null;
-		this.update({ name: user.displayName });
+		this.update({
+			name: user.displayName,
+			email: user.email,
+			createdAt: user.metadata.creationTime,
+			avatar: user.photoURL,
+		});
 	}
 
 	/**
@@ -142,7 +155,7 @@ export class UserService {
 
 	private switchToUserFromDatabase(user: User) {
 		if (user)
-			return this._db
+			return this._afStore
 				.doc<IUser>(`users/${user.uid}`)
 				.valueChanges()
 				.pipe(map(doc => ({ uid: user.uid, ...doc })));

@@ -30,4 +30,10 @@ export interface IUser {
 	 * Id of an user
 	 */
 	uid?: string;
+
+	email: string;
+
+	createdAt: string;
+
+	avatar: string;
 }
