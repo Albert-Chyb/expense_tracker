@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { map, switchMap, take, filter } from 'rxjs/operators';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 
 import { ITransaction } from './../../common/models/transaction';
 import { PeriodsService } from './../periods/periods.service';
 import { TransactionsGroupsService } from './../transactions-groups/transactions-groups.service';
 import { UserService } from './../user/user.service';
-import { includeDocsIds } from 'src/app/common/helpers/includeDocsIds';
-import { includeDocId } from 'src/app/common/helpers/includeDocId';
 
 @Injectable({
 	providedIn: 'root',
@@ -33,9 +31,8 @@ export class TransactionsService {
 					.collection<ITransaction>('transactions', ref =>
 						ref.where('date', '>=', period.date.start).orderBy('date', 'desc')
 					)
-					.snapshotChanges()
+					.valueChanges({ idField: 'id' })
 					.pipe(
-						includeDocsIds(),
 						map(transactions => this.normalizeTransactionsDate(transactions))
 					)
 			)

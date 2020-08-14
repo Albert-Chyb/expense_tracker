@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { includeDocId } from 'src/app/common/helpers/includeDocId';
-import { includeDocsIds } from 'src/app/common/helpers/includeDocsIds';
 
 import { ITransactionGroup } from './../../common/models/group';
 import { UserService } from './../user/user.service';
@@ -24,8 +23,7 @@ export class TransactionsGroupsService {
 		return this._afStore
 			.doc(`users/${this._user.id}`)
 			.collection<ITransactionGroup>('groups')
-			.snapshotChanges()
-			.pipe(includeDocsIds());
+			.valueChanges({ idField: 'id' });
 	}
 
 	/**

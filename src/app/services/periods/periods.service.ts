@@ -1,12 +1,11 @@
-import { firestore } from 'firebase';
-import { map, first, switchMap } from 'rxjs/operators';
-import { IPeriod } from './../../common/models/period';
-import { Observable } from 'rxjs';
-import { UserService } from './../user/user.service';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
-import { includeDocId } from 'src/app/common/helpers/includeDocId';
-import { includeDocsIds } from 'src/app/common/helpers/includeDocsIds';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { firestore } from 'firebase';
+import { Observable } from 'rxjs';
+import { first, map, switchMap } from 'rxjs/operators';
+
+import { IPeriod } from './../../common/models/period';
+import { UserService } from './../user/user.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -24,9 +23,8 @@ export class PeriodsService {
 			.collection('users')
 			.doc(this._user.id)
 			.collection<IPeriod>('periods', ref => ref.where('isClosed', '==', false))
-			.snapshotChanges()
+			.valueChanges({ idField: 'id' })
 			.pipe(
-				includeDocsIds(),
 				map(periods => periods[0]),
 				map(period => {
 					period.date.start = (period.date.start as any).toDate();
@@ -63,7 +61,7 @@ export class PeriodsService {
 				switchMap(period =>
 					this._afStore
 						.doc(`users/${this._user.id}/periods/${period.id}`)
-						.update({ 'date.end': null })
+						.update({ 'date.end': firestore.FieldValue.delete() })
 				)
 			)
 			.toPromise();
