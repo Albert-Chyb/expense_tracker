@@ -1,3 +1,4 @@
+import { DataUnavailableGuard } from './guards/data-unavailable/data-unavailable.guard';
 import { DataAvailableGuard } from './guards/data-available/data-available.guard';
 import { AddTransactionComponent } from './pages/add-transaction/add-transaction.component';
 import { UnAuthGuard } from './guards/un-auth/un-auth.guard';
@@ -73,6 +74,7 @@ const routes: Routes = [
 		path: 'setup-account',
 		component: SetupAccountComponent,
 		data: { name: 'Zakończ rejestrację' },
+		canActivate: [DataUnavailableGuard, AuthGuard],
 	},
 ];
 
