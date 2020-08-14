@@ -1,7 +1,10 @@
-<section class="profile" *ngIf="user$ | async as currentUser">
-	<h2 class="profile__heading">Witaj, {{ currentUser.name }} !</h2>
+<section class="profile" *ngIf="data$ | async as data">
+	<h2 class="profile__heading">Witaj, {{ data.user.name }} !</h2>
 
-	<section class="profile__section">
+	<section
+		class="profile__section"
+		*ngIf="!data.period.date.end; else reOpenPeriod"
+	>
 		<h3 class="profile__heading">Zakończ obecny okres rozliczeniowy.</h3>
 
 		<p class="profile__description">
@@ -10,8 +13,27 @@
 			zostanie przeliczone z uwzględnieniem startu nowego okresu.
 		</p>
 
-		<button class="btn btn--secondary btn--block">Zakończ</button>
+		<button (click)="endPeriod()" class="btn btn--secondary btn--block">
+			Zakończ
+		</button>
 	</section>
+
+	<ng-template #reOpenPeriod>
+		<section class="profile__section">
+			<h3 class="profile__heading">
+				Ponownie otwórz obecny okres rozliczeniowy
+			</h3>
+
+			<p class="profile__description">
+				Jeśli zakończyłeś obecny okres rozliczeniowy, możesz otworzyć go
+				ponownie przyciskiem poniżej. Pamięta, że masz czas do północy.
+			</p>
+
+			<button (click)="openPeriod()" class="btn btn--secondary btn--block">
+				Otwórz
+			</button>
+		</section>
+	</ng-template>
 
 	<section class="profile__section">
 		<h3 class="profile__heading">Wyloguj się</h3>

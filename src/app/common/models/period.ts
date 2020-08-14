@@ -44,4 +44,6 @@ export interface IPeriod {
 	 * Present only in closed period.
 	 */
 	balance?: number;
+
+	id?: string;
 }
