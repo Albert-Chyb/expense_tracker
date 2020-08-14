@@ -1,3 +1,5 @@
+import { PeriodsService } from './../../services/periods/periods.service';
+import { IPeriod } from './../../common/models/period';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +21,8 @@ export class ManageTransactionComponent implements OnInit {
 		private readonly _transactions: TransactionsService,
 		private readonly _groups: TransactionsGroupsService,
 		private readonly _router: Router,
-		private readonly _route: ActivatedRoute
+		private readonly _route: ActivatedRoute,
+		private readonly _periods: PeriodsService
 	) {}
 
 	form = new FormGroup({
@@ -38,6 +41,7 @@ export class ManageTransactionComponent implements OnInit {
 	data$: Observable<{
 		groups: ITransactionGroup[];
 		transaction: ITransaction;
+		period: IPeriod;
 	}>;
 	private originalTransaction: ITransaction;
 
@@ -50,9 +54,10 @@ export class ManageTransactionComponent implements OnInit {
 				return transaction;
 			})
 		);
+		const period$ = this._periods.getCurrent();
 
-		this.data$ = combineLatest([groups$, transactions$]).pipe(
-			map(([groups, transaction]) => ({ groups, transaction })),
+		this.data$ = combineLatest([groups$, transactions$, period$]).pipe(
+			map(([groups, transaction, period]) => ({ groups, transaction, period })),
 			tap(data => this.form.patchValue(data.transaction))
 		);
 	}
