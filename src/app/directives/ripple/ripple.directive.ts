@@ -15,8 +15,14 @@ export class RippleDirective {
 		if (this.isRippling) return null;
 		const { offsetX, offsetY } = $event;
 
-		this.host.nativeElement.style.setProperty('--ripple-x-pos', `${offsetX}px`);
-		this.host.nativeElement.style.setProperty('--ripple-y-pos', `${offsetY}px`);
+		this.host.nativeElement.style.setProperty(
+			'--ripple-x-pos',
+			`${offsetX - 25}px`
+		);
+		this.host.nativeElement.style.setProperty(
+			'--ripple-y-pos',
+			`${offsetY - 25}px`
+		);
 
 		this.isRippling = true;
 		setTimeout(() => (this.isRippling = false), 500);
