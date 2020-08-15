@@ -1,3 +1,4 @@
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { DataUnavailableGuard } from './guards/data-unavailable/data-unavailable.guard';
 import { DataAvailableGuard } from './guards/data-available/data-available.guard';
 import { AddTransactionComponent } from './pages/add-transaction/add-transaction.component';
@@ -75,6 +76,11 @@ const routes: Routes = [
 		component: SetupAccountComponent,
 		data: { name: 'Zakończ rejestrację' },
 		canActivate: [DataUnavailableGuard, AuthGuard],
+	},
+	{
+		path: '**',
+		component: NotFoundComponent,
+		data: { name: 'Nie znaleziono strony' },
 	},
 ];
 

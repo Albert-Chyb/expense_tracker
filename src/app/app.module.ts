@@ -43,6 +43,7 @@ import { ZippyListComponent } from './components/zippy-components/zippy-list/zip
 import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
 import { RippleDirective } from './directives/ripple/ripple.directive';
 import { AddTransactionComponent } from './pages/add-transaction/add-transaction.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 @NgModule({
 	declarations: [
@@ -72,6 +73,7 @@ import { AddTransactionComponent } from './pages/add-transaction/add-transaction
 		AddTransactionComponent,
 		FormErrorsComponent,
 		FormErrorsDirective,
+		NotFoundComponent,
 	],
 	imports: [
 		BrowserModule,
