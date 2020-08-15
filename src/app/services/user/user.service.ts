@@ -74,6 +74,9 @@ export class UserService {
 	 */
 
 	deleteData(): Promise<void> {
+		console.warn(
+			'DO NOT USE ! This functions does not delete sub-collections. Add cloud function that can fully delete user data.'
+		);
 		return this._afStore.doc(`users/${this.id}`).delete();
 	}
 
