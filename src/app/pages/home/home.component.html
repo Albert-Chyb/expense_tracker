@@ -34,7 +34,10 @@
 		</summary-card>
 	</div>
 
-	<section class="transactions">
+	<section
+		class="transactions"
+		*ngIf="data.transactions.length; else noTransactionsClue"
+	>
 		<h2 class="transactions__heading">Wydatki w tym okresie</h2>
 
 		<section
@@ -57,6 +60,19 @@
 			</ul>
 		</section>
 	</section>
+
+	<ng-template #noTransactionsClue>
+		<figure class="clue home__clue">
+			<img
+				class="clue__image"
+				src="/assets/images/no_data_1.svg"
+				alt="Nie znaleziono danych"
+			/>
+			<figcaption class="clue__caption">
+				Dodaj pierwszą transakcję, klikając przycisk w prawym dolnym rogu.
+			</figcaption>
+		</figure>
+	</ng-template>
 
 	<a
 		aria-label="Dodaj nową transakcje"

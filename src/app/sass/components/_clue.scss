@@ -1,0 +1,13 @@
+.clue {
+
+  &__image {
+    width: min(#{rem(300px)}, 100%);
+    margin: 0px auto;
+  }
+
+  &__caption {
+    text-align: center;
+    color: $textLighterColor;
+    margin-top: rem(20px);
+  }
+}
