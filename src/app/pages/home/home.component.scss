@@ -72,6 +72,17 @@
 
   &__transaction {
     margin-bottom: rem(10px);
+    transition: transform 50ms ease-in-out;
+
+    @media (hover: hover) {
+      &:hover {
+        transform: scale(1.01);
+      }
+    }
+
+    &:active {
+      transform: scale(.97);
+    }
   }
 
   h2#{&}__heading {
