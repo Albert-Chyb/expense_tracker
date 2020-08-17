@@ -15,4 +15,4 @@ export const manageBalanceOnDelete = manageBalance.onDelete;
 export const populateTransactionOnCreate = populateNewTransactionGroup;
 export const populateTransactionOnUpdate = populateUpdatedTransactionGroup;
 export const addDefaultGroupsOnCreate = addDefaultGroups;
-export const autoEndPeriodOnDayEnd = autoEndPeriod;
+export const autoEndPeriodOnDayBeginning = autoEndPeriod;

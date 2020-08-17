@@ -49,7 +49,7 @@ const DEFAULT_GROUPS = [
 ];
 
 /**
- * When user first creates his data in firestore, it adds some default groups.
+ * When user creates account, it adds some pre-defined groups to get him set up faster.
  */
 
 export const addDefaultGroups = functions.firestore
