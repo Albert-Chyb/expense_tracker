@@ -4,38 +4,41 @@ import * as moment from 'moment';
 
 const db = firestore();
 
-export const autoEndPeriod = functions.https.onCall(async (data, context) => {
-	const users = await db.collection('users').listDocuments();
+export const autoEndPeriod = functions.pubsub
+	.schedule('01 00 * * *')
+	.timeZone('Poland/Warsaw')
+	.onRun(async context => {
+		const users = await db.collection('users').listDocuments();
 
-	users.forEach(async userDoc => {
-		const { settings, balance } = (await userDoc.get()).data() as any;
+		users.forEach(async userDoc => {
+			const { settings, balance } = (await userDoc.get()).data() as any;
 
-		const activePeriod = (await getCurrentPeriod(userDoc)).data();
-		const isPeriodEnded = !!activePeriod.date.end;
+			const activePeriod = (await getCurrentPeriod(userDoc)).data();
+			const isPeriodEnded = !!activePeriod.date.end;
 
-		if (!isPeriodEnded && !settings.autoEndPeriod) return null;
+			if (!isPeriodEnded && !settings.autoEndPeriod) return;
 
-		const closedPeriodStats = {
-			isClosed: true,
-			...(await calculateStats(userDoc, activePeriod)),
-			balance,
-		};
-
-		const periodStartDate = moment(new Date(activePeriod.date.start.toDate()));
-		const daysPassed = moment(Date.now()).diff(periodStartDate, 'days');
-		const hasPassedEnoughDays = daysPassed >= settings.autoEndAfter;
-
-		if (isPeriodEnded) {
-			await closePeriod(userDoc, closedPeriodStats);
-		} else if (settings.autoEndPeriod && hasPassedEnoughDays) {
-			const data = {
-				...closedPeriodStats,
-				'date.end': firestore.FieldValue.serverTimestamp(),
+			const closedPeriodStats = {
+				isClosed: true,
+				...(await calculateStats(userDoc, activePeriod)),
+				balance,
 			};
-			await closePeriod(userDoc, data);
-		}
+
+			const periodStartDate = moment(activePeriod.date.start.toDate());
+			const daysPassed = moment(Date.now()).diff(periodStartDate, 'days');
+			const hasPassedEnoughDays = daysPassed >= settings.autoEndAfter;
+
+			if (isPeriodEnded) {
+				await closePeriod(userDoc, closedPeriodStats);
+			} else if (settings.autoEndPeriod && hasPassedEnoughDays) {
+				const data = {
+					...closedPeriodStats,
+					'date.end': firestore.FieldValue.serverTimestamp(),
+				};
+				await closePeriod(userDoc, data);
+			}
+		});
 	});
-});
 
 async function closePeriod(
 	userDoc: firestore.DocumentReference<firestore.DocumentData>,
