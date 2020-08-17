@@ -16,8 +16,8 @@ export class PeriodsComponent implements OnInit {
 				end: new Date('2020/07/13'),
 			},
 			isClosed: true,
-			saved: 400.63,
-			spent: 3000.12,
+			incomes: 400.63,
+			outcomes: 3000.12,
 			balance: 8765.88,
 		},
 		{
@@ -26,8 +26,8 @@ export class PeriodsComponent implements OnInit {
 				end: new Date('2020/08/14'),
 			},
 			isClosed: true,
-			saved: 700.34,
-			spent: 2600.55,
+			incomes: 700.34,
+			outcomes: 2600.55,
 			balance: 9765.88,
 		},
 		{
@@ -36,8 +36,8 @@ export class PeriodsComponent implements OnInit {
 				end: new Date('2020/09/15'),
 			},
 			isClosed: true,
-			saved: 125.34,
-			spent: 5000.32,
+			incomes: 125.34,
+			outcomes: 5000.32,
 			balance: 11765.88,
 		},
 	];

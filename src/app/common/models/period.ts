@@ -31,13 +31,13 @@ export interface IPeriod {
 	 * Total saved amount in given period.
 	 * Present only in closed period.
 	 */
-	saved?: number;
+	incomes?: number;
 
 	/**
 	 * Total spent amount in given period.
 	 * Present only in closed period.
 	 */
-	spent?: number;
+	outcomes?: number;
 
 	/**
 	 * Main balance when period was closed permanently.

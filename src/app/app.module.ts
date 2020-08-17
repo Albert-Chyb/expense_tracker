@@ -8,6 +8,7 @@ import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AngularFireFunctionsModule } from '@angular/fire/functions';
 
 /*
 	To speed up development process, app uses date picker and select component from Angular Material.
@@ -88,6 +89,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		MatNativeDateModule,
 		MatInputModule,
 		MatSelectModule,
+		AngularFireFunctionsModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

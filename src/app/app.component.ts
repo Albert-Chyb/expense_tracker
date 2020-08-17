@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 
 import { FormErrorsService } from './services/form-errors/form-errors.service';
 import { UserService } from './services/user/user.service';
+import { AngularFireFunctions } from '@angular/fire/functions';
 
 @Component({
 	selector: 'app-root',
@@ -20,15 +21,22 @@ export class AppComponent implements OnInit {
 	*/
 	constructor(
 		private readonly _user: UserService,
-		private readonly _formErrors: FormErrorsService
+		private readonly _formErrors: FormErrorsService,
+		private readonly _afFunctions: AngularFireFunctions
 	) {}
 
 	ngOnInit() {
 		registerLocaleData(localePL);
 
 		// Change to local cloud functions in development environment.
-		if (environment.firebaseEmulators.enabled)
+		if (environment.firebaseEmulators.enabled) {
 			firebase.functions().useFunctionsEmulator('http://localhost:5001');
+
+			const fn = this._afFunctions.httpsCallable('autoEndPeriodOnDayEnd');
+			setInterval(() => {
+				fn({}).subscribe(console.log);
+			}, 5000);
+		}
 
 		this._formErrors
 			.add('required', 'To pole jest wymagane')
