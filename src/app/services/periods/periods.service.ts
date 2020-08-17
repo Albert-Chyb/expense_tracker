@@ -16,7 +16,9 @@ export class PeriodsService {
 		private readonly _user: UserService
 	) {}
 
-	/** Gets currently active period  */
+	/**
+	 * Gets currently active period
+	 */
 
 	getCurrent(): Observable<IPeriod> {
 		return this._afStore
@@ -65,5 +67,16 @@ export class PeriodsService {
 				)
 			)
 			.toPromise();
+	}
+
+	/**
+	 * Gets all closed periods that user currently has.
+	 */
+
+	getAllClosed(): Observable<IPeriod[]> {
+		return this._afStore
+			.doc(`users/${this._user.id}`)
+			.collection<IPeriod>('periods', ref => ref.where('isClosed', '==', true))
+			.valueChanges({ idField: 'id' });
 	}
 }

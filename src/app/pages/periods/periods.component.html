@@ -1,12 +1,12 @@
-<zippy-list>
+<zippy-list *ngIf="periods$ | async as periods">
 	<ul>
 		<li *ngFor="let period of periods">
 			<section class="period">
 				<zippy>
 					<zippy-static>
 						<h2 class="period__date">
-							{{ period.date.start | date }} -
-							{{ period.date.end | date }}
+							{{ period.date.start.toDate() | date }} -
+							{{ period.date.end.toDate() | date }}
 						</h2>
 
 						<button

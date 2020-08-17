@@ -1,3 +1,5 @@
+import { firestore } from 'firebase/app';
+import { Timestamp } from '@google-cloud/firestore';
 /**
  * Represents one period in database.
  * Period describes form when to when user want to monitor his budget.
@@ -12,17 +14,16 @@ export interface IPeriod {
 		 * Date when period was ended.
 		 * Present only in ended period.
 		 */
-		end?: Date;
+		end?: Timestamp;
 
 		/**
 		 * Date when period was started.
 		 */
-		start: Date;
+		start: Timestamp;
 	};
 
 	/**
 	 * Indicates if period was closed permanently.
-	 * Present only in closed period.
 	 * Note that there can be only one period that is not closed.
 	 */
 	isClosed?: boolean;
@@ -45,5 +46,8 @@ export interface IPeriod {
 	 */
 	balance?: number;
 
+	/**
+	 * Id of an period.
+	 */
 	id?: string;
 }
