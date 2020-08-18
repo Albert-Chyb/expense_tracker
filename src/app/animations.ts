@@ -9,27 +9,23 @@ import {
 	AnimationQueryOptions,
 } from '@angular/animations';
 
+/** Default params for animations */
+const params = {
+	duration: '150ms',
+	easing: 'ease-out',
+	delay: '0ms',
+};
+const optional: AnimationQueryOptions = { optional: true };
+
 export const fadeIn = animation(
-	[style({ opacity: 0 }), animate('{{ duration }} {{ easing }}')],
-	{
-		params: {
-			duration: '150ms',
-			easing: 'ease-out',
-		},
-	}
+	[style({ opacity: 0 }), animate('{{ duration }} {{ delay }} {{ easing }}')],
+	{ params }
 );
 
 export const fadeOut = animation(
-	animate('{{ duration }} {{ easing }}', style({ opacity: 0 })),
-	{
-		params: {
-			duration: '150ms',
-			easing: 'ease-in',
-		},
-	}
+	animate('{{ duration }} {{ delay }} {{ easing }}', style({ opacity: 0 })),
+	{ params }
 );
-
-const optional: AnimationQueryOptions = { optional: true };
 
 export const routeAnimations = trigger('routeAnimations', [
 	transition('* => *', [
