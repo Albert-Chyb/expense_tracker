@@ -5,7 +5,7 @@ import { RouterOutlet } from '@angular/router';
 import { functions } from 'firebase';
 import { environment } from 'src/environments/environment';
 
-import { routeAnimations } from './animations';
+import { routeAnimation } from './animations';
 import { FormErrorsService } from './services/form-errors/form-errors.service';
 import { UserService } from './services/user/user.service';
 
@@ -13,7 +13,7 @@ import { UserService } from './services/user/user.service';
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss'],
-	animations: [routeAnimations],
+	animations: [routeAnimation],
 })
 export class AppComponent implements OnInit {
 	/*

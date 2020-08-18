@@ -1,11 +1,5 @@
-import {
-	animate,
-	state,
-	style,
-	transition,
-	trigger,
-} from '@angular/animations';
 import { Component, Input } from '@angular/core';
+import { zippyAnimation } from 'src/app/animations';
 
 /**
  * Content that will be expanded or collapsed.
@@ -15,14 +9,7 @@ import { Component, Input } from '@angular/core';
 	selector: 'zippy-content',
 	templateUrl: './zippy-content.component.html',
 	styleUrls: ['./zippy-content.component.scss'],
-	animations: [
-		trigger('zippyAnimation', [
-			state('collapsed', style({ height: 0, opacity: 0 })),
-
-			transition('collapsed => expanded', animate('200ms ease-out')),
-			transition('expanded => collapsed', animate('200ms ease-in')),
-		]),
-	],
+	animations: [zippyAnimation],
 })
 export class ZippyContentComponent {
 	constructor() {}
