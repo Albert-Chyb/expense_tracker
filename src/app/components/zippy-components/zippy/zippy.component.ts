@@ -18,10 +18,10 @@ import { ZippyStaticComponent } from './../zippy-static/zippy-static.component';
 export class ZippyComponent implements AfterContentInit {
 	constructor() {}
 
-	@ContentChild(ZippyStaticComponent, { static: false })
+	@ContentChild(ZippyStaticComponent)
 	static: ZippyStaticComponent;
 
-	@ContentChild(ZippyContentComponent, { static: false })
+	@ContentChild(ZippyContentComponent)
 	content: ZippyContentComponent;
 
 	ngAfterContentInit() {
