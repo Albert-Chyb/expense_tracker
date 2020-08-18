@@ -1,17 +1,19 @@
 import { registerLocaleData } from '@angular/common';
 import localePL from '@angular/common/locales/pl';
 import { Component, OnInit } from '@angular/core';
-import * as firebase from 'firebase';
+import { RouterOutlet } from '@angular/router';
+import { functions } from 'firebase';
 import { environment } from 'src/environments/environment';
 
+import { routeAnimations } from './animations';
 import { FormErrorsService } from './services/form-errors/form-errors.service';
 import { UserService } from './services/user/user.service';
-import { AngularFireFunctions } from '@angular/fire/functions';
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss'],
+	animations: [routeAnimations],
 })
 export class AppComponent implements OnInit {
 	/*
@@ -29,7 +31,7 @@ export class AppComponent implements OnInit {
 
 		// Change to local cloud functions in development environment.
 		if (environment.firebaseEmulators.enabled)
-			firebase.functions().useFunctionsEmulator('http://localhost:5001');
+			functions().useFunctionsEmulator('http://localhost:5001');
 
 		this._formErrors
 			.add('required', 'To pole jest wymagane')
@@ -41,5 +43,11 @@ export class AppComponent implements OnInit {
 				'Podana wartośc nie jest poprawnym schematem ikony'
 			)
 			.add('whiteList', 'Podana wartośc nie jest właściwa');
+	}
+
+	prepareRoute(outlet: RouterOutlet) {
+		return (
+			outlet && outlet.activatedRouteData && outlet.activatedRouteData.name
+		);
 	}
 }

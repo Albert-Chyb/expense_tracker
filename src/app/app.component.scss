@@ -3,8 +3,17 @@
 @import './sass/utils/mixins';
 
 .app {
-  padding: 0px rem(30px);
   max-width: rem(768px);
   margin: 0px auto;
   padding-top: rem(82px);
+  position: relative;
+}
+
+::ng-deep router-outlet~* {
+  padding: 0px rem(30px);
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: rem(82px);
+  left: 0px;
 }
