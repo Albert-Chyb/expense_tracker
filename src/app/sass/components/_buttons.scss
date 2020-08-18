@@ -41,7 +41,7 @@
 
     &::after {
       content: '';
-      background-image: url('./assets/images/google_logo.png');
+      background-image: url('/assets/images/google_logo.png');
       height: rem(50px);
       width: rem(50px);
       position: absolute;
