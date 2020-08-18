@@ -45,8 +45,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Firebase emulators
+# Firebase
 firestore-debug.log
 firebase-debug.log
 pubsub-debug.log
 ui-debug.log
+.firebase/
