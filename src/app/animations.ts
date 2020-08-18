@@ -69,6 +69,22 @@ export const slideOutBottom = animation(
 	}
 );
 
+export const zoomOut = animation(
+	[
+		animate(
+			'{{ duration }} {{ delay }} {{ easing }}',
+			style({ transform: 'scale3d(0.3, 0.3, 0.3)' })
+		),
+	],
+	{
+		params: {
+			duration: '150ms',
+			easing: 'ease-in',
+			delay: '0ms',
+		},
+	}
+);
+
 export const routeAnimation = trigger('routeAnimation', [
 	transition('* => *', [
 		query(':enter', style({ opacity: 0 }), optional),
@@ -97,4 +113,13 @@ export const zippyAnimation = trigger('zippyAnimation', [
 
 	transition('collapsed => expanded', animate('200ms ease-out')),
 	transition('expanded => collapsed', animate('200ms ease-in')),
+]);
+
+export const groupAnimation = trigger('groupAnimation', [
+	transition(
+		':leave',
+		group([useAnimation(zoomOut), useAnimation(fadeOut)], {
+			params: { duration: '300ms' },
+		})
+	),
 ]);

@@ -1,11 +1,14 @@
-import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
-import { Observable, of } from 'rxjs';
-import { ITransactionGroup } from './../../common/models/group';
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { groupAnimation } from 'src/app/animations';
+import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
+
+import { ITransactionGroup } from './../../common/models/group';
 
 @Component({
 	templateUrl: './manage-groups.component.html',
 	styleUrls: ['./manage-groups.component.scss'],
+	animations: [groupAnimation],
 })
 export class ManageGroupsComponent implements OnInit {
 	constructor(private readonly _groups: TransactionsGroupsService) {}
@@ -14,5 +17,9 @@ export class ManageGroupsComponent implements OnInit {
 
 	ngOnInit() {
 		this.groups$ = this._groups.getAll();
+	}
+
+	trackBy(index: number, group: ITransactionGroup) {
+		return group.id;
 	}
 }
