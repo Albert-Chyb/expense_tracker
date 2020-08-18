@@ -10,7 +10,11 @@
   }
 }
 
-.form__error {
-  color: $colorError;
-  font-size: rem(14px);
+.form-errors {
+  position: relative;
+
+  &__error {
+    color: $colorError;
+    font-size: rem(14px);
+  }
 }
