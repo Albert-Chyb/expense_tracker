@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "expenseTracker"
+  "defaultProject": "expenseTracker",
+  "cli": {
+    "analytics": "495cd82b-a8af-480b-a0af-180ac816fa6e"
+  }
 }
