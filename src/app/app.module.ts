@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore';
+import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -88,6 +89,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		MatNativeDateModule,
 		MatInputModule,
 		MatSelectModule,
+		AngularFireAuthGuardModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },
