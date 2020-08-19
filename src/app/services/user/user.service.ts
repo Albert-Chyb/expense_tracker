@@ -125,7 +125,7 @@ export class UserService {
 			switchMap(this.getUserFromDatabase.bind(this))
 		);
 
-		// On every auth state change check if currently logged in user has created initial data in databse.
+		// On every auth state change check if currently logged in user has created initial data in database.
 		this._afAuth.authState.subscribe(
 			this.determineIfUserCreatedData.bind(this)
 		);
@@ -137,13 +137,11 @@ export class UserService {
 	 * @param user Firebase user
 	 */
 
-	private determineIfUserCreatedData(user: User): void {
+	async determineIfUserCreatedData(user: User) {
 		if (!user) return this._hasCreatedData$.next(false);
 
-		this._afStore
-			.doc(`users/${user.uid}`)
-			.ref.get()
-			.then(doc => this._hasCreatedData$.next(doc.exists));
+		const doc = await this._afStore.doc(`users/${user.uid}`).ref.get();
+		this._hasCreatedData$.next(doc.exists);
 	}
 
 	/**

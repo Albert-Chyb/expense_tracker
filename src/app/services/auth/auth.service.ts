@@ -1,3 +1,4 @@
+import { UserService } from 'src/app/services/user/user.service';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
@@ -6,15 +7,20 @@ import { auth } from 'firebase/app';
 	providedIn: 'root',
 })
 export class AuthService {
-	constructor(private readonly _afAuth: AngularFireAuth) {}
+	constructor(
+		private readonly _afAuth: AngularFireAuth,
+		private readonly _user: UserService
+	) {}
 
 	/**
 	 * Logs in with google account.
 	 */
 
-	loginWithGoogle() {
+	async loginWithGoogle() {
 		const provider = new auth.GoogleAuthProvider();
-		return this._afAuth.auth.signInWithPopup(provider);
+		const credentials = await this._afAuth.auth.signInWithPopup(provider);
+		await this._user.determineIfUserCreatedData(credentials.user);
+		return credentials;
 	}
 
 	/**
