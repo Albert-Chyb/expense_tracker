@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { filter, map, switchMap, take } from 'rxjs/operators';
+import { filter, first, map, switchMap } from 'rxjs/operators';
 
 import { ITransaction } from './../../common/models/transaction';
 import { PeriodsService } from './../periods/periods.service';
@@ -40,7 +40,7 @@ export class TransactionsService {
 	}
 
 	/**
-	 * Gets one transaction with given ID.
+	 * Gets transaction with given ID.
 	 * @param id Id of a transaction
 	 */
 
@@ -55,13 +55,16 @@ export class TransactionsService {
 	}
 
 	/**
-	 * Saves transaction on the server.
+	 * Saves transaction in the database.
 	 * Automatically replaces transaction id in group field with actual data of the group.
 	 * @param transaction Transaction object to save on the server
-	 * @param populateLocally If true (default) - group field will be populated before data is sent to database, if false - cloud function will take care of this.
+	 * @param populateLocally If true (default) - group field will be populated before data is sent to database, if false - cloud function will take care of this behavior.
 	 */
 
-	async add(transaction: ITransaction, populateLocally = true) {
+	async add(
+		transaction: ITransaction,
+		populateLocally = true
+	): Promise<DocumentReference> {
 		let data: ITransaction = transaction;
 		if (populateLocally)
 			data = await this.populateTransactionGroup(transaction);
@@ -74,13 +77,17 @@ export class TransactionsService {
 	}
 
 	/**
-	 * Updates a transaction in the database
+	 * Updates a transaction in the database.
 	 * @param id Id of the transaction
 	 * @param transaction New transaction
 	 * @param populateLocally If true (default) - group field will be populated before data is sent to database, if false - cloud function will take care of this.
 	 */
 
-	async update(id: string, transaction: ITransaction, populateLocally = true) {
+	async update(
+		id: string,
+		transaction: ITransaction,
+		populateLocally = true
+	): Promise<void> {
 		let data: ITransaction = transaction;
 		if (populateLocally)
 			data = await this.populateTransactionGroup(transaction);
@@ -102,7 +109,7 @@ export class TransactionsService {
 	}
 
 	/**
-	 * Changes firestore date format to JavaScript Date object.
+	 * Changes firestore Timestamp to JavaScript Date object.
 	 * @param transactions Transactions to normalize.
 	 */
 
@@ -120,10 +127,12 @@ export class TransactionsService {
 	 * @param transaction Transaction to populate.
 	 */
 
-	private async populateTransactionGroup(transaction: ITransaction) {
+	private async populateTransactionGroup(
+		transaction: ITransaction
+	): Promise<ITransaction> {
 		const group = await this._groups
 			.get((transaction.group as any) as string)
-			.pipe(take(1))
+			.pipe(first())
 			.toPromise();
 
 		if (group) transaction.group = group;

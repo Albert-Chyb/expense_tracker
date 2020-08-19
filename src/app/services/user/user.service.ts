@@ -1,15 +1,15 @@
-import { ISettings } from './../../common/models/settings';
-import { firestore } from 'firebase/app';
-import { IPeriod } from './../../common/models/period';
-import { ICompletingData } from './../../common/models/completingData';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { switchMap, map, tap, take, first, filter } from 'rxjs/operators';
-
-import { IUser } from './../../common/models/user';
 import { User } from 'firebase';
+import { firestore } from 'firebase/app';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { filter, first, map, switchMap, tap } from 'rxjs/operators';
+
+import { ICompletingData } from './../../common/models/completingData';
+import { IPeriod } from './../../common/models/period';
+import { ISettings } from './../../common/models/settings';
+import { IUser } from './../../common/models/user';
 
 /**
  * Handles user's data.
@@ -48,12 +48,11 @@ export class UserService {
 	}
 
 	/**
-	 * Completes creating user's account by creating data in database.
-	 * Do not use it for other purposes.
+	 * Creates required data in database, for app to work properly.
 	 * @param data Completing data that is required to complete account.
 	 */
 
-	async createData(data: ICompletingData) {
+	async createData(data: ICompletingData): Promise<void> {
 		const userRef = this._afStore.doc(`users/${this.id}`);
 		const period = {
 			date: {
@@ -75,26 +74,6 @@ export class UserService {
 	}
 
 	/**
-	 * Deletes all user data in database without deleting account.
-	 */
-
-	deleteData(): Promise<void> {
-		console.warn(
-			'DO NOT USE ! This functions does not delete sub-collections. Add cloud function that can fully delete user data.'
-		);
-		return this._afStore.doc(`users/${this.id}`).delete();
-	}
-
-	/**
-	 * Deletes all user data in database and deletes user account.
-	 */
-
-	async delete(): Promise<void> {
-		await this.deleteData();
-		return this._afAuth.auth.currentUser.delete();
-	}
-
-	/**
 	 * Returns user data from database.
 	 */
 
@@ -112,27 +91,19 @@ export class UserService {
 			: '';
 	}
 
-	get hasCreatedData$() {
+	/**
+	 * Checks if user completed creating account by creating data in database. (RxJS way)
+	 */
+
+	get hasCreatedData$(): Observable<boolean> {
 		return this._hasCreatedData$.pipe(filter(value => value !== null));
 	}
 
 	/**
-	 * Checks if user completed creating account by creating data in database.
+	 * Checks if user completed creating account by creating data in database. (Promise way)
 	 */
 	get hasCreatedData(): Promise<boolean> {
-		return this._afAuth.authState
-			.pipe(
-				take(1),
-				switchMap(user => {
-					if (user)
-						return this._afStore
-							.doc<IUser>(`users/${user.uid}`)
-							.ref.get()
-							.then(doc => doc.exists);
-					else return of(false);
-				})
-			)
-			.toPromise();
+		return this.hasCreatedData$.pipe(first()).toPromise();
 	}
 
 	/**
@@ -147,20 +118,32 @@ export class UserService {
 	 * Initialization logic.
 	 */
 
-	private init() {
-		this.hasCreatedData$.subscribe(console.log);
+	private init(): void {
+		// Set up user observable with data from database.
 		this._user$ = this._afAuth.authState.pipe(
 			tap(this.updateUserCredentials.bind(this)),
-			switchMap(this.switchToUserFromDatabase.bind(this))
+			switchMap(this.getUserFromDatabase.bind(this))
 		);
 
-		this._afAuth.authState.subscribe(user => {
-			if (!user) return this._hasCreatedData$.next(false);
-			this._afStore
-				.doc(`users/${user.uid}`)
-				.ref.get()
-				.then(doc => this._hasCreatedData$.next(doc.exists));
-		});
+		// On every auth state change check if currently logged in user has created initial data in databse.
+		this._afAuth.authState.subscribe(
+			this.determineIfUserCreatedData.bind(this)
+		);
+	}
+
+	/**
+	 * Determines if user has created initial data in database.
+	 * If no user is passed in the argument, then function asserts that there is no data available.
+	 * @param user Firebase user
+	 */
+
+	private determineIfUserCreatedData(user: User): void {
+		if (!user) return this._hasCreatedData$.next(false);
+
+		this._afStore
+			.doc(`users/${user.uid}`)
+			.ref.get()
+			.then(doc => this._hasCreatedData$.next(doc.exists));
 	}
 
 	/**
@@ -168,7 +151,7 @@ export class UserService {
 	 * @param user Firebase user.
 	 */
 
-	private async updateUserCredentials(user: User) {
+	private async updateUserCredentials(user: User): Promise<void> {
 		if (!user || !(await this.hasCreatedData)) return null;
 		this.update({
 			name: user.displayName,
@@ -183,7 +166,7 @@ export class UserService {
 	 * @param user Firebase user.
 	 */
 
-	private switchToUserFromDatabase(user: User) {
+	private getUserFromDatabase(user: User): Observable<IUser> {
 		if (user)
 			return this._afStore
 				.doc<IUser>(`users/${user.uid}`)

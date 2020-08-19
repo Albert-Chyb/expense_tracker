@@ -39,7 +39,7 @@ export class PeriodsService {
 	 * Ends current period.
 	 */
 
-	endCurrent() {
+	endCurrent(): Promise<void> {
 		return this.getCurrent()
 			.pipe(
 				first(),
@@ -56,7 +56,7 @@ export class PeriodsService {
 	 * If current period is closed but not yet sealed, this function can re-open current period.
 	 */
 
-	openCurrent() {
+	openCurrent(): Promise<void> {
 		return this.getCurrent()
 			.pipe(
 				first(),

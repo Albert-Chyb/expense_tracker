@@ -10,8 +10,6 @@ export class AuthService {
 
 	/**
 	 * Logs in with google account.
-	 * This is only first part of creating account !
-	 * Remember to complete creating account by creating associated with user's ID, data in database. @see UserService
 	 */
 
 	loginWithGoogle() {
