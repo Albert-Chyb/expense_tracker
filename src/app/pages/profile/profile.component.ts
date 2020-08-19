@@ -1,5 +1,5 @@
 import { map } from 'rxjs/operators';
-import { IPeriod } from './../../common/models/period';
+import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
 import { PeriodsService } from './../../services/periods/periods.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit {
 
 	data$: Observable<{
 		user: IUser;
-		period: IPeriod;
+		period: IOpenedPeriod;
 	}>;
 
 	ngOnInit() {
@@ -41,16 +41,6 @@ export class ProfileComponent implements OnInit {
 
 	openPeriod() {
 		this._periods.openCurrent();
-	}
-
-	async deleteUserData() {
-		await this._user.deleteData();
-		this._router.navigateByUrl('/setup-account');
-	}
-
-	async deleteUserAccount() {
-		await this._user.delete();
-		this._router.navigateByUrl('/login');
 	}
 
 	async logOut() {

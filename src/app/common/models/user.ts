@@ -1,3 +1,4 @@
+import { FirestoreTimestamp } from './firestoreTimestamp';
 import { ISettings } from './settings';
 
 /**
@@ -23,7 +24,6 @@ export interface IUser {
 	/**
 	 * Balance when user firstly created data.
 	 */
-
 	startingBalance: number;
 
 	/**
@@ -33,7 +33,7 @@ export interface IUser {
 
 	email: string;
 
-	createdAt: string;
+	createdAt: FirestoreTimestamp;
 
 	avatar: string;
 }

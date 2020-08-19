@@ -4,7 +4,7 @@ import { firestore } from 'firebase';
 import { Observable } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
 
-import { IPeriod } from './../../common/models/period';
+import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
 import { UserService } from './../user/user.service';
 
 @Injectable({
@@ -20,11 +20,13 @@ export class PeriodsService {
 	 * Gets currently active period
 	 */
 
-	getCurrent(): Observable<IPeriod> {
+	getCurrent(): Observable<IOpenedPeriod> {
 		return this._afStore
 			.collection('users')
 			.doc(this._user.id)
-			.collection<IPeriod>('periods', ref => ref.where('isClosed', '==', false))
+			.collection<IOpenedPeriod>('periods', ref =>
+				ref.where('isClosed', '==', false)
+			)
 			.valueChanges({ idField: 'id' })
 			.pipe(
 				map(periods => periods[0]),
@@ -73,10 +75,12 @@ export class PeriodsService {
 	 * Gets all closed periods that user currently has.
 	 */
 
-	getAllClosed(): Observable<IPeriod[]> {
+	getAllClosed(): Observable<IClosedPeriod[]> {
 		return this._afStore
 			.doc(`users/${this._user.id}`)
-			.collection<IPeriod>('periods', ref => ref.where('isClosed', '==', true))
+			.collection<IClosedPeriod>('periods', ref =>
+				ref.where('isClosed', '==', true)
+			)
 			.valueChanges({ idField: 'id' });
 	}
 }

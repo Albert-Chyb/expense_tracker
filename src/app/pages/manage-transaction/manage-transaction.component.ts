@@ -1,5 +1,5 @@
 import { PeriodsService } from './../../services/periods/periods.service';
-import { IPeriod } from './../../common/models/period';
+import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -41,7 +41,7 @@ export class ManageTransactionComponent implements OnInit {
 	data$: Observable<{
 		groups: ITransactionGroup[];
 		transaction: ITransaction;
-		period: IPeriod;
+		period: IOpenedPeriod;
 	}>;
 	private originalTransaction: ITransaction;
 

@@ -1,9 +1,10 @@
+import { FirestoreTimestamp } from './firestoreTimestamp';
 /**
  * Represents one period in database.
  * Period describes form when to when user want to monitor his budget.
  */
 
-export interface IPeriod {
+export interface IClosedPeriod {
 	/**
 	 * Specific dates for period.
 	 */
@@ -12,37 +13,60 @@ export interface IPeriod {
 		 * Date when period was ended.
 		 * Present only in ended period.
 		 */
-		end?: any;
+		end: FirestoreTimestamp;
 
 		/**
 		 * Date when period was started.
 		 */
-		start: any;
+		start: FirestoreTimestamp;
 	};
 
 	/**
 	 * Indicates if period was closed permanently.
 	 * Note that there can be only one period that is not closed.
 	 */
-	isClosed?: boolean;
+	isClosed: boolean;
 
 	/**
 	 * Total saved amount in given period.
 	 * Present only in closed period.
 	 */
-	incomes?: number;
+	incomes: number;
 
 	/**
 	 * Total spent amount in given period.
 	 * Present only in closed period.
 	 */
-	outcomes?: number;
+	outcomes: number;
 
 	/**
 	 * Main balance when period was closed permanently.
 	 * Present only in closed period.
 	 */
-	balance?: number;
+	balance: number;
+
+	/**
+	 * Id of an period.
+	 */
+	id?: string;
+}
+
+export interface IOpenedPeriod {
+	/**
+	 * Specific dates for period.
+	 */
+	date: {
+		/**
+		 * Date when period was ended.
+		 * Present only in period that was closed manually.
+		 */
+		end?: FirestoreTimestamp;
+
+		/**
+		 * Date when period was started.
+		 */
+		start: FirestoreTimestamp;
+	};
 
 	/**
 	 * Id of an period.

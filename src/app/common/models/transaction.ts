@@ -1,5 +1,5 @@
+import { FirestoreTimestamp } from './firestoreTimestamp';
 import { ITransactionGroup } from './group';
-import { firestore } from 'firebase/app';
 
 /**
  * Represents one transaction in database.
@@ -14,7 +14,7 @@ export interface ITransaction {
 	/**
 	 * Date of when transaction was made.
 	 */
-	date: Date;
+	date: FirestoreTimestamp;
 
 	/**
 	 * Description of transaction.

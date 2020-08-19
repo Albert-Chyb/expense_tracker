@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { ICompletingData } from './../../common/models/completingData';
-import { IPeriod } from './../../common/models/period';
+import { IClosedPeriod } from './../../common/models/period';
 import { ISettings } from './../../common/models/settings';
 import { IUser } from './../../common/models/user';
 
@@ -64,7 +64,7 @@ export class UserService {
 		data.name = this._afAuth.auth.currentUser.displayName;
 
 		const userPromise = userRef.set({ ...data, startingBalance: data.balance });
-		const periodsPromise = userRef.collection<IPeriod>('periods').add(period);
+		const periodsPromise = userRef.collection('periods').add(period);
 
 		await Promise.all([userPromise, periodsPromise]);
 
@@ -156,7 +156,7 @@ export class UserService {
 		this.update({
 			name: user.displayName,
 			email: user.email,
-			createdAt: user.metadata.creationTime,
+			createdAt: new Date(user.metadata.creationTime) as any,
 			avatar: user.photoURL,
 		});
 	}

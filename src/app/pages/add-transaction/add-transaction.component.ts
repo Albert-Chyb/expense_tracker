@@ -1,6 +1,6 @@
 import { map } from 'rxjs/internal/operators/map';
 import { PeriodsService } from './../../services/periods/periods.service';
-import { IPeriod } from './../../common/models/period';
+import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -40,7 +40,7 @@ export class AddTransactionComponent implements OnInit {
 	groups$: Observable<ITransactionGroup[]>;
 	data$: Observable<{
 		groups: ITransactionGroup[];
-		period: IPeriod;
+		period: IOpenedPeriod;
 	}>;
 
 	ngOnInit() {
