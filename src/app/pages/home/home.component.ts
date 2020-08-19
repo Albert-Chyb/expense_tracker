@@ -1,3 +1,4 @@
+import { FirestoreTimestamp } from './../../common/models/firestoreTimestamp';
 import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -53,8 +54,8 @@ export class HomeComponent implements OnInit {
 		);
 	}
 
-	private dateNormalizer(data: Date): number {
-		return data.setHours(0, 0, 0, 0);
+	private dateNormalizer(data: FirestoreTimestamp): number {
+		return data.toDate().setHours(0, 0, 0, 0);
 	}
 
 	private calculateStatistics(transactions: ITransaction[]) {

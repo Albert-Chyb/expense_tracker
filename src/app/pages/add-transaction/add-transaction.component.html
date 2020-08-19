@@ -28,7 +28,7 @@
 	<mat-form-field class="transaction__detail" appearance="fill">
 		<mat-label>Wybierz datę</mat-label>
 		<input
-			[min]="data.period.date.start"
+			[min]="data.period.date.start.toDate()"
 			matInput
 			[matDatepicker]="picker"
 			formControlName="date"

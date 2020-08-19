@@ -32,9 +32,6 @@ export class TransactionsService {
 						ref.where('date', '>=', period.date.start).orderBy('date', 'desc')
 					)
 					.valueChanges({ idField: 'id' })
-					.pipe(
-						map(transactions => this.normalizeTransactionsDate(transactions))
-					)
 			)
 		);
 	}
@@ -47,11 +44,7 @@ export class TransactionsService {
 	get(id: string): Observable<ITransaction> {
 		return this._afStore
 			.doc<ITransaction>(`users/${this._user.id}/transactions/${id}`)
-			.valueChanges()
-			.pipe(
-				filter(transaction => !!transaction),
-				map(transaction => this.normalizeTransactionsDate([transaction])[0])
-			);
+			.valueChanges();
 	}
 
 	/**
@@ -106,20 +99,6 @@ export class TransactionsService {
 		return this._afStore
 			.doc(`users/${this._user.id}/transactions/${id}`)
 			.delete();
-	}
-
-	/**
-	 * Changes firestore Timestamp to JavaScript Date object.
-	 * @param transactions Transactions to normalize.
-	 */
-
-	private normalizeTransactionsDate(
-		transactions: ITransaction[]
-	): ITransaction[] {
-		return transactions.map(transaction => {
-			transaction.date = (transaction.date as any).toDate();
-			return transaction;
-		});
 	}
 
 	/**

@@ -28,13 +28,7 @@ export class PeriodsService {
 				ref.where('isClosed', '==', false)
 			)
 			.valueChanges({ idField: 'id' })
-			.pipe(
-				map(periods => periods[0]),
-				map(period => {
-					period.date.start = (period.date.start as any).toDate();
-					return period;
-				})
-			);
+			.pipe(map(periods => periods[0]));
 	}
 
 	/**
