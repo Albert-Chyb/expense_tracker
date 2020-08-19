@@ -5,8 +5,8 @@ import { ICompletingData } from './../../common/models/completingData';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, of } from 'rxjs';
-import { switchMap, map, tap, take, first } from 'rxjs/operators';
+import { Observable, of, BehaviorSubject } from 'rxjs';
+import { switchMap, map, tap, take, first, filter } from 'rxjs/operators';
 
 import { IUser } from './../../common/models/user';
 import { User } from 'firebase';
@@ -27,6 +27,7 @@ export class UserService {
 	}
 
 	private _user$: Observable<IUser>;
+	private readonly _hasCreatedData$ = new BehaviorSubject<boolean>(null);
 
 	/**
 	 * Updates user data in database.
@@ -52,7 +53,7 @@ export class UserService {
 	 * @param data Completing data that is required to complete account.
 	 */
 
-	createData(data: ICompletingData) {
+	async createData(data: ICompletingData) {
 		const userRef = this._afStore.doc(`users/${this.id}`);
 		const period = {
 			date: {
@@ -66,7 +67,11 @@ export class UserService {
 		const userPromise = userRef.set({ ...data, startingBalance: data.balance });
 		const periodsPromise = userRef.collection<IPeriod>('periods').add(period);
 
-		return Promise.all([userPromise, periodsPromise]);
+		await Promise.all([userPromise, periodsPromise]);
+
+		this._hasCreatedData$.next(true);
+
+		return Promise.resolve();
 	}
 
 	/**
@@ -107,6 +112,10 @@ export class UserService {
 			: '';
 	}
 
+	get hasCreatedData$() {
+		return this._hasCreatedData$.pipe(filter(value => value !== null));
+	}
+
 	/**
 	 * Checks if user completed creating account by creating data in database.
 	 */
@@ -139,10 +148,19 @@ export class UserService {
 	 */
 
 	private init() {
+		this.hasCreatedData$.subscribe(console.log);
 		this._user$ = this._afAuth.authState.pipe(
 			tap(this.updateUserCredentials.bind(this)),
 			switchMap(this.switchToUserFromDatabase.bind(this))
 		);
+
+		this._afAuth.authState.subscribe(user => {
+			if (!user) return this._hasCreatedData$.next(false);
+			this._afStore
+				.doc(`users/${user.uid}`)
+				.ref.get()
+				.then(doc => this._hasCreatedData$.next(doc.exists));
+		});
 	}
 
 	/**

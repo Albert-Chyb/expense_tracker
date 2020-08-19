@@ -1,3 +1,4 @@
+import { map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import {
 	CanActivate,
@@ -30,9 +31,11 @@ export class DataUnavailableGuard implements CanActivate {
 		| Promise<boolean | UrlTree>
 		| boolean
 		| UrlTree {
-		return this._user.hasCreatedData.then(status => {
-			if (status) this._router.navigateByUrl('/');
-			return !status;
-		});
+		return this._user.hasCreatedData$.pipe(
+			tap(hasCreated => {
+				if (hasCreated) this._router.navigateByUrl('/');
+			}),
+			map(hasCreated => !hasCreated)
+		);
 	}
 }
