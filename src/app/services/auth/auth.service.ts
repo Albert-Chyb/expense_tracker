@@ -19,7 +19,6 @@ export class AuthService {
 	async loginWithGoogle() {
 		const provider = new auth.GoogleAuthProvider();
 		const credentials = await this._afAuth.auth.signInWithPopup(provider);
-		await this._user.determineIfUserCreatedData(credentials.user);
 		return credentials;
 	}
 
@@ -27,7 +26,7 @@ export class AuthService {
 	 * Logs out currently logged in user.
 	 */
 
-	logout() {
+	logout(): Promise<void> {
 		return this._afAuth.auth.signOut();
 	}
 }

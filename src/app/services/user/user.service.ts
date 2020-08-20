@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from 'firebase';
 import { firestore } from 'firebase/app';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, from } from 'rxjs';
 import { filter, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { ICompletingData } from './../../common/models/completingData';
@@ -27,7 +27,6 @@ export class UserService {
 	}
 
 	private _user$: Observable<IUser>;
-	private readonly _hasCreatedData$ = new BehaviorSubject<boolean>(null);
 
 	/**
 	 * Updates user data in database.
@@ -68,8 +67,6 @@ export class UserService {
 
 		await Promise.all([userPromise, periodsPromise]);
 
-		this._hasCreatedData$.next(true);
-
 		return Promise.resolve();
 	}
 
@@ -92,15 +89,20 @@ export class UserService {
 	}
 
 	/**
-	 * Checks if user completed creating account by creating data in database. (RxJS way)
+	 * Checks if user created initial data in database. (RxJS way)
 	 */
 
 	get hasCreatedData$(): Observable<boolean> {
-		return this._hasCreatedData$.pipe(filter(value => value !== null));
+		return this._afAuth.authState.pipe(
+			first(),
+			tap(() => console.log('Checking for document')),
+			switchMap(user => from(this._afStore.doc(`users/${user.uid}`).ref.get())),
+			map(doc => doc.exists)
+		);
 	}
 
 	/**
-	 * Checks if user completed creating account by creating data in database. (Promise way)
+	 * Checks if user created initial data in database. (Promise way)
 	 */
 	get hasCreatedData(): Promise<boolean> {
 		return this.hasCreatedData$.pipe(first()).toPromise();
@@ -124,24 +126,6 @@ export class UserService {
 			tap(this.updateUserCredentials.bind(this)),
 			switchMap(this.getUserFromDatabase.bind(this))
 		);
-
-		// On every auth state change check if currently logged in user has created initial data in database.
-		this._afAuth.authState.subscribe(
-			this.determineIfUserCreatedData.bind(this)
-		);
-	}
-
-	/**
-	 * Determines if user has created initial data in database.
-	 * If no user is passed in the argument, then function asserts that there is no data available.
-	 * @param user Firebase user
-	 */
-
-	async determineIfUserCreatedData(user: User) {
-		if (!user) return this._hasCreatedData$.next(false);
-
-		const doc = await this._afStore.doc(`users/${user.uid}`).ref.get();
-		this._hasCreatedData$.next(doc.exists);
 	}
 
 	/**
