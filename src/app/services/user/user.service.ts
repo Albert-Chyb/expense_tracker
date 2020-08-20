@@ -66,6 +66,7 @@ export class UserService {
 		const periodsPromise = userRef.collection('periods').add(period);
 
 		await Promise.all([userPromise, periodsPromise]);
+		this._hasCreatedData.next(true);
 
 		return Promise.resolve();
 	}
@@ -93,12 +94,7 @@ export class UserService {
 	 */
 
 	get hasCreatedData$(): Observable<boolean> {
-		return this._afAuth.authState.pipe(
-			first(),
-			tap(() => console.log('Checking for document')),
-			switchMap(user => from(this._afStore.doc(`users/${user.uid}`).ref.get())),
-			map(doc => doc.exists)
-		);
+		return this._hasCreatedData.pipe(filter(value => value !== null));
 	}
 
 	/**
@@ -116,6 +112,8 @@ export class UserService {
 		return this._afAuth.authState.pipe(map(user => !!user));
 	}
 
+	private readonly _hasCreatedData = new BehaviorSubject(null);
+
 	/**
 	 * Initialization logic.
 	 */
@@ -126,6 +124,22 @@ export class UserService {
 			tap(this.updateUserCredentials.bind(this)),
 			switchMap(this.getUserFromDatabase.bind(this))
 		);
+
+		this._afAuth.authState.subscribe(
+			this.informAppIfUserDataIsAvailable.bind(this)
+		);
+	}
+
+	async informAppIfUserDataIsAvailable(user: User) {
+		if (!user) {
+			this._hasCreatedData.next(false);
+			return user;
+		}
+
+		const doc = await this._afStore.doc(`users/${user.uid}`).ref.get();
+		this._hasCreatedData.next(doc.exists);
+
+		return user;
 	}
 
 	/**

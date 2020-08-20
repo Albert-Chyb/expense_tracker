@@ -1,9 +1,10 @@
-import { tap } from 'rxjs/operators';
-import { UserService } from './../../services/user/user.service';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from './../../services/auth/auth.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
+import { AuthService } from './../../services/auth/auth.service';
+import { UserService } from './../../services/user/user.service';
 
 @Component({
 	templateUrl: './login.component.html',
@@ -25,10 +26,15 @@ export class LoginComponent implements OnDestroy {
 	async loginWithGoogle() {
 		try {
 			await this._auth.loginWithGoogle();
-			const hasCreatedData = await this._user.hasCreatedData;
 
-			if (hasCreatedData) this._router.navigateByUrl('/');
-			else this._router.navigateByUrl('/setup-account');
+			this.subscriptions.add(
+				this._auth.onLogin$
+					.pipe(switchMap(user => this._user.hasCreatedData$))
+					.subscribe(hasCreatedData => {
+						const route = hasCreatedData ? '/' : '/setup-account';
+						this._router.navigateByUrl(route);
+					})
+			);
 		} catch (error) {
 			console.log(error);
 		}
