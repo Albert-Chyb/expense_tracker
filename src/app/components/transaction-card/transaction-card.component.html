@@ -1,4 +1,4 @@
-<section class="transaction" *ngIf="transaction; else ghostTransaction">
+<section class="transaction" *ngIf="!displayPlaceholder; else ghostTransaction">
 	<div class="transaction__icon">
 		<group-icon
 			[icon]="transaction.group.icon"
