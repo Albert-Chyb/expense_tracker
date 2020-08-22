@@ -1,3 +1,4 @@
+import { Pages } from 'src/app/common/routing/routesUrls';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
@@ -40,5 +41,9 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy() {
 		this.subscriptions.unsubscribe();
+	}
+
+	get Pages() {
+		return Pages;
 	}
 }

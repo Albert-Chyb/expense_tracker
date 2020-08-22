@@ -1,3 +1,4 @@
+import { Pages } from 'src/app/common/routing/routesUrls';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { groupAnimation } from 'src/app/animations';
@@ -21,5 +22,9 @@ export class ManageGroupsComponent implements OnInit {
 
 	trackBy(index: number, group: ITransactionGroup) {
 		return group.id;
+	}
+
+	get Pages() {
+		return Pages;
 	}
 }

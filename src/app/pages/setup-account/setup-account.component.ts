@@ -1,3 +1,4 @@
+import { Pages } from './../../common/routing/routesUrls';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -27,6 +28,6 @@ export class SetupAccountComponent {
 		const data: ICompletingData = this.form.value;
 
 		await this._user.createData(data);
-		this._router.navigateByUrl('/');
+		this._router.navigateByUrl(Pages.Home);
 	}
 }

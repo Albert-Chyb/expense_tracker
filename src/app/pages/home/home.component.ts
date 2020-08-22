@@ -9,6 +9,7 @@ import { ITransaction } from './../../common/models/transaction';
 import { IUser } from './../../common/models/user';
 import { TransactionsService } from './../../services/transactions/transactions.service';
 import { UserService } from './../../services/user/user.service';
+import { Pages } from 'src/app/common/routing/routesUrls';
 
 @Component({
 	templateUrl: './home.component.html',
@@ -35,6 +36,10 @@ export class HomeComponent implements OnInit {
 
 	get savings(): number {
 		return this.incomes - this.outcomes;
+	}
+
+	get Pages() {
+		return Pages;
 	}
 
 	private setupData() {

@@ -1,3 +1,4 @@
+import { Pages } from './../../common/routing/routesUrls';
 import { map } from 'rxjs/operators';
 import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
 import { PeriodsService } from './../../services/periods/periods.service';
@@ -45,6 +46,10 @@ export class ProfileComponent implements OnInit {
 
 	async logOut() {
 		await this._auth.logout();
-		this._router.navigateByUrl('/login');
+		this._router.navigateByUrl(Pages.Login);
+	}
+
+	get Pages() {
+		return Pages;
 	}
 }

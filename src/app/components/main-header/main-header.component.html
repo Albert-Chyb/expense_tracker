@@ -1,13 +1,13 @@
 <header class="header">
-	<a routerLink="/" aria-label="Home" class="header__icon"
+	<a [routerLink]="Pages.Home" aria-label="Home" class="header__icon"
 		><i class="fas fa-home"></i
 	></a>
 
 	<h1 class="header__heading">{{ pageName$ | async }}</h1>
 
 	<a
-		routerLink="/profile"
-		aria-label="Profile"
+		[routerLink]="Pages.Profile"
+		aria-label="Profil"
 		class="header__icon"
 		*ngIf="isLoggedIn$ | async"
 	>

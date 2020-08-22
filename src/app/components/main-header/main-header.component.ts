@@ -5,6 +5,7 @@ import { filter, map, tap } from 'rxjs/operators';
 
 import { UserService } from './../../services/user/user.service';
 import { Title } from '@angular/platform-browser';
+import { Pages } from 'src/app/common/routing/routesUrls';
 
 @Component({
 	selector: 'main-header',
@@ -31,5 +32,9 @@ export class MainHeaderComponent implements OnInit {
 		);
 
 		this.isLoggedIn$ = this._user.isLoggedIn$;
+	}
+
+	get Pages() {
+		return Pages;
 	}
 }

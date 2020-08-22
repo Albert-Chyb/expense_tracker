@@ -52,7 +52,7 @@
 					class="transactions__transaction"
 					*ngFor="let transaction of transactions[1]"
 				>
-					<a [routerLink]="['/manage-transaction', transaction.id]"
+					<a [routerLink]="[Pages.ManageTransaction, transaction.id]"
 						><transaction-card [transaction]="transaction"></transaction-card
 					></a>
 				</li>
@@ -136,6 +136,6 @@
 <a
 	aria-label="Dodaj nową transakcje"
 	class="btn btn--circle home__add-transaction"
-	routerLink="/add-transaction"
+	[routerLink]="Pages.AddTransaction"
 	>+</a
 >

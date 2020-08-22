@@ -1,3 +1,4 @@
+import { Pages } from './../../common/routing/routesUrls';
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -31,8 +32,9 @@ export class LoginComponent implements OnDestroy {
 				this._auth.onLogin$
 					.pipe(switchMap(user => this._user.hasCreatedData$))
 					.subscribe(hasCreatedData => {
-						const route = hasCreatedData ? '/' : '/setup-account';
-						this._router.navigateByUrl(route);
+						const { Home, SetupAccount } = Pages;
+						const routeUrl = hasCreatedData ? Home : SetupAccount;
+						this._router.navigateByUrl(routeUrl);
 					})
 			);
 		} catch (error) {

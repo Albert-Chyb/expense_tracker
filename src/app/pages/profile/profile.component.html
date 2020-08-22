@@ -55,7 +55,7 @@
 			poniżej.
 		</p>
 
-		<a routerLink="/app-settings" class="link">Ustawienia</a>
+		<a [routerLink]="Pages.AppSettings" class="link">Ustawienia</a>
 	</section>
 
 	<section class="profile__section">
@@ -65,34 +65,6 @@
 			Zobacz zestawienie swoich wydatków z wcześniejszych okresów.
 		</p>
 
-		<a routerLink="/periods" class="link">Okresy rozliczeniowe</a>
+		<a [routerLink]="Pages.Periods" class="link">Okresy rozliczeniowe</a>
 	</section>
-
-	<!-- <section class="profile__section">
-		<h3 class="profile__heading">Usuń konto</h3>
-
-		<p class="profile__description">
-			Jeśli chcesz usunąć konto i skasować dane które znajdują się na naszych
-			serweach kliknij w przycisk poniżej. Pamiętaj jednak, że ta akcja jest
-			<strong>nieodwracalna</strong>. Ta opcja nie jest równozanczna z
-			usunięciem konta zewnętrznego dostawcy (np: Google).
-		</p>
-
-		<button (click)="deleteUserAccount()" class="btn btn--danger btn--block">
-			Usuń
-		</button>
-	</section>
-
-	<section class="profile__section">
-		<h3 class="profile__heading">Usuń wszystkie dane</h3>
-
-		<p class="profile__description">
-			Jeśli chcesz usunąć tylko swoje dane i ustawic je od nowa kliknij w
-			przycisk poniżej. Ta operacja jest <strong>nieodwracalna</strong>.
-		</p>
-
-		<button (click)="deleteUserData()" class="btn btn--danger btn--block">
-			Usuń
-		</button>
-	</section> -->
 </section>

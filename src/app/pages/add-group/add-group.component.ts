@@ -1,3 +1,4 @@
+import { Pages } from './../../common/routing/routesUrls';
 import { Router } from '@angular/router';
 import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
 import { Component } from '@angular/core';
@@ -37,7 +38,7 @@ export class AddGroupComponent {
 		};
 
 		await this._groups.add(icon);
-		this._router.navigateByUrl('/manage-groups');
+		this._router.navigateByUrl(Pages.ManageGroups);
 	}
 
 	get transaction(): ITransaction {

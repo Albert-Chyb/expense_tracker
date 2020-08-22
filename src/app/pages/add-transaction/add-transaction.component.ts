@@ -1,3 +1,4 @@
+import { Pages } from './../../common/routing/routesUrls';
 import { map } from 'rxjs/internal/operators/map';
 import { PeriodsService } from './../../services/periods/periods.service';
 import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
@@ -54,6 +55,6 @@ export class AddTransactionComponent implements OnInit {
 
 	async addTransaction() {
 		await this._transactions.add(this.form.value);
-		this._router.navigateByUrl('/');
+		this._router.navigateByUrl(Pages.Home);
 	}
 }

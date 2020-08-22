@@ -1,3 +1,4 @@
+import { Pages } from './../../common/routing/routesUrls';
 import { PeriodsService } from './../../services/periods/periods.service';
 import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
 import { Component, OnInit } from '@angular/core';
@@ -82,12 +83,12 @@ export class ManageTransactionComponent implements OnInit {
 		);
 
 		// After a transaction has been updated, return to home page.
-		this._router.navigateByUrl('/');
+		this._router.navigateByUrl(Pages.Home);
 	}
 
 	async delete() {
 		await this._transactions.delete(this.transactionId);
-		this._router.navigateByUrl('/');
+		this._router.navigateByUrl(Pages.Home);
 	}
 
 	private get transactionId(): string {
