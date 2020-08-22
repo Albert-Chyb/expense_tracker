@@ -1,10 +1,10 @@
-import { FirestoreTimestamp } from './../../common/models/firestoreTimestamp';
 import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import groupBy from 'src/app/common/helpers/groupBy';
 import isToday from 'src/app/common/helpers/isToday';
 
+import { FirestoreTimestamp } from './../../common/models/firestoreTimestamp';
 import { ITransaction } from './../../common/models/transaction';
 import { IUser } from './../../common/models/user';
 import { TransactionsService } from './../../services/transactions/transactions.service';

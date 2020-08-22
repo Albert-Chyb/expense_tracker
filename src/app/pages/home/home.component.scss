@@ -105,3 +105,27 @@
     margin-top: rem(30px);
   }
 }
+
+// Styles for loading placeholder
+
+.transactions--ghost {
+  .transactions__transaction {
+
+    &:hover,
+    &:active {
+      transform: none;
+    }
+  }
+
+  h2.transactions__heading {
+    @include loadingPlaceholder();
+    height: 29px;
+    width: 100%;
+  }
+
+  h3.transactions__heading {
+    @include loadingPlaceholder();
+    height: 14px;
+    width: 100%;
+  }
+}

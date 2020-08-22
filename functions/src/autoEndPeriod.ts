@@ -11,8 +11,8 @@ const db = firestore();
 
 export const autoEndPeriod = functions.pubsub
 	.schedule('01 00 * * *')
-	.timeZone('Poland/Warsaw')
 	.onRun(async context => {
+		console.log('Tried to auto end periods');
 		const users = await db.collection('users').listDocuments();
 
 		users.forEach(async userDoc => {

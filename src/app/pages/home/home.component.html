@@ -1,36 +1,35 @@
-<div *ngIf="data$ | async as data">
+<div *ngIf="data$ | async as data; else loadingPlaceholder">
 	<div class="summary-cards">
 		<summary-card theme="primary" type="big" class="summary-cards__balance">
-			<span class="title">Aktualny balans</span>
-			<span class="amount">{{ data.user.balance | currency: ' ' }}</span>
-			<span class="currency">PLN</span>
+			<ng-container class="title">Aktualny balans</ng-container>
+			<ng-container class="amount">{{
+				data.user.balance | currency: ' '
+			}}</ng-container>
+			<ng-container class="currency">PLN</ng-container>
 		</summary-card>
 
 		<summary-card theme="danger" type="small" class="summary-cards__outcomes">
-			<span class="title">Wydatki</span>
-			<span class="amount">{{ outcomes | currency: ' ' }}</span>
-			<span class="currency">PLN</span>
-			<span class="icon">
+			<ng-container class="title">Wydatki</ng-container>
+			<ng-container class="amount">{{ outcomes | currency: ' ' }}</ng-container>
+			<ng-container class="icon">
 				<i class="fas fa-long-arrow-alt-down"></i>
-			</span>
+			</ng-container>
 		</summary-card>
 
 		<summary-card theme="success" type="small" class="summary-cards__incomes">
-			<span class="title">Przychody</span>
-			<span class="amount">{{ incomes | currency: ' ' }}</span>
-			<span class="currency">PLN</span>
-			<span class="icon">
+			<ng-container class="title">Przychody</ng-container>
+			<ng-container class="amount">{{ incomes | currency: ' ' }}</ng-container>
+			<ng-container class="icon">
 				<i class="fas fa-long-arrow-alt-up"></i>
-			</span>
+			</ng-container>
 		</summary-card>
 
 		<summary-card theme="secondary" type="small" class="summary-cards__savings">
-			<span class="title">Zaoszczędzono</span>
-			<span class="amount">{{ savings | currency: ' ' }}</span>
-			<span class="currency">PLN</span>
-			<span class="icon">
+			<ng-container class="title">Zaoszczędzono</ng-container>
+			<ng-container class="amount">{{ savings | currency: ' ' }}</ng-container>
+			<ng-container class="icon">
 				<i class="fas fa-piggy-bank"></i>
-			</span>
+			</ng-container>
 		</summary-card>
 	</div>
 
@@ -73,11 +72,70 @@
 			</figcaption>
 		</figure>
 	</ng-template>
-
-	<a
-		aria-label="Dodaj nową transakcje"
-		class="btn btn--circle home__add-transaction"
-		routerLink="/add-transaction"
-		>+</a
-	>
 </div>
+
+<ng-template #loadingPlaceholder>
+	<div class="summary-cards">
+		<summary-card
+			displayPlaceholder="true"
+			theme="primary"
+			type="big"
+			class="summary-cards__balance"
+		>
+		</summary-card>
+
+		<summary-card
+			displayPlaceholder="true"
+			theme="danger"
+			type="small"
+			class="summary-cards__outcomes"
+		>
+			<span class="icon">
+				<i class="fas fa-long-arrow-alt-down"></i>
+			</span>
+		</summary-card>
+
+		<summary-card
+			displayPlaceholder="true"
+			theme="success"
+			type="small"
+			class="summary-cards__incomes"
+		>
+			<span class="icon">
+				<i class="fas fa-long-arrow-alt-up"></i>
+			</span>
+		</summary-card>
+
+		<summary-card
+			displayPlaceholder="true"
+			theme="secondary"
+			type="small"
+			class="summary-cards__savings"
+		>
+			<span class="icon">
+				<i class="fas fa-piggy-bank"></i>
+			</span>
+		</summary-card>
+	</div>
+
+	<section class="transactions transactions--ghost">
+		<h2 class="transactions__heading"></h2>
+
+		<section class="transactions__group">
+			<h3 class="transactions__heading"></h3>
+
+			<ul>
+				<li class="transactions__transaction" *ngFor="let n of [1, 2, 3, 4]">
+					<transaction-card [displayPlaceholder]="true"></transaction-card>
+				</li>
+			</ul>
+		</section>
+	</section>
+</ng-template>
+
+<a
+	aria-label="Dodaj nową transakcje"
+	class="btn btn--circle home__add-transaction"
+	routerLink="/add-transaction"
+	>+</a
+>

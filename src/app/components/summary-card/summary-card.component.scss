@@ -7,6 +7,7 @@
   box-shadow: rem(-3px) rem(4px) rem(7px) rgba(0, 0, 0, 0.25);
   display: grid;
   font-size: 1rem;
+  align-items: center;
 
   &--big {
     grid-template: {
@@ -14,10 +15,11 @@
         'title currency'
         'amount currency'
       ;
-      rows: repeat(2, 1fr);
+      rows: 1fr 1.5fr;
       columns: 3fr 1fr;
     }
 
+    row-gap: rem(10px);
     column-gap: rem(25px);
     padding: rem(30px);
 
@@ -98,5 +100,28 @@
     grid-area: icon;
     place-self: center;
     font-size: rem(26px);
+  }
+}
+
+.summary--ghost {
+
+  &.summary--big {
+    grid-template-rows: rem(17px) rem(37px);
+  }
+
+  &.summary--small {
+    grid-template-rows: rem(17px) rem(19px);
+  }
+
+  .summary__title {
+    @include loadingPlaceholder('dark');
+  }
+
+  .summary__amount {
+    @include loadingPlaceholder('dark');
+  }
+
+  .summary__currency {
+    @include loadingPlaceholder('dark');
   }
 }

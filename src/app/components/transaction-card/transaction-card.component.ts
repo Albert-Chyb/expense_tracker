@@ -11,6 +11,7 @@ export class TransactionCardComponent implements OnInit {
 	constructor() {}
 
 	@Input('transaction') transaction: ITransaction;
+	@Input('displayPlaceholder') displayPlaceholder: boolean = false;
 
 	ngOnInit() {}
 }

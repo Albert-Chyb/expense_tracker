@@ -45,3 +45,25 @@
     font-weight: bold;
   }
 }
+
+.transaction--ghost {
+  row-gap: 10px;
+
+  .transaction__icon {
+    @include loadingPlaceholder();
+    height: 50px;
+  }
+
+  .transaction__title {
+    @include loadingPlaceholder();
+  }
+
+  .transaction__description {
+    @include loadingPlaceholder();
+  }
+
+  .transaction__amount {
+    @include loadingPlaceholder();
+  }
+
+}

@@ -1,4 +1,4 @@
-<section class="transaction">
+<section class="transaction" *ngIf="transaction; else ghostTransaction">
 	<div class="transaction__icon">
 		<group-icon
 			[icon]="transaction.group.icon"
@@ -14,3 +14,15 @@
 
 	<p class="transaction__amount">{{ transaction.amount | currency: 'PLN' }}</p>
 </section>
+
+<ng-template #ghostTransaction>
+	<section class="transaction transaction--ghost">
+		<div class="transaction__icon"></div>
+
+		<h3 class="transaction__title"></h3>
+
+		<p class="transaction__description"></p>
+
+		<p class="transaction__amount"></p>
+	</section>
+</ng-template>

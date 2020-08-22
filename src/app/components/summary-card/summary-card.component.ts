@@ -18,10 +18,15 @@ export class SummaryCardComponent implements OnInit {
 
 	@Input('theme') themeColor: summaryCardTheme;
 	@Input('type') type: summaryCardType;
+	@Input('displayPlaceholder') displayPlaceholder: boolean = false;
 
 	ngOnInit() {}
 
 	get classes() {
-		return [`summary--${this.themeColor}`, `summary--${this.type}`];
+		return {
+			[`summary--${this.themeColor}`]: true,
+			[`summary--${this.type}`]: true,
+			'summary--ghost': this.displayPlaceholder,
+		};
 	}
 }
