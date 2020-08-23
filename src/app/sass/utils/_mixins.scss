@@ -125,27 +125,6 @@
     width: 150px;
     height: 100%;
     animation: slide 1s ease-out infinite;
-    -webkit-animation: slide 1s ease-out infinite;
     background: map-deep-get($themes, $theme, 'gradient');
-  }
-}
-
-@keyframes slide {
-  0% {
-    left: -150px;
-  }
-
-  100% {
-    left: 100%;
-  }
-}
-
-@-webkit-keyframes slide {
-  0% {
-    left: -150px;
-  }
-
-  100% {
-    left: 100%;
   }
 }
