@@ -10,7 +10,7 @@ const db = firestore();
  */
 
 export const autoEndPeriod = functions.pubsub
-	.schedule('01 00 * * *')
+	.schedule('0 0 * * *')
 	.onRun(async context => {
 		console.log('Tried to auto end periods');
 		const users = await db.collection('users').listDocuments();
