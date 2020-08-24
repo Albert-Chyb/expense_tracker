@@ -1,9 +1,13 @@
-@keyframes slide {
+@keyframes loadingPlaceholderAnimation {
   0% {
-    left: -150px;
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
   }
 
   100% {
-    left: 100%;
+    opacity: 1;
   }
 }

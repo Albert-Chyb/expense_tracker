@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, delay } from 'rxjs/operators';
 import groupBy from 'src/app/common/helpers/groupBy';
 import isToday from 'src/app/common/helpers/isToday';
 
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
 	}>;
 	incomes: number = 0;
 	outcomes: number = 0;
-
+	readonly Pages = Pages;
 	readonly isToday = isToday;
 
 	ngOnInit() {
@@ -36,10 +36,6 @@ export class HomeComponent implements OnInit {
 
 	get savings(): number {
 		return this.incomes - this.outcomes;
-	}
-
-	get Pages() {
-		return Pages;
 	}
 
 	private setupData() {

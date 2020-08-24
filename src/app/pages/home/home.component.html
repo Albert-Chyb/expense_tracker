@@ -124,11 +124,7 @@
 		<section class="transactions__group">
 			<h3 class="transactions__heading"></h3>
 
-			<ul>
-				<li class="transactions__transaction" *ngFor="let n of [1, 2, 3, 4]">
-					<transaction-card [displayPlaceholder]="true"></transaction-card>
-				</li>
-			</ul>
+			<transaction-card [displayPlaceholder]="true"></transaction-card>
 		</section>
 	</section>
 </ng-template>
