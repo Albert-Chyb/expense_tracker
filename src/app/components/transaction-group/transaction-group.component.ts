@@ -12,7 +12,6 @@ export class TransactionGroupComponent {
 	constructor(private readonly _groups: TransactionsGroupsService) {}
 
 	@Input('group') group: ITransactionGroup;
-	@Input('onElement') onElement: boolean = false;
 	@Input('isEditable') isEditable: boolean = false;
 
 	delete() {

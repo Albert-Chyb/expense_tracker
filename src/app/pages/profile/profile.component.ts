@@ -1,18 +1,19 @@
-import { Pages } from './../../common/routing/routesUrls';
-import { map } from 'rxjs/operators';
-import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
-import { PeriodsService } from './../../services/periods/periods.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
+import { IOpenedPeriod } from './../../common/models/period';
 import { IUser } from './../../common/models/user';
+import { Pages } from './../../common/routing/routesUrls';
 import { AuthService } from './../../services/auth/auth.service';
+import { PeriodsService } from './../../services/periods/periods.service';
 import { UserService } from './../../services/user/user.service';
 
 @Component({
 	templateUrl: './profile.component.html',
 	styleUrls: ['./profile.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileComponent implements OnInit {
 	constructor(

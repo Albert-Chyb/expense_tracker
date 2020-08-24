@@ -7,11 +7,9 @@ import { ITransaction } from './../../common/models/transaction';
 	templateUrl: './transaction-card.component.html',
 	styleUrls: ['./transaction-card.component.scss'],
 })
-export class TransactionCardComponent implements OnInit {
+export class TransactionCardComponent {
 	constructor() {}
 
 	@Input('transaction') transaction: ITransaction;
 	@Input('displayPlaceholder') displayPlaceholder: boolean = false;
-
-	ngOnInit() {}
 }

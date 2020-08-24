@@ -1,5 +1,5 @@
 import { Pages } from './../../common/routing/routesUrls';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import { UserService } from './../../services/user/user.service';
 @Component({
 	templateUrl: './login.component.html',
 	styleUrls: ['./login.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnDestroy {
 	constructor(

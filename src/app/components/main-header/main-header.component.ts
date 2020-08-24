@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
@@ -11,6 +11,7 @@ import { Pages } from 'src/app/common/routing/routesUrls';
 	selector: 'main-header',
 	templateUrl: './main-header.component.html',
 	styleUrls: ['./main-header.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainHeaderComponent implements OnInit {
 	constructor(
@@ -21,6 +22,7 @@ export class MainHeaderComponent implements OnInit {
 
 	pageName$: Observable<string>;
 	isLoggedIn$: Observable<boolean>;
+	Pages = Pages;
 
 	ngOnInit() {
 		this.pageName$ = this._router.events.pipe(
@@ -32,9 +34,5 @@ export class MainHeaderComponent implements OnInit {
 		);
 
 		this.isLoggedIn$ = this._user.isLoggedIn$;
-	}
-
-	get Pages() {
-		return Pages;
 	}
 }

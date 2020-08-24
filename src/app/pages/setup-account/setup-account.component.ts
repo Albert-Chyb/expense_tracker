@@ -1,5 +1,5 @@
 import { Pages } from './../../common/routing/routesUrls';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -9,6 +9,7 @@ import { UserService } from './../../services/user/user.service';
 @Component({
 	templateUrl: './setup-account.component.html',
 	styleUrls: ['./setup-account.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SetupAccountComponent {
 	constructor(

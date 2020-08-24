@@ -1,7 +1,7 @@
 import { Pages } from './../../common/routing/routesUrls';
 import { Router } from '@angular/router';
 import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { fontAwesomeIconTemplateValidator } from 'src/app/common/validators/fontAwesomeIconTemplateValidator';
 
@@ -11,6 +11,7 @@ import { ITransaction } from './../../common/models/transaction';
 @Component({
 	templateUrl: './add-group.component.html',
 	styleUrls: ['./add-group.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddGroupComponent {
 	constructor(

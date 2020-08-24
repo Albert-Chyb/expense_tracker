@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map, tap, delay } from 'rxjs/operators';
 import groupBy from 'src/app/common/helpers/groupBy';
@@ -14,6 +14,7 @@ import { Pages } from 'src/app/common/routing/routesUrls';
 @Component({
 	templateUrl: './home.component.html',
 	styleUrls: ['./home.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
 	constructor(

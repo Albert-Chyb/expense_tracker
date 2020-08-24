@@ -1,7 +1,7 @@
 import { Pages } from './../../common/routing/routesUrls';
 import { PeriodsService } from './../../services/periods/periods.service';
 import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
@@ -16,6 +16,7 @@ import { TransactionsService } from 'src/app/services/transactions/transactions.
 @Component({
 	templateUrl: './manage-transaction.component.html',
 	styleUrls: ['./manage-transaction.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManageTransactionComponent implements OnInit {
 	constructor(

@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 @Component({
-  templateUrl: './not-found.component.html',
-  styleUrls: ['./not-found.component.scss']
+	templateUrl: './not-found.component.html',
+	styleUrls: ['./not-found.component.scss'],
 })
 export class NotFoundComponent implements OnInit {
+	constructor(private readonly _changeDetector: ChangeDetectorRef) {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+	ngOnInit() {
+		this._changeDetector.detach();
+	}
 }

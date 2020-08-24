@@ -1,5 +1,10 @@
 import { ITransactionGroupIcon } from './../../common/models/group';
-import { Component, OnInit, Input } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	Input,
+	ChangeDetectionStrategy,
+} from '@angular/core';
 
 type GroupIconType = 'income' | 'outcome' | 'neutral';
 
@@ -7,6 +12,7 @@ type GroupIconType = 'income' | 'outcome' | 'neutral';
 	selector: 'group-icon',
 	templateUrl: './group-icon.component.html',
 	styleUrls: ['./group-icon.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupIconComponent implements OnInit {
 	constructor() {}
