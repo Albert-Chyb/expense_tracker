@@ -12,7 +12,6 @@ type GroupIconType = 'income' | 'outcome' | 'neutral';
 	selector: 'group-icon',
 	templateUrl: './group-icon.component.html',
 	styleUrls: ['./group-icon.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupIconComponent implements OnInit {
 	constructor() {}
