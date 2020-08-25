@@ -38,7 +38,7 @@ export class AuthService {
 	}
 
 	/**
-	 * If you need to do something after login use this observable, rather than just awaiting login function.
+	 * If you need to do something immediately after login occurs, use this observable, rather than just awaiting login function.
 	 */
 
 	get onLogin$() {
@@ -48,7 +48,7 @@ export class AuthService {
 	}
 
 	/**
-	 * If you need to do something after logout use this observable, rather than just awaiting login function.
+	 * If you need to do something immediately after logout occurs, use this observable, rather than just awaiting login function.
 	 */
 
 	get onLogout$() {

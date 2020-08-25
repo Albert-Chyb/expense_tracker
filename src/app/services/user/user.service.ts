@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from 'firebase';
-import { firestore, auth } from 'firebase/app';
-import { BehaviorSubject, Observable, of, from } from 'rxjs';
+import { firestore } from 'firebase/app';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { ICompletingData } from './../../common/models/completingData';
-import { IClosedPeriod } from './../../common/models/period';
 import { ISettings } from './../../common/models/settings';
 import { IUser } from './../../common/models/user';
 
@@ -27,6 +26,7 @@ export class UserService {
 	}
 
 	private _user$: Observable<IUser>;
+	private readonly _hasCreatedData = new BehaviorSubject(null);
 
 	/**
 	 * Updates user data in database.
@@ -112,8 +112,6 @@ export class UserService {
 		return this._afAuth.authState.pipe(map(user => !!user));
 	}
 
-	private readonly _hasCreatedData = new BehaviorSubject(null);
-
 	/**
 	 * Initialization logic.
 	 */
@@ -121,19 +119,23 @@ export class UserService {
 	private init(): void {
 		// Set up user observable with data from database.
 		this._user$ = this._afAuth.authState.pipe(
-			tap(this.updateUserCredentials.bind(this)),
 			switchMap(this.getUserFromDatabase.bind(this))
 		);
 
-		this._afAuth.authState.subscribe(
-			this.informAppIfUserDataIsAvailable.bind(this)
-		);
+		this._afAuth.authState
+			.pipe(tap(this.updateUserCredentials.bind(this)))
+			.subscribe(this.informAppIfUserDataIsAvailable.bind(this));
 	}
+
+	/**
+	 * Informs app if user's data is available in database.
+	 * @param user Firebase user
+	 */
 
 	async informAppIfUserDataIsAvailable(user: User) {
 		if (!user) {
 			this._hasCreatedData.next(false);
-			return user;
+			return null;
 		}
 
 		const doc = await this._afStore.doc(`users/${user.uid}`).ref.get();
@@ -158,7 +160,7 @@ export class UserService {
 	}
 
 	/**
-	 * Returns observable of user from database instead of default firebase user.
+	 * Returns user data from database based on passed user.
 	 * @param user Firebase user.
 	 */
 

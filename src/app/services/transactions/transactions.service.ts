@@ -20,7 +20,7 @@ export class TransactionsService {
 	) {}
 
 	/**
-	 * Gets all transactions in current period of currently logged in user.
+	 * Gets all transactions in current period.
 	 */
 
 	getAllCurrent(): Observable<ITransaction[]> {

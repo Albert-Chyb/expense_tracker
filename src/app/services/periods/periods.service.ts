@@ -17,7 +17,7 @@ export class PeriodsService {
 	) {}
 
 	/**
-	 * Gets currently active period
+	 * Gets currently active period.
 	 */
 
 	getCurrent(): Observable<IOpenedPeriod> {
@@ -66,7 +66,7 @@ export class PeriodsService {
 	}
 
 	/**
-	 * Gets all closed periods that user currently has.
+	 * Gets all closed periods.
 	 */
 
 	getAllClosed(): Observable<IClosedPeriod[]> {

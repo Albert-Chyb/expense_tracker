@@ -20,7 +20,7 @@ export enum Pages {
 	/** Page where a transaction group can be added to database */
 	AddGroup = '/add-group',
 
-	/** Page where all groups are displayed and there is an option to delete them */
+	/** Page where all groups are displayed */
 	ManageGroups = '/manage-groups',
 
 	/** Page where app settings can be displayed and changed */

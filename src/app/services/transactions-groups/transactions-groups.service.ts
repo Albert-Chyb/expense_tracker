@@ -16,7 +16,7 @@ export class TransactionsGroupsService {
 	) {}
 
 	/**
-	 * Gets all transactions groups that user have.
+	 * Returns all groups.
 	 */
 
 	getAll(): Observable<ITransactionGroup[]> {
@@ -27,7 +27,7 @@ export class TransactionsGroupsService {
 	}
 
 	/**
-	 * Gets one transactions group with given id.
+	 * Returns one transactions group with given id.
 	 * @param id Id of a transaction group.
 	 */
 
@@ -39,17 +39,16 @@ export class TransactionsGroupsService {
 	}
 
 	/**
-	 * Deletes transaction from database.
+	 * Deletes a transaction from database.
 	 * @param id Id of an transaction
 	 */
 
 	delete(id: string): Promise<void> {
-		if (!id) throw new Error('No ID of an group was passed !');
 		return this._afStore.doc(`users/${this._user.id}/groups/${id}`).delete();
 	}
 
 	/**
-	 * Creates group in database.
+	 * Creates a group in database.
 	 * @param group Group to save in database
 	 */
 
