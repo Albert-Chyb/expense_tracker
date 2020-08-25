@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 @Directive({
-	selector: '[ripple], .btn:not(.no-ripple)',
+	selector: '[ripple], .btn:not(.no-ripple), .ripple',
 })
 export class RippleDirective {
 	constructor(private readonly host: ElementRef<HTMLElement>) {}

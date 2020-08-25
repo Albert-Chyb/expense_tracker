@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from 'firebase';
-import { firestore } from 'firebase/app';
+import { firestore, auth } from 'firebase/app';
 import { BehaviorSubject, Observable, of, from } from 'rxjs';
 import { filter, first, map, switchMap, tap } from 'rxjs/operators';
 

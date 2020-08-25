@@ -12,7 +12,7 @@
   }
 
   &::after {
-    @include fontAwesomeInPseudoElement('\f054', 'free', 'solid');
+    @include fontAwesomeIcon('\f054', 'free', 'solid');
 
     position: absolute;
     right: rem(20px);

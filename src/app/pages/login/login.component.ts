@@ -1,5 +1,10 @@
 import { Pages } from './../../common/routing/routesUrls';
-import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import {
+	Component,
+	OnDestroy,
+	ChangeDetectionStrategy,
+	OnInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -12,7 +17,7 @@ import { UserService } from './../../services/user/user.service';
 	styleUrls: ['./login.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent implements OnDestroy, OnInit {
 	constructor(
 		private readonly _auth: AuthService,
 		private readonly _router: Router,
@@ -21,6 +26,18 @@ export class LoginComponent implements OnDestroy {
 
 	subscriptions = new Subscription();
 
+	ngOnInit() {
+		this.subscriptions.add(
+			this._auth.onLogin$
+				.pipe(switchMap(user => this._user.hasCreatedData$))
+				.subscribe(hasCreatedData => {
+					const { Home, SetupAccount } = Pages;
+					const routeUrl = hasCreatedData ? Home : SetupAccount;
+					this._router.navigateByUrl(routeUrl);
+				})
+		);
+	}
+
 	ngOnDestroy() {
 		this.subscriptions.unsubscribe();
 	}
@@ -28,16 +45,6 @@ export class LoginComponent implements OnDestroy {
 	async loginWithGoogle() {
 		try {
 			await this._auth.loginWithGoogle();
-
-			this.subscriptions.add(
-				this._auth.onLogin$
-					.pipe(switchMap(user => this._user.hasCreatedData$))
-					.subscribe(hasCreatedData => {
-						const { Home, SetupAccount } = Pages;
-						const routeUrl = hasCreatedData ? Home : SetupAccount;
-						this._router.navigateByUrl(routeUrl);
-					})
-			);
 		} catch (error) {
 			console.log(error);
 		}

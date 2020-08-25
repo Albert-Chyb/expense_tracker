@@ -5,15 +5,24 @@
 .login {
   h2#{&}__heading {
     font-size: rem(26px);
-    margin-top: rem(30px);
-    margin-bottom: rem(40px);
+  }
+
+  h3#{&}__heading {
+    margin-bottom: rem(15px);
   }
 
   &__description {
     margin-top: rem(10px);
-    margin-bottom: rem(20px);
     color: $textLighterColor;
     font-weight: 500;
     font-size: rem(14px);
+  }
+
+  &__method {
+    margin-bottom: rem(25px);
+
+    &:first-of-type {
+      margin-top: rem(40px)
+    }
   }
 }

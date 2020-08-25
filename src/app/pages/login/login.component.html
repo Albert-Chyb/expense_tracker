@@ -1,12 +1,26 @@
 <section class="login">
-	<h2 class="login__heading">Witaj w naszej aplikacji.</h2>
-
-	<button class="btn btn--block btn--google" (click)="loginWithGoogle()">
-		Zaloguj sie z Google
-	</button>
+	<h2 class="login__heading">Witaj w swoim monitorze wydatków !</h2>
 
 	<p class="login__description">
-		Kliknij w przycisk powyżej i postępuj z instrukcjami wyświetlanymi na
-		ekranie.
+		Wybierz jednego z dostawców, aby kontynuować.
 	</p>
+
+	<ul>
+		<li>
+			<section class="login__method">
+				<h3 class="login__heading">Google</h3>
+
+				<button
+					class="auth-btn auth-btn--google ripple"
+					(click)="loginWithGoogle()"
+				>
+					Zaloguj sie z Google
+				</button>
+
+				<p class="login__description">
+					Zaloguj się za pomoca konta Google.
+				</p>
+			</section>
+		</li>
+	</ul>
 </section>

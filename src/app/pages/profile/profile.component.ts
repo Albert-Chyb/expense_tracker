@@ -27,6 +27,7 @@ export class ProfileComponent implements OnInit {
 		user: IUser;
 		period: IOpenedPeriod;
 	}>;
+	Pages = Pages;
 
 	ngOnInit() {
 		const user$ = this._user.user$;
@@ -48,9 +49,5 @@ export class ProfileComponent implements OnInit {
 	async logOut() {
 		await this._auth.logout();
 		this._router.navigateByUrl(Pages.Login);
-	}
-
-	get Pages() {
-		return Pages;
 	}
 }

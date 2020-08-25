@@ -36,13 +36,21 @@
   }
 }
 
+@mixin resetDefaultButton() {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: inherit;
+}
+
 @mixin ellipsis() {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
 
-@mixin fontAwesomeInPseudoElement($unicode, $fontGroup, $iconGroup) {
+@mixin fontAwesomeIcon($unicode, $fontGroup, $iconGroup) {
   $fonts: ('free': 'Font Awesome 5 Free',
       'brand': 'Font Awesome 5 Brand',
       'pro': 'Font Awesome 5 Pro',
