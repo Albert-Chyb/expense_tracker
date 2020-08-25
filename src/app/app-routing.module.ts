@@ -26,8 +26,8 @@ const routes: Routes = [
 	{
 		path: '',
 		component: HomeComponent,
-		data: { name: 'Strona główna' },
-		canActivate: [DataAvailableGuard],
+		data: { name: 'Strona główna', authGuardPipe: redirectUnauthorizedToLogin },
+		canActivate: [AngularFireAuthGuard, DataAvailableGuard],
 	},
 	{
 		path: 'manage-transaction/:id',
