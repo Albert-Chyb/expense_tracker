@@ -68,6 +68,8 @@ export interface IOpenedPeriod {
 		start: FirestoreTimestamp;
 	};
 
+	isClosed: false;
+
 	/**
 	 * Id of an period.
 	 */

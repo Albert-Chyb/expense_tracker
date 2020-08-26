@@ -1,3 +1,5 @@
+import { FirestoreTimestamp } from './../../common/models/firestoreTimestamp';
+import { IOpenedPeriod } from './../../common/models/period';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -6,7 +8,10 @@ import { firestore } from 'firebase/app';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, first, map, switchMap, tap } from 'rxjs/operators';
 
-import { ICompletingData } from './../../common/models/completingData';
+import {
+	ICompletingData,
+	CompletingData,
+} from './../../common/models/completingData';
 import { ISettings } from './../../common/models/settings';
 import { IUser } from './../../common/models/user';
 
@@ -53,22 +58,20 @@ export class UserService {
 
 	async createData(data: ICompletingData): Promise<void> {
 		const userRef = this._afStore.doc(`users/${this.id}`);
-		const period = {
+		const period: IOpenedPeriod = {
 			date: {
-				start: firestore.FieldValue.serverTimestamp() as any,
+				start: firestore.FieldValue.serverTimestamp() as FirestoreTimestamp,
 			},
 			isClosed: false,
 		};
-
-		data.name = this._afAuth.auth.currentUser.displayName;
-
-		const userPromise = userRef.set({ ...data, startingBalance: data.balance });
+		const { currentUser } = this._afAuth.auth;
+		const userPromise = userRef.set(
+			CompletingData.buildUser(currentUser, data)
+		);
 		const periodsPromise = userRef.collection('periods').add(period);
 
 		await Promise.all([userPromise, periodsPromise]);
 		this._hasCreatedData.next(true);
-
-		return Promise.resolve();
 	}
 
 	/**
@@ -112,6 +115,19 @@ export class UserService {
 		return this._afAuth.authState.pipe(map(user => !!user));
 	}
 
+	private get userData() {
+		if (!this._afAuth.auth.currentUser) return null;
+
+		return {
+			name: this._afAuth.auth.currentUser.displayName,
+			email: this._afAuth.auth.currentUser.email,
+			createdAt: new Date(
+				this._afAuth.auth.currentUser.metadata.creationTime
+			) as any,
+			avatar: this._afAuth.auth.currentUser.photoURL,
+		};
+	}
+
 	/**
 	 * Initialization logic.
 	 */
@@ -151,12 +167,7 @@ export class UserService {
 
 	private async updateUserCredentials(user: User): Promise<void> {
 		if (!user || !(await this.hasCreatedData)) return null;
-		this.update({
-			name: user.displayName,
-			email: user.email,
-			createdAt: new Date(user.metadata.creationTime) as any,
-			avatar: user.photoURL,
-		});
+		this.update(this.userData);
 	}
 
 	/**
