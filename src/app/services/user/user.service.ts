@@ -1,19 +1,17 @@
-import { FirestoreTimestamp } from './../../common/models/firestoreTimestamp';
-import { IOpenedPeriod } from './../../common/models/period';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from 'firebase';
-import { firestore } from 'firebase/app';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, first, map, switchMap, tap } from 'rxjs/operators';
 
 import {
-	ICompletingData,
 	CompletingData,
+	ICompletingData,
 } from './../../common/models/completingData';
+import { Period } from './../../common/models/period';
 import { ISettings } from './../../common/models/settings';
-import { IUser } from './../../common/models/user';
+import { AppUser, IUser } from './../../common/models/user';
 
 /**
  * Handles user's data.
@@ -52,18 +50,13 @@ export class UserService {
 	}
 
 	/**
-	 * Creates required data in database, for app to work properly.
+	 * Creates required data in database.
 	 * @param data Completing data that is required to complete account.
 	 */
 
 	async createData(data: ICompletingData): Promise<void> {
 		const userRef = this._afStore.doc(`users/${this.id}`);
-		const period: IOpenedPeriod = {
-			date: {
-				start: firestore.FieldValue.serverTimestamp() as FirestoreTimestamp,
-			},
-			isClosed: false,
-		};
+		const period = Period.buildOpened();
 		const { currentUser } = this._afAuth.auth;
 		const userPromise = userRef.set(
 			CompletingData.buildUser(currentUser, data)
@@ -116,16 +109,7 @@ export class UserService {
 	}
 
 	private get userData() {
-		if (!this._afAuth.auth.currentUser) return null;
-
-		return {
-			name: this._afAuth.auth.currentUser.displayName,
-			email: this._afAuth.auth.currentUser.email,
-			createdAt: new Date(
-				this._afAuth.auth.currentUser.metadata.creationTime
-			) as any,
-			avatar: this._afAuth.auth.currentUser.photoURL,
-		};
+		return AppUser.buildFromFirebaseUser(this._afAuth.auth.currentUser);
 	}
 
 	/**

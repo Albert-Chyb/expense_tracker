@@ -1,3 +1,4 @@
+import { User } from 'firebase';
 import { FirestoreTimestamp } from './firestoreTimestamp';
 import { ISettings } from './settings';
 
@@ -36,4 +37,21 @@ export interface IUser {
 	createdAt: FirestoreTimestamp;
 
 	avatar: string;
+}
+
+export class AppUser {
+	/**
+	 * Picks all fields from firebase user.
+	 * @param user Firebase user
+	 */
+	static buildFromFirebaseUser(user: User) {
+		if (!user) return null;
+
+		return {
+			name: user.displayName,
+			email: user.email,
+			createdAt: new Date(user.metadata.creationTime) as any,
+			avatar: user.photoURL,
+		};
+	}
 }

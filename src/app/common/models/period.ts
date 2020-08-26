@@ -1,4 +1,5 @@
 import { FirestoreTimestamp } from './firestoreTimestamp';
+import { firestore } from 'firebase';
 /**
  * Represents one period in database.
  * Period describes form when to when user want to monitor his budget.
@@ -25,7 +26,7 @@ export interface IClosedPeriod {
 	 * Indicates if period was closed permanently.
 	 * Note that there can be only one period that is not closed.
 	 */
-	isClosed: boolean;
+	isClosed: true;
 
 	/**
 	 * Total saved amount in given period.
@@ -74,4 +75,18 @@ export interface IOpenedPeriod {
 	 * Id of an period.
 	 */
 	id?: string;
+}
+
+export class Period {
+	/**
+	 * Creates an empty opened period.
+	 */
+	static buildOpened(): IOpenedPeriod {
+		return {
+			date: {
+				start: firestore.FieldValue.serverTimestamp() as FirestoreTimestamp,
+			},
+			isClosed: false,
+		};
+	}
 }

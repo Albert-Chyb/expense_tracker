@@ -1,4 +1,4 @@
-import { IUser } from './user';
+import { IUser, AppUser } from './user';
 import { User } from 'firebase';
 import { ISettings } from './settings';
 
@@ -18,12 +18,9 @@ export class CompletingData {
 
 		return {
 			settings: data.settings,
-			avatar: user.photoURL,
-			startingBalance: data.balance,
-			createdAt: new Date(user.metadata.creationTime) as any,
 			balance: data.balance,
-			name: user.displayName,
-			email: user.email,
+			startingBalance: data.balance,
+			...AppUser.buildFromFirebaseUser(user),
 		};
 	}
 }
