@@ -8,29 +8,41 @@
 			<ng-container class="currency">PLN</ng-container>
 		</summary-card>
 
-		<summary-card theme="danger" type="small" class="summary-cards__outcomes">
-			<ng-container class="title">Wydatki</ng-container>
-			<ng-container class="amount">{{ outcomes | currency: ' ' }}</ng-container>
-			<ng-container class="icon">
-				<i class="fas fa-long-arrow-alt-down"></i>
-			</ng-container>
-		</summary-card>
+		<ng-container *ngIf="data.transactions.length">
+			<summary-card theme="danger" type="small" class="summary-cards__outcomes">
+				<ng-container class="title">Wydatki</ng-container>
+				<ng-container class="amount">{{
+					outcomes | currency: ' '
+				}}</ng-container>
+				<ng-container class="icon">
+					<i class="fas fa-long-arrow-alt-down"></i>
+				</ng-container>
+			</summary-card>
 
-		<summary-card theme="success" type="small" class="summary-cards__incomes">
-			<ng-container class="title">Przychody</ng-container>
-			<ng-container class="amount">{{ incomes | currency: ' ' }}</ng-container>
-			<ng-container class="icon">
-				<i class="fas fa-long-arrow-alt-up"></i>
-			</ng-container>
-		</summary-card>
+			<summary-card theme="success" type="small" class="summary-cards__incomes">
+				<ng-container class="title">Przychody</ng-container>
+				<ng-container class="amount">{{
+					incomes | currency: ' '
+				}}</ng-container>
+				<ng-container class="icon">
+					<i class="fas fa-long-arrow-alt-up"></i>
+				</ng-container>
+			</summary-card>
 
-		<summary-card theme="secondary" type="small" class="summary-cards__savings">
-			<ng-container class="title">Zaoszczędzono</ng-container>
-			<ng-container class="amount">{{ savings | currency: ' ' }}</ng-container>
-			<ng-container class="icon">
-				<i class="fas fa-piggy-bank"></i>
-			</ng-container>
-		</summary-card>
+			<summary-card
+				theme="secondary"
+				type="small"
+				class="summary-cards__savings"
+			>
+				<ng-container class="title">Zaoszczędzono</ng-container>
+				<ng-container class="amount">{{
+					savings | currency: ' '
+				}}</ng-container>
+				<ng-container class="icon">
+					<i class="fas fa-piggy-bank"></i>
+				</ng-container>
+			</summary-card>
+		</ng-container>
 	</div>
 
 	<section
