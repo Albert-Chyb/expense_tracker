@@ -1,32 +1,46 @@
 import {
 	Directive,
-	HostListener,
-	HostBinding,
 	ElementRef,
+	HostBinding,
+	HostListener,
+	Renderer2,
+	RendererStyleFlags2,
 } from '@angular/core';
 
 @Directive({
 	selector: '[ripple], .btn:not(.no-ripple), .ripple',
 })
 export class RippleDirective {
-	constructor(private readonly host: ElementRef<HTMLElement>) {}
+	constructor(
+		private readonly _host: ElementRef<HTMLElement>,
+		private readonly _renderer: Renderer2
+	) {}
+
+	private isRippling: boolean = false;
 
 	@HostListener('mousedown', ['$event']) positionRipple($event: MouseEvent) {
 		if (this.isRippling) return null;
 		const { offsetX, offsetY } = $event;
+		const { nativeElement } = this._host;
 
-		this.host.nativeElement.style.setProperty(
+		this._renderer.setStyle(
+			nativeElement,
 			'--ripple-x-pos',
-			`${offsetX - 25}px`
+			`${offsetX - 25}px`,
+			RendererStyleFlags2.DashCase
 		);
-		this.host.nativeElement.style.setProperty(
+		this._renderer.setStyle(
+			nativeElement,
 			'--ripple-y-pos',
-			`${offsetY - 25}px`
+			`${offsetY - 25}px`,
+			RendererStyleFlags2.DashCase
 		);
+		this._renderer.addClass(nativeElement, 'ripple--is-rippling');
 
-		this.isRippling = true;
-		setTimeout(() => (this.isRippling = false), 500);
+		setTimeout(() => {
+			this._renderer.removeClass(nativeElement, 'ripple--is-rippling');
+			this.isRippling = false;
+		}, 500);
 	}
-	@HostBinding('class.ripple--is-rippling') isRippling: boolean = false;
 	@HostBinding('class.ripple') isEnabled: boolean = true;
 }
