@@ -1,9 +1,5 @@
 :root {
   font-size: 100%;
-
-  @supports (font-size: clamp(1rem, 1vw, 2rem)) {
-    font-size: clamp(1rem, .9vw, 2rem);
-  }
 }
 
 body {
