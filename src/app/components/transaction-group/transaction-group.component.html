@@ -3,7 +3,7 @@
 		<group-icon [icon]="group.icon" type="neutral"></group-icon>
 	</div>
 
-	<div class="group__name">{{ group.name }}</div>
+	<p class="group__name">{{ group.name }}</p>
 
 	<div class="group__actions" *ngIf="isEditable">
 		<button class="btn" (click)="delete()">

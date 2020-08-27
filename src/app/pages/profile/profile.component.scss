@@ -4,24 +4,12 @@
 
 
 .profile {
-
   &__heading {
-    margin: rem(20px) 0px;
-    font-weight: 500;
-  }
-
-  h2#{&}__heading {
-    font-size: rem(24px);
-  }
-
-  h3#{&}__heading {
-    font-size: rem(18px);
+    margin-bottom: $headingSpacing;
   }
 
   &__description {
-    margin-bottom: rem(20px);
-    color: $textLighterColor;
-    font-size: rem(14px);
+    margin-bottom: $paragraphSpacing;
   }
 
   &__section {

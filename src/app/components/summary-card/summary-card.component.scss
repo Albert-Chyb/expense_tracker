@@ -73,6 +73,7 @@
 
   &__title {
     grid-area: title;
+    margin-bottom: 0px;
 
     font: {
       size: rem(14px);
@@ -83,6 +84,7 @@
   &__amount {
     @include ellipsis();
     grid-area: amount;
+    margin-bottom: 0px;
 
     font: {
       size: rem(30px);

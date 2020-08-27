@@ -3,26 +3,7 @@
 @import '../../sass/utils/mixins';
 
 .login {
-  h2#{&}__heading {
-    font-size: rem(26px);
-  }
-
-  h3#{&}__heading {
-    margin-bottom: rem(15px);
-  }
-
-  &__description {
-    margin-top: rem(10px);
-    color: $textLighterColor;
-    font-weight: 500;
-    font-size: rem(14px);
-  }
-
-  &__method {
-    margin-bottom: rem(25px);
-
-    &:first-of-type {
-      margin-top: rem(40px)
-    }
+  &__methods {
+    margin-top: rem(40px);
   }
 }
