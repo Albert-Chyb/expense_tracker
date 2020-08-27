@@ -5,7 +5,10 @@
 			*ngFor="let group of groups; trackBy: trackBy"
 			@groupAnimation
 		>
-			<transaction-group [group]="group" isEditable="true"></transaction-group>
+			<transaction-group
+				[group]="group"
+				[isEditable]="true"
+			></transaction-group>
 		</li>
 	</ul>
 

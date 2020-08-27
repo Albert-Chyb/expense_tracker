@@ -20,10 +20,6 @@
   border-radius: rem(15px);
   padding: rem(15px);
 
-  &--on-element {
-    background-color: $bgColorDark;
-  }
-
   &__icon {
     grid-area: icon;
   }

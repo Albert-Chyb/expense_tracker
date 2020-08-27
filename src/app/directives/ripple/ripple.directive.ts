@@ -17,6 +17,7 @@ export class RippleDirective {
 	) {}
 
 	private isRippling: boolean = false;
+	private readonly ripplingClass = 'ripple--is-rippling';
 
 	@HostListener('mousedown', ['$event']) positionRipple($event: MouseEvent) {
 		if (this.isRippling) return null;
@@ -35,10 +36,10 @@ export class RippleDirective {
 			`${offsetY - 25}px`,
 			RendererStyleFlags2.DashCase
 		);
-		this._renderer.addClass(nativeElement, 'ripple--is-rippling');
+		this._renderer.addClass(nativeElement, this.ripplingClass);
 
 		setTimeout(() => {
-			this._renderer.removeClass(nativeElement, 'ripple--is-rippling');
+			this._renderer.removeClass(nativeElement, this.ripplingClass);
 			this.isRippling = false;
 		}, 500);
 	}
