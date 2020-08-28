@@ -15,7 +15,7 @@
     'icon description amount'
   ;
   column-gap: rem(10px);
-  background-color: $bgColorDarker;
+  background-color: var(--bg-color-1);
   padding: rem(15px);
   border-radius: rem(15px);
 
@@ -33,7 +33,7 @@
 
   &__description {
     grid-area: description;
-    color: $textLighterColor;
+    color: var(--text-color-1);
     font-size: rem(12px);
     align-self: center;
     margin-bottom: 0px;

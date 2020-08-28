@@ -1,5 +1,5 @@
 .styled-input {
-  --border-color: #{$bgColorDark};
+  --border-color: var(--bg-color-2);
   --border-size: #{rem(1px)};
 
   @include hideNumberInputArrows();
@@ -10,10 +10,10 @@
   border-radius: rem(4px);
   padding: rem(15px);
   padding-left: rem(25px);
-  background-color: $bgColorDarker;
+  background-color: var(--bg-color-1);
   margin-top: rem(2px);
   box-shadow: 0px 0px 0px var(--border-size) var(--border-color);
-  color: $textLighterColor;
+  color: var(--text-color-1);
   transition: box-shadow .1s linear;
 
   &--focused {
@@ -21,13 +21,13 @@
   }
 
   &--valid#{&}--touched {
-    color: $colorSuccess;
-    --border-color: #{$colorSuccess};
+    color: var(--color-success);
+    --border-color: var(--color-success);
   }
 
   &--invalid#{&}--touched {
-    --border-color: #{$colorError};
-    color: $colorError;
+    --border-color: var(--color-danger);
+    color: var(--color-danger);
   }
 
   &__suffix {
@@ -43,6 +43,7 @@
     border: none;
     outline: none;
     padding-top: rem(15px);
+    color: var(--text-color-0);
 
     font: {
       size: rem(16px);

@@ -1,9 +1,8 @@
 $colorPrimary: #171717;
 $colorSecondary: #7E0CF5;
-$colorDanger: #AF1B3F;
+$colorDanger: #f44336;
 $colorSuccess: #0B6E4F;
 $colorWarning: #FFC857;
-$colorError: #f44336;
 
 $textOnPrimaryColor: #FFF;
 $textOnSecondaryColor: #FFF;
@@ -11,12 +10,9 @@ $textOnDangerColor: #FFF;
 $textOnSuccessColor: #FFF;
 $textOnWarningColor: #171717;
 
-$bgColor: #FFF;
-$bgColorDarker: #F3F3F3;
-$bgColorDark: #CFCFCF;
+$bgColor0: #303030;
+$bgColor1: lighten($bgColor0, 10%);
+$bgColor2: lighten($bgColor0, 20%);
 
-$textColor: #171717;
-$textLighterColor: #909090;
-
-$headingSpacing: 1.5rem;
-$paragraphSpacing: 1rem;
+$textColor0: #ececec;
+$textColor1: #a5a5a5;

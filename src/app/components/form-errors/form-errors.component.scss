@@ -14,7 +14,7 @@
   position: relative;
 
   &__error {
-    color: $colorError;
+    color: var(--color-danger);
     font-size: rem(14px);
   }
 }

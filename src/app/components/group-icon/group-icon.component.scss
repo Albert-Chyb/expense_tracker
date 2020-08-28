@@ -12,14 +12,14 @@
   color: #F8F1FE;
 
   &--income {
-    background-color: $colorSuccess;
+    background-color: var(--color-success);
   }
 
   &--outcome {
-    background-color: $colorDanger;
+    background-color: var(--color-danger);
   }
 
   &--neutral {
-    background-color: $colorSecondary;
+    background-color: var(--color-secondary);
   }
 }

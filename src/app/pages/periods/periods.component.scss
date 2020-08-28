@@ -3,9 +3,9 @@
 @import '../../sass/utils/mixins';
 
 .period {
-  background-color: $colorPrimary;
+  background-color: var(--color-primary);
   border-radius: rem(10px);
-  color: $textOnPrimaryColor;
+  color: var(--text-on-primary);
   padding: rem(20px) 0px;
   margin-top: rem(20px);
 

@@ -11,24 +11,24 @@
   }
 
   &--secondary {
-    @include buttonTheme($colorSecondary, $textOnSecondaryColor);
+    @include buttonTheme(var(--color-secondary), var(--text-on-secondary));
   }
 
   &--danger {
-    @include buttonTheme($colorDanger, $textOnDangerColor);
+    @include buttonTheme(var(--color-danger), var(--text-on-danger));
   }
 
   &--success {
-    @include buttonTheme($colorSuccess, $textOnSuccessColor);
+    @include buttonTheme(var(--color-success), var(--text-on-success));
   }
 
   &--warning {
-    @include buttonTheme($colorWarning, $textOnWarningColor);
+    @include buttonTheme(var(--color-warning), var(--text-on-warning));
   }
 
   &--circle {
-    background-color: $colorPrimary;
-    color: $textOnPrimaryColor !important;
+    background-color: var(--color-primary);
+    color: var(--text-on-primary) !important;
     width: rem(65px);
     height: rem(65px);
     border-radius: 100%;
@@ -73,12 +73,12 @@
   }
 
   &--ghost {
-    background-color: $colorWarning;
-    color: $textOnWarningColor;
+    background-color: var(--color-warning);
+    color: var(--text-on-warning);
 
     &::after {
       @include fontAwesomeIcon('\f6e2', 'free', 'solid');
-      color: $textColor;
+      color: var(--text-color-0);
       line-height: rem(50px);
       font-size: rem(30px);
     }

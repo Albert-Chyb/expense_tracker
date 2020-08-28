@@ -14,7 +14,7 @@
 
   &__caption {
     text-align: center;
-    color: $textLighterColor;
+    color: var(text-color-1);
     margin-top: rem(20px);
   }
 }

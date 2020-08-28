@@ -72,7 +72,7 @@
 
   &__transaction {
     margin-bottom: rem(10px);
-    transition: transform 50ms ease-in-out;
+    transition: transform 150ms ease-in-out;
 
     @media (hover: hover) {
       &:hover {
@@ -91,7 +91,7 @@
   }
 
   h3#{&}__heading {
-    color: $textLighterColor;
+    color: var(--text-color-1);
 
     font: {
       size: rem(12px);
@@ -118,13 +118,13 @@
   }
 
   h2.transactions__heading {
-    @include loadingPlaceholder();
+    @include loadingPlaceholder('dark');
     height: 29px;
     width: 100%;
   }
 
   h3.transactions__heading {
-    @include loadingPlaceholder();
+    @include loadingPlaceholder('dark');
     height: 14px;
     width: 100%;
   }

@@ -4,6 +4,7 @@
 
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: var(--text-color-0);
 }
 
 h1 {
@@ -42,11 +43,11 @@ p {
   }
 
   &.paragraph-subtle {
-    color: $textLighterColor;
+    color: var(--text-color-1);
   }
 
   &.paragraph-description {
-    color: $textLighterColor;
+    color: var(--text-color-1);
     font-size: rem(14px);
     margin-top: rem(10px);
   }

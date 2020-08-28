@@ -1,6 +1,6 @@
-@import '../../sass/utils/functions';
-@import '../../sass/utils/variables';
-@import '../../sass/utils/mixins';
+@import 'utils/functions';
+@import 'utils/variables';
+@import 'utils/mixins';
 
 .summary {
   border-radius: rem(25px);
@@ -52,23 +52,23 @@
   }
 
   &--primary {
-    @include summaryCardTheme($colorPrimary, $textOnPrimaryColor, #6C6C6C);
+    @include summaryCardTheme(var(--color-primary), var(--text-on-primary), var(--text-color-1));
   }
 
   &--secondary {
-    @include summaryCardTheme($colorSecondary, $textOnSecondaryColor, $bgColorDarker);
+    @include summaryCardTheme(var(--color-secondary), var(--text-on-secondary), var(--text-on-secondary));
   }
 
   &--danger {
-    @include summaryCardTheme($colorDanger, $textOnDangerColor, $bgColorDarker);
+    @include summaryCardTheme(var(--color-danger), var(--text-on-danger), var(--text-on-danger));
   }
 
   &--success {
-    @include summaryCardTheme($colorSuccess, $textOnSuccessColor, $bgColorDarker);
+    @include summaryCardTheme(var(--color-success), var(--text-on-success), var(--text-on-success));
   }
 
   &--warning {
-    @include summaryCardTheme($colorWarning, $textOnWarningColor, $textOnWarningColor);
+    @include summaryCardTheme(var(--color-warning), var(--text-on-warning), var(--text-on-warning));
   }
 
   &__title {

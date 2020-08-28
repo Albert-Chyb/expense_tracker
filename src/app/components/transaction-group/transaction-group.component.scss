@@ -16,7 +16,7 @@
   column-gap: rem(25px);
   align-items: center;
 
-  background-color: $bgColorDarker;
+  background-color: var(--bg-color-1);
   border-radius: rem(15px);
   padding: rem(15px);
 
@@ -39,7 +39,7 @@
     cursor: pointer;
 
     &--danger {
-      color: $colorDanger;
+      color: var(--color-danger);
     }
   }
 }
