@@ -53,6 +53,7 @@ export class ManageTransactionComponent implements OnInit {
 			map(transaction => {
 				this.originalTransaction = { ...transaction };
 				transaction.group = transaction.group.id as any;
+				transaction.date = transaction.date.toDate() as any;
 				return transaction;
 			})
 		);
