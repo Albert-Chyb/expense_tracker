@@ -9,8 +9,9 @@
 		[routerLink]="Pages.Profile"
 		aria-label="Profil"
 		class="header__icon"
-		*ngIf="isLoggedIn$ | async"
+		*ngIf="user$ | async as user"
 	>
-		<i class="fas fa-user-circle"></i>
+		<img *ngIf="user.avatar" class="header__user-avatar" [src]="user.avatar" />
+		<i *ngIf="!user.avatar" class="fas fa-user-circle"></i>
 	</a>
 </header>

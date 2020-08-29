@@ -17,6 +17,15 @@
   width: 100vw;
   height: rem(72px);
 
+  &__user-avatar {
+    @include square(rem(30px));
+    border-radius: 100%;
+
+    &:active {
+      transform: scale(.9);
+    }
+  }
+
   &__icon {
 
     &:last-child {

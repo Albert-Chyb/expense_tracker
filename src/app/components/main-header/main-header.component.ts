@@ -6,6 +6,7 @@ import { filter, map, tap } from 'rxjs/operators';
 import { UserService } from './../../services/user/user.service';
 import { Title } from '@angular/platform-browser';
 import { Pages } from 'src/app/common/routing/routesUrls';
+import { IUser } from 'src/app/common/models/user';
 
 @Component({
 	selector: 'main-header',
@@ -22,6 +23,7 @@ export class MainHeaderComponent implements OnInit {
 
 	pageName$: Observable<string>;
 	isLoggedIn$: Observable<boolean>;
+	user$: Observable<IUser>;
 	Pages = Pages;
 
 	ngOnInit() {
@@ -34,5 +36,6 @@ export class MainHeaderComponent implements OnInit {
 		);
 
 		this.isLoggedIn$ = this._user.isLoggedIn$;
+		this.user$ = this._user.user$;
 	}
 }
