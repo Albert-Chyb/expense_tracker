@@ -1,5 +1,6 @@
 <section class="profile" *ngIf="data$ | async as data">
 	<h2 class="profile__heading">Witaj, {{ data.user.name }} !</h2>
+	<p class="paragraph-description">{{ data.user.email }}</p>
 
 	<section
 		class="profile__section"
