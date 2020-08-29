@@ -8,8 +8,8 @@
 		<h3 class="profile__heading">Zakończ obecny okres rozliczeniowy</h3>
 
 		<p class="profile__description paragraph-small paragraph-subtle">
-			Jeśli chcesz ręcznie zakończyc obecny okres rozliczeniowy kliknij w
-			przcisk poniżej. Masz czas do północy aby otworzyc go ponownie.
+			Zakończ ręcznie obecny okres rozliczeniowy. Masz czas do północy na
+			ponowne otwarcie okresu.
 		</p>
 
 		<button (click)="endPeriod()" class="btn btn--secondary btn--block">
@@ -24,8 +24,7 @@
 			</h3>
 
 			<p class="profile__description paragraph-small paragraph-subtle">
-				Jeśli zakończyłeś obecny okres rozliczeniowy, możesz otworzyć go
-				ponownie przyciskiem poniżej. Pamięta, że masz czas do północy.
+				Otwórz ponownie obecny okres rozliczeniowy. Masz czas do północy.
 			</p>
 
 			<button (click)="openPeriod()" class="btn btn--secondary btn--block">
@@ -50,8 +49,7 @@
 		<h3 class="profile__heading">Ustawienia</h3>
 
 		<p class="profile__description paragraph-small paragraph-subtle">
-			Jeśli chcesz dokonac zmian w działaniu aplikacji, kliknij w przycisk
-			poniżej.
+			Dokonaj zmian w działaniu aplikacji.
 		</p>
 
 		<a [routerLink]="Pages.AppSettings" class="link">Ustawienia</a>
