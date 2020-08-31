@@ -1,119 +1,32 @@
-:root {
-  // Fallback if media query is not supported
-  --color-primary: #171717;
-  --color-secondary: #7E0CF5;
-  --color-danger: #f44336;
-  --color-success: #0B6E4F;
-  --color-warning: #FFC857;
-
-  --text-on-primary: #FFF;
-  --text-on-secondary: #FFF;
-  --text-on-danger: #FFF;
-  --text-on-success: #FFF;
-  --text-on-warning: #171717;
-
-  --text-color-0: #ececec;
-  --text-color-1: #a5a5a5;
-
-  --bg-color-0: #303030;
-  --bg-color-1: #4a4a4a;
-  --bg-color-2: #636363;
-
-  @media (prefers-color-scheme: dark) {
-    --color-primary: #171717;
-    --color-secondary: #8d29f8;
-    --color-danger: #e01506;
-    --color-success: #0B6E4F;
-    --color-warning: #FFC857;
-
-    --text-on-primary: #FFF;
-    --text-on-secondary: #FFF;
-    --text-on-danger: #FFF;
-    --text-on-success: #FFF;
-    --text-on-warning: #171717;
-
-    --text-color-0: #ececec;
-    --text-color-1: #a5a5a5;
-
-    --bg-color-0: #303030;
-    --bg-color-1: #4a4a4a;
-    --bg-color-2: #636363;
-
-    // Angular material components
-
-    .mat-datepicker-toggle-default-icon,
-    .mat-select-arrow {
-      color: var(--text-color-1);
-    }
-
-    .mat-form-field {
-      background-color: var(--bg-color-1);
-    }
-
-    .mat-form-field-label {
-      color: var(--text-color-1);
-    }
-
-    .mat-select-value {
-      color: var(--text-color-0);
-    }
-
-    .mat-focused:not(.ng-invalid) .mat-form-field-label {
-      color: #ad68f7;
-    }
-  }
-
-  @media (prefers-color-scheme: light) {
-    --color-primary: #171717;
-    --color-secondary: #7E0CF5;
-    --color-danger: #f44336;
-    --color-success: #0B6E4F;
-    --color-warning: #FFC857;
-
-    --text-on-primary: #FFF;
-    --text-on-secondary: #FFF;
-    --text-on-danger: #FFF;
-    --text-on-success: #FFF;
-    --text-on-warning: #171717;
-
-    --text-color-0: #171717;
-    --text-color-1: #909090;
-
-    --bg-color-0: #FFF;
-    --bg-color-1: #F3F3F3;
-    --bg-color-2: #CFCFCF;
-  }
-}
-
 * {
-  margin: 0px;
-  padding: 0px;
-  box-sizing: border-box;
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
 
-  &::after,
-  &::before {
-    box-sizing: inherit;
-  }
+	&::after,
+	&::before {
+		box-sizing: inherit;
+	}
 }
 
 ul,
 ol {
-  list-style-type: none;
+	list-style-type: none;
 }
 
 html,
 body {
-  height: 100%;
-  margin: 0;
-  background-color: var(--bg-color-0);
+	height: 100%;
+	margin: 0;
+	background-color: var(--bg-color-0);
 }
 
 img {
-  width: 100%;
-  height: auto;
-  display: block;
+	width: 100%;
+	height: auto;
+	display: block;
 }
 
 .mat-form-field-wrapper {
-  margin-bottom: -1.25em;
+	margin-bottom: -1.25em;
 }
