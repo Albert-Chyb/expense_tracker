@@ -15,7 +15,7 @@
 		"source": "functions"
 	},
 	"hosting": {
-		"predeploy": "npm run build",
+		"predeploy": "npm run build:prod",
 		"public": "dist\\expenseTracker",
 		"ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
 		"rewrites": [
