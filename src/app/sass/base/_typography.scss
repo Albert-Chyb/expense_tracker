@@ -1,65 +1,65 @@
 :root {
-  font-size: 100%;
+	font-size: 100%;
 }
 
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  color: var(--text-color-0);
+	font-family: Roboto, 'Helvetica Neue', sans-serif;
+	color: var(--text-color-0);
 }
 
 h1 {
-  font: {
-    size: rem(30px);
-    weight: 500;
-  }
+	font: {
+		size: rem(30px);
+		weight: 500;
+	}
 
-  margin-bottom: 1.5rem;
+	margin-bottom: 1.5rem;
 }
 
 h2 {
-  font: {
-    size: rem(26px);
-    weight: 500;
-  }
+	font: {
+		size: rem(26px);
+		weight: 500;
+	}
 
-  margin-bottom: 1.5rem;
+	margin-bottom: 1.5rem;
 }
 
 h3 {
-  font: {
-    size: rem(18px);
-    weight: 500;
-  }
+	font: {
+		size: rem(18px);
+		weight: 500;
+	}
 
-  margin-bottom: 1.5rem;
+	margin-bottom: 1.5rem;
 }
 
 p {
-  font-size: 1rem;
-  margin-bottom: 1rem;
+	font-size: 1rem;
+	margin-bottom: 1rem;
 
-  &.paragraph-small {
-    font-size: rem(14px);
-  }
+	&.paragraph-small {
+		font-size: rem(14px);
+	}
 
-  &.paragraph-subtle {
-    color: var(--text-color-1);
-  }
+	&.paragraph-subtle {
+		color: var(--text-color-1);
+	}
 
-  &.paragraph-description {
-    color: var(--text-color-1);
-    font-size: rem(14px);
-    margin-top: rem(10px);
-  }
+	&.paragraph-description {
+		color: var(--text-color-1);
+		font-size: rem(14px);
+		margin-top: rem(10px);
+	}
 }
 
 textarea {
-  font-family: inherit;
+	font-family: inherit;
 }
 
 a,
 a:link,
 a:visited {
-  color: currentColor;
-  text-decoration: none;
+	color: currentColor;
+	text-decoration: none;
 }

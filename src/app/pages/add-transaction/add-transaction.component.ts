@@ -44,6 +44,7 @@ export class AddTransactionComponent implements OnInit {
 		groups: ITransactionGroup[];
 		period: IOpenedPeriod;
 	}>;
+	Pages = Pages;
 
 	ngOnInit() {
 		const groups$ = this._groups.getAll();

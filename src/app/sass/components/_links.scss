@@ -1,22 +1,33 @@
 .link {
-  display: block;
-  background-color: var(--bg-color-1);
-  color: var(--text-color-1) !important;
-  font-weight: 500;
-  padding: rem(20px);
-  border-radius: rem(7px);
-  position: relative;
+	display: block;
+	background-color: var(--bg-color-1);
+	color: var(--text-color-1) !important;
+	font-weight: 500;
+	padding: rem(20px);
+	padding-right: rem(30px);
+	border-radius: rem(7px);
+	position: relative;
 
-  &:hover {
-    filter: brightness(.95);
-  }
+	&--danger {
+		background-color: var(--color-danger);
+		color: var(--text-on-danger) !important;
+	}
 
-  &::after {
-    @include fontAwesomeIcon('\f054', 'free', 'solid');
+	&--warning {
+		background-color: var(--color-warning);
+		color: var(--text-on-warning) !important;
+	}
 
-    position: absolute;
-    right: rem(20px);
-    top: 50%;
-    transform: translateY(-50%);
-  }
+	&:hover {
+		filter: brightness(0.95);
+	}
+
+	&::after {
+		@include fontAwesomeIcon('\f054', 'free', 'solid');
+
+		position: absolute;
+		right: rem(20px);
+		top: 50%;
+		transform: translateY(-50%);
+	}
 }

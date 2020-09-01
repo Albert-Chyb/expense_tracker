@@ -10,20 +10,30 @@
 		[control]="form.get('amount')"
 	></form-errors>
 
-	<mat-form-field class="transaction__detail" appearance="fill">
-		<mat-label>Grupa</mat-label>
-		<mat-select formControlName="group">
-			<mat-option> Wybierz </mat-option>
-			<mat-option *ngFor="let group of data.groups" [value]="group.id">
-				{{ group.name }}
-			</mat-option>
-		</mat-select>
-	</mat-form-field>
+	<ng-container *ngIf="data.groups.length; else noGroupsInfo">
+		<mat-form-field class="transaction__detail" appearance="fill">
+			<mat-label>Grupa</mat-label>
+			<mat-select formControlName="group">
+				<mat-option> Wybierz </mat-option>
+				<mat-option *ngFor="let group of data.groups" [value]="group.id">
+					{{ group.name }}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
 
-	<form-errors
-		class="transaction__error"
-		[control]="form.get('group')"
-	></form-errors>
+		<form-errors
+			class="transaction__error"
+			[control]="form.get('group')"
+		></form-errors>
+	</ng-container>
+
+	<ng-template #noGroupsInfo>
+		<a
+			class="link link--warning transaction__error"
+			[routerLink]="Pages.AddGroup"
+			>Dodaj grupę, aby zmienic aktualną !</a
+		>
+	</ng-template>
 
 	<mat-form-field class="transaction__detail" appearance="fill">
 		<mat-label>Wybierz datę</mat-label>

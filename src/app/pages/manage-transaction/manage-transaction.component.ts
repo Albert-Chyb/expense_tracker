@@ -45,6 +45,7 @@ export class ManageTransactionComponent implements OnInit {
 		transaction: ITransaction;
 		period: IOpenedPeriod;
 	}>;
+	Pages = Pages;
 	private originalTransaction: ITransaction;
 
 	ngOnInit() {
