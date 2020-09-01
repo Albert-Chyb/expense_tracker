@@ -1,36 +1,36 @@
 .ripple {
-  position: relative;
-  overflow: hidden;
-  --ripple-x-pos: 0px;
-  --ripple-y-pos: 0px;
+	position: relative;
+	overflow: hidden;
+	--ripple-x-pos: 0px;
+	--ripple-y-pos: 0px;
 
-  &::before {
-    top: var(--ripple-y-pos);
-    left: var(--ripple-x-pos);
-    position: absolute;
-    content: '';
-    width: rem(50px);
-    height: rem(50px);
-    background-color: var(--bg-color-0);
-    opacity: .0;
-    border-radius: 100%;
-    z-index: -1;
-  }
+	&::before {
+		top: var(--ripple-y-pos);
+		left: var(--ripple-x-pos);
+		position: absolute;
+		content: '';
+		width: rem(50px);
+		height: rem(50px);
+		background-color: var(--bg-color-0);
+		opacity: 0;
+		border-radius: 100%;
+		z-index: -1;
+	}
 
-  &--is-rippling::before {
-    animation: ripple .5s ease-out;
-  }
+	&--is-rippling::before {
+		animation: ripple 0.5s cubic-bezier(0.69, 0.045, 0.165, 1);
+	}
 }
 
 @keyframes ripple {
-  from {
-    z-index: 0;
-    transform: scale(1);
-    opacity: .3;
-  }
+	from {
+		z-index: 0;
+		transform: scale(1);
+		opacity: 0.3;
+	}
 
-  to {
-    transform: scale(20);
-    opacity: 0;
-  }
+	to {
+		transform: scale(20);
+		opacity: 0;
+	}
 }
