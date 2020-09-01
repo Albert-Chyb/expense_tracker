@@ -46,6 +46,7 @@ import { RippleDirective } from './directives/ripple/ripple.directive';
 import { AddTransactionComponent } from './pages/add-transaction/add-transaction.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
+import { ClueComponent } from './components/clue/clue.component';
 
 @NgModule({
 	declarations: [
@@ -77,6 +78,7 @@ import { CheckboxComponent } from './components/checkbox/checkbox.component';
 		FormErrorsDirective,
 		NotFoundComponent,
 		CheckboxComponent,
+		ClueComponent,
 	],
 	imports: [
 		BrowserModule,

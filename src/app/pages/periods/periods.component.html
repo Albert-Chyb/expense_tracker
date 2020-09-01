@@ -73,14 +73,7 @@
 </zippy-list>
 
 <ng-template #noPeriodsFound>
-	<figure class="clue clue--fixed">
-		<img
-			class="clue__image"
-			src="/assets/images/no_data_3.svg"
-			alt="Nie znalezion okresów"
-		/>
-		<figcaption class="clue__caption">
-			Nie znaleziono żadnych okresów rozliczeniowych.
-		</figcaption>
-	</figure>
+	<clue imgSrc="/assets/images/no_data_3.svg" [isFixed]="true">
+		Nie znaleziono żadnych okresów rozliczeniowych.
+	</clue>
 </ng-template>

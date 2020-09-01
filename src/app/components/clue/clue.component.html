@@ -1,0 +1,7 @@
+<figure class="clue" [ngClass]="{ 'clue--fixed': isFixed }">
+	<img class="clue__image" [src]="imgSrc" />
+
+	<figcaption class="clue__caption">
+		<ng-content></ng-content>
+	</figcaption>
+</figure>

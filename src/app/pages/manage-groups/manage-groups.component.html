@@ -1,4 +1,4 @@
-<div *ngIf="groups$ | async as groups">
+<ng-container *ngIf="groups$ | async as groups">
 	<ul class="groups" *ngIf="groups.length; else noGroupsClue">
 		<li
 			class="groups__group"
@@ -13,19 +13,12 @@
 	</ul>
 
 	<ng-template #noGroupsClue>
-		<figure class="clue groups__clue">
-			<img
-				src="/assets/images/no_data_2.svg"
-				alt="Nie znaleziono grup"
-				class="clue__image"
-			/>
-			<figcaption class="clue__caption">
-				Nie znaleziono żadnych group. Dodaj nowe przyciskiem w prawym dolnym
-				rogu ekranu.
-			</figcaption>
-		</figure>
+		<clue imgSrc="/assets/images/no_data_2.svg" [isFixed]="true">
+			Nie znaleziono żadnych group. Dodaj nowe przyciskiem w prawym dolnym rogu
+			ekranu.
+		</clue>
 	</ng-template>
-</div>
+</ng-container>
 
 <a
 	aria-label="Dodaj nową grupę"
