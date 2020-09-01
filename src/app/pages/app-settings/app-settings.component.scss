@@ -3,17 +3,16 @@
 @import '../../sass/utils/mixins';
 
 .settings {
+	&__item {
+		display: block;
+		margin-bottom: rem(20px);
+	}
 
-  label#{&}__item {
-    display: block;
-    margin-bottom: rem(20px);
-  }
-
-  &__select {
-    width: 100%;
-  }
+	&__select {
+		width: 100%;
+	}
 }
 
 ::ng-deep .mat-form-field-wrapper {
-  margin-bottom: -1.25em;
+	margin-bottom: -1.25em;
 }

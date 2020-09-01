@@ -25,18 +25,13 @@
 		<zippy>
 			<zippy-static toggleOnClick="false">
 				<section class="complete-login__section">
-					<input
-						type="checkbox"
-						id="autoEndPeriod"
-						formControlName="autoEndPeriod"
-					/>
-					<label for="autoEndPeriod"
-						>&nbsp; Automatyczne zakańczanie okresu</label
+					<checkbox formControlName="autoEndPeriod" labelId="auto-end-period"
+						>Automatyczne zakańczanie okresu</checkbox
 					>
 
 					<p class="complete-login__description paragraph-description">
 						Jeśli chcesz aby twój okres został automatycznie zakańczany zaznacz
-						tą opcję
+						tą opcję.
 					</p>
 				</section>
 			</zippy-static>
@@ -52,7 +47,7 @@
 					</mat-form-field>
 
 					<p class="complete-login__description paragraph-description">
-						Wybierz co jaki czas okres będzie zakańczany
+						Wybierz co jaki czas okres będzie zakańczany.
 					</p>
 				</section>
 			</zippy-content>

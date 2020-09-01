@@ -8,7 +8,7 @@ import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 /*
 	To speed up development process, app uses date picker and select component from Angular Material.
@@ -45,6 +45,7 @@ import { SetupAccountComponent } from './pages/setup-account/setup-account.compo
 import { RippleDirective } from './directives/ripple/ripple.directive';
 import { AddTransactionComponent } from './pages/add-transaction/add-transaction.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { CheckboxComponent } from './components/checkbox/checkbox.component';
 
 @NgModule({
 	declarations: [
@@ -75,6 +76,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		FormErrorsComponent,
 		FormErrorsDirective,
 		NotFoundComponent,
+		CheckboxComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -90,6 +92,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		MatInputModule,
 		MatSelectModule,
 		AngularFireAuthGuardModule,
+		FormsModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

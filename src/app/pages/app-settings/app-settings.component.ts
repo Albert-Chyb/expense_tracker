@@ -28,9 +28,9 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
 		]),
 		autoEndPeriod: new FormControl(false, [Validators.required]),
 	});
-	subscriptions = new Subscription();
 	user$: Observable<IUser>;
 	readonly Pages = Pages;
+	private readonly subscriptions = new Subscription();
 
 	updateSettings() {
 		this._user.updateSettings(this.form.value);

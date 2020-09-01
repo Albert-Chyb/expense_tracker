@@ -1,126 +1,141 @@
 @mixin summaryCardTheme($bgColor, $textColor, $subtleTextColor) {
-  background-color: $bgColor;
-  color: $textColor;
+	background-color: $bgColor;
+	color: $textColor;
 
-  & .summary__title {
-    color: $subtleTextColor;
-  }
+	& .summary__title {
+		color: $subtleTextColor;
+	}
 
-  & .summary__icon {
-    color: $subtleTextColor;
-  }
+	& .summary__icon {
+		color: $subtleTextColor;
+	}
 
-  & .summary__currency {
-    color: $subtleTextColor;
-  }
+	& .summary__currency {
+		color: $subtleTextColor;
+	}
 }
 
 @mixin buttonTheme($bgColor, $textColor) {
-  background-color: $bgColor;
-  color: $textColor;
-  padding: rem(15px) rem(20px);
-  border-radius: rem(30px);
-  min-width: rem(100px);
+	background-color: $bgColor;
+	color: $textColor;
+	padding: rem(15px) rem(20px);
+	border-radius: rem(30px);
+	min-width: rem(100px);
 
-  font: {
-    weight: 500;
-    size: rem(18px);
-  }
+	font: {
+		weight: 500;
+		size: rem(18px);
+	}
 
-  &:not(:disabled):hover {
-    filter: brightness(.95);
-  }
+	&:not(:disabled):hover {
+		filter: brightness(0.95);
+	}
 
-  &:not(:disabled):active {
-    transform: scale(.95);
-  }
+	&:not(:disabled):active {
+		transform: scale(0.95);
+	}
 }
 
 @mixin resetDefaultButton() {
-  background-color: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  color: inherit;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	color: inherit;
 }
 
 @mixin ellipsis() {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 @mixin fontAwesomeIcon($unicode, $fontGroup, $iconGroup) {
-  $fonts: ('free': 'Font Awesome 5 Free',
-      'brand': 'Font Awesome 5 Brand',
-      'pro': 'Font Awesome 5 Pro',
-    );
+	$fonts: (
+		'free': 'Font Awesome 5 Free',
+		'brand': 'Font Awesome 5 Brand',
+		'pro': 'Font Awesome 5 Pro',
+	);
 
-  $weight: ('regular': 400,
-      'brand': 400,
-      'solid': 900,
-      'light': 300,
-    );
+	$weight: (
+		'regular': 400,
+		'brand': 400,
+		'solid': 900,
+		'light': 300,
+	);
 
-  @if(not map-has-key($fonts, $fontGroup)) {
-    @error "Invalid font group ! Available: #{map-keys($fonts)}";
-  }
+	@if (not map-has-key($fonts, $fontGroup)) {
+		@error "Invalid font group ! Available: #{map-keys($fonts)}";
+	}
 
-  @if(not map-has-key($weight, $iconGroup)) {
-    @error "Invalid icon group ! Available: #{map-keys($weight)}";
-  }
+	@if (not map-has-key($weight, $iconGroup)) {
+		@error "Invalid icon group ! Available: #{map-keys($weight)}";
+	}
 
-  font-family: map-get($fonts, $fontGroup);
-  font-weight: map-get($weight, $iconGroup);
-  content: $unicode;
+	font-family: map-get($fonts, $fontGroup);
+	font-weight: map-get($weight, $iconGroup);
+	content: $unicode;
 }
 
 @mixin hideNumberInputArrows() {
-
-  &[type=number]::-webkit-inner-spin-button,
-  &[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-    display: none;
-  }
+	&[type='number']::-webkit-inner-spin-button,
+	&[type='number']::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+		display: none;
+	}
 }
 
 @mixin square($size: 100%) {
-  width: $size;
-  height: $size;
+	width: $size;
+	height: $size;
 }
 
 @mixin centerElementAbsolute($direction) {
-  position: absolute;
+	position: absolute;
 
-  @if($direction=='vertically') {
-    top: 50%;
-    left: 0px;
-    transform: translateY(-50%);
-  }
-
-  @else if($direction=='horizontally') {
-    top: 0px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  @else {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+	@if ($direction== 'vertically') {
+		top: 50%;
+		left: 0px;
+		transform: translateY(-50%);
+	} @else if($direction== 'horizontally') {
+		top: 0px;
+		left: 50%;
+		transform: translateX(-50%);
+	} @else {
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
 }
 
 @mixin loadingPlaceholder($theme: 'light') {
-  $themes: ('light': ('bg-color': rgba(0, 0, 0, 0.1),
-        'gradient': linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%)),
-      'dark': ('bg-color': rgba(255, 255, 255, 0.2),
-        'gradient': linear-gradient(to right, transparent 0%, rgba(232, 232, 232, 0.514) 50%, transparent 100%)));
+	$themes: (
+		'light': (
+			'bg-color': rgba(0, 0, 0, 0.1),
+			'gradient':
+				linear-gradient(
+					to right,
+					transparent 0%,
+					rgba(0, 0, 0, 0.1) 50%,
+					transparent 100%
+				),
+		),
+		'dark': (
+			'bg-color': rgba(255, 255, 255, 0.2),
+			'gradient':
+				linear-gradient(
+					to right,
+					transparent 0%,
+					rgba(232, 232, 232, 0.514) 50%,
+					transparent 100%
+				),
+		),
+	);
 
-  background-color: map-deep-get($themes, $theme, 'bg-color');
-  border-radius: rem(3px);
-  width: 100%;
-  height: 100%;
-  animation: loadingPlaceholderAnimation 1.2s ease-in-out 150ms infinite;
+	background-color: map-deep-get($themes, $theme, 'bg-color');
+	border-radius: rem(3px);
+	width: 100%;
+	height: 100%;
+	animation: loadingPlaceholderAnimation 1.2s ease-in-out 150ms infinite;
 }

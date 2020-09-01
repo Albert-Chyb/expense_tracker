@@ -1,11 +1,13 @@
-<div *ngIf="user$ | async as user">
+<ng-container *ngIf="user$ | async as user">
 	<form [formGroup]="form" class="settings" (ngSubmit)="updateSettings()">
 		<zippy>
 			<zippy-static toggleOnClick="false">
-				<label class="settings__item">
-					<input type="checkbox" formControlName="autoEndPeriod" />
-					Automatycznie zakańczaj bierzące okresy.
-				</label>
+				<checkbox
+					class="settings__item"
+					formControlName="autoEndPeriod"
+					labelId="auto-end-period"
+					>Automatycznie zakańczaj bierzące okresy.</checkbox
+				>
 			</zippy-static>
 
 			<zippy-content [state]="form.get('autoEndPeriod').value">
@@ -13,14 +15,14 @@
 					<mat-label>Automatycznie zakończ za</mat-label>
 					<mat-select formControlName="autoEndAfter">
 						<mat-option> Wybierz </mat-option>
-						<mat-option [value]="7"> Tydzień </mat-option>
-						<mat-option [value]="30"> Miesiąc </mat-option>
+						<mat-option [value]="7"> Tydzień</mat-option>
+						<mat-option [value]="30"> Miesiąc</mat-option>
 					</mat-select>
 				</mat-form-field>
 
 				<p class="settings__description settings__item paragraph-description">
 					Okres zostanie automatycznie zakończony za wybraną ilość dni, licząc
-					od daty rozpoczęcia obecnego
+					od daty rozpoczęcia obecnego.
 				</p>
 			</zippy-content>
 		</zippy>
@@ -35,4 +37,4 @@
 			Dodawaj i usuwaj grupy transakcji.
 		</p>
 	</section>
-</div>
+</ng-container>

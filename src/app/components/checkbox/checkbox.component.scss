@@ -1,0 +1,68 @@
+@import 'utils/functions';
+@import 'utils/variables';
+@import 'utils/mixins';
+
+:host {
+	display: block;
+}
+
+.checkbox {
+	// Hide vanilla checkbox in the view.
+	&__vanilla-checkbox {
+		transform: scale(0);
+		position: absolute;
+	}
+
+	&__label {
+		position: relative;
+		display: inline-block;
+		text-indent: rem(45px);
+
+		// Mutual styles for both pseudo elements.
+		&::after,
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			cursor: pointer;
+		}
+
+		// Background
+		&::after {
+			height: rem(20px);
+			width: rem(40px);
+			border-radius: rem(20px);
+			background-color: var(--bg-color-1);
+			border: var(--bg-color-2) rem(2px) solid;
+			z-index: 1;
+		}
+
+		// The dot inside
+		&::before {
+			@include square(rem(16px));
+			background-color: var(--color-warning);
+			z-index: 2;
+			border-radius: 100%;
+			top: rem(2px);
+			left: rem(2px);
+			transition: transform 150ms ease-in;
+		}
+	}
+
+	// Background when vanilla checkbox is checked.
+	&__vanilla-checkbox:checked + &__label::after {
+		background-color: var(--color-success);
+	}
+
+	// Background when vanilla checkbox is focused.
+	&__vanilla-checkbox:focus + &__label::after {
+		outline: rem(1px) dotted var(--text-color-0);
+	}
+
+	// The dot inside when vanilla checkbox is checked.
+	&__vanilla-checkbox:checked + &__label::before {
+		transition: transform 150ms ease-out;
+		transform: translateX(rem(20px));
+	}
+}

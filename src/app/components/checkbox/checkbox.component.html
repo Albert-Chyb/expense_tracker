@@ -1,0 +1,14 @@
+<div class="checkbox">
+	<input
+		[(ngModel)]="isChecked"
+		[disabled]="isDisabled"
+		(change)="check($event.target.checked)"
+		type="checkbox"
+		[id]="id"
+		class="checkbox__vanilla-checkbox"
+	/>
+
+	<label [for]="id" class="checkbox__label">
+		<ng-content></ng-content>
+	</label>
+</div>
