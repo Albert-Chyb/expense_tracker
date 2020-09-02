@@ -7,7 +7,10 @@
 		<meta charset="utf-8" />
 		<title>Monitor wydatków</title>
 		<base href="/" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, viewport-fit=cover"
+		/>
 		<meta
 			name="description"
 			content="Wygodnie śledź wydatki i przychody w naszej aplikacji. Zobacz i porównaj zestawienie z różnych okresów czasowych."
@@ -15,14 +18,53 @@
 		<script
 			src="https://kit.fontawesome.com/ca89f8290a.js"
 			crossorigin="anonymous"
-			defer
+			defer=""
 		></script>
-		<link
-			href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-			rel="stylesheet"
+
+		<!-- Apple devices PWA configuration -->
+		<meta
+			name="apple-mobile-web-app-status-bar-style"
+			content="black-translucent"
 		/>
 
-		<!-- Favicons for different devices -->
+		<!-- App loading screens -->
+		<link
+			href="assets/splashscreens/iphone5_splash.png"
+			media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+			rel="apple-touch-startup-image"
+		/>
+		<link
+			href="assets/splashscreens/iphone6_splash.png"
+			media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+			rel="apple-touch-startup-image"
+		/>
+		<link
+			href="assets/splashscreens/iphoneplus_splash.png"
+			media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)"
+			rel="apple-touch-startup-image"
+		/>
+		<link
+			href="assets/splashscreens/iphonex_splash.png"
+			media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+			rel="apple-touch-startup-image"
+		/>
+		<link
+			href="assets/splashscreens/ipad_splash.png"
+			media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+			rel="apple-touch-startup-image"
+		/>
+		<link
+			href="assets/splashscreens/ipadpro1_splash.png"
+			media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+			rel="apple-touch-startup-image"
+		/>
+		<link
+			href="assets/splashscreens/ipadpro2_splash.png"
+			media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+			rel="apple-touch-startup-image"
+		/>
+
+		<!-- App icons -->
 		<link
 			rel="apple-touch-icon"
 			sizes="57x57"
@@ -68,6 +110,10 @@
 			sizes="180x180"
 			href="/assets/favicons/apple-icon-180x180.png"
 		/>
+
+		<!-- |-----------------------------| -->
+
+		<!-- Favicons -->
 		<link
 			rel="icon"
 			type="image/png"
@@ -92,17 +138,18 @@
 			sizes="16x16"
 			href="/assets/favicons/favicon-16x16.png"
 		/>
-		<link rel="manifest" href="/assets/favicons/manifest.json" />
-		<meta name="msapplication-TileColor" content="#ffffff" />
+		<meta name="msapplication-TileColor" content="#303030" />
 		<meta
 			name="msapplication-TileImage"
 			content="/assets/favicons/ms-icon-144x144.png"
 		/>
-		<meta name="theme-color" content="#ffffff" />
-		<!-- Favicons END -->
+		<!-- |-------| -->
+
+		<link rel="manifest" href="manifest.webmanifest" />
+		<meta name="theme-color" content="#8d29f8" />
 
 		<link
-			href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap"
+			href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap"
 			rel="stylesheet"
 		/>
 		<link
@@ -111,6 +158,10 @@
 		/>
 
 		<style>
+			body {
+				background-color: #303030;
+			}
+
 			.loading-screen {
 				background-repeat: repeat;
 				background-image: url('./assets/images/loading-screen-bg.svg');
@@ -184,5 +235,8 @@
 				</h2>
 			</section>
 		</app-root>
+		<noscript
+			>Aby korzystać z tej aplikacji JavaScript musi byc włączony !</noscript
+		>
 	</body>
 </html>

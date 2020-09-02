@@ -3,47 +3,57 @@
 @import '../../sass/utils/mixins';
 
 .header {
-  display: grid;
-  grid-template-columns: rem(30px) auto rem(40px);
-  align-items: center;
-  background-color: var(--bg-color-0);
-  padding: rem(15px) 0px;
-  font-size: rem(26px);
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  z-index: 99;
-  padding: rem(20px) rem(30px);
-  width: 100vw;
-  height: rem(72px);
+	display: grid;
+	grid-template-columns: rem(30px) auto rem(40px);
+	align-items: center;
+	background-color: var(--bg-color-0);
+	font-size: rem(26px);
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 99;
+	padding: rem(20px) rem(30px);
+	width: 100vw;
+	height: rem(72px);
+	margin-top: env(safe-area-inset-top);
 
-  &__user-avatar {
-    @include square(rem(30px));
-    border-radius: 100%;
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		width: 100vw;
+		height: env(safe-area-inset-top);
+		background-color: var(--bg-color-0);
+		margin-top: calc(env(safe-area-inset-top) * -1);
+		z-index: 99;
+	}
 
-    &:active {
-      transform: scale(.9);
-    }
-  }
+	&__user-avatar {
+		@include square(rem(30px));
+		border-radius: 100%;
 
-  &__icon {
+		&:active {
+			transform: scale(0.9);
+		}
+	}
 
-    &:last-child {
-      justify-self: end;
-    }
-  }
+	&__icon {
+		&:last-child {
+			justify-self: end;
+		}
+	}
 
-  &__heading {
-    font-weight: bold;
-    font-size: inherit;
-    margin-left: rem(20px);
-    margin-bottom: 0px;
-  }
+	&__heading {
+		font-weight: bold;
+		font-size: inherit;
+		margin-left: rem(20px);
+		margin-bottom: 0px;
+	}
 
-  @media screen and (max-width: 425px) {
-
-    &__heading {
-      font-size: rem(18px);
-    }
-  }
+	@media screen and (max-width: 425px) {
+		&__heading {
+			font-size: rem(18px);
+		}
+	}
 }

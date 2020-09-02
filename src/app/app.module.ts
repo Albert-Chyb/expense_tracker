@@ -47,6 +47,7 @@ import { AddTransactionComponent } from './pages/add-transaction/add-transaction
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { ClueComponent } from './components/clue/clue.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
 	declarations: [
@@ -95,6 +96,7 @@ import { ClueComponent } from './components/clue/clue.component';
 		MatSelectModule,
 		AngularFireAuthGuardModule,
 		FormsModule,
+		ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { routeAnimation } from './animations';
 import { FormErrorsService } from './services/form-errors/form-errors.service';
 import { UserService } from './services/user/user.service';
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
 	selector: 'app-root',
@@ -23,7 +24,8 @@ export class AppComponent implements OnInit {
 	*/
 	constructor(
 		private readonly _user: UserService,
-		private readonly _formErrors: FormErrorsService
+		private readonly _formErrors: FormErrorsService,
+		private readonly _pwaUpdates: SwUpdate
 	) {}
 
 	ngOnInit() {
@@ -32,6 +34,8 @@ export class AppComponent implements OnInit {
 		// Change to local cloud functions in development environment.
 		if (environment.firebaseEmulators.enabled)
 			functions().useFunctionsEmulator('http://localhost:5001');
+
+		this.listenForPWAUpdates();
 
 		this._formErrors
 			.add('required', 'To pole jest wymagane')
@@ -49,5 +53,20 @@ export class AppComponent implements OnInit {
 		return (
 			outlet && outlet.activatedRouteData && outlet.activatedRouteData.name
 		);
+	}
+
+	listenForPWAUpdates() {
+		this._pwaUpdates.available.subscribe(() => {
+			alert('Test');
+			const userAgreedToUpdateApp = confirm(
+				'Nowa wersja aplikacji jest dostępna ! Czy chcesz zainstalowac ją teraz ?'
+			);
+
+			if (userAgreedToUpdateApp)
+				this._pwaUpdates
+					.activateUpdate()
+					.then(() => document.location.reload());
+		});
+		this._pwaUpdates.checkForUpdate();
 	}
 }
