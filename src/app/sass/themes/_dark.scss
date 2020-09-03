@@ -1,45 +1,45 @@
-:root {
-	@media (prefers-color-scheme: dark) {
-		--color-primary: #171717;
-		--color-secondary: #8d29f8;
-		--color-danger: #e01506;
-		--color-success: #0b6e4f;
-		--color-warning: #ffc857;
+body.theme--dark {
+	--color-primary: #171717;
+	--color-secondary: #8d29f8;
+	--color-danger: #e01506;
+	--color-success: #0b6e4f;
+	--color-warning: #ffc857;
 
-		--text-on-primary: #fff;
-		--text-on-secondary: #fff;
-		--text-on-danger: #fff;
-		--text-on-success: #fff;
-		--text-on-warning: #171717;
+	--text-on-primary: #fff;
+	--text-on-secondary: #fff;
+	--text-on-danger: #fff;
+	--text-on-success: #fff;
+	--text-on-warning: #171717;
 
-		--text-color-0: #ececec;
-		--text-color-1: #a5a5a5;
+	--text-color-0: #ececec;
+	--text-color-1: #a5a5a5;
 
-		--bg-color-0: #303030;
-		--bg-color-1: #4a4a4a;
-		--bg-color-2: #636363;
+	--bg-color-0: #303030;
+	--bg-color-1: #4a4a4a;
+	--bg-color-2: #636363;
 
-		// Angular material components
+	--apple-bar-style: var(--bg-color-0);
 
-		.mat-datepicker-toggle-default-icon,
-		.mat-select-arrow {
-			color: var(--text-color-1);
-		}
+	// Angular material components
 
-		.mat-form-field {
-			background-color: var(--bg-color-1);
-		}
+	.mat-datepicker-toggle-default-icon,
+	.mat-select-arrow {
+		color: var(--text-color-1);
+	}
 
-		.mat-form-field-label {
-			color: var(--text-color-1);
-		}
+	.mat-form-field {
+		background-color: var(--bg-color-1);
+	}
 
-		.mat-select-value {
-			color: var(--text-color-0);
-		}
+	.mat-form-field-label {
+		color: var(--text-color-1);
+	}
 
-		.mat-focused:not(.ng-invalid) .mat-form-field-label {
-			color: #ad68f7;
-		}
+	.mat-select-value {
+		color: var(--text-color-0);
+	}
+
+	.mat-focused:not(.ng-invalid) .mat-form-field-label {
+		color: #ad68f7;
 	}
 }

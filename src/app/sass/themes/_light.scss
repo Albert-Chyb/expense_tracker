@@ -1,22 +1,22 @@
-:root {
-	@media (prefers-color-scheme: light) {
-		--color-primary: #171717;
-		--color-secondary: #7e0cf5;
-		--color-danger: #f44336;
-		--color-success: #0b6e4f;
-		--color-warning: #ffc857;
+body.theme--light {
+	--color-primary: #171717;
+	--color-secondary: #7e0cf5;
+	--color-danger: #f44336;
+	--color-success: #0b6e4f;
+	--color-warning: #ffc857;
 
-		--text-on-primary: #fff;
-		--text-on-secondary: #fff;
-		--text-on-danger: #fff;
-		--text-on-success: #fff;
-		--text-on-warning: #171717;
+	--text-on-primary: #fff;
+	--text-on-secondary: #fff;
+	--text-on-danger: #fff;
+	--text-on-success: #fff;
+	--text-on-warning: #171717;
 
-		--text-color-0: #171717;
-		--text-color-1: #909090;
+	--text-color-0: #171717;
+	--text-color-1: #909090;
 
-		--bg-color-0: #fff;
-		--bg-color-1: #f3f3f3;
-		--bg-color-2: #cfcfcf;
-	}
+	--bg-color-0: #fff;
+	--bg-color-1: #f3f3f3;
+	--bg-color-2: #cfcfcf;
+
+	--apple-bar-style: #000;
 }

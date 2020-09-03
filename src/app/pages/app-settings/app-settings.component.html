@@ -29,12 +29,29 @@
 	</form>
 
 	<section class="settings">
-		<a class="settings__item link" [routerLink]="Pages.ManageGroups"
-			>Zarządzaj grupami</a
-		>
+		<section class="settings__item">
+			<a class="settings__item link" [routerLink]="Pages.ManageGroups"
+				>Zarządzaj grupami</a
+			>
 
-		<p class="settings__description settings__item paragraph-description">
-			Dodawaj i usuwaj grupy transakcji.
-		</p>
+			<p class="settings__description paragraph-description">
+				Dodawaj i usuwaj grupy transakcji.
+			</p>
+		</section>
+
+		<section class="settings__item">
+			<mat-form-field class="settings__select" appearance="fill">
+				<mat-label>Motyw</mat-label>
+				<mat-select [formControl]="theme">
+					<mat-option value="light">Jasny</mat-option>
+					<mat-option value="dark">Ciemny</mat-option>
+					<mat-option value="auto">Motyw urządzenia</mat-option>
+				</mat-select>
+			</mat-form-field>
+
+			<p class="settings__description paragraph-description">
+				Zmień motyw aplikacji.
+			</p>
+		</section>
 	</section>
 </ng-container>

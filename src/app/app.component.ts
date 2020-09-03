@@ -1,3 +1,5 @@
+import { Themes } from './common/models/themes';
+import { ThemesService } from './services/themes/themes.service';
 import { registerLocaleData } from '@angular/common';
 import localePL from '@angular/common/locales/pl';
 import { Component, OnInit } from '@angular/core';
@@ -24,6 +26,7 @@ export class AppComponent implements OnInit {
 	*/
 	constructor(
 		private readonly _user: UserService,
+		private readonly _themes: ThemesService,
 		private readonly _formErrors: FormErrorsService,
 		private readonly _pwaUpdates: SwUpdate
 	) {}
@@ -57,7 +60,6 @@ export class AppComponent implements OnInit {
 
 	listenForPWAUpdates() {
 		this._pwaUpdates.available.subscribe(() => {
-			alert('Test');
 			const userAgreedToUpdateApp = confirm(
 				'Nowa wersja aplikacji jest dostępna ! Czy chcesz zainstalowac ją teraz ?'
 			);

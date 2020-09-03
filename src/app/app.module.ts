@@ -96,7 +96,9 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 		MatSelectModule,
 		AngularFireAuthGuardModule,
 		FormsModule,
-		ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+		ServiceWorkerModule.register('ngsw-worker.js', {
+			enabled: environment.production,
+		}),
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

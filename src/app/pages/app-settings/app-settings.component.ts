@@ -1,3 +1,4 @@
+import { ThemesService } from './../../services/themes/themes.service';
 import { Pages } from 'src/app/common/routing/routesUrls';
 import {
 	Component,
@@ -12,6 +13,7 @@ import { whiteListValidator } from 'src/app/common/validators/whiteListValidator
 import { UserService } from 'src/app/services/user/user.service';
 
 import { IUser } from './../../common/models/user';
+import { SupportedThemeName } from 'src/app/common/models/themes';
 
 @Component({
 	templateUrl: './app-settings.component.html',
@@ -19,7 +21,10 @@ import { IUser } from './../../common/models/user';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppSettingsComponent implements OnInit, OnDestroy {
-	constructor(private readonly _user: UserService) {}
+	constructor(
+		private readonly _user: UserService,
+		private readonly _themes: ThemesService
+	) {}
 
 	form = new FormGroup({
 		autoEndAfter: new FormControl(30, [
@@ -28,12 +33,17 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
 		]),
 		autoEndPeriod: new FormControl(false, [Validators.required]),
 	});
+	theme = new FormControl(this._themes.currentThemeName);
 	user$: Observable<IUser>;
 	readonly Pages = Pages;
 	private readonly subscriptions = new Subscription();
 
 	updateSettings() {
 		this._user.updateSettings(this.form.value);
+	}
+
+	changeTheme(name: SupportedThemeName) {
+		this._themes.switchToByName(name);
 	}
 
 	ngOnInit() {
@@ -43,6 +53,10 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
 
 		this.subscriptions.add(
 			this.form.valueChanges.subscribe(this.updateSettings.bind(this))
+		);
+
+		this.subscriptions.add(
+			this.theme.valueChanges.subscribe(this.changeTheme.bind(this))
 		);
 	}
 
