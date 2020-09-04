@@ -18,6 +18,6 @@
 	}
 
 	&--is-rippling::before {
-		animation: ripple 0.5s cubic-bezier(0.69, 0.045, 0.165, 1);
+		animation: ripple 500ms cubic-bezier(0, 0, 0.2, 1);
 	}
 }
