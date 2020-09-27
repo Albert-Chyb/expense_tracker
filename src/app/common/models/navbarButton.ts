@@ -1,5 +1,5 @@
-export interface NavbarButton {
+export interface NavbarLink {
 	iconUnicode: string;
 	description: string;
-	onClick: () => void;
+	route: string;
 }

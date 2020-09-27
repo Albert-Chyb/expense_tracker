@@ -1,5 +1,5 @@
 import { MainNavService } from './../../services/main-nav/main-nav.service';
-import { NavbarButton } from './../../common/models/navbarButton';
+import { NavbarLink } from './../../common/models/navbarButton';
 import { first } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UserService } from './../../services/user/user.service';
@@ -22,24 +22,23 @@ import {
 export class MainNavComponent implements AfterViewInit, OnInit {
 	constructor(
 		private readonly _user: UserService,
-		private readonly _router: Router,
 		private readonly _renderer: Renderer2,
 		private readonly _mainNav: MainNavService
 	) {}
 
-	@ViewChild('programmableButton', { read: ElementRef })
+	@ViewChild('programmableLink', { read: ElementRef })
 	programmableButton: ElementRef<HTMLButtonElement>;
 
 	Pages = Pages;
 	isLoggedIn$ = this._user.isLoggedIn$;
-	private readonly defaultButton: NavbarButton = {
+	private readonly defaultButton: NavbarLink = {
 		iconUnicode: '\\f0fe',
 		description: 'Dodaj transakcję',
-		onClick: () => this._router.navigateByUrl(this.Pages.AddTransaction),
+		route: Pages.AddTransaction,
 	};
-	button: NavbarButton = this.defaultButton;
+	button: NavbarLink = this.defaultButton;
 
-	changeButton(newButton: NavbarButton) {
+	changeButton(newButton: NavbarLink) {
 		this.button = newButton;
 	}
 

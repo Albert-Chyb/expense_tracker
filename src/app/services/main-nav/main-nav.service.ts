@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { NavbarButton } from 'src/app/common/models/navbarButton';
+import { NavbarLink } from 'src/app/common/models/navbarButton';
 
 @Injectable({
 	providedIn: 'root',
@@ -8,14 +8,14 @@ import { NavbarButton } from 'src/app/common/models/navbarButton';
 export class MainNavService {
 	constructor() {}
 
-	private readonly _changeButtonBroadcaster$ = new Subject<NavbarButton>();
+	private readonly _changeButtonBroadcaster$ = new Subject<NavbarLink>();
 	private readonly _resetButtonBroadcaster$ = new Subject<void>();
 
 	/**
 	 * Replaces default button with new one.
 	 * @param newButton New button that will replace current one.
 	 */
-	changeButton(newButton: NavbarButton) {
+	changeButton(newButton: NavbarLink) {
 		this._changeButtonBroadcaster$.next(newButton);
 	}
 

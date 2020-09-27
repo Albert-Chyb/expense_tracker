@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { NavbarButton } from './../../common/models/navbarButton';
+import { NavbarLink } from './../../common/models/navbarButton';
 import { MainNavService } from './../../services/main-nav/main-nav.service';
 import { Pages } from 'src/app/common/routing/routesUrls';
 import {
@@ -23,8 +23,7 @@ import { ITransactionGroup } from './../../common/models/group';
 export class ManageGroupsComponent implements OnInit, OnDestroy {
 	constructor(
 		private readonly _groups: TransactionsGroupsService,
-		private readonly _mainNav: MainNavService,
-		private readonly _router: Router
+		private readonly _mainNav: MainNavService
 	) {}
 
 	groups$: Observable<ITransactionGroup[]>;
@@ -33,10 +32,10 @@ export class ManageGroupsComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 		this.groups$ = this._groups.getAll();
 
-		const addGroupButton: NavbarButton = {
+		const addGroupButton: NavbarLink = {
 			description: 'Dodaj grupę',
 			iconUnicode: '\\f0fe',
-			onClick: () => this._router.navigateByUrl(Pages.AddGroup),
+			route: Pages.AddGroup,
 		};
 		this._mainNav.changeButton(addGroupButton);
 	}

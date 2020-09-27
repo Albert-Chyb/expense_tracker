@@ -16,9 +16,8 @@
 	<a
 		class="main-nav__link main-nav__link--add-transaction"
 		routerLinkActive="main-nav__link--active"
-		[routerLink]="Pages.AddTransaction"
-		#programmableButton
-		(click)="button.onClick()"
+		[routerLink]="button.route"
+		#programmableLink
 	>
 		{{ button.description }}
 	</a>
