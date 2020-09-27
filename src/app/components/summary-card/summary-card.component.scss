@@ -3,127 +3,140 @@
 @import 'utils/mixins';
 
 .summary {
-  border-radius: rem(25px);
-  box-shadow: rem(-3px) rem(4px) rem(7px) rgba(0, 0, 0, 0.25);
-  display: grid;
-  font-size: 1rem;
-  align-items: center;
+	border-radius: rem(25px);
+	// box-shadow: rem(-3px) rem(4px) rem(7px) rgba(0, 0, 0, 0.25);
+	display: grid;
+	font-size: 1rem;
+	align-items: center;
 
-  &--big {
-    grid-template: {
-      areas:
-        'title currency'
-        'amount currency'
-      ;
-      rows: 1fr 1.5fr;
-      columns: 3fr 1fr;
-    }
+	&--big {
+		grid-template: {
+			areas: 'title currency' 'amount currency';
+			rows: 1fr 1.5fr;
+			columns: 3fr 1fr;
+		}
 
-    row-gap: rem(10px);
-    column-gap: rem(25px);
-    padding: rem(30px);
+		row-gap: rem(10px);
+		column-gap: rem(25px);
+		padding: rem(30px);
 
-    & .summary__icon {
-      display: none;
-    }
-  }
+		& .summary__icon {
+			display: none;
+		}
+	}
 
-  &--small {
-    grid-template: {
-      areas:
-        'icon title'
-        'icon amount'
-      ;
-      rows: repeat(2, 1fr);
-      columns: rem(35px) minmax(rem(90px), auto);
-    }
+	&--small {
+		grid-template: {
+			areas: 'icon title' 'icon amount';
+			rows: repeat(2, 1fr);
+			columns: rem(35px) minmax(rem(90px), auto);
+		}
 
-    row-gap: rem(5px);
-    column-gap: rem(10px);
-    padding: rem(15px) rem(10px);
+		row-gap: rem(5px);
+		column-gap: rem(10px);
+		padding: rem(15px) rem(10px);
 
-    & .summary__currency {
-      display: none;
-    }
+		& .summary__currency {
+			display: none;
+		}
 
-    & .summary__amount {
-      font-size: rem(16px);
-    }
-  }
+		& .summary__amount {
+			font-size: rem(16px);
+		}
+	}
 
-  &--primary {
-    @include summaryCardTheme(var(--color-primary), var(--text-on-primary), var(--text-color-1));
-  }
+	&--primary {
+		@include summaryCardTheme(
+			var(--color-primary),
+			var(--text-on-primary),
+			var(--text-color-1)
+		);
+	}
 
-  &--secondary {
-    @include summaryCardTheme(var(--color-secondary), var(--text-on-secondary), var(--text-on-secondary));
-  }
+	&--secondary {
+		@include summaryCardTheme(
+			var(--color-secondary),
+			var(--text-on-secondary),
+			var(--text-on-secondary)
+		);
+	}
 
-  &--danger {
-    @include summaryCardTheme(var(--color-danger), var(--text-on-danger), var(--text-on-danger));
-  }
+	&--danger {
+		@include summaryCardTheme(
+			var(--color-danger),
+			var(--text-on-danger),
+			var(--text-on-danger)
+		);
+	}
 
-  &--success {
-    @include summaryCardTheme(var(--color-success), var(--text-on-success), var(--text-on-success));
-  }
+	&--success {
+		@include summaryCardTheme(
+			var(--color-success),
+			var(--text-on-success),
+			var(--text-on-success)
+		);
+	}
 
-  &--warning {
-    @include summaryCardTheme(var(--color-warning), var(--text-on-warning), var(--text-on-warning));
-  }
+	&--warning {
+		@include summaryCardTheme(
+			var(--color-warning),
+			var(--text-on-warning),
+			var(--text-on-warning)
+		);
+	}
 
-  &__title {
-    grid-area: title;
-    margin-bottom: 0px;
+	&__title {
+		grid-area: title;
+		margin-bottom: 0px;
 
-    font: {
-      size: rem(14px);
-      weight: normal;
-    }
-  }
+		font: {
+			size: rem(14px);
+			weight: normal;
+		}
+	}
 
-  &__amount {
-    @include ellipsis();
-    grid-area: amount;
-    margin-bottom: 0px;
+	&__amount {
+		@include ellipsis();
+		grid-area: amount;
+		margin-bottom: 0px;
 
-    font: {
-      size: rem(30px);
-      weight: bold;
-    }
-  }
+		font: {
+			size: rem(30px);
+			weight: bold;
+		}
+	}
 
-  &__currency {
-    grid-area: currency;
-    font-size: rem(40px);
-    place-self: center;
-  }
+	&__currency {
+		grid-area: currency;
+		font-size: rem(40px);
+		place-self: center;
+	}
 
-  &__icon {
-    grid-area: icon;
-    place-self: center;
-    font-size: rem(26px);
-  }
+	&__icon {
+		grid-area: icon;
+		place-self: center;
+		font-size: rem(26px);
+	}
 }
 
 .summary--ghost {
+	&.summary--big {
+		grid-template-rows: rem(17px) rem(37px);
+	}
 
-  &.summary--big {
-    grid-template-rows: rem(17px) rem(37px);
-  }
+	&.summary--small {
+		grid-template-rows: rem(17px) rem(19px);
+	}
 
-  &.summary--small {
-    grid-template-rows: rem(17px) rem(19px);
-  }
+	.summary__title {
+		@include loadingPlaceholder('dark');
+	}
 
-  .summary__title {
-    @include loadingPlaceholder('dark');
-  }
+	.summary__amount {
+		@include loadingPlaceholder('dark');
+	}
 
-  .summary__amount {
-    @include loadingPlaceholder('dark');
-  }
-
-  .summary__currency {
-    @include loadingPlaceholder('dark');
-  }
+	.summary__currency {
+		@include loadingPlaceholder('dark');
+	}
 }
