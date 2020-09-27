@@ -17,8 +17,11 @@
 		class="main-nav__link main-nav__link--add-transaction"
 		routerLinkActive="main-nav__link--active"
 		[routerLink]="Pages.AddTransaction"
-		>Dodaj transakcję</a
+		#programmableButton
+		(click)="button.onClick()"
 	>
+		{{ button.description }}
+	</a>
 
 	<a
 		class="main-nav__link main-nav__link--periods"

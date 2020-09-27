@@ -28,7 +28,7 @@
 			color: var(--color-warning);
 		}
 
-		&::before {
+		&::after {
 			position: absolute;
 			top: 0px;
 			left: 50%;
@@ -36,31 +36,35 @@
 			font-size: rem(25px);
 		}
 
-		&--home::before {
+		&--home::after {
 			@include fontAwesomeIcon('\f015', 'free', 'solid');
 		}
 
-		&--profile::before {
+		&--profile::after {
 			@include fontAwesomeIcon('\f007', 'free', 'solid');
 		}
 
-		&--periods::before {
+		&--periods::after {
 			@include fontAwesomeIcon('\f073', 'free', 'regular');
 		}
 
-		&--settings::before {
+		&--settings::after {
 			@include fontAwesomeIcon('\f013', 'free', 'solid');
 		}
 
-		&--add-transaction::before {
-			@include fontAwesomeIcon('\f0fe', 'free', 'solid');
+		&--add-transaction {
+			// --icon: '\f0fe';
+
+			&::after {
+				@include fontAwesomeIcon(var(--icon), 'free', 'solid');
+			}
 		}
 
 		@media only screen and (max-width: 375px) {
 			font-size: rem(10px);
 			padding-top: rem(32px);
 
-			&::before {
+			&::after {
 				font-size: rem(23px);
 			}
 		}
