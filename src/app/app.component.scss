@@ -13,11 +13,11 @@
 	display: block;
 	width: 100%;
 	position: absolute;
-	top: $mainHeaderHeight;
+	top: calc($mainHeaderHeight + #{rem(10px)});
 	left: 0px;
 
 	@supports (top: env(safe-area-inset-top)) {
-		top: calc(#{$mainHeaderHeight} + env(safe-area-inset-top));
+		top: calc(#{$mainHeaderHeight} + env(safe-area-inset-top) + #{rem(10px)});
 	}
 
 	// When main nav is visible

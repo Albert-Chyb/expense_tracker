@@ -6,7 +6,7 @@
 	display: grid;
 	grid-template-columns: rem(30px) auto rem(40px);
 	align-items: center;
-	background-color: var(--bg-color-0);
+	background-color: var(--bg-color-header);
 	font-size: rem(26px);
 	position: fixed;
 	top: 0px;
@@ -16,18 +16,7 @@
 	width: 100vw;
 	height: rem(72px);
 	margin-top: env(safe-area-inset-top);
-
-	&::before {
-		content: '';
-		position: absolute;
-		top: 0px;
-		left: 0px;
-		width: 100vw;
-		height: env(safe-area-inset-top);
-		background-color: var(--apple-bar-style);
-		margin-top: calc(env(safe-area-inset-top) * -1);
-		z-index: 99;
-	}
+	color: var(--text-color-on-header);
 
 	&__user-avatar {
 		@include square(rem(30px));

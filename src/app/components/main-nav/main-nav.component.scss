@@ -53,7 +53,7 @@
 		}
 
 		&--add-transaction {
-			// --icon: '\f0fe';
+			--icon: '\f0fe';
 
 			&::after {
 				@include fontAwesomeIcon(var(--icon), 'free', 'solid');
