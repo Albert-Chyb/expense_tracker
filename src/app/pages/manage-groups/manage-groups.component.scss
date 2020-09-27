@@ -12,6 +12,10 @@
 	&__add {
 		position: fixed;
 		right: rem(30px);
-		bottom: rem(40px);
+		bottom: rem(30px);
+
+		@media only screen and (max-device-width: $mainNavVisibilityBreakpoint) {
+			display: none;
+		}
 	}
 }
