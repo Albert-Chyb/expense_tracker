@@ -1,0 +1,35 @@
+<nav class="main-nav" *ngIf="isLoggedIn$ | async">
+	<a
+		class="main-nav__link main-nav__link--home"
+		routerLinkActive="main-nav__link--active"
+		[routerLinkActiveOptions]="{ exact: true }"
+		[routerLink]="Pages.Home"
+		>Strona główna</a
+	>
+	<a
+		class="main-nav__link main-nav__link--profile"
+		routerLinkActive="main-nav__link--active"
+		[routerLink]="Pages.Profile"
+		>Profil</a
+	>
+
+	<a
+		class="main-nav__link main-nav__link--add-transaction"
+		routerLinkActive="main-nav__link--active"
+		[routerLink]="Pages.AddTransaction"
+		>Dodaj transakcję</a
+	>
+
+	<a
+		class="main-nav__link main-nav__link--periods"
+		routerLinkActive="main-nav__link--active"
+		[routerLink]="Pages.Periods"
+		>Okresy</a
+	>
+	<a
+		class="main-nav__link main-nav__link--settings"
+		routerLinkActive="main-nav__link--active"
+		[routerLink]="Pages.AppSettings"
+		>Ustawienia</a
+	>
+</nav>

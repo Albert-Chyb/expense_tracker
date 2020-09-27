@@ -13,10 +13,17 @@
 	display: block;
 	width: 100%;
 	position: absolute;
-	top: rem(72px);
+	top: $mainHeaderHeight;
 	left: 0px;
 
 	@supports (top: env(safe-area-inset-top)) {
-		top: calc(#{rem(72px)} + env(safe-area-inset-top));
+		top: calc(#{$mainHeaderHeight} + env(safe-area-inset-top));
+	}
+
+	// When main nav is visible
+	@media only screen and (max-device-width: $mainNavVisibilityBreakpoint) {
+		padding-bottom: calc(
+			#{$mainNavHeight} + env(safe-area-inset-bottom) + #{rem(10px)}
+		);
 	}
 }

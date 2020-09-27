@@ -4,7 +4,9 @@
 
 .groups {
 	&__group {
-		margin-bottom: rem(20px);
+		&:not(:last-child) {
+			margin-bottom: rem(20px);
+		}
 	}
 
 	&__add {

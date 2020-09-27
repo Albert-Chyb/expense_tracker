@@ -2,17 +2,18 @@
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
 
-
 .profile {
-  &__section {
-    margin-bottom: rem(50px);
+	&__section {
+		&:not(:last-child) {
+			margin-bottom: rem(50px);
+		}
 
-    &:first-of-type {
-      margin-top: rem(40px);
-    }
-  }
+		&:first-of-type {
+			margin-top: rem(40px);
+		}
+	}
 
-  h2#{&}__heading {
-    margin-bottom: rem(10px);
-  }
+	h2#{&}__heading {
+		margin-bottom: rem(10px);
+	}
 }

@@ -1,0 +1,78 @@
+@import 'utils/functions';
+@import 'utils/variables';
+@import 'utils/mixins';
+
+.main-nav {
+	z-index: 99;
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	background-color: var(--bg-color-1);
+	height: $mainNavHeight;
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+	align-items: center;
+	box-sizing: content-box;
+	padding-bottom: env(safe-area-inset-bottom);
+
+	&__link {
+		font-size: rem(12px);
+		position: relative;
+		padding-top: rem(35px);
+		text-align: center;
+		font-weight: 400;
+
+		&--active {
+			color: var(--color-warning);
+		}
+
+		&::before {
+			position: absolute;
+			top: 0px;
+			left: 50%;
+			transform: translateX(-50%);
+			font-size: rem(25px);
+		}
+
+		&--home::before {
+			@include fontAwesomeIcon('\f015', 'free', 'solid');
+		}
+
+		&--profile::before {
+			@include fontAwesomeIcon('\f007', 'free', 'solid');
+		}
+
+		&--periods::before {
+			@include fontAwesomeIcon('\f073', 'free', 'regular');
+		}
+
+		&--settings::before {
+			@include fontAwesomeIcon('\f013', 'free', 'solid');
+		}
+
+		&--add-transaction::before {
+			@include fontAwesomeIcon('\f0fe', 'free', 'solid');
+		}
+
+		@media only screen and (max-width: 375px) {
+			font-size: rem(10px);
+			padding-top: rem(32px);
+
+			&::before {
+				font-size: rem(23px);
+			}
+		}
+	}
+
+	@media only screen and (max-width: 375px) {
+		&__action-btn {
+			transform: scale(0.9);
+		}
+	}
+
+	@media only screen and (min-device-width: $mainNavVisibilityBreakpoint) {
+		display: none;
+	}
+}
