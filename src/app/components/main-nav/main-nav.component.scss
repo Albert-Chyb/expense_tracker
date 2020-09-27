@@ -76,7 +76,7 @@
 		}
 	}
 
-	@media only screen and (min-device-width: $mainNavVisibilityBreakpoint) {
+	@media only screen and (min-width: $mainNavVisibilityBreakpoint) {
 		display: none;
 	}
 }
