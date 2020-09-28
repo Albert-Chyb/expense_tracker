@@ -6,7 +6,7 @@
 	display: grid;
 	grid-template-columns: rem(30px) auto rem(40px);
 	align-items: center;
-	background-color: var(--bg-color-header);
+	background-color: var(--bg-color-0);
 	font-size: rem(26px);
 	position: fixed;
 	top: 0px;
@@ -16,7 +16,7 @@
 	width: 100vw;
 	height: rem(72px);
 	margin-top: env(safe-area-inset-top);
-	color: var(--text-color-on-header);
+	color: var(--text-color-0);
 
 	&__user-avatar {
 		@include square(rem(30px));
