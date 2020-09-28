@@ -8,7 +8,7 @@
 		right: rem(30px);
 		bottom: rem(30px);
 
-		@media only screen and (max-device-width: $mainNavVisibilityBreakpoint) {
+		@media only screen and (max-width: $mainNavVisibilityBreakpoint) {
 			display: none;
 		}
 	}
