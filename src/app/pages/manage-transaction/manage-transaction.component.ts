@@ -52,6 +52,7 @@ export class ManageTransactionComponent implements OnInit {
 		const groups$ = this._groups.getAll();
 		const transactions$ = this._transactions.get(this.transactionId).pipe(
 			map(transaction => {
+				if (transaction === undefined) return {} as any;
 				this.originalTransaction = { ...transaction };
 				transaction.group = transaction.group.id as any;
 				transaction.date = transaction.date.toDate() as any;
