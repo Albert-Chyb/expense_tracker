@@ -1,4 +1,7 @@
-<nav class="main-nav" *ngIf="isLoggedIn$ | async">
+<nav
+	class="main-nav"
+	[ngClass]="(isLoggedIn$ | async) ? '' : 'main-nav--hidden'"
+>
 	<a
 		class="main-nav__link main-nav__link--home"
 		routerLinkActive="main-nav__link--active"

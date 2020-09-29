@@ -36,7 +36,11 @@ export class MainNavComponent implements AfterViewInit, OnInit {
 		description: 'Dodaj transakcję',
 		route: Pages.AddTransaction,
 	};
-	button: NavbarLink = this.defaultButton;
+	button: NavbarLink = {
+		iconUnicode: '\\f0fe',
+		description: 'Dodaj transakcję',
+		route: Pages.AddTransaction,
+	};
 
 	changeButton(newButton: NavbarLink) {
 		this.button = newButton;
@@ -46,8 +50,7 @@ export class MainNavComponent implements AfterViewInit, OnInit {
 		this.button = this.defaultButton;
 	}
 
-	async ngAfterViewInit() {
-		await this.isLoggedIn$.pipe(first()).toPromise();
+	ngAfterViewInit() {
 		this._renderer.setStyle(
 			this.programmableButton.nativeElement,
 			'--icon',
