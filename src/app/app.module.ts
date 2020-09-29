@@ -1,8 +1,9 @@
+import { GlobalErrorHandler } from './common/errors/globalErrorHandler';
 import { FormErrorsDirective } from './directives/form-errors/form-errors.directive';
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
 import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
@@ -111,6 +112,7 @@ import { MainNavComponent } from './components/main-nav/main-nav.component';
 				? environment.firebaseEmulators.firestore
 				: undefined,
 		},
+		{ provide: ErrorHandler, useClass: GlobalErrorHandler },
 	],
 	bootstrap: [AppComponent],
 })
