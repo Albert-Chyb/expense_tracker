@@ -20,7 +20,7 @@
 
 	&--hidden {
 		transition: transform 0.3s ease-in;
-		transform: translateY($mainNavHeight);
+		transform: translateY(calc(100% + env(safe-area-inset-bottom)));
 	}
 
 	&__link {
