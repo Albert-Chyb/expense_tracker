@@ -1,15 +1,17 @@
-import { Pages } from './../../common/routing/routesUrls';
 import {
+	ChangeDetectionStrategy,
 	Component,
 	OnDestroy,
-	ChangeDetectionStrategy,
 	OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { FirebaseError } from 'firebase';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
+import { Pages } from './../../common/routing/routesUrls';
 import { AuthService } from './../../services/auth/auth.service';
+import { ErrorsService } from './../../services/errors/errors.service';
 import { UserService } from './../../services/user/user.service';
 
 @Component({
@@ -21,10 +23,11 @@ export class LoginComponent implements OnDestroy, OnInit {
 	constructor(
 		private readonly _auth: AuthService,
 		private readonly _router: Router,
-		private readonly _user: UserService
+		private readonly _user: UserService,
+		private readonly _errors: ErrorsService
 	) {}
 
-	subscriptions = new Subscription();
+	private readonly subscriptions = new Subscription();
 
 	ngOnInit() {
 		this.subscriptions.add(
@@ -46,7 +49,29 @@ export class LoginComponent implements OnDestroy, OnInit {
 		try {
 			await this._auth.loginWithGoogle();
 		} catch (error) {
-			console.log(error);
+			this.handleError(error);
+		}
+	}
+	private handleError(error: FirebaseError) {
+		switch (error.code) {
+			case 'auth/popup-closed-by-user':
+				this._errors.notifyUser('Za wcześnie zamknięto okno logowania');
+				break;
+
+			case 'auth/popup-blocked':
+				this._errors.notifyUser(
+					'Okno logowania zostało zablokowane przez przeklądarkę.'
+				);
+				break;
+
+			case 'auth/cancelled-popup-request':
+				this._errors.notifyUser(
+					'Anulowano działanie okna logowania. Tylko jedno okno może być aktywne w tym samym czasie.'
+				);
+				break;
+
+			default:
+				throw error;
 		}
 	}
 }
