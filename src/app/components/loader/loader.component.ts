@@ -21,8 +21,10 @@ export class LoaderComponent {
 	 */
 	@Input('isFixed') isFixed = false;
 
-	classes = {
-		'loader--fixed': this.isFixed,
-		'loader--centered': this.isCenteredAbsolutely,
-	};
+	get classes() {
+		return {
+			'loader--fixed': this.isFixed,
+			'loader--centered': this.isCenteredAbsolutely,
+		};
+	}
 }
