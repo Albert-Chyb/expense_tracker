@@ -14,12 +14,12 @@ export class LoaderComponent {
 	/**
 	 * If true loader is centered based on closest relative parent.
 	 */
-	@Input('centered') isCenteredAbsolutely = false;
+	@Input('isCentered') isCenteredAbsolutely = false;
 
 	/**
 	 * If true loader is centered based on window.
 	 */
-	@Input('fixed') isFixed = false;
+	@Input('isFixed') isFixed = false;
 
 	classes = {
 		'loader--fixed': this.isFixed,
