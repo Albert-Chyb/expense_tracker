@@ -50,6 +50,7 @@ import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { ClueComponent } from './components/clue/clue.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MainNavComponent } from './components/main-nav/main-nav.component';
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
 	declarations: [
@@ -83,6 +84,7 @@ import { MainNavComponent } from './components/main-nav/main-nav.component';
 		CheckboxComponent,
 		ClueComponent,
 		MainNavComponent,
+		LoaderComponent,
 	],
 	imports: [
 		BrowserModule,
