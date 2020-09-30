@@ -91,7 +91,7 @@
 	height: $size;
 }
 
-@mixin centerElementAbsolute($direction) {
+@mixin centerElementAbsolute($direction: '') {
 	position: absolute;
 
 	@if ($direction== 'vertically') {
