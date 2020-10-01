@@ -1,4 +1,4 @@
-<zippy-list *ngIf="periods$ | async as periods">
+<zippy-list *ngIf="periods$ | async as periods; else loader">
 	<ul *ngIf="periods.length; else noPeriodsFound">
 		<li *ngFor="let period of periods">
 			<section class="period">
@@ -76,4 +76,8 @@
 	<clue imgSrc="/assets/images/no_data_3.svg" [isFixed]="true">
 		Nie znaleziono żadnych okresów rozliczeniowych.
 	</clue>
+</ng-template>
+
+<ng-template #loader>
+	<loader [isFixed]="true"></loader>
 </ng-template>

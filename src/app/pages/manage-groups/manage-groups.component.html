@@ -1,4 +1,4 @@
-<ng-container *ngIf="groups$ | async as groups">
+<ng-container *ngIf="groups$ | async as groups; else loader">
 	<ul class="groups" *ngIf="groups.length; else noGroupsClue">
 		<li
 			class="groups__group"
@@ -26,3 +26,7 @@
 	[routerLink]="Pages.AddGroup"
 	>+</a
 >
+
+<ng-template #loader>
+	<loader [isFixed]="true"></loader>
+</ng-template>

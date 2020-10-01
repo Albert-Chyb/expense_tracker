@@ -1,4 +1,4 @@
-<section class="profile" *ngIf="data$ | async as data">
+<section class="profile" *ngIf="data$ | async as data; else loader">
 	<h2 class="profile__heading">Witaj, {{ data.user.name }} !</h2>
 	<p class="paragraph-description">{{ data.user.email }}</p>
 
@@ -66,3 +66,7 @@
 		<a [routerLink]="Pages.Periods" class="link">Okresy rozliczeniowe</a>
 	</section>
 </section>
+
+<ng-template #loader>
+	<loader [isFixed]="true"></loader>
+</ng-template>

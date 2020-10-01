@@ -1,4 +1,8 @@
-<form [formGroup]="form" class="transaction" *ngIf="data$ | async as data">
+<form
+	[formGroup]="form"
+	class="transaction"
+	*ngIf="data$ | async as data; else loader"
+>
 	<styled-input class="transaction__detail" appearance="filled">
 		<input formErrors styledInput type="number" formControlName="amount" />
 		<span styledInputSuffix>PLN</span>
@@ -83,3 +87,7 @@
 		</button>
 	</div>
 </form>
+
+<ng-template #loader>
+	<loader [isFixed]="true"></loader>
+</ng-template>
