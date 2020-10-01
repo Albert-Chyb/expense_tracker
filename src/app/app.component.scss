@@ -13,7 +13,7 @@
 	display: block;
 	width: 100%;
 	position: absolute;
-	top: calc($mainHeaderHeight + #{rem(10px)});
+	top: calc(#{$mainHeaderHeight} + #{rem(10px)});
 	left: 0px;
 
 	@supports (top: env(safe-area-inset-top)) {
@@ -21,7 +21,7 @@
 	}
 
 	// When main nav is visible
-	@media only screen and (max-device-width: $mainNavVisibilityBreakpoint) {
+	@media only screen and (max-width: $mainNavVisibilityBreakpoint) {
 		padding-bottom: calc(
 			#{$mainNavHeight} + env(safe-area-inset-bottom) + #{rem(10px)}
 		);
