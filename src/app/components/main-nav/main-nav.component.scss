@@ -3,7 +3,7 @@
 @import 'utils/mixins';
 
 .main-nav {
-	z-index: 99;
+	z-index: $globalMaxZIndex;
 	position: fixed;
 	bottom: 0px;
 	left: 0px;

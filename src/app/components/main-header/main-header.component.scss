@@ -11,7 +11,7 @@
 	position: fixed;
 	top: 0px;
 	left: 0px;
-	z-index: 99;
+	z-index: $globalMaxZIndex;
 	padding: rem(20px) $globalPadding;
 	width: 100vw;
 	height: rem(72px);
