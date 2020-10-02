@@ -9,12 +9,15 @@
 }
 
 ::ng-deep router-outlet ~ * {
-	padding: 0px rem(30px);
+	position: absolute;
 	display: block;
 	width: 100%;
-	position: absolute;
-	top: calc(#{$mainHeaderHeight} + #{rem(10px)});
 	left: 0px;
+	top: calc(#{$mainHeaderHeight} + #{rem(10px)});
+	padding : {
+		left: max(#{$globalPadding}, env(safe-area-inset-left));
+		right: max(#{$globalPadding}, env(safe-area-inset-right));
+	}
 
 	@supports (top: env(safe-area-inset-top)) {
 		top: calc(#{$mainHeaderHeight} + env(safe-area-inset-top) + #{rem(10px)});
