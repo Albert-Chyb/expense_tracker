@@ -3,47 +3,50 @@
 @import '../../sass/utils/mixins';
 
 .period {
-  background-color: var(--color-primary);
-  border-radius: rem(10px);
-  color: var(--text-on-primary);
-  padding: rem(20px) 0px;
-  margin-top: rem(20px);
+	background-color: var(--color-primary);
+	border-radius: rem(10px);
+	color: var(--text-on-primary);
+	padding: rem(20px) 0px;
 
-  &--expanded {
-    padding-top: rem(10px);
-  }
+	&:not(:first-child) {
+		margin-top: rem(20px);
+	}
 
-  &__date {
-    font-weight: 500;
-    font-size: rem(18px);
-    margin-bottom: rem(10px);
-    text-align: center;
-  }
+	&--expanded {
+		padding-top: rem(10px);
+	}
 
-  &__icon {
-    text-align: center;
-    transition: transform .2s ease-in-out;
+	&__date {
+		font-weight: 500;
+		font-size: rem(18px);
+		margin-bottom: rem(10px);
+		text-align: center;
+	}
 
-    &--expanded {
-      transform: rotate(180deg);
-    }
+	&__icon {
+		text-align: center;
+		transition: transform 0.2s ease-in-out;
 
-    &--collapsed {
-      transform: rotate(0deg);
-    }
-  }
+		&--expanded {
+			transform: rotate(180deg);
+		}
 
-  &__details {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    column-gap: rem(20px);
-    row-gap: rem(20px);
-    padding: 0px rem(20px);
-  }
+		&--collapsed {
+			transform: rotate(0deg);
+		}
+	}
 
-  @media only screen and (max-width: 425px) {
-    &__details {
-      grid-template-columns: 1fr;
-    }
-  }
+	&__details {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		column-gap: rem(20px);
+		row-gap: rem(20px);
+		padding: 0px rem(20px);
+	}
+
+	@media only screen and (max-width: 425px) {
+		&__details {
+			grid-template-columns: 1fr;
+		}
+	}
 }
