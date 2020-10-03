@@ -13,20 +13,22 @@
 	display: block;
 	width: 100%;
 	left: 0px;
-	top: calc(#{$mainHeaderHeight} + #{rem(10px)});
+	top: calc(#{$mainHeaderHeight} + #{$globalHorizontalSpace});
 	padding : {
-		left: max(#{$globalPadding}, env(safe-area-inset-left));
-		right: max(#{$globalPadding}, env(safe-area-inset-right));
+		left: max(#{$globalVerticalPadding}, env(safe-area-inset-left));
+		right: max(#{$globalVerticalPadding}, env(safe-area-inset-right));
 	}
 
 	@supports (top: env(safe-area-inset-top)) {
-		top: calc(#{$mainHeaderHeight} + env(safe-area-inset-top) + #{rem(10px)});
+		top: calc(
+			#{$mainHeaderHeight} + env(safe-area-inset-top) + #{$globalHorizontalSpace}
+		);
 	}
 
 	// When main nav is visible
 	@media only screen and (max-width: $mainNavVisibilityBreakpoint) {
 		padding-bottom: calc(
-			#{$mainNavHeight} + env(safe-area-inset-bottom) + #{rem(10px)}
+			#{$mainNavHeight} + env(safe-area-inset-bottom) + #{$globalHorizontalSpace}
 		);
 	}
 }

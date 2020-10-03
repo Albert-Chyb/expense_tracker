@@ -12,7 +12,7 @@
 	top: 0px;
 	left: 0px;
 	z-index: $globalMaxZIndex;
-	padding: rem(20px) $globalPadding;
+	padding: rem(20px) $globalVerticalPadding;
 	width: 100vw;
 	height: rem(72px);
 	margin-top: env(safe-area-inset-top);
