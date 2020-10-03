@@ -28,7 +28,7 @@
 							<li>
 								<summary-card type="small" theme="danger">
 									<span class="title">Wydatki</span>
-									<span class="amount">{{ period.outcomes }}</span>
+									<span class="amount">{{ period.outcomes | currency }}</span>
 									<span class="icon">
 										<i class="fas fa-long-arrow-alt-down"></i>
 									</span>
@@ -38,7 +38,7 @@
 							<li>
 								<summary-card type="small" theme="success">
 									<span class="title">Przychody</span>
-									<span class="amount">{{ period.incomes }}</span>
+									<span class="amount">{{ period.incomes | currency }}</span>
 									<span class="icon">
 										<i class="fas fa-long-arrow-alt-up"></i>
 									</span>
@@ -48,7 +48,7 @@
 							<summary-card type="small" theme="secondary">
 								<span class="title">Zaoszczędzono</span>
 								<span class="amount">{{
-									period.incomes - period.outcomes
+									period.incomes - period.outcomes | currency
 								}}</span>
 								<span class="icon">
 									<i class="fas fa-piggy-bank"></i>
@@ -58,7 +58,7 @@
 							<li>
 								<summary-card type="small" theme="warning">
 									<span class="title">Balans</span>
-									<span class="amount">{{ period.balance }}</span>
+									<span class="amount">{{ period.balance | currency }}</span>
 									<span class="icon">
 										<i class="fas fa-coins"></i>
 									</span>
