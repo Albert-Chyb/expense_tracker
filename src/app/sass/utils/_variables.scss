@@ -17,11 +17,20 @@ $bgColor2: lighten($bgColor0, 20%);
 $textColor0: #ececec;
 $textColor1: #a5a5a5;
 
+// Height of the mobile navbar.
 $mainNavHeight: rem(72px);
+
+// Width of the screen when mobile navbar is shown.
 $mainNavVisibilityBreakpoint: 1024px;
 
+// Height of the main header.
 $mainHeaderHeight: rem(72px);
 
+// Describes app`s left and right paddings.
 $globalVerticalPadding: rem(15px);
+
+// Describes app`s top and bottom paddings.
 $globalHorizontalSpace: rem(10px);
+
+// Header and mobile bottom navbar z-indexes.
 $globalMaxZIndex: 99;
