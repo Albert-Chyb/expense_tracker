@@ -1,23 +1,25 @@
 @function strip-unit($number) {
-  @if type-of($number)=='number'and not unitless($number) {
-    @return $number / ($number * 0 + 1);
-  }
+	@if type-of($number) == 'number' and not unitless($number) {
+		@return $number / ($number * 0 + 1);
+	}
 
-  @return $number;
+	@return $number;
 }
 
 @function rem($value, $rootFontSize: 16) {
+	$value: strip-unit($value);
 
-  $value: strip-unit($value);
-
-  @return #{$value / $rootFontSize}rem;
-
+	@return #{$value / $rootFontSize}rem;
 }
 
 @function map-deep-get($map, $keys...) {
-  @each $key in $keys {
-    $map: map-get($map, $key);
-  }
+	@each $key in $keys {
+		$map: map-get($map, $key);
+	}
 
-  @return $map;
+	@return $map;
+}
+
+@function list-has-item($list, $searchedItem) {
+	@return not not index($list, $searchedItem);
 }

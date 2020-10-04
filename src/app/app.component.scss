@@ -1,6 +1,7 @@
 @import './sass/utils/functions';
 @import './sass/utils/variables';
 @import './sass/utils/mixins';
+@import './sass/utils/mediaBreakpoints';
 
 .app {
 	max-width: rem(768px);
@@ -26,7 +27,7 @@
 	}
 
 	// When main nav is visible
-	@media only screen and (max-width: $mainNavVisibilityBreakpoint) {
+	@include respondTo('mobile-navbar-shown', 'max') {
 		padding-bottom: calc(
 			#{$mainNavHeight} + env(safe-area-inset-bottom) + #{$globalHorizontalSpace}
 		);

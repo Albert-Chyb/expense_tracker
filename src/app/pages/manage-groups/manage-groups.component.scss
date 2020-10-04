@@ -1,6 +1,7 @@
 @import '../../sass/utils/functions';
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
+@import '../../sass/utils/mediaBreakpoints';
 
 .groups {
 	&__group {
@@ -14,7 +15,7 @@
 		right: rem(30px);
 		bottom: rem(30px);
 
-		@media only screen and (max-width: $mainNavVisibilityBreakpoint) {
+		@include respondTo('mobile-navbar-shown', 'max') {
 			display: none;
 		}
 	}

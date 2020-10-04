@@ -1,6 +1,7 @@
 @import '../../sass/utils/functions';
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
+@import '../../sass/utils/mediaBreakpoints';
 
 .home {
 	&__add-transaction {
@@ -8,7 +9,7 @@
 		right: rem(30px);
 		bottom: rem(30px);
 
-		@media only screen and (max-width: $mainNavVisibilityBreakpoint) {
+		@include respondTo('mobile-navbar-shown', 'max') {
 			display: none;
 		}
 	}
@@ -39,7 +40,7 @@
 		grid-column: span 2;
 	}
 
-	@media screen and (max-width: 370px) {
+	@media only screen and (max-width: 370px) {
 		&__incomes {
 			grid-column: span 2;
 		}
@@ -49,7 +50,7 @@
 		}
 	}
 
-	@media screen and (min-width: 768px) {
+	@include respondTo('tablet', 'min') {
 		grid-template-columns: repeat(3, 1fr);
 
 		&__balance {

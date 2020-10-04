@@ -1,0 +1,24 @@
+$breakpoints: (
+	'mobile-s': 320,
+	'mobile-m': 375,
+	'mobile-l': 425,
+	'tablet': 768,
+	'laptop': 1024,
+	'laptop-l': 1440,
+	'mobile-navbar-shown': $mainNavVisibilityBreakpoint,
+);
+$approaches: 'max', 'min', 'min-device', 'max-device';
+
+@mixin respondTo($breakpoint, $approach) {
+	@if (not map-has-key($breakpoints, $breakpoint)) {
+		@error 'No breakpoints with given name ! Available: #{ map-keys($breakpoints) }';
+	}
+
+	@if (not list-has-item($approaches, $approach)) {
+		@error 'No approach with given name ! Available: #{ $approaches }';
+	}
+
+	@media only screen and (#{ $approach }-width: map-get($breakpoints, $breakpoint)) {
+		@content;
+	}
+}

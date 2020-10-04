@@ -1,6 +1,7 @@
 @import '../../sass/utils/functions';
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
+@import '../../sass/utils/mediaBreakpoints';
 
 .period {
 	background-color: var(--color-primary);
@@ -44,7 +45,7 @@
 		padding: 0px rem(20px);
 	}
 
-	@media only screen and (max-width: 425px) {
+	@include respondTo('mobile-l', 'max') {
 		&__details {
 			grid-template-columns: 1fr;
 		}
