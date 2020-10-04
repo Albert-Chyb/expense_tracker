@@ -23,7 +23,7 @@ export class AuthService {
 
 	async loginWithGoogle() {
 		const provider = new auth.GoogleAuthProvider();
-		const credentials = await this._afAuth.auth.signInWithPopup(provider);
+		const credentials = await this._afAuth.signInWithPopup(provider);
 		this._onLogin$.next(credentials.user);
 		return credentials;
 	}
@@ -33,7 +33,7 @@ export class AuthService {
 	 */
 
 	async logout(): Promise<void> {
-		await this._afAuth.auth.signOut();
+		await this._afAuth.signOut();
 		this._onLogout$.next(null);
 	}
 

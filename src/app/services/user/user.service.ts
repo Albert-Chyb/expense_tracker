@@ -29,6 +29,7 @@ export class UserService {
 	}
 
 	private _user$: Observable<IUser>;
+	private _uid: string;
 	private readonly _hasCreatedData = new BehaviorSubject(null);
 
 	/**
@@ -57,7 +58,7 @@ export class UserService {
 	async createData(data: ICompletingData): Promise<void> {
 		const userRef = this._afStore.doc(`users/${this.id}`);
 		const period = Period.buildOpened();
-		const { currentUser } = this._afAuth.auth;
+		const currentUser = await this._afAuth.currentUser;
 		const userPromise = userRef.set(
 			CompletingData.buildUser(currentUser, data)
 		);
@@ -80,9 +81,7 @@ export class UserService {
 	 */
 
 	get id(): string {
-		return this._afAuth.auth.currentUser
-			? this._afAuth.auth.currentUser.uid
-			: '';
+		return this._uid || '';
 	}
 
 	/**
@@ -108,8 +107,9 @@ export class UserService {
 		return this._afAuth.authState.pipe(map(user => !!user));
 	}
 
-	private get userData() {
-		return AppUser.buildFromFirebaseUser(this._afAuth.auth.currentUser);
+	private async getUserData() {
+		const currentUser = await this._afAuth.currentUser;
+		return AppUser.buildFromFirebaseUser(currentUser);
 	}
 
 	/**
@@ -119,6 +119,10 @@ export class UserService {
 	private init(): void {
 		// Set up user observable with data from database.
 		this._user$ = this._afAuth.authState.pipe(
+			tap(user => {
+				if (user) this._uid = user.uid;
+				else this._uid = '';
+			}),
 			switchMap(this.getUserFromDatabase.bind(this))
 		);
 
@@ -151,7 +155,7 @@ export class UserService {
 
 	private async updateUserCredentials(user: User): Promise<void> {
 		if (!user || !(await this.hasCreatedData)) return null;
-		this.update(this.userData);
+		this.update(await this.getUserData());
 	}
 
 	/**
