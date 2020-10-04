@@ -1,15 +1,15 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { map, tap, delay } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import groupBy from 'src/app/common/helpers/groupBy';
 import isToday from 'src/app/common/helpers/isToday';
+import { Pages } from 'src/app/common/routing/routesUrls';
 
 import { FirestoreTimestamp } from './../../common/models/firestoreTimestamp';
 import { ITransaction } from './../../common/models/transaction';
 import { IUser } from './../../common/models/user';
 import { TransactionsService } from './../../services/transactions/transactions.service';
 import { UserService } from './../../services/user/user.service';
-import { Pages } from 'src/app/common/routing/routesUrls';
 
 @Component({
 	templateUrl: './home.component.html',

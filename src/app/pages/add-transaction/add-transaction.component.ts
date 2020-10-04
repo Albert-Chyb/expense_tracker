@@ -1,15 +1,15 @@
-import { Pages } from './../../common/routing/routesUrls';
-import { map } from 'rxjs/internal/operators/map';
-import { PeriodsService } from './../../services/periods/periods.service';
-import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, combineLatest, pipe } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/internal/operators/map';
 import { blackListValidator } from 'src/app/common/validators/blackListValidator';
 import { isNotANumberValidator } from 'src/app/common/validators/isNotANumberValidator';
 
 import { ITransactionGroup } from './../../common/models/group';
+import { IOpenedPeriod } from './../../common/models/period';
+import { Pages } from './../../common/routing/routesUrls';
+import { PeriodsService } from './../../services/periods/periods.service';
 import { TransactionsGroupsService } from './../../services/transactions-groups/transactions-groups.service';
 import { TransactionsService } from './../../services/transactions/transactions.service';
 

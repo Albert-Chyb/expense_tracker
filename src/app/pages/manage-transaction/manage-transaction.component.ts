@@ -1,7 +1,4 @@
-import { Pages } from './../../common/routing/routesUrls';
-import { PeriodsService } from './../../services/periods/periods.service';
-import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
@@ -12,6 +9,10 @@ import { blackListValidator } from 'src/app/common/validators/blackListValidator
 import { isNotANumberValidator } from 'src/app/common/validators/isNotANumberValidator';
 import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
 import { TransactionsService } from 'src/app/services/transactions/transactions.service';
+
+import { IOpenedPeriod } from './../../common/models/period';
+import { Pages } from './../../common/routing/routesUrls';
+import { PeriodsService } from './../../services/periods/periods.service';
 
 @Component({
 	templateUrl: './manage-transaction.component.html',

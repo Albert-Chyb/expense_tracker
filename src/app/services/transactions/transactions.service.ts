@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { filter, first, map, switchMap } from 'rxjs/operators';
+import { first, switchMap } from 'rxjs/operators';
 
 import { ITransaction } from './../../common/models/transaction';
 import { PeriodsService } from './../periods/periods.service';

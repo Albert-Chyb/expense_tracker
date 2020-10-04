@@ -1,16 +1,15 @@
-import { Themes } from './common/models/themes';
-import { ThemesService } from './services/themes/themes.service';
 import { registerLocaleData } from '@angular/common';
 import localePL from '@angular/common/locales/pl';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { SwUpdate } from '@angular/service-worker';
 import { functions } from 'firebase';
 import { environment } from 'src/environments/environment';
 
 import { routeAnimation } from './animations';
 import { FormErrorsService } from './services/form-errors/form-errors.service';
+import { ThemesService } from './services/themes/themes.service';
 import { UserService } from './services/user/user.service';
-import { SwUpdate } from '@angular/service-worker';
 
 @Component({
 	selector: 'app-root',

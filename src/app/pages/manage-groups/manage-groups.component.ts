@@ -1,18 +1,17 @@
-import { Router } from '@angular/router';
-import { NavbarLink } from './../../common/models/navbarButton';
-import { MainNavService } from './../../services/main-nav/main-nav.service';
-import { Pages } from 'src/app/common/routing/routesUrls';
 import {
-	Component,
-	OnInit,
 	ChangeDetectionStrategy,
+	Component,
 	OnDestroy,
+	OnInit,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { groupAnimation } from 'src/app/animations';
+import { Pages } from 'src/app/common/routing/routesUrls';
 import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
 
 import { ITransactionGroup } from './../../common/models/group';
+import { NavbarLink } from './../../common/models/navbarButton';
+import { MainNavService } from './../../services/main-nav/main-nav.service';
 
 @Component({
 	templateUrl: './manage-groups.component.html',

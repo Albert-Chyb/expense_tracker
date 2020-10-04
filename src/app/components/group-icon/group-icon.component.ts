@@ -1,10 +1,6 @@
+import { Component, Input, OnInit } from '@angular/core';
+
 import { ITransactionGroupIcon } from './../../common/models/group';
-import {
-	Component,
-	OnInit,
-	Input,
-	ChangeDetectionStrategy,
-} from '@angular/core';
 
 type GroupIconType = 'income' | 'outcome' | 'neutral';
 

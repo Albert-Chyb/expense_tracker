@@ -1,14 +1,15 @@
-import { map, tap } from 'rxjs/operators';
-import { UserService } from './../../services/user/user.service';
 import { Injectable } from '@angular/core';
 import {
-	CanActivate,
 	ActivatedRouteSnapshot,
+	CanActivate,
+	Router,
 	RouterStateSnapshot,
 	UrlTree,
-	Router,
 } from '@angular/router';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+import { UserService } from './../../services/user/user.service';
 
 /**
  * Gives access only to authenticates users.

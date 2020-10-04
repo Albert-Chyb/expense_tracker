@@ -1,18 +1,17 @@
-import { MainNavService } from './../../services/main-nav/main-nav.service';
-import { NavbarLink } from './../../common/models/navbarButton';
-import { first } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { UserService } from './../../services/user/user.service';
-import { Pages } from './../../common/routing/routesUrls';
 import {
 	AfterViewInit,
 	Component,
 	ElementRef,
-	ViewChild,
+	OnInit,
 	Renderer2,
 	RendererStyleFlags2,
-	OnInit,
+	ViewChild,
 } from '@angular/core';
+
+import { NavbarLink } from './../../common/models/navbarButton';
+import { Pages } from './../../common/routing/routesUrls';
+import { MainNavService } from './../../services/main-nav/main-nav.service';
+import { UserService } from './../../services/user/user.service';
 
 @Component({
 	selector: 'main-nav',
