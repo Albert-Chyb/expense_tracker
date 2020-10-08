@@ -21,7 +21,7 @@ class EmptyComponent1 {}
 @Component({ template: '' })
 class EmptyComponent2 {}
 
-fdescribe('MainHeaderComponent', () => {
+describe('MainHeaderComponent', () => {
 	let component: MainHeaderComponent;
 	let fixture: ComponentFixture<MainHeaderComponent>;
 
