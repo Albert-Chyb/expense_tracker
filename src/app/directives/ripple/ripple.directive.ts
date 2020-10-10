@@ -25,6 +25,7 @@ export class RippleDirective implements OnInit {
 
 	@HostListener('mousedown', ['$event']) positionRipple($event: MouseEvent) {
 		if (this.isRippling) return null;
+		this.isRippling = true;
 		const { offsetX, offsetY } = $event;
 		const { nativeElement } = this._host;
 		const { width, height } = this._host.nativeElement.getBoundingClientRect();
