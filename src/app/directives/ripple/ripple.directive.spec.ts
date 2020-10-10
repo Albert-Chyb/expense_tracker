@@ -9,7 +9,7 @@ import { waitPromise } from '../../common/helpers/waitPromise';
 })
 class TestComponent {}
 
-fdescribe('RippleDirective', () => {
+describe('RippleDirective', () => {
 	let component: TestComponent;
 	let fixture: ComponentFixture<TestComponent>;
 	let directive: RippleDirective;
