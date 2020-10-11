@@ -13,7 +13,7 @@ import {
 
 import { ManageGroupsComponent } from './manage-groups.component';
 
-fdescribe('ManageGroupsComponent', () => {
+describe('ManageGroupsComponent', () => {
 	let component: ManageGroupsComponent;
 	let fixture: ComponentFixture<ManageGroupsComponent>;
 
