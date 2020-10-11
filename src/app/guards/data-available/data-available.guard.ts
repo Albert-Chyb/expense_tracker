@@ -1,3 +1,4 @@
+import { Pages } from './../../common/routing/routesUrls';
 import { tap } from 'rxjs/operators';
 import { UserService } from './../../services/user/user.service';
 import { Injectable } from '@angular/core';
@@ -33,7 +34,7 @@ export class DataAvailableGuard implements CanActivate {
 		| UrlTree {
 		return this._user.hasCreatedData$.pipe(
 			tap(hasCreated => {
-				if (!hasCreated) this._router.navigateByUrl('/setup-account');
+				if (!hasCreated) this._router.navigateByUrl(Pages.SetupAccount);
 			})
 		);
 	}
