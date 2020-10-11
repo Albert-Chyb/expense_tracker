@@ -1,3 +1,4 @@
+import { Pages } from './../../common/routing/routesUrls';
 import { map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import {
@@ -33,7 +34,7 @@ export class DataUnavailableGuard implements CanActivate {
 		| UrlTree {
 		return this._user.hasCreatedData$.pipe(
 			tap(hasCreated => {
-				if (hasCreated) this._router.navigateByUrl('/');
+				if (hasCreated) this._router.navigateByUrl(Pages.Home);
 			}),
 			map(hasCreated => !hasCreated)
 		);
