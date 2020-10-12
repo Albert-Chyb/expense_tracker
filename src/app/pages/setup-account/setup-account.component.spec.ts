@@ -1,3 +1,9 @@
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { CheckboxComponent } from './../../components/checkbox/checkbox.component';
+import { FormErrorsDirective } from './../../directives/form-errors/form-errors.directive';
+import { StyledInputComponent } from './../../components/styled-input/styled-input.component';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Pages } from './../../common/routing/routesUrls';
 import { UserService } from './../../services/user/user.service';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -12,6 +18,10 @@ import {
 
 import { SetupAccountComponent } from './setup-account.component';
 import { Router } from '@angular/router';
+import { FormErrorsComponent } from 'src/app/components/form-errors/form-errors.component';
+import { ZippyContentComponent } from 'src/app/components/zippy-components/zippy-content/zippy-content.component';
+import { ZippyStaticComponent } from 'src/app/components/zippy-components/zippy-static/zippy-static.component';
+import { ZippyComponent } from 'src/app/components/zippy-components/zippy/zippy.component';
 
 describe('SetupAccountComponent', () => {
 	let component: SetupAccountComponent;
@@ -19,10 +29,22 @@ describe('SetupAccountComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [SetupAccountComponent],
+			declarations: [
+				SetupAccountComponent,
+				StyledInputComponent,
+				FormErrorsComponent,
+				FormErrorsDirective,
+				ZippyComponent,
+				ZippyStaticComponent,
+				ZippyContentComponent,
+				CheckboxComponent,
+			],
 			imports: [
 				AngularFireModule.initializeApp(environment.firebase),
 				RouterTestingModule,
+				ReactiveFormsModule,
+				MatFormFieldModule,
+				MatSelectModule,
 			],
 		}).compileComponents();
 	}));

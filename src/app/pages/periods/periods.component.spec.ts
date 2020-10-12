@@ -1,3 +1,10 @@
+import { SummaryCardComponent } from './../../components/summary-card/summary-card.component';
+import { LoaderComponent } from './../../components/loader/loader.component';
+import { ClueComponent } from './../../components/clue/clue.component';
+import { ZippyContentComponent } from './../../components/zippy-components/zippy-content/zippy-content.component';
+import { ZippyStaticComponent } from './../../components/zippy-components/zippy-static/zippy-static.component';
+import { ZippyListComponent } from './../../components/zippy-components/zippy-list/zippy-list.component';
+import { ZippyComponent } from './../../components/zippy-components/zippy/zippy.component';
 import { UserService } from './../../services/user/user.service';
 import { environment } from './../../../environments/environment';
 import { AngularFireModule } from '@angular/fire';
@@ -11,7 +18,16 @@ describe('PeriodsComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [PeriodsComponent],
+			declarations: [
+				PeriodsComponent,
+				ZippyComponent,
+				ZippyListComponent,
+				ZippyStaticComponent,
+				ZippyContentComponent,
+				ClueComponent,
+				LoaderComponent,
+				SummaryCardComponent,
+			],
 			imports: [AngularFireModule.initializeApp(environment.firebase)],
 		}).compileComponents();
 	}));

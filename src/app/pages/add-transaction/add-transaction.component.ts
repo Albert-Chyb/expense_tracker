@@ -49,7 +49,6 @@ export class AddTransactionComponent implements OnInit {
 	ngOnInit() {
 		const groups$ = this._groups.getAll();
 		const period$ = this._periods.getCurrent();
-
 		this.data$ = combineLatest([groups$, period$]).pipe(
 			map(([groups, period]) => ({ groups, period }))
 		);

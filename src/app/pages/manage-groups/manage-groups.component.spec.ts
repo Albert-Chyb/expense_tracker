@@ -1,3 +1,6 @@
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TransactionGroupComponent } from './../../components/transaction-group/transaction-group.component';
+import { ClueComponent } from './../../components/clue/clue.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LoaderComponent } from './../../components/loader/loader.component';
 import { UserService } from './../../services/user/user.service';
@@ -19,10 +22,16 @@ describe('ManageGroupsComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [ManageGroupsComponent, LoaderComponent],
+			declarations: [
+				ManageGroupsComponent,
+				LoaderComponent,
+				ClueComponent,
+				TransactionGroupComponent,
+			],
 			imports: [
 				AngularFireModule.initializeApp(environment.firebase),
 				RouterTestingModule,
+				BrowserAnimationsModule,
 			],
 		}).compileComponents();
 	}));
