@@ -1,3 +1,4 @@
+import { ErrorsMessages } from './../../common/errors/errorsMessages';
 import {
 	ChangeDetectionStrategy,
 	Component,
@@ -55,19 +56,15 @@ export class LoginComponent implements OnDestroy, OnInit {
 	private handleError(error: FirebaseError) {
 		switch (error.code) {
 			case 'auth/popup-closed-by-user':
-				this._errors.notifyUser('Za wcześnie zamknięto okno logowania');
+				this._errors.notifyUser(ErrorsMessages.PopupClosedByUser);
 				break;
 
 			case 'auth/popup-blocked':
-				this._errors.notifyUser(
-					'Okno logowania zostało zablokowane przez przeklądarkę.'
-				);
+				this._errors.notifyUser(ErrorsMessages.PopupBlocked);
 				break;
 
 			case 'auth/cancelled-popup-request':
-				this._errors.notifyUser(
-					'Anulowano działanie okna logowania. Tylko jedno okno może być aktywne w tym samym czasie.'
-				);
+				this._errors.notifyUser(ErrorsMessages.CancelledPopupRequest);
 				break;
 
 			default:
