@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { periodsServiceTestProvider } from './../../common/test-stubs/periods.service-stub';
+import { userServiceTestProvider } from './../../common/test-stubs/user.service-stub';
+import { of } from 'rxjs';
+import { Component, Injectable } from '@angular/core';
 import {
 	async,
 	ComponentFixture,
@@ -36,11 +39,11 @@ describe('ProfileComponent', () => {
 					},
 				]),
 			],
+			providers: [userServiceTestProvider, periodsServiceTestProvider],
 		}).compileComponents();
 	}));
 
 	beforeEach(() => {
-		spyOnProperty(TestBed.inject(UserService), 'id').and.returnValue('id');
 		fixture = TestBed.createComponent(ProfileComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

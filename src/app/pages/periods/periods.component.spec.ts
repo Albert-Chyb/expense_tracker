@@ -1,3 +1,5 @@
+import { RouterTestingModule } from '@angular/router/testing';
+import { periodsServiceTestProvider } from './../../common/test-stubs/periods.service-stub';
 import { SummaryCardComponent } from './../../components/summary-card/summary-card.component';
 import { LoaderComponent } from './../../components/loader/loader.component';
 import { ClueComponent } from './../../components/clue/clue.component';
@@ -28,7 +30,11 @@ describe('PeriodsComponent', () => {
 				LoaderComponent,
 				SummaryCardComponent,
 			],
-			imports: [AngularFireModule.initializeApp(environment.firebase)],
+			imports: [
+				AngularFireModule.initializeApp(environment.firebase),
+				RouterTestingModule,
+			],
+			providers: [periodsServiceTestProvider],
 		}).compileComponents();
 	}));
 

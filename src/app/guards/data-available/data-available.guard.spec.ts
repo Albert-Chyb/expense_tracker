@@ -1,3 +1,4 @@
+import { userServiceTestProvider } from './../../common/test-stubs/user.service-stub';
 import { Pages } from './../../common/routing/routesUrls';
 import { of, Observable } from 'rxjs';
 import { UserService } from './../../services/user/user.service';
@@ -16,7 +17,7 @@ class TestComponent {}
 describe('DataAvailableGuard', () => {
 	beforeEach(() => {
 		TestBed.configureTestingModule({
-			providers: [DataAvailableGuard],
+			providers: [DataAvailableGuard, userServiceTestProvider],
 			imports: [
 				AngularFireModule.initializeApp(environment.firebase),
 				RouterTestingModule.withRoutes([

@@ -3,7 +3,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { CheckboxComponent } from './../../components/checkbox/checkbox.component';
 import { FormErrorsDirective } from './../../directives/form-errors/form-errors.directive';
 import { StyledInputComponent } from './../../components/styled-input/styled-input.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Pages } from './../../common/routing/routesUrls';
 import { UserService } from './../../services/user/user.service';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -22,6 +22,7 @@ import { FormErrorsComponent } from 'src/app/components/form-errors/form-errors.
 import { ZippyContentComponent } from 'src/app/components/zippy-components/zippy-content/zippy-content.component';
 import { ZippyStaticComponent } from 'src/app/components/zippy-components/zippy-static/zippy-static.component';
 import { ZippyComponent } from 'src/app/components/zippy-components/zippy/zippy.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('SetupAccountComponent', () => {
 	let component: SetupAccountComponent;
@@ -43,8 +44,10 @@ describe('SetupAccountComponent', () => {
 				AngularFireModule.initializeApp(environment.firebase),
 				RouterTestingModule,
 				ReactiveFormsModule,
+				FormsModule,
 				MatFormFieldModule,
 				MatSelectModule,
+				NoopAnimationsModule,
 			],
 		}).compileComponents();
 	}));

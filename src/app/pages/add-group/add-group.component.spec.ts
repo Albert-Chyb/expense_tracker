@@ -1,3 +1,4 @@
+import { GroupIconComponent } from './../../components/group-icon/group-icon.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormErrorsDirective } from './../../directives/form-errors/form-errors.directive';
 import { TransactionCardComponent } from './../../components/transaction-card/transaction-card.component';
@@ -22,6 +23,7 @@ describe('AddGroupComponent', () => {
 				FormErrorsComponent,
 				TransactionCardComponent,
 				FormErrorsDirective,
+				GroupIconComponent,
 			],
 			imports: [
 				AngularFireModule.initializeApp(environment.firebase),

@@ -1,11 +1,13 @@
-import { MainNavComponent } from './components/main-nav/main-nav.component';
-import { MainHeaderComponent } from './components/main-header/main-header.component';
+import { async, TestBed } from '@angular/core/testing';
+import { AngularFireModule } from '@angular/fire';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
-import { AngularFireModule } from '@angular/fire';
-import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+
 import { AppComponent } from './app.component';
+import { userServiceTestProvider } from './common/test-stubs/user.service-stub';
+import { MainHeaderComponent } from './components/main-header/main-header.component';
+import { MainNavComponent } from './components/main-nav/main-nav.component';
 
 describe('AppComponent', () => {
 	beforeEach(async(() => {
@@ -18,6 +20,7 @@ describe('AppComponent', () => {
 				}),
 			],
 			declarations: [AppComponent, MainHeaderComponent, MainNavComponent],
+			providers: [userServiceTestProvider],
 		}).compileComponents();
 	}));
 

@@ -1,25 +1,27 @@
-import { first } from 'rxjs/operators';
-import { environment } from './../../../environments/environment';
-import { AngularFireModule } from '@angular/fire';
-import { RouterTestingModule } from '@angular/router/testing';
+import { UserService } from './../../services/user/user.service';
+import { of } from 'rxjs';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import {
-	async,
-	ComponentFixture,
-	fakeAsync,
-	TestBed,
-	tick,
-} from '@angular/core/testing';
-
-import { MainHeaderComponent } from './main-header.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AngularFireModule } from '@angular/fire';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { environment } from './../../../environments/environment';
+import { MainHeaderComponent } from './main-header.component';
 
 @Component({ template: '' })
 class EmptyComponent1 {}
 
 @Component({ template: '' })
 class EmptyComponent2 {}
+
+class UserServiceStub {
+	isLoggedIn$ = of(true);
+	user$ = of({
+		avatar: 'aaa',
+	});
+}
 
 describe('MainHeaderComponent', () => {
 	let component: MainHeaderComponent;
@@ -46,6 +48,12 @@ describe('MainHeaderComponent', () => {
 						},
 					},
 				]),
+			],
+			providers: [
+				{
+					provide: UserService,
+					useClass: UserServiceStub,
+				},
 			],
 		})
 			.overrideComponent(MainHeaderComponent, {

@@ -16,6 +16,7 @@ export class StyledInputComponent implements AfterContentInit {
 	ngAfterContentInit() {}
 
 	get classes() {
+		if (!this.input) return null;
 		return {
 			'styled-input--invalid': this.input.control.invalid,
 			'styled-input--valid': this.input.control.valid,

@@ -1,3 +1,5 @@
+import { RouterTestingModule } from '@angular/router/testing';
+import { userServiceTestProvider } from './../../common/test-stubs/user.service-stub';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ZippyContentComponent } from './../../components/zippy-components/zippy-content/zippy-content.component';
@@ -8,7 +10,7 @@ import {
 	TestBed,
 } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from 'src/app/services/user/user.service';
 import { environment } from 'src/environments/environment';
 
@@ -17,6 +19,7 @@ import { ZippyStaticComponent } from './../../components/zippy-components/zippy-
 import { ZippyComponent } from './../../components/zippy-components/zippy/zippy.component';
 import { ThemesService } from './../../services/themes/themes.service';
 import { AppSettingsComponent } from './app-settings.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AppSettingsComponent', () => {
 	let component: AppSettingsComponent;
@@ -36,7 +39,11 @@ describe('AppSettingsComponent', () => {
 				ReactiveFormsModule,
 				MatFormFieldModule,
 				MatSelectModule,
+				FormsModule,
+				NoopAnimationsModule,
+				RouterTestingModule,
 			],
+			providers: [userServiceTestProvider],
 		}).compileComponents();
 	}));
 

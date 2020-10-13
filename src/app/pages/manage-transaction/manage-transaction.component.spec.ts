@@ -1,3 +1,5 @@
+import { periodsServiceTestProvider } from './../../common/test-stubs/periods.service-stub';
+import { transactionsGroupsServiceTestProvider } from './../../common/test-stubs/transactions-groups.service-stub';
 import { UserService } from 'src/app/services/user/user.service';
 import { LoaderComponent } from './../../components/loader/loader.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -34,6 +36,11 @@ describe('ManageTransactionComponent', () => {
 				MatFormFieldModule,
 				MatSelectModule,
 				MatDatepickerModule,
+			],
+			providers: [
+				transactionsGroupsServiceTestProvider,
+				transactionsGroupsServiceTestProvider,
+				periodsServiceTestProvider,
 			],
 		}).compileComponents();
 	}));

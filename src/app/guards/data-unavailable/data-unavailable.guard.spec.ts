@@ -1,3 +1,4 @@
+import { userServiceTestProvider } from './../../common/test-stubs/user.service-stub';
 import { Component } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
@@ -16,7 +17,7 @@ class TestComponent {}
 describe('DataUnavailableGuard', () => {
 	beforeEach(() => {
 		TestBed.configureTestingModule({
-			providers: [DataUnavailableGuard],
+			providers: [DataUnavailableGuard, userServiceTestProvider],
 			imports: [
 				AngularFireModule.initializeApp(environment.firebase),
 				RouterTestingModule.withRoutes([

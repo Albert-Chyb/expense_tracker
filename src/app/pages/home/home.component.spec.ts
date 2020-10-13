@@ -1,12 +1,14 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AngularFireModule } from '@angular/fire';
+import { RouterTestingModule } from '@angular/router/testing';
+import { environment } from 'src/environments/environment';
+
+import { transactionsGroupsServiceTestProvider } from './../../common/test-stubs/transactions-groups.service-stub';
+import { userServiceTestProvider } from './../../common/test-stubs/user.service-stub';
 import { ClueComponent } from './../../components/clue/clue.component';
 import { LoaderComponent } from './../../components/loader/loader.component';
-import { TransactionCardComponent } from './../../components/transaction-card/transaction-card.component';
 import { SummaryCardComponent } from './../../components/summary-card/summary-card.component';
-import { UserService } from 'src/app/services/user/user.service';
-import { environment } from 'src/environments/environment';
-import { AngularFireModule } from '@angular/fire';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TransactionCardComponent } from './../../components/transaction-card/transaction-card.component';
 import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
@@ -22,12 +24,18 @@ describe('HomeComponent', () => {
 				LoaderComponent,
 				ClueComponent,
 			],
-			imports: [AngularFireModule.initializeApp(environment.firebase)],
+			imports: [
+				AngularFireModule.initializeApp(environment.firebase),
+				RouterTestingModule,
+			],
+			providers: [
+				transactionsGroupsServiceTestProvider,
+				userServiceTestProvider,
+			],
 		}).compileComponents();
 	}));
 
 	beforeEach(() => {
-		spyOnProperty(TestBed.inject(UserService), 'id').and.returnValue('id');
 		fixture = TestBed.createComponent(HomeComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
