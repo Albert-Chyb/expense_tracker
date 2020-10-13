@@ -7,7 +7,7 @@ export class TransactionsServiceStub {
 	}
 
 	get(id) {
-		return of({});
+		return of(undefined);
 	}
 
 	add() {

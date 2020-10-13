@@ -1,3 +1,4 @@
+import { transactionsServiceTestProvider } from './../../common/test-stubs/transactions.service-stub';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -28,10 +29,7 @@ describe('HomeComponent', () => {
 				AngularFireModule.initializeApp(environment.firebase),
 				RouterTestingModule,
 			],
-			providers: [
-				transactionsGroupsServiceTestProvider,
-				userServiceTestProvider,
-			],
+			providers: [transactionsServiceTestProvider, userServiceTestProvider],
 		}).compileComponents();
 	}));
 

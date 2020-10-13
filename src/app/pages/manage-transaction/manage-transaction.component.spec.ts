@@ -1,3 +1,6 @@
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { transactionsServiceTestProvider } from './../../common/test-stubs/transactions.service-stub';
 import { periodsServiceTestProvider } from './../../common/test-stubs/periods.service-stub';
 import { transactionsGroupsServiceTestProvider } from './../../common/test-stubs/transactions-groups.service-stub';
 import { UserService } from 'src/app/services/user/user.service';
@@ -15,6 +18,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ManageTransactionComponent } from './manage-transaction.component';
 import { FormErrorsComponent } from 'src/app/components/form-errors/form-errors.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ManageTransactionComponent', () => {
 	let component: ManageTransactionComponent;
@@ -36,11 +40,15 @@ describe('ManageTransactionComponent', () => {
 				MatFormFieldModule,
 				MatSelectModule,
 				MatDatepickerModule,
+				MatInputModule,
+				MatNativeDateModule,
+				NoopAnimationsModule,
 			],
 			providers: [
 				transactionsGroupsServiceTestProvider,
-				transactionsGroupsServiceTestProvider,
+				transactionsServiceTestProvider,
 				periodsServiceTestProvider,
+				MatDatepickerModule,
 			],
 		}).compileComponents();
 	}));
