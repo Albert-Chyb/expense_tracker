@@ -1,7 +1,8 @@
-import { DeviceTheme } from '../../common/models/device';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { fromEvent, merge, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { DeviceTheme } from '../../common/models/device';
 
 @Injectable({
 	providedIn: 'root',
@@ -11,6 +12,10 @@ export class DeviceService {
 		this.listenForThemeChanges();
 	}
 	private readonly _theme$: Subject<MediaQueryListEvent> = new Subject();
+	private readonly _connectionStatus$ = merge(
+		fromEvent(window, 'online'),
+		fromEvent(window, 'offline')
+	);
 
 	/**
 	 * Returns device's current theme.
@@ -33,8 +38,26 @@ export class DeviceService {
 	/**
 	 * Checks if app is installed on device as PWA.
 	 */
-	get isInstalledOnDevice() {
+	get isInstalledOnDevice(): boolean {
 		return matchMedia('(display-mode: standalone)').matches;
+	}
+
+	/**
+	 * Checks if device is connected to the web.
+	 *
+	 * @returns true for online and false for offline
+	 */
+	get connectionStatus(): boolean {
+		return navigator.onLine;
+	}
+
+	/**
+	 * Allows listening for connection changes.
+	 *
+	 * @returns true for online and false for offline
+	 */
+	get connectionStatus$(): Observable<boolean> {
+		return this._connectionStatus$.pipe(map(() => navigator.onLine));
 	}
 
 	private listenForThemeChanges(): void {
