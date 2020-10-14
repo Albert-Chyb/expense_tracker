@@ -43,4 +43,19 @@ describe('HomeComponent', () => {
 	it('should create', () => {
 		expect(component).toBeTruthy();
 	});
+
+	describe('calculateStatistics', () => {
+		it('should calculate statistics', () => {
+			const fakeTransactions = [
+				{ amount: 30 },
+				{ amount: -17 },
+				{ amount: -3 },
+			] as any[];
+
+			component['calculateStatistics'](fakeTransactions);
+
+			expect(component.incomes).toEqual(30);
+			expect(component.outcomes).toEqual(20);
+		});
+	});
 });
