@@ -14,9 +14,14 @@
 	z-index: $globalMaxZIndex;
 	padding: rem(20px) $globalVerticalPadding;
 	width: 100vw;
-	height: rem(72px);
+	height: $mainHeaderHeight;
 	margin-top: env(safe-area-inset-top);
 	color: var(--text-color-0);
+
+	&--offline {
+		background-color: var(--color-danger);
+		color: var(--text-on-danger);
+	}
 
 	&__user-avatar {
 		@include square(rem(30px));
@@ -38,11 +43,36 @@
 		font-size: inherit;
 		margin-left: rem(20px);
 		margin-bottom: 0px;
+
+		&--offline {
+			display: none;
+		}
 	}
 
 	@media screen and (max-width: 425px) {
 		&__heading {
 			font-size: rem(18px);
 		}
+	}
+}
+
+.offline-info {
+	display: fixed;
+	position: absolute;
+	top: $mainHeaderHeight;
+	z-index: $globalMaxZIndex;
+	background-color: var(--color-danger);
+	color: var(--text-on-danger);
+	width: 100%;
+	display: flex;
+	place-content: center;
+	padding: rem(10px);
+
+	i[class^='fa'] {
+		padding-right: rem(10px);
+	}
+
+	&__message {
+		margin: 0px;
 	}
 }

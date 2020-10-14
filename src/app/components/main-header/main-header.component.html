@@ -15,3 +15,8 @@
 		<i *ngIf="!user.avatar" class="fas fa-user-circle"></i>
 	</a>
 </header>
+
+<section class="offline-info" *ngIf="!isOnline" @offlineInfoAnimation>
+	<i class="fas fa-exclamation-circle"></i>
+	<p class="offline-info__message">Brak połączenia z siecią !</p>
+</section>
