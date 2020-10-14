@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { environment } from './../../../environments/environment';
-import { transactionsGroupsServiceTestProvider } from './../../common/test-stubs/transactions-groups.service-stub';
+import { TestingProviders } from './../../common/test-stubs/testing-providers';
 import { ClueComponent } from './../../components/clue/clue.component';
 import { LoaderComponent } from './../../components/loader/loader.component';
 import { TransactionGroupComponent } from './../../components/transaction-group/transaction-group.component';
@@ -34,7 +34,7 @@ describe('ManageGroupsComponent', () => {
 				RouterTestingModule,
 				BrowserAnimationsModule,
 			],
-			providers: [transactionsGroupsServiceTestProvider],
+			providers: [TestingProviders.TransactionsGroupsService],
 		}).compileComponents();
 	}));
 

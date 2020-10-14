@@ -1,3 +1,4 @@
+import { TestingProviders } from './../../common/test-stubs/testing-providers';
 import { periodsServiceTestProvider } from './../../common/test-stubs/periods.service-stub';
 import { userServiceTestProvider } from './../../common/test-stubs/user.service-stub';
 import { of } from 'rxjs';
@@ -39,7 +40,10 @@ describe('ProfileComponent', () => {
 					},
 				]),
 			],
-			providers: [userServiceTestProvider, periodsServiceTestProvider],
+			providers: [
+				TestingProviders.UserService,
+				TestingProviders.PeriodsService,
+			],
 		}).compileComponents();
 	}));
 

@@ -20,8 +20,7 @@ import { TransactionsService } from 'src/app/services/transactions/transactions.
 import { UserService } from 'src/app/services/user/user.service';
 import { environment } from 'src/environments/environment';
 
-import { periodsServiceTestProvider } from './../../common/test-stubs/periods.service-stub';
-import { transactionsGroupsServiceTestProvider } from './../../common/test-stubs/transactions-groups.service-stub';
+import { TestingProviders } from './../../common/test-stubs/testing-providers';
 import { LoaderComponent } from './../../components/loader/loader.component';
 import { StyledInputComponent } from './../../components/styled-input/styled-input.component';
 import { FormErrorsDirective } from './../../directives/form-errors/form-errors.directive';
@@ -53,8 +52,8 @@ describe('AddTransactionComponent', () => {
 			],
 			providers: [
 				MatDatepickerModule,
-				transactionsGroupsServiceTestProvider,
-				periodsServiceTestProvider,
+				TestingProviders.TransactionsGroupsService,
+				TestingProviders.PeriodsService,
 			],
 		}).compileComponents();
 	}));

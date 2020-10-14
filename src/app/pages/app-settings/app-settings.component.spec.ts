@@ -1,8 +1,3 @@
-import { RouterTestingModule } from '@angular/router/testing';
-import { userServiceTestProvider } from './../../common/test-stubs/user.service-stub';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { ZippyContentComponent } from './../../components/zippy-components/zippy-content/zippy-content.component';
 import {
 	async,
 	ComponentFixture,
@@ -11,15 +6,20 @@ import {
 } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from 'src/app/services/user/user.service';
 import { environment } from 'src/environments/environment';
 
+import { TestingProviders } from './../../common/test-stubs/testing-providers';
 import { CheckboxComponent } from './../../components/checkbox/checkbox.component';
+import { ZippyContentComponent } from './../../components/zippy-components/zippy-content/zippy-content.component';
 import { ZippyStaticComponent } from './../../components/zippy-components/zippy-static/zippy-static.component';
 import { ZippyComponent } from './../../components/zippy-components/zippy/zippy.component';
 import { ThemesService } from './../../services/themes/themes.service';
 import { AppSettingsComponent } from './app-settings.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AppSettingsComponent', () => {
 	let component: AppSettingsComponent;
@@ -43,7 +43,7 @@ describe('AppSettingsComponent', () => {
 				NoopAnimationsModule,
 				RouterTestingModule,
 			],
-			providers: [userServiceTestProvider],
+			providers: [TestingProviders.UserService],
 		}).compileComponents();
 	}));
 

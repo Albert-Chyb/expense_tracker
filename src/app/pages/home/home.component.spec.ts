@@ -1,11 +1,9 @@
-import { transactionsServiceTestProvider } from './../../common/test-stubs/transactions.service-stub';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from 'src/environments/environment';
 
-import { transactionsGroupsServiceTestProvider } from './../../common/test-stubs/transactions-groups.service-stub';
-import { userServiceTestProvider } from './../../common/test-stubs/user.service-stub';
+import { TestingProviders } from './../../common/test-stubs/testing-providers';
 import { ClueComponent } from './../../components/clue/clue.component';
 import { LoaderComponent } from './../../components/loader/loader.component';
 import { SummaryCardComponent } from './../../components/summary-card/summary-card.component';
@@ -29,7 +27,10 @@ describe('HomeComponent', () => {
 				AngularFireModule.initializeApp(environment.firebase),
 				RouterTestingModule,
 			],
-			providers: [transactionsServiceTestProvider, userServiceTestProvider],
+			providers: [
+				TestingProviders.TransactionsService,
+				TestingProviders.UserService,
+			],
 		}).compileComponents();
 	}));
 

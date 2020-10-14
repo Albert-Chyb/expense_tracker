@@ -1,24 +1,22 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AngularFireModule } from '@angular/fire';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatInputModule } from '@angular/material/input';
-import { transactionsServiceTestProvider } from './../../common/test-stubs/transactions.service-stub';
-import { periodsServiceTestProvider } from './../../common/test-stubs/periods.service-stub';
-import { transactionsGroupsServiceTestProvider } from './../../common/test-stubs/transactions-groups.service-stub';
-import { UserService } from 'src/app/services/user/user.service';
-import { LoaderComponent } from './../../components/loader/loader.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
+import { FormErrorsComponent } from 'src/app/components/form-errors/form-errors.component';
+import { UserService } from 'src/app/services/user/user.service';
+import { environment } from 'src/environments/environment';
+
+import { TestingProviders } from './../../common/test-stubs/testing-providers';
+import { LoaderComponent } from './../../components/loader/loader.component';
 import { StyledInputComponent } from './../../components/styled-input/styled-input.component';
 import { FormErrorsDirective } from './../../directives/form-errors/form-errors.directive';
-import { ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
-import { environment } from 'src/environments/environment';
-import { AngularFireModule } from '@angular/fire';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ManageTransactionComponent } from './manage-transaction.component';
-import { FormErrorsComponent } from 'src/app/components/form-errors/form-errors.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ManageTransactionComponent', () => {
 	let component: ManageTransactionComponent;
@@ -45,10 +43,10 @@ describe('ManageTransactionComponent', () => {
 				NoopAnimationsModule,
 			],
 			providers: [
-				transactionsGroupsServiceTestProvider,
-				transactionsServiceTestProvider,
-				periodsServiceTestProvider,
 				MatDatepickerModule,
+				TestingProviders.TransactionsGroupsService,
+				TestingProviders.TransactionsService,
+				TestingProviders.PeriodsService,
 			],
 		}).compileComponents();
 	}));
