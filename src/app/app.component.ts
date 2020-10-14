@@ -1,3 +1,4 @@
+import { DeviceService } from './services/device/device.service';
 import { registerLocaleData } from '@angular/common';
 import localePL from '@angular/common/locales/pl';
 import { Component, OnInit } from '@angular/core';
@@ -27,7 +28,8 @@ export class AppComponent implements OnInit {
 		private readonly _user: UserService,
 		private readonly _themes: ThemesService,
 		private readonly _formErrors: FormErrorsService,
-		private readonly _pwaUpdates: SwUpdate
+		private readonly _pwaUpdates: SwUpdate,
+		private readonly _device: DeviceService
 	) {}
 
 	ngOnInit() {
@@ -58,6 +60,7 @@ export class AppComponent implements OnInit {
 	}
 
 	listenForPWAUpdates() {
+		if (!this._device.isInstalledOnDevice) return;
 		this._pwaUpdates.available.subscribe(() => {
 			const userAgreedToUpdateApp = confirm(
 				'Nowa wersja aplikacji jest dostępna ! Czy chcesz zainstalowac ją teraz ?'

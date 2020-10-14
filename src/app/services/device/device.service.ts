@@ -30,6 +30,13 @@ export class DeviceService {
 		);
 	}
 
+	/**
+	 * Checks if app is installed on device as PWA.
+	 */
+	get isInstalledOnDevice() {
+		return matchMedia('(display-mode: standalone)').matches;
+	}
+
 	private listenForThemeChanges(): void {
 		const themeChanges = matchMedia('(prefers-color-scheme: dark)');
 		const listener = ($event: MediaQueryListEvent) => this._theme$.next($event);
