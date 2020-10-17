@@ -1,0 +1,68 @@
+@import 'utils/functions';
+@import 'utils/variables';
+@import 'utils/mixins';
+
+.notification {
+	position: fixed;
+	z-index: 100;
+	max-width: max(#{rem(400px)}, 30vw);
+	min-width: rem(250px);
+	padding: rem(20px);
+	border-radius: rem(6px);
+	right: rem(10px);
+	bottom: calc(#{$mainNavHeight} + #{rem(10px)});
+	margin-left: rem(10px);
+	font-size: clamp(#{rem(18px)}, 1vw, #{rem(26px)});
+
+	display: grid;
+	grid-template: {
+		columns: auto rem(20px);
+		rows: auto auto;
+		areas: 'heading close' 'message message';
+	}
+	align-items: center;
+	gap: rem(10px);
+
+	&--no-title {
+		grid-template-rows: 1fr;
+		grid-template-areas: 'message close';
+		align-items: center;
+	}
+
+	&--warning {
+		background-color: var(--color-warning);
+		color: var(--text-on-warning);
+	}
+
+	&--danger {
+		background-color: var(--color-danger);
+		color: var(--text-on-danger);
+	}
+
+	&--success {
+		background-color: var(--color-success);
+		color: var(--text-on-success);
+	}
+
+	&--neutral {
+		background-color: var(--color-primary);
+		color: var(--text-on-primary);
+	}
+
+	&__heading {
+		grid-area: heading;
+		font-size: 1em;
+		margin: 0px;
+	}
+
+	&__message {
+		grid-area: message;
+		font-size: 14/18 * 1em;
+		margin: 0px;
+	}
+
+	&__close {
+		grid-area: close;
+		height: rem(20px);
+	}
+}

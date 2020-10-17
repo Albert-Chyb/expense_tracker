@@ -1,0 +1,15 @@
+<section
+	#notification
+	class="notification notification--neutral"
+	[ngClass]="classes"
+>
+	<h2 *ngIf="title" class="notification__heading">{{ title }}</h2>
+
+	<p class="notification__message">
+		{{ msg }}
+	</p>
+
+	<button (click)="dismiss()" class="btn notification__close no-ripple">
+		<i class="far fa-times-circle fa-lg"></i>
+	</button>
+</section>

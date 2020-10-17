@@ -51,6 +51,8 @@ import { ClueComponent } from './components/clue/clue.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { LoaderComponent } from './components/loader/loader.component';
+import { NotificationComponent } from './components/notification/notification.component';
+import { NOTIFICATIONS_GLOBAL_SETTINGS } from './services/notifications/notifications.service';
 
 @NgModule({
 	declarations: [
@@ -85,6 +87,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 		ClueComponent,
 		MainNavComponent,
 		LoaderComponent,
+		NotificationComponent,
 	],
 	imports: [
 		BrowserModule,

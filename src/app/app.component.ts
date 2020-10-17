@@ -1,4 +1,3 @@
-import { DeviceService } from './services/device/device.service';
 import { registerLocaleData } from '@angular/common';
 import localePL from '@angular/common/locales/pl';
 import { Component, OnInit } from '@angular/core';
@@ -8,7 +7,9 @@ import { functions } from 'firebase';
 import { environment } from 'src/environments/environment';
 
 import { routeAnimation } from './animations';
+import { DeviceService } from './services/device/device.service';
 import { FormErrorsService } from './services/form-errors/form-errors.service';
+import { NotificationsService } from './services/notifications/notifications.service';
 import { ThemesService } from './services/themes/themes.service';
 import { UserService } from './services/user/user.service';
 
@@ -29,10 +30,19 @@ export class AppComponent implements OnInit {
 		private readonly _themes: ThemesService,
 		private readonly _formErrors: FormErrorsService,
 		private readonly _pwaUpdates: SwUpdate,
-		private readonly _device: DeviceService
+		private readonly _device: DeviceService,
+		private readonly _notifications: NotificationsService
 	) {}
 
 	ngOnInit() {
+		// ! Remove this line
+		this._notifications.displayNotification(
+			`Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla dolores
+		blanditiis est a perspiciatis cupiditate sed beatae, repellendus debitis
+		quisquam modi, quidem doloribus nam laudantium eveniet`,
+			'Some title'
+		);
+
 		registerLocaleData(localePL);
 
 		// Change to local cloud functions in development environment.
