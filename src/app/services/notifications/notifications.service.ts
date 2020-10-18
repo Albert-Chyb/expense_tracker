@@ -27,13 +27,19 @@ export interface INotificationsGlobalSettings {
 	posY: 'top' | 'bottom';
 	autoDismiss: boolean;
 	autoDismissTimeout: number;
+	animationDuration: number;
+	margin: number;
+	maxNotificationOnScreen: number;
 }
 
 const notificationsDefaultSettings: INotificationsGlobalSettings = {
-	posX: 'left',
-	posY: 'top',
-	autoDismiss: true,
+	posX: 'right',
+	posY: 'bottom',
+	autoDismiss: false,
 	autoDismissTimeout: 1000,
+	animationDuration: 300,
+	margin: 10,
+	maxNotificationOnScreen: 2,
 };
 
 @Injectable({
@@ -59,22 +65,7 @@ export class NotificationsService {
 
 	private readonly _renderer: Renderer2;
 	private _config: INotificationsGlobalSettings;
-
-	success(message: string, title?: string) {
-		return this.displayNotification(message, title, NotificationType.Success);
-	}
-
-	danger(message: string, title?: string) {
-		return this.displayNotification(message, title, NotificationType.Danger);
-	}
-
-	warning(message: string, title?: string) {
-		return this.displayNotification(message, title, NotificationType.Warning);
-	}
-
-	neutral(message: string, title?: string) {
-		return this.displayNotification(message, title, NotificationType.Neutral);
-	}
+	private readonly _currentNotifications: NotificationComponent[] = [];
 
 	displayNotification(
 		message: string,
@@ -100,11 +91,15 @@ export class NotificationsService {
 		if (this._config.autoDismiss)
 			this.scheduleDismiss(component, this._config.autoDismissTimeout);
 
-		component.instance.onViewInit.subscribe(el => {
+		const s = component.instance.onViewInit.subscribe(el => {
 			/*
 				When the view of the newly created notification is ready,
 				position it here.
 			*/
+
+			this.addNotificationToArray(component.instance);
+			this.positionNotifications();
+			s.unsubscribe();
 		});
 
 		return component.instance;
@@ -114,16 +109,30 @@ export class NotificationsService {
 		this._appRef.detachView(notificationRef.hostView);
 		notificationRef.destroy();
 
-		// ! Remove this timeout
-		setTimeout(
-			() =>
-				this.displayNotification(
-					'Zamknięto powiadomienie !',
-					'Powiadomienie bez sensu !',
-					getRandomInt(1, 4)
-				),
-			300
-		);
+		this.removeNotificationFromArray(notificationRef.instance);
+
+		if (this._config.autoDismiss) {
+			setTimeout(
+				() => this.positionNotifications(),
+				this._config.animationDuration
+			);
+		} else () => this.positionNotifications();
+	}
+
+	success(message: string, title?: string) {
+		return this.displayNotification(message, title, NotificationType.Success);
+	}
+
+	danger(message: string, title?: string) {
+		return this.displayNotification(message, title, NotificationType.Danger);
+	}
+
+	warning(message: string, title?: string) {
+		return this.displayNotification(message, title, NotificationType.Warning);
+	}
+
+	neutral(message: string, title?: string) {
+		return this.displayNotification(message, title, NotificationType.Neutral);
 	}
 
 	private scheduleDismiss(
@@ -139,10 +148,31 @@ export class NotificationsService {
 		const htmlElement = notificationView.rootNodes[0];
 		this._renderer.appendChild(this._docRef.body, htmlElement);
 	}
-}
 
-function getRandomInt(min, max) {
-	min = Math.ceil(min);
-	max = Math.floor(max);
-	return Math.floor(Math.random() * (max - min)) + min;
+	private removeNotificationFromArray(notification: NotificationComponent) {
+		const notificationIndex = this._currentNotifications.indexOf(notification);
+		this._currentNotifications.splice(notificationIndex, 1);
+	}
+
+	private addNotificationToArray(notification: NotificationComponent) {
+		this._currentNotifications.push(notification);
+
+		if (
+			this._currentNotifications.length > this._config.maxNotificationOnScreen
+		) {
+			const lastNotification = this._currentNotifications[0];
+			lastNotification.dismiss();
+		}
+	}
+
+	private positionNotifications() {
+		this._currentNotifications.forEach((notification, index) => {
+			const el = notification.notificationEl.nativeElement;
+
+			el.style.setProperty(
+				'transform',
+				`translateY(${(-140 - this._config.margin) * index}px)`
+			);
+		});
+	}
 }

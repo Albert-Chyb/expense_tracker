@@ -34,14 +34,24 @@ export class AppComponent implements OnInit {
 		private readonly _notifications: NotificationsService
 	) {}
 
+	getRandomInt(min, max) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min)) + min;
+	}
+
 	ngOnInit() {
 		// ! Remove this line
-		this._notifications.displayNotification(
-			`Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla dolores
-		blanditiis est a perspiciatis cupiditate sed beatae, repellendus debitis
-		quisquam modi, quidem doloribus nam laudantium eveniet`,
-			'Some title'
-		);
+		let i = 5;
+		setInterval(() => {
+			this._notifications.displayNotification(
+				`Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla dolores
+			blanditiis est a perspiciatis cupiditate sed beatae, repellendus debitis
+			quisquam modi, quidem doloribus nam laudantium eveniet`,
+				'Some title ' + i++,
+				this.getRandomInt(1, 4)
+			);
+		}, 700);
 
 		registerLocaleData(localePL);
 
