@@ -39,7 +39,7 @@ const notificationsDefaultSettings: INotificationsGlobalSettings = {
 	autoDismissTimeout: 1000,
 	animationDuration: 300,
 	margin: 10,
-	maxNotificationOnScreen: 2,
+	maxNotificationOnScreen: 4,
 };
 
 @Injectable({
@@ -111,12 +111,10 @@ export class NotificationsService {
 
 		this.removeNotificationFromArray(notificationRef.instance);
 
-		if (this._config.autoDismiss) {
-			setTimeout(
-				() => this.positionNotifications(),
-				this._config.animationDuration
-			);
-		} else () => this.positionNotifications();
+		setTimeout(
+			() => this.positionNotifications(),
+			this._config.animationDuration
+		);
 	}
 
 	success(message: string, title?: string) {
@@ -166,13 +164,13 @@ export class NotificationsService {
 	}
 
 	private positionNotifications() {
-		this._currentNotifications.forEach((notification, index) => {
+		this._currentNotifications.reduce((prevTranslation, notification) => {
 			const el = notification.notificationEl.nativeElement;
+			const { height } = el.getBoundingClientRect();
 
-			el.style.setProperty(
-				'transform',
-				`translateY(${(-140 - this._config.margin) * index}px)`
-			);
-		});
+			el.style.setProperty('transform', `translateY(${-prevTranslation}px)`);
+
+			return prevTranslation + height + this._config.margin;
+		}, 0);
 	}
 }

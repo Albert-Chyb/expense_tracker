@@ -15,6 +15,7 @@
 	font-size: clamp(#{rem(18px)}, 1vw, #{rem(26px)});
 
 	transition: transform 300ms ease-out;
+	transform-origin: bottom;
 
 	display: grid;
 	grid-template: {
