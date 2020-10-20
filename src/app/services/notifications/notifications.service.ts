@@ -1,4 +1,9 @@
-import { trigger } from '@angular/animations';
+import {
+	NOTIFICATIONS_GLOBAL_SETTINGS,
+	INotificationsGlobalSettings,
+	notificationsDefaultSettings,
+	NotificationType,
+} from '../../common/models/notifications';
 import { DOCUMENT } from '@angular/common';
 import {
 	ApplicationRef,
@@ -7,41 +12,12 @@ import {
 	EmbeddedViewRef,
 	Inject,
 	Injectable,
-	InjectionToken,
 	Injector,
 	Optional,
 	Renderer2,
 	RendererFactory2,
 } from '@angular/core';
-import {
-	NotificationComponent,
-	NotificationType,
-} from 'src/app/components/notification/notification.component';
-
-/** Default notifications settings. You can use this token to provide your own settings */
-export const NOTIFICATIONS_GLOBAL_SETTINGS = new InjectionToken<
-	INotificationsGlobalSettings
->('notifications-global-settings');
-
-export interface INotificationsGlobalSettings {
-	posX: 'left' | 'right' | 'center';
-	posY: 'top' | 'bottom';
-	autoDismiss: boolean;
-	autoDismissTimeout: number;
-	animationDuration: number;
-	margin: number;
-	maxNotificationOnScreen: number;
-}
-
-const notificationsDefaultSettings: INotificationsGlobalSettings = {
-	posX: 'right',
-	posY: 'bottom',
-	autoDismiss: false,
-	autoDismissTimeout: 1000,
-	animationDuration: 300,
-	margin: 10,
-	maxNotificationOnScreen: 3,
-};
+import { NotificationComponent } from 'src/app/components/notification/notification.component';
 
 @Injectable({
 	providedIn: 'root',

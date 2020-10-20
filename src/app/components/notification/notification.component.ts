@@ -11,16 +11,10 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { Subject } from 'rxjs';
+import { NotificationType } from 'src/app/common/models/notifications';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 
 import { fadeIn, fadeOut } from './../../animations';
-
-export enum NotificationType {
-	Warning = 1,
-	Danger = 2,
-	Success = 3,
-	Neutral = 4,
-}
 
 @Component({
 	templateUrl: './notification.component.html',
