@@ -1,7 +1,7 @@
-import { Subject } from 'rxjs';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import {
 	AfterViewInit,
+	ChangeDetectorRef,
 	Component,
 	ComponentRef,
 	ElementRef,
@@ -10,6 +10,7 @@ import {
 	OnInit,
 	ViewChild,
 } from '@angular/core';
+import { Subject } from 'rxjs';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 
 import { fadeIn, fadeOut } from './../../animations';
@@ -26,13 +27,16 @@ export enum NotificationType {
 	styleUrls: ['./notification.component.scss'],
 	animations: [
 		trigger('notificationAnimation', [
-			transition(':enter', useAnimation(fadeIn)),
+			transition(
+				':enter',
+				useAnimation(fadeIn, { params: { delay: '300ms' } })
+			),
 			transition(':leave', useAnimation(fadeOut)),
 		]),
 	],
 })
 export class NotificationComponent implements OnInit, AfterViewInit {
-	constructor() {}
+	constructor(private readonly _changeDetector: ChangeDetectorRef) {}
 
 	@Input() title: string;
 	@Input() msg: string;
@@ -42,12 +46,13 @@ export class NotificationComponent implements OnInit, AfterViewInit {
 
 	private _componentRef: ComponentRef<NotificationComponent>;
 	private _notifications: NotificationsService;
-	private _onViewInit = new Subject<HTMLElement>();
+	private _onViewInit = new Subject<void>();
 
 	ngOnInit(): void {}
 
 	ngAfterViewInit() {
-		this._onViewInit.next(this.notificationEl.nativeElement);
+		this._onViewInit.next();
+		this._changeDetector.detach();
 	}
 
 	dismiss() {

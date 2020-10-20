@@ -1,3 +1,4 @@
+import { trigger } from '@angular/animations';
 import { DOCUMENT } from '@angular/common';
 import {
 	ApplicationRef,
@@ -39,7 +40,7 @@ const notificationsDefaultSettings: INotificationsGlobalSettings = {
 	autoDismissTimeout: 1000,
 	animationDuration: 300,
 	margin: 10,
-	maxNotificationOnScreen: 4,
+	maxNotificationOnScreen: 3,
 };
 
 @Injectable({
@@ -64,8 +65,8 @@ export class NotificationsService {
 	}
 
 	private readonly _renderer: Renderer2;
-	private _config: INotificationsGlobalSettings;
 	private readonly _currentNotifications: NotificationComponent[] = [];
+	private _config: INotificationsGlobalSettings;
 
 	displayNotification(
 		message: string,
@@ -91,52 +92,44 @@ export class NotificationsService {
 		if (this._config.autoDismiss)
 			this.scheduleDismiss(component, this._config.autoDismissTimeout);
 
-		const s = component.instance.onViewInit.subscribe(el => {
-			/*
-				When the view of the newly created notification is ready,
-				position it here.
-			*/
-
+		const s = component.instance.onViewInit.subscribe(() => {
 			this.addNotificationToArray(component.instance);
-			this.positionNotifications();
+
 			s.unsubscribe();
 		});
 
 		return component.instance;
 	}
 
-	destroyNotification(notificationRef: ComponentRef<NotificationComponent>) {
+	destroyNotification(
+		notificationRef: ComponentRef<NotificationComponent>
+	): void {
 		this._appRef.detachView(notificationRef.hostView);
 		notificationRef.destroy();
 
 		this.removeNotificationFromArray(notificationRef.instance);
-
-		setTimeout(
-			() => this.positionNotifications(),
-			this._config.animationDuration
-		);
 	}
 
-	success(message: string, title?: string) {
+	success(message: string, title?: string): NotificationComponent {
 		return this.displayNotification(message, title, NotificationType.Success);
 	}
 
-	danger(message: string, title?: string) {
+	danger(message: string, title?: string): NotificationComponent {
 		return this.displayNotification(message, title, NotificationType.Danger);
 	}
 
-	warning(message: string, title?: string) {
+	warning(message: string, title?: string): NotificationComponent {
 		return this.displayNotification(message, title, NotificationType.Warning);
 	}
 
-	neutral(message: string, title?: string) {
+	neutral(message: string, title?: string): NotificationComponent {
 		return this.displayNotification(message, title, NotificationType.Neutral);
 	}
 
 	private scheduleDismiss(
 		notification: ComponentRef<NotificationComponent>,
 		timeout: number
-	) {
+	): void {
 		setTimeout(() => this.destroyNotification(notification), timeout);
 	}
 
@@ -147,12 +140,19 @@ export class NotificationsService {
 		this._renderer.appendChild(this._docRef.body, htmlElement);
 	}
 
-	private removeNotificationFromArray(notification: NotificationComponent) {
+	private removeNotificationFromArray(
+		notification: NotificationComponent
+	): void {
 		const notificationIndex = this._currentNotifications.indexOf(notification);
 		this._currentNotifications.splice(notificationIndex, 1);
+
+		setTimeout(
+			() => this.positionNotifications(),
+			this._config.animationDuration
+		);
 	}
 
-	private addNotificationToArray(notification: NotificationComponent) {
+	private addNotificationToArray(notification: NotificationComponent): void {
 		this._currentNotifications.push(notification);
 
 		if (
@@ -161,14 +161,20 @@ export class NotificationsService {
 			const lastNotification = this._currentNotifications[0];
 			lastNotification.dismiss();
 		}
+
+		this.positionNotifications();
 	}
 
-	private positionNotifications() {
+	private positionNotifications(): void {
 		this._currentNotifications.reduce((prevTranslation, notification) => {
 			const el = notification.notificationEl.nativeElement;
 			const { height } = el.getBoundingClientRect();
 
-			el.style.setProperty('transform', `translateY(${-prevTranslation}px)`);
+			this._renderer.setStyle(
+				el,
+				'transform',
+				`translateY(${-prevTranslation}px)`
+			);
 
 			return prevTranslation + height + this._config.margin;
 		}, 0);

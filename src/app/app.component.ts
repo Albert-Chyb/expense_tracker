@@ -45,13 +45,11 @@ export class AppComponent implements OnInit {
 		let i = 5;
 		setInterval(() => {
 			this._notifications.displayNotification(
-				`Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla dolores
-			blanditiis est a perspiciatis cupiditate sed beatae, repellendus debitis
-			quisquam modi, quidem doloribus nam laudantium eveniet`,
+				new Array(this.getRandomInt(100, 400)).fill('a').join(' '),
 				'Some title ' + i++,
 				this.getRandomInt(1, 4)
 			);
-		}, 700);
+		}, 2000);
 
 		registerLocaleData(localePL);
 
