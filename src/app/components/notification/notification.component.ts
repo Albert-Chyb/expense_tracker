@@ -1,3 +1,4 @@
+import { first } from 'rxjs/operators';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import {
 	AfterViewInit,
@@ -72,6 +73,6 @@ export class NotificationComponent implements OnInit, AfterViewInit {
 	}
 
 	get onViewInit() {
-		return this._onViewInit.pipe();
+		return this._onViewInit.pipe(first());
 	}
 }

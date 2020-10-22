@@ -19,14 +19,6 @@ import {
 } from '@angular/core';
 import { NotificationComponent } from 'src/app/components/notification/notification.component';
 
-interface INotificationInputs {
-	msg: string;
-	title: string;
-	type: NotificationType;
-	componentRef: ComponentRef<NotificationComponent>;
-	notificationsService: NotificationsService;
-}
-
 @Injectable({
 	providedIn: 'root',
 })
@@ -70,10 +62,6 @@ export class NotificationsService {
 			notificationsService: that,
 		};
 
-		// TODO: Make Limited array that automatically trims itself when there is more
-		// TODO: items than allowed.
-		// TODO: Also it should be able to register callback on trim
-
 		Object.assign(component.instance, inputs);
 		this._appRef.attachView(component.hostView);
 		this.attachNotificationToTheView(
@@ -83,11 +71,9 @@ export class NotificationsService {
 		if (this._config.autoDismiss)
 			this.scheduleDismiss(component, this._config.autoDismissTimeout);
 
-		const s = component.instance.onViewInit.subscribe(() => {
-			this.addNotificationToArray(component.instance);
-
-			s.unsubscribe();
-		});
+		component.instance.onViewInit.subscribe(() =>
+			this.addNotificationToArray(component.instance)
+		);
 
 		return component.instance;
 	}
