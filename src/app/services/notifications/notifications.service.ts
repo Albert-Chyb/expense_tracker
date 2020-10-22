@@ -19,6 +19,14 @@ import {
 } from '@angular/core';
 import { NotificationComponent } from 'src/app/components/notification/notification.component';
 
+interface INotificationInputs {
+	msg: string;
+	title: string;
+	type: NotificationType;
+	componentRef: ComponentRef<NotificationComponent>;
+	notificationsService: NotificationsService;
+}
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -46,20 +54,27 @@ export class NotificationsService {
 
 	displayNotification(
 		message: string,
-		title?: string,
-		type?: NotificationType
+		title = '',
+		type = NotificationType.Neutral
 	): NotificationComponent {
 		const componentFactory = this._componentResolver.resolveComponentFactory(
 			NotificationComponent
 		);
 		const component = componentFactory.create(this._injector);
+		const that = this;
+		const inputs = {
+			msg: message,
+			title,
+			type,
+			componentRef: component,
+			notificationsService: that,
+		};
 
-		component.instance.msg = message || '';
-		component.instance.title = title || '';
-		component.instance.type = type || NotificationType.Neutral;
-		component.instance.componentRef = component;
-		component.instance.notificationsService = this;
+		// TODO: Make Limited array that automatically trims itself when there is more
+		// TODO: items than allowed.
+		// TODO: Also it should be able to register callback on trim
 
+		Object.assign(component.instance, inputs);
 		this._appRef.attachView(component.hostView);
 		this.attachNotificationToTheView(
 			component.hostView as EmbeddedViewRef<NotificationComponent>
