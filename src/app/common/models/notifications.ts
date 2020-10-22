@@ -5,9 +5,16 @@ export const NOTIFICATIONS_GLOBAL_SETTINGS = new InjectionToken<
 	INotificationsGlobalSettings
 >('notifications-global-settings');
 
+export enum NotificationsPosition {
+	Bottom = -1,
+	Top = 1,
+	Left = 'left',
+	Right = 'right',
+}
+
 export interface INotificationsGlobalSettings {
 	posX: 'left' | 'right' | 'center';
-	posY: 'top' | 'bottom';
+	posY: 1 | -1;
 	autoDismiss: boolean;
 	autoDismissTimeout: number;
 	animationDuration: number;
@@ -16,8 +23,8 @@ export interface INotificationsGlobalSettings {
 }
 
 export const notificationsDefaultSettings: INotificationsGlobalSettings = {
-	posX: 'right',
-	posY: 'bottom',
+	posX: NotificationsPosition.Right,
+	posY: NotificationsPosition.Top,
 	autoDismiss: false,
 	autoDismissTimeout: 1000,
 	animationDuration: 300,

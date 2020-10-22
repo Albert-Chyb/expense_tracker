@@ -10,11 +10,10 @@
 	padding: rem(20px);
 	border-radius: rem(6px);
 	right: rem(10px);
-	bottom: calc(#{$mainNavHeight} + #{rem(10px)});
 	margin-left: rem(10px);
 	font-size: clamp(#{rem(18px)}, 1vw, #{rem(26px)});
 
-	transition: transform 300ms ease-out;
+	transition: transform ease-out;
 
 	display: grid;
 	grid-template: {
@@ -24,6 +23,14 @@
 	}
 	align-items: center;
 	gap: rem(10px);
+
+	&--top {
+		top: rem(10px);
+	}
+
+	&--bottom {
+		bottom: calc(#{$mainNavHeight} + #{rem(10px)});
+	}
 
 	&--no-title {
 		grid-template-rows: 1fr;

@@ -1,4 +1,4 @@
-import { first } from 'rxjs/operators';
+import { filter, first, map } from 'rxjs/operators';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import {
 	AfterViewInit,
@@ -7,12 +7,20 @@ import {
 	ComponentRef,
 	ElementRef,
 	HostBinding,
+	Inject,
 	Input,
 	OnInit,
+	Optional,
 	ViewChild,
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { NotificationType } from 'src/app/common/models/notifications';
+import {
+	INotificationsGlobalSettings,
+	notificationsDefaultSettings,
+	NotificationsPosition,
+	NOTIFICATIONS_GLOBAL_SETTINGS,
+	NotificationType,
+} from 'src/app/common/models/notifications';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 
 import { fadeIn, fadeOut } from './../../animations';
@@ -31,7 +39,17 @@ import { fadeIn, fadeOut } from './../../animations';
 	],
 })
 export class NotificationComponent implements OnInit, AfterViewInit {
-	constructor(private readonly _changeDetector: ChangeDetectorRef) {}
+	constructor(
+		private readonly _changeDetector: ChangeDetectorRef,
+
+		@Optional()
+		@Inject(NOTIFICATIONS_GLOBAL_SETTINGS)
+		config: INotificationsGlobalSettings
+	) {
+		this._config = this._config = config
+			? Object.assign(notificationsDefaultSettings, config)
+			: notificationsDefaultSettings;
+	}
 
 	@Input() title: string;
 	@Input() msg: string;
@@ -42,6 +60,7 @@ export class NotificationComponent implements OnInit, AfterViewInit {
 	private _componentRef: ComponentRef<NotificationComponent>;
 	private _notifications: NotificationsService;
 	private _onViewInit = new Subject<void>();
+	private _config: INotificationsGlobalSettings;
 
 	ngOnInit(): void {}
 
@@ -61,6 +80,11 @@ export class NotificationComponent implements OnInit, AfterViewInit {
 			'notification--danger': this.type === NotificationType.Danger,
 			'notification--success': this.type === NotificationType.Success,
 			'notification--neutral': this.type === NotificationType.Neutral,
+			'notification--bottom':
+				this._config.posY === NotificationsPosition.Bottom,
+			'notification--top': this._config.posY === NotificationsPosition.Top,
+			'notification--left': this._config.posX === NotificationsPosition.Left,
+			'notification--right': this._config.posX === NotificationsPosition.Right,
 		};
 	}
 
@@ -74,5 +98,9 @@ export class NotificationComponent implements OnInit, AfterViewInit {
 
 	get onViewInit() {
 		return this._onViewInit.pipe(first());
+	}
+
+	get config() {
+		return this._config;
 	}
 }

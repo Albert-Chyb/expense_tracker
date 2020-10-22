@@ -150,7 +150,7 @@ export class NotificationsService {
 			this._renderer.setStyle(
 				el,
 				'transform',
-				`translateY(${-prevTranslation}px)`
+				`translateY(${prevTranslation * this._config.posY}px)`
 			);
 
 			return prevTranslation + height + this._config.margin;
