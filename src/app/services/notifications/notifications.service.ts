@@ -19,6 +19,10 @@ import {
 } from '@angular/core';
 import { NotificationComponent } from 'src/app/components/notification/notification.component';
 
+/**
+ * Service that manages toast notifications in the app.
+ */
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -44,6 +48,12 @@ export class NotificationsService {
 	private readonly _currentNotifications: NotificationComponent[] = [];
 	private _config: INotificationsGlobalSettings;
 
+	/**
+	 * Displays notification to the user.
+	 * @param message Message that will be displayed to the user
+	 * @param title Title of the notification
+	 * @param type Theme of the notification
+	 */
 	displayNotification(
 		message: string,
 		title = '',
@@ -78,6 +88,10 @@ export class NotificationsService {
 		return component.instance;
 	}
 
+	/**
+	 * Removes notification from the view.
+	 * @param notificationRef Reference to the notification`s ComponentRef
+	 */
 	destroyNotification(
 		notificationRef: ComponentRef<NotificationComponent>
 	): void {
@@ -87,22 +101,31 @@ export class NotificationsService {
 		this.removeNotificationFromArray(notificationRef.instance);
 	}
 
+	/** Displays notification with success theme. */
 	success(message: string, title?: string): NotificationComponent {
 		return this.displayNotification(message, title, NotificationType.Success);
 	}
 
+	/** Displays notification with danger theme. */
 	danger(message: string, title?: string): NotificationComponent {
 		return this.displayNotification(message, title, NotificationType.Danger);
 	}
 
+	/** Displays notification with warning theme. */
 	warning(message: string, title?: string): NotificationComponent {
 		return this.displayNotification(message, title, NotificationType.Warning);
 	}
 
+	/** Displays notification with neutral theme. */
 	neutral(message: string, title?: string): NotificationComponent {
 		return this.displayNotification(message, title, NotificationType.Neutral);
 	}
 
+	/**
+	 * Removes notification automatically after specified timeout.
+	 * @param notification ComponentRef of the notification to remove after time.
+	 * @param timeout Time after notification will be removed from the view.
+	 */
 	private scheduleDismiss(
 		notification: ComponentRef<NotificationComponent>,
 		timeout: number
@@ -110,6 +133,9 @@ export class NotificationsService {
 		setTimeout(() => this.destroyNotification(notification), timeout);
 	}
 
+	/**
+	 * Appends notification HTML to the page body.
+	 */
 	private attachNotificationToTheView(
 		notificationView: EmbeddedViewRef<NotificationComponent>
 	): void {
@@ -117,6 +143,7 @@ export class NotificationsService {
 		this._renderer.appendChild(this._docRef.body, htmlElement);
 	}
 
+	/** Removes notification from the array and re-positions other notifications. */
 	private removeNotificationFromArray(
 		notification: NotificationComponent
 	): void {
@@ -129,6 +156,7 @@ export class NotificationsService {
 		);
 	}
 
+	/** Adds notification to the array, makes sure that in the view exists allowed number of notifications, and re-positions them */
 	private addNotificationToArray(notification: NotificationComponent): void {
 		this._currentNotifications.push(notification);
 
@@ -142,6 +170,7 @@ export class NotificationsService {
 		this.positionNotifications();
 	}
 
+	/** Positions notification in the view. */
 	private positionNotifications(): void {
 		this._currentNotifications.reduce((prevTranslation, notification) => {
 			const el = notification.notificationEl.nativeElement;
