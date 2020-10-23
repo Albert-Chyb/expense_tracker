@@ -133,7 +133,7 @@ export class NotificationsService {
 		this._currentNotifications.push(notification);
 
 		if (
-			this._currentNotifications.length > this._config.maxNotificationOnScreen
+			this._currentNotifications.length > this._config.maxNotificationsOnScreen
 		) {
 			const lastNotification = this._currentNotifications[0];
 			lastNotification.dismiss();

@@ -19,17 +19,17 @@ export interface INotificationsGlobalSettings {
 	autoDismissTimeout: number;
 	animationDuration: number;
 	margin: number;
-	maxNotificationOnScreen: number;
+	maxNotificationsOnScreen: number;
 }
 
 export const notificationsDefaultSettings: INotificationsGlobalSettings = {
 	posX: NotificationsPosition.Right,
-	posY: NotificationsPosition.Top,
+	posY: NotificationsPosition.Bottom,
 	autoDismiss: false,
 	autoDismissTimeout: 1000,
 	animationDuration: 300,
 	margin: 10,
-	maxNotificationOnScreen: 3,
+	maxNotificationsOnScreen: 3,
 };
 
 export enum NotificationType {

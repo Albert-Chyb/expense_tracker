@@ -9,7 +9,6 @@
 	min-width: rem(250px);
 	padding: rem(20px);
 	border-radius: rem(6px);
-	right: rem(10px);
 	margin-left: rem(10px);
 	font-size: clamp(#{rem(18px)}, 1vw, #{rem(26px)});
 
@@ -24,14 +23,28 @@
 	align-items: center;
 	gap: rem(10px);
 
+	// Styles of a notification when position in Y axis is set to top.
 	&--top {
 		top: calc(#{$mainHeaderHeight} + #{rem(10px)});
 	}
 
+	// Styles of a notification when position in Y axis is set to bottom.
 	&--bottom {
 		bottom: calc(#{$mainNavHeight} + #{rem(10px)});
 	}
 
+	// Styles of a notification when position in X axis is set to left.
+	&--left {
+		left: rem(10px);
+	}
+
+	// Styles of a notification when position in X axis is set to right.
+	&--right {
+		right: rem(10px);
+	}
+
+	// The title of a notification is optional, use different grid layout instead
+	// if there is no title.
 	&--no-title {
 		grid-template-rows: 1fr;
 		grid-template-areas: 'message close';
