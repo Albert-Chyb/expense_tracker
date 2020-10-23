@@ -25,7 +25,7 @@
 	gap: rem(10px);
 
 	&--top {
-		top: rem(10px);
+		top: calc(#{$mainHeaderHeight} + #{rem(10px)});
 	}
 
 	&--bottom {
