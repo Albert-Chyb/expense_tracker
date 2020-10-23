@@ -9,7 +9,6 @@ import { environment } from 'src/environments/environment';
 import { routeAnimation } from './animations';
 import { DeviceService } from './services/device/device.service';
 import { FormErrorsService } from './services/form-errors/form-errors.service';
-import { NotificationsService } from './services/notifications/notifications.service';
 import { ThemesService } from './services/themes/themes.service';
 import { UserService } from './services/user/user.service';
 
@@ -30,27 +29,10 @@ export class AppComponent implements OnInit {
 		private readonly _themes: ThemesService,
 		private readonly _formErrors: FormErrorsService,
 		private readonly _pwaUpdates: SwUpdate,
-		private readonly _device: DeviceService,
-		private readonly _notifications: NotificationsService
+		private readonly _device: DeviceService
 	) {}
 
-	getRandomInt(min, max) {
-		min = Math.ceil(min);
-		max = Math.floor(max);
-		return Math.floor(Math.random() * (max - min)) + min;
-	}
-
 	ngOnInit() {
-		// ! Remove this line
-		let i = 5;
-		setInterval(() => {
-			this._notifications.displayNotification(
-				new Array(this.getRandomInt(100, 400)).fill('a').join(' '),
-				'Some title ' + i++,
-				this.getRandomInt(1, 4)
-			);
-		}, 2000);
-
 		registerLocaleData(localePL);
 
 		// Change to local cloud functions in development environment.

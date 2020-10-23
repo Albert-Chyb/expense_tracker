@@ -1,4 +1,3 @@
-import { ErrorsMessages } from './../../common/errors/errorsMessages';
 import {
 	ChangeDetectionStrategy,
 	Component,
@@ -10,6 +9,7 @@ import { FirebaseError } from 'firebase';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
+import { ErrorsMessages } from './../../common/errors/errorsMessages';
 import { Pages } from './../../common/routing/routesUrls';
 import { AuthService } from './../../services/auth/auth.service';
 import { ErrorsService } from './../../services/errors/errors.service';
