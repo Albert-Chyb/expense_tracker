@@ -1,14 +1,7 @@
-import {
-	NOTIFICATIONS_GLOBAL_SETTINGS,
-	INotificationsGlobalSettings,
-	notificationsDefaultSettings,
-	NotificationType,
-} from '../../common/models/notifications';
 import { DOCUMENT } from '@angular/common';
 import {
 	ApplicationRef,
 	ComponentFactoryResolver,
-	ComponentRef,
 	EmbeddedViewRef,
 	Inject,
 	Injectable,
@@ -19,6 +12,17 @@ import {
 } from '@angular/core';
 import { NotificationComponent } from 'src/app/components/notification/notification.component';
 
+import {
+	INotificationsGlobalSettings,
+	NOTIFICATIONS_GLOBAL_SETTINGS,
+	notificationsDefaultSettings,
+	NotificationType,
+} from '../../common/models/notifications';
+import {
+	LimitedArray,
+	ILimitedArrayEvent,
+} from './../../common/models/limitedArray';
+
 /**
  * Service that manages toast notifications in the app.
  */
@@ -27,6 +31,10 @@ import { NotificationComponent } from 'src/app/components/notification/notificat
 	providedIn: 'root',
 })
 export class NotificationsService {
+	private readonly _renderer: Renderer2;
+	private _config: INotificationsGlobalSettings;
+	private _currentNotifications: LimitedArray<NotificationComponent>;
+
 	constructor(
 		private readonly _injector: Injector,
 		private readonly _appRef: ApplicationRef,
@@ -42,11 +50,18 @@ export class NotificationsService {
 		this._config = config
 			? Object.assign(notificationsDefaultSettings, config)
 			: notificationsDefaultSettings;
-	}
+		this._currentNotifications = new LimitedArray(
+			this._config.maxNotificationsOnScreen
+		);
 
-	private readonly _renderer: Renderer2;
-	private readonly _currentNotifications: NotificationComponent[] = [];
-	private _config: INotificationsGlobalSettings;
+		this._currentNotifications.onDelete.subscribe(
+			this.onNotificationsOverflowing.bind(this)
+		);
+
+		this._currentNotifications.onAdd.subscribe(() =>
+			this.positionNotifications()
+		);
+	}
 
 	/**
 	 * Displays notification to the user.
@@ -63,42 +78,30 @@ export class NotificationsService {
 			NotificationComponent
 		);
 		const component = componentFactory.create(this._injector);
-		const that = this;
+		const notificationsService = this;
 		const inputs = {
 			msg: message,
 			title,
 			type,
+			notificationsService,
 			componentRef: component,
-			notificationsService: that,
 		};
 
 		Object.assign(component.instance, inputs);
+
 		this._appRef.attachView(component.hostView);
 		this.attachNotificationToTheView(
 			component.hostView as EmbeddedViewRef<NotificationComponent>
 		);
 
 		if (this._config.autoDismiss)
-			this.scheduleDismiss(component, this._config.autoDismissTimeout);
+			this.scheduleDismiss(component.instance, this._config.autoDismissTimeout);
 
 		component.instance.onViewInit.subscribe(() =>
-			this.addNotificationToArray(component.instance)
+			this._currentNotifications.add(component.instance)
 		);
 
 		return component.instance;
-	}
-
-	/**
-	 * Removes notification from the view.
-	 * @param notificationRef Reference to the notification`s ComponentRef
-	 */
-	destroyNotification(
-		notificationRef: ComponentRef<NotificationComponent>
-	): void {
-		this._appRef.detachView(notificationRef.hostView);
-		notificationRef.destroy();
-
-		this.removeNotificationFromArray(notificationRef.instance);
 	}
 
 	/** Displays notification with success theme. */
@@ -123,18 +126,18 @@ export class NotificationsService {
 
 	/**
 	 * Removes notification automatically after specified timeout.
-	 * @param notification ComponentRef of the notification to remove after time.
+	 * @param notification Notification to remove after time.
 	 * @param timeout Time after notification will be removed from the view.
 	 */
 	private scheduleDismiss(
-		notification: ComponentRef<NotificationComponent>,
+		notification: NotificationComponent,
 		timeout: number
 	): void {
-		setTimeout(() => this.destroyNotification(notification), timeout);
+		setTimeout(() => notification.dismiss(), timeout);
 	}
 
 	/**
-	 * Appends notification HTML to the page body.
+	 * Appends notification`s layout to the page body.
 	 */
 	private attachNotificationToTheView(
 		notificationView: EmbeddedViewRef<NotificationComponent>
@@ -143,36 +146,9 @@ export class NotificationsService {
 		this._renderer.appendChild(this._docRef.body, htmlElement);
 	}
 
-	/** Removes notification from the array and re-positions other notifications. */
-	private removeNotificationFromArray(
-		notification: NotificationComponent
-	): void {
-		const notificationIndex = this._currentNotifications.indexOf(notification);
-		this._currentNotifications.splice(notificationIndex, 1);
-
-		setTimeout(
-			() => this.positionNotifications(),
-			this._config.animationDuration
-		);
-	}
-
-	/** Adds notification to the array, makes sure that in the view exists allowed number of notifications, and re-positions them */
-	private addNotificationToArray(notification: NotificationComponent): void {
-		this._currentNotifications.push(notification);
-
-		if (
-			this._currentNotifications.length > this._config.maxNotificationsOnScreen
-		) {
-			const lastNotification = this._currentNotifications[0];
-			lastNotification.dismiss();
-		}
-
-		this.positionNotifications();
-	}
-
 	/** Positions notification in the view. */
 	private positionNotifications(): void {
-		this._currentNotifications.reduce((prevTranslation, notification) => {
+		this._currentNotifications.array.reduce((prevTranslation, notification) => {
 			const el = notification.notificationEl.nativeElement;
 			const { height } = el.getBoundingClientRect();
 
@@ -184,5 +160,25 @@ export class NotificationsService {
 
 			return prevTranslation + height + this._config.margin;
 		}, 0);
+	}
+
+	/**
+	 * Removes a notification from the view.
+	 * @param notification Notification to remove
+	 */
+	private onNotificationsOverflowing({
+		item: notification,
+	}: ILimitedArrayEvent<NotificationComponent>): void {
+		notification.componentRef.destroy();
+
+		setTimeout(
+			() => this.positionNotifications(),
+			this._config.animationDuration
+		);
+	}
+
+	/** Contains all notifications that are currently visible to the user */
+	get inView() {
+		return this._currentNotifications;
 	}
 }

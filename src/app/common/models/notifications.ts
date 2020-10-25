@@ -25,8 +25,8 @@ export interface INotificationsGlobalSettings {
 export const notificationsDefaultSettings: INotificationsGlobalSettings = {
 	posX: NotificationsPosition.Right,
 	posY: NotificationsPosition.Bottom,
-	autoDismiss: true,
-	autoDismissTimeout: 700,
+	autoDismiss: false,
+	autoDismissTimeout: 1500,
 	animationDuration: 300,
 	margin: 10,
 	maxNotificationsOnScreen: 3,

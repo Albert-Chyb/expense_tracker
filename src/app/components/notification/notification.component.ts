@@ -57,7 +57,7 @@ export class NotificationComponent implements OnInit, AfterViewInit {
 	@HostBinding('@notificationAnimation') t = true;
 	@ViewChild('notification') notificationEl: ElementRef<HTMLElement>;
 
-	private _componentRef: ComponentRef<NotificationComponent>;
+	public componentRef: ComponentRef<NotificationComponent>;
 	private _notifications: NotificationsService;
 	private _onViewInit = new Subject<void>();
 	private _config: INotificationsGlobalSettings;
@@ -70,7 +70,7 @@ export class NotificationComponent implements OnInit, AfterViewInit {
 	}
 
 	dismiss() {
-		this._notifications.destroyNotification(this._componentRef);
+		this._notifications.inView.delete(this);
 	}
 
 	get classes() {
@@ -86,10 +86,6 @@ export class NotificationComponent implements OnInit, AfterViewInit {
 			'notification--left': this._config.posX === NotificationsPosition.Left,
 			'notification--right': this._config.posX === NotificationsPosition.Right,
 		};
-	}
-
-	set componentRef(component: ComponentRef<NotificationComponent>) {
-		this._componentRef = component;
 	}
 
 	set notificationsService(service: NotificationsService) {
