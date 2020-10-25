@@ -23,8 +23,8 @@ export class LoaderComponent {
 
 	get classes() {
 		return {
-			'loader--fixed': this.isFixed,
-			'loader--centered': this.isCenteredAbsolutely,
+			'loader-container--fixed': this.isFixed,
+			'loader-container--centered': this.isCenteredAbsolutely,
 		};
 	}
 }
