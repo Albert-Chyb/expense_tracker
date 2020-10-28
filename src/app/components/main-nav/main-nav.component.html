@@ -1,6 +1,6 @@
 <nav
 	class="main-nav"
-	[ngClass]="(isLoggedIn$ | async) ? '' : 'main-nav--hidden'"
+	[ngClass]="(isLoggedIn$ | async) ? 'main-nav--shown' : ''"
 >
 	<a
 		class="main-nav__link main-nav__link--home"
