@@ -1,10 +1,10 @@
 $breakpoints: (
-	'mobile-s': 320,
-	'mobile-m': 375,
-	'mobile-l': 425,
-	'tablet': 768,
-	'laptop': 1024,
-	'laptop-l': 1440,
+	'mobile-s': 320px,
+	'mobile-m': 375px,
+	'mobile-l': 425px,
+	'tablet': 768px,
+	'laptop': 1024px,
+	'laptop-l': 1440px,
 	'mobile-navbar-shown': $mainNavVisibilityBreakpoint,
 );
 $approaches: 'max', 'min', 'min-device', 'max-device';
