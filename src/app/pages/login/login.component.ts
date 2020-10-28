@@ -1,3 +1,4 @@
+import { NotificationsService } from './../../services/notifications/notifications.service';
 import {
 	ChangeDetectionStrategy,
 	Component,
@@ -25,7 +26,8 @@ export class LoginComponent implements OnDestroy, OnInit {
 		private readonly _auth: AuthService,
 		private readonly _router: Router,
 		private readonly _user: UserService,
-		private readonly _errors: ErrorsService
+		private readonly _errors: ErrorsService,
+		private readonly _notifications: NotificationsService
 	) {}
 
 	private readonly subscriptions = new Subscription();
@@ -49,6 +51,10 @@ export class LoginComponent implements OnDestroy, OnInit {
 	async loginWithGoogle() {
 		try {
 			await this._auth.loginWithGoogle();
+			this._notifications.success(
+				'Poprawnie zalogowano za pomocą konta Google',
+				'Witaj w naszej aplikacji !'
+			);
 		} catch (error) {
 			this.handleError(error);
 		}
