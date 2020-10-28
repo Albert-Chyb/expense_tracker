@@ -1,6 +1,7 @@
 @import 'utils/functions';
 @import 'utils/variables';
 @import 'utils/mixins';
+@import 'utils/mediaBreakpoints';
 
 .notification {
 	position: fixed;
@@ -25,22 +26,24 @@
 
 	// Styles of a notification when position in Y axis is set to top.
 	&--top {
-		top: calc(#{$mainHeaderHeight} + #{rem(10px)});
+		top: calc(#{$mainHeaderHeight} + #{rem(10px)} + env(safe-area-inset-top));
 	}
 
 	// Styles of a notification when position in Y axis is set to bottom.
 	&--bottom {
-		bottom: calc(#{$mainNavHeight} + #{rem(10px)});
+		bottom: calc(
+			#{$mainNavHeight} + #{rem(10px)} + env(safe-area-inset-bottom)
+		);
 	}
 
 	// Styles of a notification when position in X axis is set to left.
 	&--left {
-		left: rem(10px);
+		left: calc(#{rem(10px)} + env(safe-area-inset-left));
 	}
 
 	// Styles of a notification when position in X axis is set to right.
 	&--right {
-		right: rem(10px);
+		right: calc(#{rem(10px)} + env(safe-area-inset-right));
 	}
 
 	// The title of a notification is optional, use different grid layout instead
@@ -86,5 +89,9 @@
 	&__close {
 		grid-area: close;
 		height: rem(20px);
+	}
+
+	@include respondTo('mobile-l', 'max') {
+		width: calc(100% - #{rem(20px)});
 	}
 }
