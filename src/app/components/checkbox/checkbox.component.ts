@@ -14,7 +14,7 @@ const valueAccessorProvider: Provider = {
 	providers: [valueAccessorProvider],
 })
 export class CheckboxComponent implements ControlValueAccessor {
-	@Input('labelId') id: string;
+	@Input('labelId') id: string = `${window['uniqueNumber']++}`;
 	@Input('checked') isChecked: boolean = false;
 	@Input('disabled') isDisabled: boolean = false;
 

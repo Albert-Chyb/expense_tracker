@@ -1,4 +1,3 @@
-import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 import { registerLocaleData } from '@angular/common';
 import localePL from '@angular/common/locales/pl';
 import { Component, OnInit } from '@angular/core';
@@ -34,6 +33,8 @@ export class AppComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
+		window['uniqueNumber'] = 0;
+
 		registerLocaleData(localePL);
 
 		// Change to local cloud functions in development environment.

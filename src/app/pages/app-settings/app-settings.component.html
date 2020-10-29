@@ -2,10 +2,7 @@
 	<form [formGroup]="form" class="settings" (ngSubmit)="updateSettings()">
 		<zippy>
 			<zippy-static toggleOnClick="false">
-				<checkbox
-					class="settings__item"
-					formControlName="autoEndPeriod"
-					labelId="auto-end-period"
+				<checkbox class="settings__item" formControlName="autoEndPeriod"
 					>Automatycznie zakańczaj bierzące okresy.</checkbox
 				>
 			</zippy-static>
