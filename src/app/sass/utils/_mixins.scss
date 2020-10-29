@@ -30,10 +30,6 @@
 	&:not(:disabled):hover {
 		filter: brightness(0.95);
 	}
-
-	&:not(:disabled):active {
-		transform: scale(0.95);
-	}
 }
 
 @mixin resetDefaultButton() {
