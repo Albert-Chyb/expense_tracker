@@ -1,12 +1,8 @@
-import { NotificationType } from './../../common/models/notifications';
+import { async, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TestBed, async } from '@angular/core/testing';
-import { isRegExp } from 'util';
 
+import { NotificationType } from './../../common/models/notifications';
 import { NotificationsService } from './notifications.service';
-import { LimitedArray } from 'src/app/common/models/limitedArray';
-import { NotificationComponent } from 'src/app/components/notification/notification.component';
-import { ComponentFactoryResolver, Injector } from '@angular/core';
 
 describe('NotificationsService', () => {
 	let service: NotificationsService;
