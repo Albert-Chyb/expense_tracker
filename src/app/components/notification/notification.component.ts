@@ -1,4 +1,3 @@
-import { filter, first, map } from 'rxjs/operators';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import {
 	AfterViewInit,
@@ -6,19 +5,17 @@ import {
 	Component,
 	ComponentRef,
 	ElementRef,
-	HostBinding,
 	Inject,
-	Input,
-	OnInit,
 	Optional,
 	ViewChild,
 } from '@angular/core';
 import { Subject } from 'rxjs';
+import { first } from 'rxjs/operators';
 import {
 	INotificationsGlobalSettings,
+	NOTIFICATIONS_GLOBAL_SETTINGS,
 	notificationsDefaultSettings,
 	NotificationsPosition,
-	NOTIFICATIONS_GLOBAL_SETTINGS,
 	NotificationType,
 } from 'src/app/common/models/notifications';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
@@ -37,8 +34,11 @@ import { fadeIn, fadeOut } from './../../animations';
 			transition(':leave', useAnimation(fadeOut)),
 		]),
 	],
+	host: {
+		'[@notificationAnimation]': 'true',
+	},
 })
-export class NotificationComponent implements OnInit, AfterViewInit {
+export class NotificationComponent implements AfterViewInit {
 	constructor(
 		private readonly _changeDetector: ChangeDetectorRef,
 
@@ -51,18 +51,16 @@ export class NotificationComponent implements OnInit, AfterViewInit {
 			: notificationsDefaultSettings;
 	}
 
-	@Input() title: string;
-	@Input() msg: string;
-	@Input() type: NotificationType = NotificationType.Neutral;
-	@HostBinding('@notificationAnimation') t = true;
-	@ViewChild('notification') notificationEl: ElementRef<HTMLElement>;
+	@ViewChild('notification') private notificationEl: ElementRef<HTMLElement>;
 
+	public title: string;
+	public msg: string;
+	public type: NotificationType = NotificationType.Neutral;
 	public componentRef: ComponentRef<NotificationComponent>;
 	private _notifications: NotificationsService;
 	private _onViewInit = new Subject<void>();
 	private _config: INotificationsGlobalSettings;
-
-	ngOnInit(): void {}
+	private _translationY: number;
 
 	ngAfterViewInit() {
 		this._onViewInit.next();
@@ -92,11 +90,24 @@ export class NotificationComponent implements OnInit, AfterViewInit {
 		this._notifications = service;
 	}
 
-	get onViewInit() {
+	get onViewInit$() {
 		return this._onViewInit.pipe(first());
 	}
 
 	get config() {
 		return this._config;
+	}
+
+	set translationY(value: number) {
+		this._translationY = value;
+		this._changeDetector.detectChanges();
+	}
+
+	get translationY() {
+		return this._translationY;
+	}
+
+	get height() {
+		return this.notificationEl.nativeElement.getBoundingClientRect().height;
 	}
 }

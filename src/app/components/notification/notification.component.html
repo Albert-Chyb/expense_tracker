@@ -2,7 +2,10 @@
 	#notification
 	class="notification notification--neutral"
 	[ngClass]="classes"
-	[ngStyle]="{ 'transition-duration': config.animationDuration + 'ms' }"
+	[ngStyle]="{
+		'transition-duration': config.animationDuration + 'ms',
+		transform: 'translateY(' + translationY + 'px)'
+	}"
 >
 	<h2 *ngIf="title" class="notification__heading">{{ title }}</h2>
 

@@ -19,8 +19,8 @@ import {
 	NotificationType,
 } from '../../common/models/notifications';
 import {
-	LimitedArray,
 	ILimitedArrayEvent,
+	LimitedArray,
 } from './../../common/models/limitedArray';
 
 /**
@@ -47,9 +47,11 @@ export class NotificationsService {
 		config: INotificationsGlobalSettings
 	) {
 		this._renderer = this._rendererFactory.createRenderer(null, null);
+
 		this._config = config
 			? Object.assign(notificationsDefaultSettings, config)
 			: notificationsDefaultSettings;
+
 		this._currentNotifications = new LimitedArray(
 			this._config.maxNotificationsOnScreen
 		);
@@ -97,7 +99,7 @@ export class NotificationsService {
 		if (this._config.autoDismiss)
 			this.scheduleDismiss(component.instance, this._config.autoDismissTimeout);
 
-		component.instance.onViewInit.subscribe(() =>
+		component.instance.onViewInit$.subscribe(() =>
 			this._currentNotifications.add(component.instance)
 		);
 
@@ -149,16 +151,9 @@ export class NotificationsService {
 	/** Positions notification in the view. */
 	private positionNotifications(): void {
 		this._currentNotifications.array.reduce((prevTranslation, notification) => {
-			const el = notification.notificationEl.nativeElement;
-			const { height } = el.getBoundingClientRect();
+			notification.translationY = prevTranslation * this._config.posY;
 
-			this._renderer.setStyle(
-				el,
-				'transform',
-				`translateY(${prevTranslation * this._config.posY}px)`
-			);
-
-			return prevTranslation + height + this._config.margin;
+			return prevTranslation + notification.height + this._config.margin;
 		}, 0);
 	}
 
