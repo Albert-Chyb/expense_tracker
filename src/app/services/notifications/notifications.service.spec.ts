@@ -1,7 +1,10 @@
 import { async, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { NotificationType } from './../../common/models/notifications';
+import {
+	NotificationsPosition,
+	NotificationType,
+} from './../../common/models/notifications';
 import { NotificationsService } from './notifications.service';
 
 describe('NotificationsService', () => {
@@ -148,5 +151,47 @@ describe('NotificationsService', () => {
 				expect(spy).toHaveBeenCalled();
 			}, service['_config'].animationDuration + 1);
 		}));
+	});
+
+	describe('positionNotifications', () => {
+		it('should set notifications translationY property based on their height', () => {
+			const fakeNotifications = [
+				{
+					height: 20,
+					translationY: 0,
+				},
+				{
+					height: 70,
+					translationY: 0,
+				},
+				{
+					height: 150,
+					translationY: 0,
+				},
+			];
+			service['_config'].margin = 10;
+			service['_config'].posY = NotificationsPosition.Bottom;
+
+			spyOnProperty(service['_currentNotifications'], 'array').and.returnValue(
+				fakeNotifications
+			);
+
+			service['positionNotifications']();
+
+			expect(fakeNotifications).toEqual([
+				{
+					height: fakeNotifications[0].height,
+					translationY: 0 * NotificationsPosition.Bottom,
+				},
+				{
+					height: fakeNotifications[1].height,
+					translationY: 30 * NotificationsPosition.Bottom,
+				},
+				{
+					height: fakeNotifications[2].height,
+					translationY: 110 * NotificationsPosition.Bottom,
+				},
+			]);
+		});
 	});
 });
