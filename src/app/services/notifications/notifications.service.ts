@@ -148,7 +148,7 @@ export class NotificationsService {
 		this._renderer.appendChild(this._docRef.body, htmlElement);
 	}
 
-	/** Positions notification in the view. */
+	/** Positions notifications in the view. */
 	private positionNotifications(): void {
 		this._currentNotifications.array.reduce((prevTranslation, notification) => {
 			notification.translationY = prevTranslation * this._config.posY;
