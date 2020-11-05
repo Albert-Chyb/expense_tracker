@@ -24,14 +24,20 @@ export class TransactionsService {
 	 */
 
 	getAllCurrent(): Observable<ITransaction[]> {
-		return this._periods.getCurrent().pipe(
-			switchMap(period =>
-				this._afStore
-					.doc(`users/${this._user.id}`)
-					.collection<ITransaction>('transactions', ref =>
-						ref.where('date', '>=', period.date.start).orderBy('date', 'desc')
+		return this._user.getUid$().pipe(
+			switchMap(uid =>
+				this._periods.getCurrent().pipe(
+					switchMap(period =>
+						this._afStore
+							.doc(`users/${uid}`)
+							.collection<ITransaction>('transactions', ref =>
+								ref
+									.where('date', '>=', period.date.start)
+									.orderBy('date', 'desc')
+							)
+							.valueChanges({ idField: 'id' })
 					)
-					.valueChanges({ idField: 'id' })
+				)
 			)
 		);
 	}
@@ -42,9 +48,15 @@ export class TransactionsService {
 	 */
 
 	get(id: string): Observable<ITransaction> {
-		return this._afStore
-			.doc<ITransaction>(`users/${this._user.id}/transactions/${id}`)
-			.valueChanges();
+		return this._user
+			.getUid$()
+			.pipe(
+				switchMap(uid =>
+					this._afStore
+						.doc<ITransaction>(`users/${uid}/transactions/${id}`)
+						.valueChanges()
+				)
+			);
 	}
 
 	/**
@@ -64,7 +76,7 @@ export class TransactionsService {
 
 		return this._afStore
 			.collection('users')
-			.doc(this._user.id)
+			.doc(await this._user.getUid())
 			.collection<ITransaction>('transactions')
 			.add(data);
 	}
@@ -86,7 +98,7 @@ export class TransactionsService {
 			data = await this.populateTransactionGroup(transaction);
 
 		return this._afStore
-			.doc(`users/${this._user.id}/transactions/${id}`)
+			.doc(`users/${await this._user.getUid()}/transactions/${id}`)
 			.update(data);
 	}
 
@@ -95,9 +107,9 @@ export class TransactionsService {
 	 * @param id Id of an transaction
 	 */
 
-	delete(id: string): Promise<void> {
+	async delete(id: string): Promise<void> {
 		return this._afStore
-			.doc(`users/${this._user.id}/transactions/${id}`)
+			.doc(`users/${await this._user.getUid()}/transactions/${id}`)
 			.delete();
 	}
 

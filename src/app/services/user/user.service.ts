@@ -1,14 +1,11 @@
+import { ICompletingData } from './../../common/models/completingData';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from 'firebase';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { filter, first, map, switchMap, tap } from 'rxjs/operators';
-
-import {
-	CompletingData,
-	ICompletingData,
-} from './../../common/models/completingData';
+import { CompletingData } from 'src/app/common/models/completingData';
 import { Period } from './../../common/models/period';
 import { ISettings } from './../../common/models/settings';
 import { AppUser, IUser } from './../../common/models/user';
@@ -29,7 +26,6 @@ export class UserService {
 	}
 
 	private _user$: Observable<IUser>;
-	private _uid: string;
 	private readonly _hasCreatedData = new BehaviorSubject(null);
 
 	/**
@@ -37,8 +33,8 @@ export class UserService {
 	 * @param user Contains those fields that will be replaced in database.
 	 */
 
-	update(user: Partial<IUser>): Promise<void> {
-		return this._afStore.doc(`users/${this.id}`).update(user);
+	async update(user: Partial<IUser>): Promise<void> {
+		return this._afStore.doc(`users/${await this.getUid()}`).update(user);
 	}
 
 	/**
@@ -46,17 +42,18 @@ export class UserService {
 	 * @param settings New settings
 	 */
 
-	updateSettings(settings: ISettings): Promise<void> {
-		return this._afStore.doc(`users/${this.id}`).update({ settings });
+	async updateSettings(settings: ISettings): Promise<void> {
+		return this._afStore
+			.doc(`users/${await this.getUid()}`)
+			.update({ settings });
 	}
 
 	/**
-	 * Creates required data in database.
-	 * @param data Completing data that is required to complete account.
+	 * Creates initial data in database.
 	 */
 
 	async createData(data: ICompletingData): Promise<void> {
-		const userRef = this._afStore.doc(`users/${this.id}`);
+		const userRef = this._afStore.doc(`users/${await this.getUid()}`);
 		const period = Period.buildOpened();
 		const currentUser = await this._afAuth.currentUser;
 		const userPromise = userRef.set(
@@ -77,11 +74,19 @@ export class UserService {
 	}
 
 	/**
-	 * Returns currently logged in user's id.
+	 * Returns user ID. (Promise way)
 	 */
 
-	get id(): string {
-		return this._uid || '';
+	async getUid(): Promise<string> {
+		return (await this._afAuth.currentUser).uid;
+	}
+
+	/**
+	 * Returns user ID. (Observable way)
+	 */
+
+	getUid$() {
+		return from(this._afAuth.currentUser).pipe(map(user => user.uid));
 	}
 
 	/**
@@ -119,10 +124,6 @@ export class UserService {
 	private init(): void {
 		// Set up user observable with data from database.
 		this._user$ = this._afAuth.authState.pipe(
-			tap(user => {
-				if (user) this._uid = user.uid;
-				else this._uid = '';
-			}),
 			switchMap(this.getUserFromDatabase.bind(this))
 		);
 

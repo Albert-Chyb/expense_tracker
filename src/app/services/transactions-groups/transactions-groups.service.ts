@@ -1,3 +1,4 @@
+import { switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
@@ -20,10 +21,16 @@ export class TransactionsGroupsService {
 	 */
 
 	getAll(): Observable<ITransactionGroup[]> {
-		return this._afStore
-			.doc(`users/${this._user.id}`)
-			.collection<ITransactionGroup>('groups')
-			.valueChanges({ idField: 'id' });
+		return this._user
+			.getUid$()
+			.pipe(
+				switchMap(uid =>
+					this._afStore
+						.doc(`users/${uid}`)
+						.collection<ITransactionGroup>('groups')
+						.valueChanges({ idField: 'id' })
+				)
+			);
 	}
 
 	/**
@@ -32,10 +39,16 @@ export class TransactionsGroupsService {
 	 */
 
 	get(id: string): Observable<ITransactionGroup> {
-		return this._afStore
-			.doc<ITransactionGroup>(`users/${this._user.id}/groups/${id}`)
-			.snapshotChanges()
-			.pipe(includeDocId());
+		return this._user
+			.getUid$()
+			.pipe(
+				switchMap(uid =>
+					this._afStore
+						.doc<ITransactionGroup>(`users/${uid}/groups/${id}`)
+						.snapshotChanges()
+						.pipe(includeDocId())
+				)
+			);
 	}
 
 	/**
@@ -43,8 +56,9 @@ export class TransactionsGroupsService {
 	 * @param id Id of an transaction
 	 */
 
-	delete(id: string): Promise<void> {
-		return this._afStore.doc(`users/${this._user.id}/groups/${id}`).delete();
+	async delete(id: string): Promise<void> {
+		const uid = await this._user.getUid();
+		return this._afStore.doc(`users/${uid}/groups/${id}`).delete();
 	}
 
 	/**
@@ -52,10 +66,8 @@ export class TransactionsGroupsService {
 	 * @param group Group to save in database
 	 */
 
-	add(group: ITransactionGroup): Promise<DocumentReference> {
-		return this._afStore
-			.doc(`users/${this._user.id}`)
-			.collection('groups')
-			.add(group);
+	async add(group: ITransactionGroup): Promise<DocumentReference> {
+		const uid = await this._user.getUid();
+		return this._afStore.doc(`users/${uid}`).collection('groups').add(group);
 	}
 }

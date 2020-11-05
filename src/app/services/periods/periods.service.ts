@@ -21,14 +21,18 @@ export class PeriodsService {
 	 */
 
 	getCurrent(): Observable<IOpenedPeriod> {
-		return this._afStore
-			.collection('users')
-			.doc(this._user.id)
-			.collection<IOpenedPeriod>('periods', ref =>
-				ref.where('isClosed', '==', false)
+		return this._user.getUid$().pipe(
+			switchMap(uid =>
+				this._afStore
+					.collection('users')
+					.doc(uid)
+					.collection<IOpenedPeriod>('periods', ref =>
+						ref.where('isClosed', '==', false)
+					)
+					.valueChanges({ idField: 'id' })
+					.pipe(map(periods => periods[0]))
 			)
-			.valueChanges({ idField: 'id' })
-			.pipe(map(periods => periods[0]));
+		);
 	}
 
 	/**
@@ -36,13 +40,19 @@ export class PeriodsService {
 	 */
 
 	endCurrent(): Promise<void> {
-		return this.getCurrent()
+		return this._user
+			.getUid$()
 			.pipe(
-				first(),
-				switchMap(period =>
-					this._afStore
-						.doc(`users/${this._user.id}/periods/${period.id}`)
-						.update({ 'date.end': firestore.FieldValue.serverTimestamp() })
+				switchMap(uid =>
+					this.getCurrent().pipe(
+						first(),
+
+						switchMap(period =>
+							this._afStore
+								.doc(`users/${uid}/periods/${period.id}`)
+								.update({ 'date.end': firestore.FieldValue.serverTimestamp() })
+						)
+					)
 				)
 			)
 			.toPromise();
@@ -53,13 +63,18 @@ export class PeriodsService {
 	 */
 
 	openCurrent(): Promise<void> {
-		return this.getCurrent()
+		return this._user
+			.getUid$()
 			.pipe(
-				first(),
-				switchMap(period =>
-					this._afStore
-						.doc(`users/${this._user.id}/periods/${period.id}`)
-						.update({ 'date.end': firestore.FieldValue.delete() })
+				switchMap(uid =>
+					this.getCurrent().pipe(
+						first(),
+						switchMap(period =>
+							this._afStore
+								.doc(`users/${uid}/periods/${period.id}`)
+								.update({ 'date.end': firestore.FieldValue.delete() })
+						)
+					)
 				)
 			)
 			.toPromise();
@@ -70,11 +85,15 @@ export class PeriodsService {
 	 */
 
 	getAllClosed(): Observable<IClosedPeriod[]> {
-		return this._afStore
-			.doc(`users/${this._user.id}`)
-			.collection<IClosedPeriod>('periods', ref =>
-				ref.where('isClosed', '==', true)
+		return this._user.getUid$().pipe(
+			switchMap(uid =>
+				this._afStore
+					.doc(`users/${uid}`)
+					.collection<IClosedPeriod>('periods', ref =>
+						ref.where('isClosed', '==', true)
+					)
+					.valueChanges({ idField: 'id' })
 			)
-			.valueChanges({ idField: 'id' });
+		);
 	}
 }
