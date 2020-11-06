@@ -8,7 +8,7 @@ import {
 	RendererStyleFlags2,
 } from '@angular/core';
 
-type RippleProperty = 'x' | 'y' | 'size' | 'duration';
+type RippleProperty = 'x' | 'y' | 'size' | 'duration' | 'color';
 
 @Directive({
 	selector: '[ripple], .btn:not(.no-ripple), .ripple',
@@ -46,6 +46,12 @@ export class RippleDirective implements OnInit {
 
 	ngOnInit(): void {
 		this.setRippleProperty('duration', `${this.animationDuration}ms`);
+		this.setRippleProperty(
+			'color',
+			this.idealTextColor(
+				getComputedStyle(this._host.nativeElement).backgroundColor
+			)
+		);
 	}
 
 	private setRippleProperty(varName: RippleProperty, value: string): void {
@@ -55,5 +61,26 @@ export class RippleDirective implements OnInit {
 			value,
 			RendererStyleFlags2.DashCase
 		);
+	}
+
+	private idealTextColor(bgColor) {
+		const nThreshold = 105;
+		const components = this.getRGBComponents(bgColor);
+		const bgDelta =
+			components.R * 0.299 + components.G * 0.587 + components.B * 0.114;
+
+		return 255 - bgDelta < nThreshold ? '#000000' : '#ffffff';
+	}
+
+	private getRGBComponents(color) {
+		const r = color.substring(1, 3);
+		const g = color.substring(3, 5);
+		const b = color.substring(5, 7);
+
+		return {
+			R: parseInt(r, 16),
+			G: parseInt(g, 16),
+			B: parseInt(b, 16),
+		};
 	}
 }
