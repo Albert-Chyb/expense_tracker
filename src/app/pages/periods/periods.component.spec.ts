@@ -39,8 +39,6 @@ describe('PeriodsComponent', () => {
 	}));
 
 	beforeEach(() => {
-		spyOnProperty(TestBed.inject(UserService), 'id').and.returnValue('id');
-
 		fixture = TestBed.createComponent(PeriodsComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

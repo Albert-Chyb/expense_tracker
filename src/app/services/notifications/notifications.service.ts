@@ -22,7 +22,10 @@ import {
 	ILimitedArrayEvent,
 	LimitedArray,
 } from './../../common/models/limitedArray';
-import { NOTIFICATIONS_SERVICE } from './../../common/models/notifications';
+import {
+	NOTIFICATIONS_SERVICE,
+	NOTIFICATIONS_SETTINGS,
+} from './../../common/models/notifications';
 
 /**
  * Service that manages toast notifications in the app.
@@ -83,7 +86,7 @@ export class NotificationsService {
 		const injector = Injector.create({
 			parent: this._injector,
 			providers: [
-				{ provide: 'NOTIFICATIONS_CONFIG', useValue: this._config },
+				{ provide: NOTIFICATIONS_SETTINGS, useValue: this._config },
 				{ provide: NOTIFICATIONS_SERVICE, useValue: this },
 			],
 			name: 'Injector for NotificationComponent',
@@ -174,7 +177,6 @@ export class NotificationsService {
 		item: notification,
 	}: ILimitedArrayEvent<NotificationComponent>): void {
 		clearTimeout(notification.timeout);
-		this._appRef.detachView(notification.componentRef.hostView);
 		notification.componentRef.destroy();
 
 		setTimeout(

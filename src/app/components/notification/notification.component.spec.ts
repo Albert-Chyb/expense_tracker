@@ -1,7 +1,11 @@
+import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 import { NotificationComponent } from 'src/app/components/notification/notification.component';
 import {
 	NotificationType,
 	NotificationsPosition,
+	NOTIFICATIONS_GLOBAL_SETTINGS,
+	NOTIFICATIONS_SETTINGS,
+	NOTIFICATIONS_SERVICE,
 } from './../../common/models/notifications';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -18,6 +22,16 @@ describe('NotificationComponent', () => {
 		TestBed.configureTestingModule({
 			declarations: [NotificationComponent],
 			imports: [BrowserAnimationsModule],
+			providers: [
+				{
+					provide: NOTIFICATIONS_SETTINGS,
+					useValue: NOTIFICATIONS_GLOBAL_SETTINGS,
+				},
+				{
+					provide: NOTIFICATIONS_SERVICE,
+					useClass: NotificationsService,
+				},
+			],
 		}).compileComponents();
 	}));
 

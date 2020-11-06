@@ -39,8 +39,6 @@ describe('ManageGroupsComponent', () => {
 	}));
 
 	beforeEach(() => {
-		spyOnProperty(TestBed.inject(UserService), 'id').and.returnValue('id');
-
 		fixture = TestBed.createComponent(ManageGroupsComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

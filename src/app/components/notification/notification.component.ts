@@ -19,7 +19,10 @@ import {
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 
 import { fadeIn, fadeOut } from './../../animations';
-import { NOTIFICATIONS_SERVICE } from './../../common/models/notifications';
+import {
+	NOTIFICATIONS_SERVICE,
+	NOTIFICATIONS_SETTINGS,
+} from './../../common/models/notifications';
 
 @Component({
 	templateUrl: './notification.component.html',
@@ -42,7 +45,7 @@ export class NotificationComponent implements AfterViewInit {
 		private readonly _changeDetector: ChangeDetectorRef,
 		private readonly _injector: Injector,
 
-		@Inject('NOTIFICATIONS_CONFIG')
+		@Inject(NOTIFICATIONS_SETTINGS)
 		private readonly _config: INotificationsSettings
 	) {}
 
@@ -52,7 +55,7 @@ export class NotificationComponent implements AfterViewInit {
 	public msg: string;
 	public type: NotificationType = NotificationType.Neutral;
 	public componentRef: ComponentRef<NotificationComponent>;
-	public timeout: number;
+	public timeout: number | any;
 	private _notifications: NotificationsService = this._injector.get(
 		NOTIFICATIONS_SERVICE
 	);

@@ -59,7 +59,6 @@ describe('AddTransactionComponent', () => {
 	}));
 
 	beforeEach(() => {
-		spyOnProperty(TestBed.inject(UserService), 'id').and.returnValue('id');
 		fixture = TestBed.createComponent(AddTransactionComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();

@@ -4,7 +4,11 @@ import { NotificationsService } from 'src/app/services/notifications/notificatio
 /** Default notifications settings. You can use this token to provide your own settings */
 export const NOTIFICATIONS_GLOBAL_SETTINGS = new InjectionToken<
 	INotificationsSettings
->('notifications-global-settings');
+>('NOTIFICATIONS_GLOBAL_SETTINGS');
+
+export const NOTIFICATIONS_SETTINGS = new InjectionToken<
+	INotificationsSettings
+>('NOTIFICATIONS_SETTINGS');
 
 /**
  * To avoid circular dependency error in notification component,
