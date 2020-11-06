@@ -6,21 +6,20 @@ import {
 	ComponentRef,
 	ElementRef,
 	Inject,
-	Optional,
+	Injector,
 	ViewChild,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
 import {
-	INotificationsGlobalSettings,
-	NOTIFICATIONS_GLOBAL_SETTINGS,
-	notificationsDefaultSettings,
+	INotificationsSettings,
 	NotificationsPosition,
 	NotificationType,
 } from 'src/app/common/models/notifications';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 
 import { fadeIn, fadeOut } from './../../animations';
+import { NOTIFICATIONS_SERVICE } from './../../common/models/notifications';
 
 @Component({
 	templateUrl: './notification.component.html',
@@ -41,15 +40,11 @@ import { fadeIn, fadeOut } from './../../animations';
 export class NotificationComponent implements AfterViewInit {
 	constructor(
 		private readonly _changeDetector: ChangeDetectorRef,
+		private readonly _injector: Injector,
 
-		@Optional()
-		@Inject(NOTIFICATIONS_GLOBAL_SETTINGS)
-		config: INotificationsGlobalSettings
-	) {
-		this._config = this._config = config
-			? Object.assign(notificationsDefaultSettings, config)
-			: notificationsDefaultSettings;
-	}
+		@Inject('NOTIFICATIONS_CONFIG')
+		private readonly _config: INotificationsSettings
+	) {}
 
 	@ViewChild('notification') private notificationEl: ElementRef<HTMLElement>;
 
@@ -57,9 +52,11 @@ export class NotificationComponent implements AfterViewInit {
 	public msg: string;
 	public type: NotificationType = NotificationType.Neutral;
 	public componentRef: ComponentRef<NotificationComponent>;
-	private _notifications: NotificationsService;
+	public timeout: number;
+	private _notifications: NotificationsService = this._injector.get(
+		NOTIFICATIONS_SERVICE
+	);
 	private _onViewInit = new Subject<void>();
-	private _config: INotificationsGlobalSettings;
 	private _translationY: number;
 
 	ngAfterViewInit() {
@@ -86,16 +83,12 @@ export class NotificationComponent implements AfterViewInit {
 		};
 	}
 
-	set notificationsService(service: NotificationsService) {
-		this._notifications = service;
-	}
-
 	get onViewInit$() {
 		return this._onViewInit.pipe(first());
 	}
 
-	get config() {
-		return this._config;
+	get animationDuration() {
+		return this._config.animationDuration;
 	}
 
 	set translationY(value: number) {

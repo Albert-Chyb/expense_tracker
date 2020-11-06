@@ -13,7 +13,7 @@ import {
 import { NotificationComponent } from 'src/app/components/notification/notification.component';
 
 import {
-	INotificationsGlobalSettings,
+	INotificationsSettings,
 	NOTIFICATIONS_GLOBAL_SETTINGS,
 	notificationsDefaultSettings,
 	NotificationType,
@@ -22,6 +22,7 @@ import {
 	ILimitedArrayEvent,
 	LimitedArray,
 } from './../../common/models/limitedArray';
+import { NOTIFICATIONS_SERVICE } from './../../common/models/notifications';
 
 /**
  * Service that manages toast notifications in the app.
@@ -32,7 +33,7 @@ import {
 })
 export class NotificationsService {
 	private readonly _renderer: Renderer2;
-	private _config: INotificationsGlobalSettings;
+	private _config: INotificationsSettings;
 	private _currentNotifications: LimitedArray<NotificationComponent>;
 
 	constructor(
@@ -44,7 +45,7 @@ export class NotificationsService {
 
 		@Optional()
 		@Inject(NOTIFICATIONS_GLOBAL_SETTINGS)
-		config: INotificationsGlobalSettings
+		config: INotificationsSettings
 	) {
 		this._renderer = this._rendererFactory.createRenderer(null, null);
 
@@ -79,13 +80,19 @@ export class NotificationsService {
 		const componentFactory = this._componentResolver.resolveComponentFactory(
 			NotificationComponent
 		);
-		const component = componentFactory.create(this._injector);
-		const notificationsService = this;
+		const injector = Injector.create({
+			parent: this._injector,
+			providers: [
+				{ provide: 'NOTIFICATIONS_CONFIG', useValue: this._config },
+				{ provide: NOTIFICATIONS_SERVICE, useValue: this },
+			],
+			name: 'Injector for NotificationComponent',
+		});
+		const component = componentFactory.create(injector);
 		const inputs = {
 			msg: message,
 			title,
 			type,
-			notificationsService,
 			componentRef: component,
 		};
 
@@ -135,7 +142,9 @@ export class NotificationsService {
 		notification: NotificationComponent,
 		timeout: number
 	): void {
-		setTimeout(() => notification.dismiss(), timeout);
+		notification.timeout = setTimeout(() => {
+			notification.dismiss();
+		}, timeout);
 	}
 
 	/**
@@ -164,6 +173,8 @@ export class NotificationsService {
 	private onNotificationsOverflowing({
 		item: notification,
 	}: ILimitedArrayEvent<NotificationComponent>): void {
+		clearTimeout(notification.timeout);
+		this._appRef.detachView(notification.componentRef.hostView);
 		notification.componentRef.destroy();
 
 		setTimeout(
