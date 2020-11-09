@@ -52,6 +52,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { OverlayComponent } from './components/overlay/overlay.component';
 
 @NgModule({
 	declarations: [
@@ -87,6 +88,7 @@ import { NotificationComponent } from './components/notification/notification.co
 		MainNavComponent,
 		LoaderComponent,
 		NotificationComponent,
+		OverlayComponent,
 	],
 	imports: [
 		BrowserModule,
