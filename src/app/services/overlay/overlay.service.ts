@@ -1,4 +1,3 @@
-import { BehaviorSubject } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import {
 	ApplicationRef,
@@ -7,17 +6,14 @@ import {
 	EmbeddedViewRef,
 	Inject,
 	Injectable,
-	InjectionToken,
 	Injector,
 	Renderer2,
 	RendererFactory2,
 } from '@angular/core';
+import { Subject } from 'rxjs';
 
+import { OVERLAY_SERVICE } from '../../common/models/overlay';
 import { OverlayComponent } from './../../components/overlay/overlay.component';
-
-export const OVERLAY_SERVICE = new InjectionToken<OverlayService>(
-	'OVERLAY_SERVICE'
-);
 
 @Injectable({
 	providedIn: 'root',
@@ -36,11 +32,26 @@ export class OverlayService {
 		this._renderer = _rendererFactory.createRenderer(null, null);
 	}
 
-	public onClick = new BehaviorSubject<MouseEvent>(null);
+	/**
+	 * Allows listening for clicks on overlay.
+	 */
+	public onClick$ = new Subject<MouseEvent>();
 	private _isOpened = false;
 	private _renderer: Renderer2;
 	private _overlayRef: ComponentRef<OverlayComponent>;
 
+	/**
+	 * Opens overlay. You can pass a class of a component that will be created and inserted
+	 * into the overlay view. Also you can pass your own injector that will be used
+	 * during component creating. Overlay can be opened only once, if you'll try to
+	 * open it while another instance is already opened nothing will happen, and
+	 * method will return null.
+	 *
+	 * It returns component instance in case you`ll need to access it later.
+	 *
+	 * @param Component Component class to create and insert into overlay
+	 * @param injector Injector that will be used to create passed Component
+	 */
 	open<T>(Component?: any, injector = this._injector): T | null {
 		if (this._isOpened) return null;
 
@@ -65,6 +76,9 @@ export class OverlayService {
 			return component.instance.insertComponent<T>(Component, injector);
 	}
 
+	/**
+	 * Closes currently opened overlay.
+	 */
 	close() {
 		if (!this._isOpened) return null;
 

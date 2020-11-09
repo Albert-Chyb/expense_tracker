@@ -1,7 +1,4 @@
-import {
-	OverlayService,
-	OVERLAY_SERVICE,
-} from './../../services/overlay/overlay.service';
+import { OVERLAY_SERVICE } from '../../common/models/overlay';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import {
 	Component,
@@ -33,18 +30,22 @@ export class OverlayComponent {
 		private readonly _injector: Injector
 	) {}
 
-	private readonly _overlay: OverlayService = this._injector.get(
-		OVERLAY_SERVICE
-	);
+	private readonly _overlay = this._injector.get(OVERLAY_SERVICE);
 
 	@ViewChild('overlayContent', { read: ViewContainerRef, static: true })
 	content: ViewContainerRef;
 
 	@HostListener('click', ['$event']) onClick($event: MouseEvent) {
-		this._overlay.onClick.next($event);
+		this._overlay.onClick$.next($event);
 	}
 
-	insertComponent<T>(Component: any, injector?: Injector): T {
+	/**
+	 * Inserts the component into overlay view using passed injector.
+	 * Returns instance of that component.
+	 * @param Component Class of a component to insert
+	 * @param injector Injector that will be used when creating the component
+	 */
+	insertComponent<T>(Component: any, injector: Injector): T {
 		const componentFactory = this._componentFactory.resolveComponentFactory<T>(
 			Component
 		);
