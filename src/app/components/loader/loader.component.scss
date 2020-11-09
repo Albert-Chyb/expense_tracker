@@ -16,8 +16,6 @@
 }
 
 .loader {
-	@include square(130px);
-
 	border-radius: 100%;
 	position: relative;
 	border: rem(15px) var(--bg-color-1) solid;

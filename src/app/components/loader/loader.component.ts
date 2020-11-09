@@ -21,6 +21,9 @@ export class LoaderComponent {
 	 */
 	@Input('isFixed') isFixed = false;
 
+	/** Lets you set height and width of the loader */
+	@Input('diameter') diameter = 130;
+
 	get classes() {
 		return {
 			'loader-container--fixed': this.isFixed,
