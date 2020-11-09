@@ -1,3 +1,4 @@
+import { BehaviorSubject } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import {
 	ApplicationRef,
@@ -6,12 +7,17 @@ import {
 	EmbeddedViewRef,
 	Inject,
 	Injectable,
+	InjectionToken,
 	Injector,
 	Renderer2,
 	RendererFactory2,
 } from '@angular/core';
 
 import { OverlayComponent } from './../../components/overlay/overlay.component';
+
+export const OVERLAY_SERVICE = new InjectionToken<OverlayService>(
+	'OVERLAY_SERVICE'
+);
 
 @Injectable({
 	providedIn: 'root',
@@ -30,6 +36,7 @@ export class OverlayService {
 		this._renderer = _rendererFactory.createRenderer(null, null);
 	}
 
+	public onClick = new BehaviorSubject<MouseEvent>(null);
 	private _isOpened = false;
 	private _renderer: Renderer2;
 	private _overlayRef: ComponentRef<OverlayComponent>;
@@ -40,7 +47,11 @@ export class OverlayService {
 		const componentFactory = this._componentResolver.resolveComponentFactory(
 			OverlayComponent
 		);
-		const component = componentFactory.create(this._injector);
+		const overlayComponentInjector = Injector.create({
+			parent: this._injector,
+			providers: [{ provide: OVERLAY_SERVICE, useValue: this }],
+		});
+		const component = componentFactory.create(overlayComponentInjector);
 		const componentView = component.hostView as EmbeddedViewRef<
 			OverlayComponent
 		>;
