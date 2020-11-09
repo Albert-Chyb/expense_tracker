@@ -8,10 +8,7 @@
 	border-radius: rem(10px);
 	color: var(--text-on-primary);
 	padding: rem(20px) 0px;
-
-	&:not(:first-child) {
-		margin-top: rem(20px);
-	}
+	margin-bottom: rem(10px);
 
 	&--expanded {
 		padding-top: rem(10px);
