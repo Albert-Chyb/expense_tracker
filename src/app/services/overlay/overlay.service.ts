@@ -85,4 +85,9 @@ export class OverlayService {
 		this._overlayRef.destroy();
 		this._isOpened = false;
 	}
+
+	toggle() {
+		if (this._isOpened) this.close();
+		else this.open();
+	}
 }
