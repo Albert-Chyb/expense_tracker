@@ -1,7 +1,14 @@
+:host {
+	display: block;
+	position: fixed;
+	z-index: 100;
+}
+
 .overlay {
-	z-index: 99999;
+	z-index: 100;
 	position: fixed;
 	width: 100vw;
 	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.541);
+	background-color: rgba(0, 0, 0, 0.2);
+	backdrop-filter: blur(10px);
 }

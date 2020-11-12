@@ -1,4 +1,3 @@
-import { OVERLAY_SERVICE } from '../../common/models/overlay';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import {
 	Component,
@@ -9,6 +8,7 @@ import {
 	ViewContainerRef,
 } from '@angular/core';
 
+import { OVERLAY_SERVICE } from '../../common/models/overlay';
 import { fadeIn, fadeOut } from './../../animations';
 
 @Component({
