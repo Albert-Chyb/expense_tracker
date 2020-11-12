@@ -53,6 +53,7 @@ import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -89,6 +90,7 @@ import { OverlayComponent } from './components/overlay/overlay.component';
 		LoaderComponent,
 		NotificationComponent,
 		OverlayComponent,
+		ConfirmDialogComponent,
 	],
 	imports: [
 		BrowserModule,

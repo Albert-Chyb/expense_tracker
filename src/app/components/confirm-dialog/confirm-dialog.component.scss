@@ -1,0 +1,22 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+.dialog {
+	@include centerElementAbsolute();
+
+	background-color: var(--bg-color-1);
+	width: min(500px, 90%);
+	padding: rem(25px);
+	border-radius: rem(10px);
+
+	&__actions {
+		display: flex;
+	}
+
+	&__action {
+		&:first-child {
+			margin-right: rem(25px);
+		}
+	}
+}
