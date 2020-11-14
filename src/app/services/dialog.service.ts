@@ -1,3 +1,4 @@
+import { ConfirmDialogComponent } from './../components/confirm-dialog/confirm-dialog.component';
 import { ComponentType } from '@angular/cdk/portal';
 import {
 	Component,
@@ -8,6 +9,7 @@ import {
 	Injectable,
 	InjectionToken,
 	Injector,
+	OnDestroy,
 	ViewChild,
 	ViewContainerRef,
 } from '@angular/core';
@@ -21,7 +23,7 @@ export const DIALOG_REF = new InjectionToken('DIALOG_REF');
 @Component({
 	template: '<ng-template #dialogContent></ng-template>',
 })
-export class DialogContainerComponent {
+export class DialogContainerComponent implements OnDestroy {
 	constructor(
 		private readonly _componentFactory: ComponentFactoryResolver,
 		private readonly _injector: Injector,
@@ -56,6 +58,10 @@ export class DialogContainerComponent {
 	closeWith(data: any) {
 		this._afterClosed.next(data);
 		this._dialog.close();
+	}
+
+	ngOnDestroy() {
+		this._afterClosed.unsubscribe();
 	}
 
 	get afterClosed() {
@@ -96,6 +102,10 @@ export class DialogService {
 		this._overlay.open(dialogContainer);
 
 		return dialogContainer.instance;
+	}
+
+	openConfirm(title: string, description: string) {
+		return this.open(ConfirmDialogComponent, { title, description });
 	}
 
 	close() {
