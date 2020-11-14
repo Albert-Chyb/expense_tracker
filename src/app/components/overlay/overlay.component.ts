@@ -1,7 +1,10 @@
 import { transition, trigger, useAnimation } from '@angular/animations';
 import {
+	AfterViewInit,
 	Component,
+	ComponentFactory,
 	ComponentFactoryResolver,
+	ComponentRef,
 	HostListener,
 	Injector,
 	ViewChild,
@@ -42,20 +45,10 @@ export class OverlayComponent {
 	/**
 	 * Inserts the component into overlay view using passed injector.
 	 * Returns instance of that component.
-	 * @param Component Class of a component to insert
+	 * @param componentRef Class of a component to insert
 	 * @param injector Injector that will be used when creating the component
 	 */
-	insertComponent<T>(Component: any, injector: Injector): T {
-		const componentFactory = this._componentFactory.resolveComponentFactory<T>(
-			Component
-		);
-
-		const componentRef = this.content.createComponent(
-			componentFactory,
-			null,
-			injector
-		);
-
-		return componentRef.instance as T;
+	insertComponent<T>(componentRef: ComponentRef<T>) {
+		this.content.insert(componentRef.hostView);
 	}
 }

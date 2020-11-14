@@ -1,3 +1,4 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { DOCUMENT } from '@angular/common';
 import {
 	ApplicationRef,
@@ -49,10 +50,10 @@ export class OverlayService {
 	 *
 	 * It returns component instance in case you`ll need to access it later.
 	 *
-	 * @param Component Component class to create and insert into overlay
+	 * @param contentComponentFactory Component class to create and insert into overlay
 	 * @param injector Injector that will be used to create passed Component
 	 */
-	open<T>(Component?: any, injector = this._injector): T | null {
+	open(contentComponentFactory?: ComponentRef<any>) {
 		if (this._isOpened) return null;
 
 		const componentFactory = this._componentResolver.resolveComponentFactory(
@@ -72,8 +73,8 @@ export class OverlayService {
 		this._renderer.appendChild(this._docRef.body, componentView.rootNodes[0]);
 		this._isOpened = true;
 
-		if (Component)
-			return component.instance.insertComponent<T>(Component, injector);
+		if (contentComponentFactory)
+			return component.instance.insertComponent(contentComponentFactory);
 	}
 
 	/**
@@ -89,5 +90,9 @@ export class OverlayService {
 	toggle() {
 		if (this._isOpened) this.close();
 		else this.open();
+	}
+
+	get isOpened(): boolean {
+		return this._isOpened;
 	}
 }

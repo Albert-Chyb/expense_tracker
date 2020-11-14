@@ -1,15 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+
+import {
+	DIALOG_DATA,
+	DIALOG_REF,
+	DialogContainerComponent,
+} from './../../services/dialog.service';
+
+export interface ConfirmDialogData {
+	title: string;
+	description: string;
+}
 
 @Component({
-  selector: 'app-confirm-dialog',
-  templateUrl: './confirm-dialog.component.html',
-  styleUrls: ['./confirm-dialog.component.scss']
+	templateUrl: './confirm-dialog.component.html',
+	styleUrls: ['./confirm-dialog.component.scss'],
 })
-export class ConfirmDialogComponent implements OnInit {
+export class ConfirmDialogComponent {
+	constructor(
+		@Inject(DIALOG_DATA) private readonly _data: ConfirmDialogData,
+		@Inject(DIALOG_REF) private readonly _dialogRef: DialogContainerComponent
+	) {}
 
-  constructor() { }
+	get data() {
+		return this._data;
+	}
 
-  ngOnInit(): void {
-  }
+	confirm() {
+		this._dialogRef.closeWith(true);
+	}
 
+	reject() {
+		this._dialogRef.closeWith(false);
+	}
 }

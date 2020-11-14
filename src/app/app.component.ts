@@ -1,27 +1,19 @@
-import { LoaderComponent } from './components/loader/loader.component';
-import { OverlayService } from './services/overlay/overlay.service';
-import { registerLocaleData } from '@angular/common';
-import localePL from '@angular/common/locales/pl';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { functions } from 'firebase';
 import { environment } from 'src/environments/environment';
 
 import { routeAnimation } from './animations';
+import {
+	ConfirmDialogComponent,
+	ConfirmDialogData,
+} from './components/confirm-dialog/confirm-dialog.component';
 import { DeviceService } from './services/device/device.service';
+import { DialogService } from './services/dialog.service';
 import { FormErrorsService } from './services/form-errors/form-errors.service';
 import { ThemesService } from './services/themes/themes.service';
 import { UserService } from './services/user/user.service';
-
-@Component({
-	template: '<h1>Jakiś tekst tutaj !!!</h1>',
-})
-class TestComponent implements OnDestroy {
-	ngOnDestroy() {
-		console.log('I am destroyed');
-	}
-}
 
 @Component({
 	selector: 'app-root',
@@ -41,17 +33,11 @@ export class AppComponent implements OnInit {
 		private readonly _formErrors: FormErrorsService,
 		private readonly _pwaUpdates: SwUpdate,
 		private readonly _device: DeviceService,
-		private readonly _overlay: OverlayService
+		private readonly _dialog: DialogService
 	) {}
 
 	ngOnInit() {
 		window['uniqueNumber'] = 0;
-
-		this._overlay.open(LoaderComponent);
-
-		setTimeout(() => this._overlay.close(), 5000);
-
-		registerLocaleData(localePL);
 
 		// Change to local cloud functions in development environment.
 		if (environment.firebaseEmulators.enabled)
