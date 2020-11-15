@@ -1,10 +1,7 @@
 import { Component, Inject } from '@angular/core';
 
-import {
-	DIALOG_DATA,
-	DIALOG_REF,
-	DialogContainerComponent,
-} from './../../services/dialog.service';
+import { DIALOG_DATA, DIALOG_REF } from '../../common/models/dialog';
+import { DialogContainerComponent } from '../dialog-container/dialog-container.component';
 
 export interface ConfirmDialogData {
 	title: string;
