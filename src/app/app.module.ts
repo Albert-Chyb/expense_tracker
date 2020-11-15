@@ -56,6 +56,7 @@ import { OverlayComponent } from './components/overlay/overlay.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { DialogContainerComponent } from './components/dialog-container/dialog-container.component';
 import { PortalModule } from '@angular/cdk/portal';
+import { ConfirmActionDirective } from './directives/confirm-action/confirm-action.directive';
 
 @NgModule({
 	declarations: [
@@ -94,6 +95,7 @@ import { PortalModule } from '@angular/cdk/portal';
 		OverlayComponent,
 		ConfirmDialogComponent,
 		DialogContainerComponent,
+		ConfirmActionDirective,
 	],
 	imports: [
 		BrowserModule,
