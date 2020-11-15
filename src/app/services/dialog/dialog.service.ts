@@ -1,3 +1,4 @@
+import { DIALOG_SERVICE } from './../../common/models/dialog';
 import { ComponentType } from '@angular/cdk/portal';
 import { Injectable, Injector } from '@angular/core';
 
@@ -30,7 +31,10 @@ export class DialogService {
 	): DialogContainerComponent {
 		const injector = Injector.create({
 			parent: this._injector,
-			providers: [{ provide: DIALOG_DATA, useValue: data }],
+			providers: [
+				{ provide: DIALOG_DATA, useValue: data },
+				{ provide: DIALOG_SERVICE, useValue: this },
+			],
 		});
 		const dialogContainer = this._overlay.open(
 			DialogContainerComponent,
