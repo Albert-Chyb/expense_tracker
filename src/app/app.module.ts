@@ -55,6 +55,7 @@ import { NotificationComponent } from './components/notification/notification.co
 import { OverlayComponent } from './components/overlay/overlay.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { DialogContainerComponent } from './services/dialog.service';
+import { PortalModule } from '@angular/cdk/portal';
 
 @NgModule({
 	declarations: [
@@ -112,6 +113,7 @@ import { DialogContainerComponent } from './services/dialog.service';
 		ServiceWorkerModule.register('ngsw-worker.js', {
 			enabled: environment.production,
 		}),
+		PortalModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

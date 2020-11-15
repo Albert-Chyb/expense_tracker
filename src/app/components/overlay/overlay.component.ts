@@ -1,21 +1,15 @@
 import { transition, trigger, useAnimation } from '@angular/animations';
 import {
-	AfterViewInit,
-	Component,
-	ComponentFactory,
-	ComponentFactoryResolver,
-	ComponentRef,
-	HostListener,
-	Injector,
-	ViewChild,
-	ViewContainerRef,
-} from '@angular/core';
+	CdkPortalOutlet,
+	ComponentPortal,
+	ComponentType,
+} from '@angular/cdk/portal';
+import { Component, HostListener, Injector, ViewChild } from '@angular/core';
 
 import { OVERLAY_SERVICE } from '../../common/models/overlay';
 import { fadeIn, fadeOut } from './../../animations';
 
 @Component({
-	templateUrl: './overlay.component.html',
 	styleUrls: ['./overlay.component.scss'],
 	animations: [
 		trigger('overlayAnimation', [
@@ -26,29 +20,39 @@ import { fadeIn, fadeOut } from './../../animations';
 	host: {
 		'[@overlayAnimation]': '',
 	},
+	template: `
+		<div class="overlay">
+			<ng-template [cdkPortalOutlet]="portal"> </ng-template>
+		</div>
+	`,
 })
 export class OverlayComponent {
-	constructor(
-		private readonly _componentFactory: ComponentFactoryResolver,
-		private readonly _injector: Injector
-	) {}
+	constructor(private readonly _injector: Injector) {}
 
 	private readonly _overlay = this._injector.get(OVERLAY_SERVICE);
+	private _portal: ComponentPortal<any>;
 
-	@ViewChild('overlayContent', { read: ViewContainerRef, static: true })
-	content: ViewContainerRef;
-
+	@ViewChild(CdkPortalOutlet, { static: true }) portalOutlet: CdkPortalOutlet;
 	@HostListener('click', ['$event']) onClick($event: MouseEvent) {
 		this._overlay.onClick$.next($event);
 	}
 
 	/**
-	 * Inserts the component into overlay view using passed injector.
-	 * Returns instance of that component.
+	 * Inserts a component into the overlay.
+	 *
 	 * @param componentRef Class of a component to insert
 	 * @param injector Injector that will be used when creating the component
+	 * @returns instance of created component
 	 */
-	insertComponent<T>(componentRef: ComponentRef<T>) {
-		this.content.insert(componentRef.hostView);
+	insertComponent<T>(Component: ComponentType<T>, injector?: Injector) {
+		const injectorToUse = injector || this._injector;
+
+		return this.portalOutlet.attach(
+			new ComponentPortal(Component, null, injectorToUse)
+		);
+	}
+
+	get portal() {
+		return this._portal;
 	}
 }
