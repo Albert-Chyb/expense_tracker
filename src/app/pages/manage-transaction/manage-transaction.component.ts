@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ConfirmDialogData } from './../../components/confirm-dialog/confirm-dialog.component';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	destroyPlatform,
+	OnInit,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
@@ -47,6 +53,11 @@ export class ManageTransactionComponent implements OnInit {
 		period: IOpenedPeriod;
 	}>;
 	Pages = Pages;
+	confirmDeleteTransactionDialogData: ConfirmDialogData = {
+		title: 'Potwierdź usunięcie transakcji',
+		description:
+			'Czy napewno chcesz usunąć tą transakcje ? Nie będzie można przywrócic jej później.',
+	};
 	private originalTransaction: ITransaction;
 
 	ngOnInit() {

@@ -1,3 +1,4 @@
+import { ConfirmDialogData } from './../../components/confirm-dialog/confirm-dialog.component';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
@@ -28,6 +29,19 @@ export class ProfileComponent implements OnInit {
 		period: IOpenedPeriod;
 	}>;
 	Pages = Pages;
+	confirmLogOutDialogData: ConfirmDialogData = {
+		title: 'Potwierdź chęć wylogowania się',
+		description:
+			'Czy napewno chcesz się wylogować ? Aby ponownie skorzystać z aplkiacji będzie wymagane ponowne logowanie.',
+	};
+	confirmEndPeriodData: ConfirmDialogData = {
+		title: 'Potwierdź zamknięcie okresu',
+		description: `Czy napewno chcesz zamknąć ten okres rozliczeniowy ? Będziesz mógł go ponownie otworyć do północy.`,
+	};
+	confirmOpenPeriodData: ConfirmDialogData = {
+		title: 'Potwierdź otwarcie okresu',
+		description: `Czy napewno chcesz ponownie otworzyć obency okres ?`,
+	};
 
 	ngOnInit() {
 		const user$ = this._user.user$;

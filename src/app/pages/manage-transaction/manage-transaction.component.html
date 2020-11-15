@@ -80,7 +80,8 @@
 		</button>
 
 		<button
-			(click)="delete()"
+			[confirmAction]="confirmDeleteTransactionDialogData"
+			(confirm)="delete()"
 			class="btn btn--danger btn--block transaction__action"
 		>
 			Usuń
