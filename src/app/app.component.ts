@@ -1,6 +1,6 @@
-import { registerLocaleData } from '@angular/common';
+import { registerLocaleData, DOCUMENT } from '@angular/common';
 import localePL from '@angular/common/locales/pl';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { functions } from 'firebase';
@@ -29,7 +29,8 @@ export class AppComponent implements OnInit {
 		private readonly _themes: ThemesService,
 		private readonly _formErrors: FormErrorsService,
 		private readonly _pwaUpdates: SwUpdate,
-		private readonly _device: DeviceService
+		private readonly _device: DeviceService,
+		@Inject(DOCUMENT) private readonly _docRef: Document
 	) {}
 
 	ngOnInit() {
@@ -62,16 +63,7 @@ export class AppComponent implements OnInit {
 
 	listenForPWAUpdates() {
 		if (!this._device.isInstalledOnDevice) return;
-		this._pwaUpdates.available.subscribe(() => {
-			const userAgreedToUpdateApp = confirm(
-				'Nowa wersja aplikacji jest dostępna ! Czy chcesz zainstalowac ją teraz ?'
-			);
-
-			if (userAgreedToUpdateApp)
-				this._pwaUpdates
-					.activateUpdate()
-					.then(() => document.location.reload());
-		});
+		this._pwaUpdates.available.subscribe(() => this._docRef.location.reload());
 		this._pwaUpdates.checkForUpdate();
 	}
 }
