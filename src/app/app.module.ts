@@ -1,9 +1,16 @@
+import { UserService } from './services/user/user.service';
+import { UserDataInitializer } from './common/initializers/user-data';
 import { GlobalErrorHandler } from './common/errors/globalErrorHandler';
 import { FormErrorsDirective } from './directives/form-errors/form-errors.directive';
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
 import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
+import {
+	NgModule,
+	LOCALE_ID,
+	ErrorHandler,
+	APP_INITIALIZER,
+} from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
@@ -127,6 +134,12 @@ import { ConfirmActionDirective } from './directives/confirm-action/confirm-acti
 				: undefined,
 		},
 		{ provide: ErrorHandler, useClass: GlobalErrorHandler },
+		{
+			provide: APP_INITIALIZER,
+			multi: true,
+			useFactory: user => UserDataInitializer(user),
+			deps: [UserService],
+		},
 	],
 	bootstrap: [AppComponent],
 })
