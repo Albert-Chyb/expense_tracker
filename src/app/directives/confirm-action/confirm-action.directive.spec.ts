@@ -34,7 +34,7 @@ class TestComponent {
 	onAction() {}
 }
 
-fdescribe('ConfirmActionDirective', () => {
+describe('ConfirmActionDirective', () => {
 	let fixture: ComponentFixture<TestComponent>;
 	let component: TestComponent;
 	let directive: ConfirmActionDirective;

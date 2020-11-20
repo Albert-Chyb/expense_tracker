@@ -62,7 +62,7 @@ describe('TransactionGroupComponent', () => {
 			expect(el.innerText).toBe(group.name);
 		});
 
-		it('should call delete() method on button click', () => {
+		it('should call delete() method on confirm event from dialog', () => {
 			component.isEditable = true;
 			fixture.detectChanges();
 
@@ -70,7 +70,7 @@ describe('TransactionGroupComponent', () => {
 			const el: HTMLParagraphElement = de.nativeElement;
 			const spy = spyOn(component, 'delete');
 
-			el.dispatchEvent(new Event('click'));
+			el.dispatchEvent(new Event('confirm'));
 
 			expect(spy).toHaveBeenCalled();
 		});
