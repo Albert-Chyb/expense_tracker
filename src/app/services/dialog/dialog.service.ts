@@ -1,3 +1,4 @@
+import { ConfirmDialogData } from './../../components/confirm-dialog/confirm-dialog.component';
 import { DIALOG_SERVICE } from './../../common/models/dialog';
 import { ComponentType } from '@angular/cdk/portal';
 import { Injectable, Injector } from '@angular/core';
@@ -59,4 +60,49 @@ export class DialogService {
 	close() {
 		this._overlay.close();
 	}
+}
+
+/**
+ * Exposes injector for elements that cannot use standard dependency injection.
+ * It has to be injected as soon as possible to any angular element (for instance AppModule class).
+ */
+@Injectable()
+export class ExposedInjector {
+	private static _injector: Injector;
+	constructor(injector: Injector) {
+		ExposedInjector._injector = injector;
+	}
+
+	static get injector() {
+		if (!ExposedInjector._injector) {
+			throw new Error(
+				'Tried to access injector before it was injected into ExposedInjector.'
+			);
+		}
+
+		return ExposedInjector._injector;
+	}
+}
+
+/**
+ * Annotated method will have to be confirmed by confirm dialog before it will be called.
+ * @param data ConfirmDialogData that will be passed to dialog
+ */
+export function Confirmable(data: ConfirmDialogData) {
+	return (target: any, key: string, descriptor: PropertyDescriptor) => {
+		const originalMethod = descriptor.value;
+
+		descriptor.value = function (...args: any[]) {
+			const dialogService = ExposedInjector.injector.get(DialogService);
+			const dialogRef = dialogService.openConfirm(data.title, data.description);
+			const s = dialogRef.afterClosed.subscribe((isConfirmed: boolean) => {
+				s.unsubscribe();
+				if (isConfirmed) {
+					return originalMethod.apply(this, args);
+				} else {
+					return null;
+				}
+			});
+		};
+	};
 }
