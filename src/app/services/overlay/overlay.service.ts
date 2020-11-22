@@ -14,6 +14,7 @@ import {
 	RendererFactory2,
 } from '@angular/core';
 import { Subject } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 import { OVERLAY_SERVICE } from '../../common/models/overlay';
 import { OverlayComponent } from './../../components/overlay/overlay.component';
@@ -38,6 +39,7 @@ export class OverlayService {
 	 */
 	public onClick$ = new Subject<MouseEvent>();
 	private _isOpened = false;
+	private _overlayRef: OverlayComponent;
 	private readonly _portalHost = new DomPortalOutlet(
 		this._docRef.body,
 		this._componentResolver,
@@ -70,7 +72,8 @@ export class OverlayService {
 		if (this._isOpened) return null;
 		this._isOpened = true;
 
-		const component = this._portalHost.attach(this._overlayComponentPortal);
+		const component = this._overlayComponentPortal.attach(this._portalHost);
+		this._overlayRef = component.instance;
 
 		if (Component)
 			return component.instance.insertComponent(Component, injector);
@@ -78,11 +81,14 @@ export class OverlayService {
 
 	/**
 	 * Closes currently opened overlay and destroys all components within.
+	 * @returns Promise resolved when overlay animations on leave are done.
 	 */
-	close() {
+	async close(): Promise<void> {
 		if (!this._isOpened) return null;
 
-		this._portalHost.detach();
+		this._overlayComponentPortal.detach();
+		await this._overlayRef.onAnimationEnd$.pipe(first()).toPromise();
+		this._overlayRef = null;
 		this._isOpened = false;
 	}
 

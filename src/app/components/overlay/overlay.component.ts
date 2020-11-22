@@ -1,10 +1,16 @@
-import { transition, trigger, useAnimation } from '@angular/animations';
+import {
+	AnimationEvent,
+	transition,
+	trigger,
+	useAnimation,
+} from '@angular/animations';
 import {
 	CdkPortalOutlet,
 	ComponentPortal,
 	ComponentType,
 } from '@angular/cdk/portal';
 import { Component, HostListener, Injector, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
 
 import { OVERLAY_SERVICE } from '../../common/models/overlay';
 import { fadeIn, fadeOut } from './../../animations';
@@ -19,6 +25,7 @@ import { fadeIn, fadeOut } from './../../animations';
 	],
 	host: {
 		'[@overlayAnimation]': '',
+		'(@overlayAnimation.done)': '_onAnimationEnd.next($event)',
 	},
 	template: `
 		<div class="overlay">
@@ -36,6 +43,7 @@ export class OverlayComponent {
 	@HostListener('click', ['$event']) onClick($event: MouseEvent) {
 		this._overlay.onClick$.next($event);
 	}
+	private readonly _onAnimationEnd = new Subject<AnimationEvent>();
 
 	/**
 	 * Inserts a component into the overlay.
@@ -50,6 +58,11 @@ export class OverlayComponent {
 		return this.portalOutlet.attach(
 			new ComponentPortal(Component, null, injectorToUse)
 		);
+	}
+
+	/** Emits an AnimationEvent when animation of overlay ended */
+	get onAnimationEnd$() {
+		return this._onAnimationEnd.pipe();
 	}
 
 	get portal() {
