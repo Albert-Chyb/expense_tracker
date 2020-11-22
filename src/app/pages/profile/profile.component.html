@@ -13,11 +13,7 @@
 			ponowne otwarcie okresu.
 		</p>
 
-		<button
-			class="btn btn--secondary btn--block"
-			[confirmAction]="confirmEndPeriodData"
-			(confirm)="endPeriod()"
-		>
+		<button class="btn btn--secondary btn--block" (click)="endPeriod()">
 			Zakończ
 		</button>
 	</section>
@@ -32,11 +28,7 @@
 				Otwórz ponownie obecny okres rozliczeniowy. Masz czas do północy.
 			</p>
 
-			<button
-				class="btn btn--secondary btn--block"
-				[confirmAction]="confirmOpenPeriodData"
-				(confirm)="openPeriod()"
-			>
+			<button class="btn btn--secondary btn--block" (click)="openPeriod()">
 				Otwórz
 			</button>
 		</section>
@@ -49,11 +41,7 @@
 			Wyloguj się z obecnego konta.
 		</p>
 
-		<button
-			class="btn btn--warning btn--block"
-			[confirmAction]="confirmLogOutDialogData"
-			(confirm)="logOut()"
-		>
+		<button class="btn btn--warning btn--block" (click)="logOut()">
 			Wyloguj się
 		</button>
 	</section>

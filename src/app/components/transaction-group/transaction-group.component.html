@@ -6,11 +6,7 @@
 	<p class="group__name">{{ group.name }}</p>
 
 	<div class="group__actions" *ngIf="isEditable">
-		<button
-			class="btn"
-			[confirmAction]="confirmDeleteTransactionDialogData"
-			(confirm)="delete()"
-		>
+		<button class="btn" (click)="delete()">
 			<i class="group__action group__action--danger far fa-trash-alt fa-lg"></i>
 		</button>
 	</div>

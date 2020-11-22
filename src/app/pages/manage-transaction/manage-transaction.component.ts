@@ -1,10 +1,4 @@
-import { ConfirmDialogData } from './../../components/confirm-dialog/confirm-dialog.component';
-import {
-	ChangeDetectionStrategy,
-	Component,
-	destroyPlatform,
-	OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
@@ -13,6 +7,7 @@ import { ITransactionGroup } from 'src/app/common/models/group';
 import { ITransaction } from 'src/app/common/models/transaction';
 import { blackListValidator } from 'src/app/common/validators/blackListValidator';
 import { isNotANumberValidator } from 'src/app/common/validators/isNotANumberValidator';
+import { Confirmable } from 'src/app/services/dialog/dialog.service';
 import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
 import { TransactionsService } from 'src/app/services/transactions/transactions.service';
 
@@ -53,11 +48,6 @@ export class ManageTransactionComponent implements OnInit {
 		period: IOpenedPeriod;
 	}>;
 	Pages = Pages;
-	confirmDeleteTransactionDialogData: ConfirmDialogData = {
-		title: 'Potwierdź usunięcie transakcji',
-		description:
-			'Czy napewno chcesz usunąć tą transakcje ? Nie będzie można przywrócic jej później.',
-	};
 	private originalTransaction: ITransaction;
 
 	ngOnInit() {
@@ -102,6 +92,11 @@ export class ManageTransactionComponent implements OnInit {
 		this._router.navigateByUrl(Pages.Home);
 	}
 
+	@Confirmable({
+		title: 'Potwierdź usunięcie transakcji',
+		description:
+			'Czy napewno chcesz usunąć tą transakcje ? Nie będzie można przywrócic jej później.',
+	})
 	async delete() {
 		await this._transactions.delete(this.transactionId);
 		this._router.navigateByUrl(Pages.Home);
