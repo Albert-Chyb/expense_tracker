@@ -1,12 +1,12 @@
 import { DIALOG_SERVICE } from './../../common/models/dialog';
 import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
-import { Component, Inject, Injector, OnDestroy } from '@angular/core';
+import { Component, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DIALOG_DATA, DIALOG_REF } from 'src/app/common/models/dialog';
 @Component({
 	template: '<ng-template [cdkPortalOutlet]="portal"></ng-template>',
 })
-export class DialogContainerComponent implements OnDestroy {
+export class DialogContainerComponent implements OnInit {
 	constructor(
 		private readonly _injector: Injector,
 		@Inject(DIALOG_DATA) private readonly _data: any
@@ -30,24 +30,26 @@ export class DialogContainerComponent implements OnDestroy {
 	 * Closes dialog and broadcast this action in afterClosed observer with data
 	 * passed in the service.
 	 */
-	close() {
+	async close() {
+		await this._dialog.close();
 		this._afterClosed.next(this._data);
-		this._dialog.close();
 	}
 
 	/**
 	 * Closes dialog and broadcast this action in afterClosed observer with data
 	 * passed in the argument.
 	 */
-	closeWith(data: any) {
+	async closeWith(data: any) {
+		await this._dialog.close();
 		this._afterClosed.next(data);
-		this._dialog.close();
 	}
 
-	ngOnDestroy() {
-		this._afterClosed.unsubscribe();
+	ngOnInit() {
+		const s = this._afterClosed.subscribe(() => {
+			this._afterClosed.unsubscribe();
+			s.unsubscribe();
+		});
 	}
-
 	/**
 	 * Allows attaching callbacks when the dialog is closed.
 	 */

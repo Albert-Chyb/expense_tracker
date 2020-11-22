@@ -58,7 +58,7 @@ export class DialogService {
 	}
 
 	close() {
-		this._overlay.close();
+		return this._overlay.close();
 	}
 }
 
