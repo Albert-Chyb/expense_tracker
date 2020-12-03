@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth, User } from 'firebase/app';
 import { from, Subject } from 'rxjs';
-import { mapTo, switchMap } from 'rxjs/operators';
+import { mapTo, switchMap, tap } from 'rxjs/operators';
+import { destroyCash } from 'src/app/common/cash/cashable';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Injectable({
@@ -12,7 +13,11 @@ export class AuthService {
 	constructor(
 		private readonly _afAuth: AngularFireAuth,
 		private readonly _user: UserService
-	) {}
+	) {
+		this._afAuth.authState.subscribe(user => {
+			if (!user) destroyCash();
+		});
+	}
 
 	private readonly _onLogin$ = new Subject<User>();
 	private readonly _onLogout$ = new Subject<null>();

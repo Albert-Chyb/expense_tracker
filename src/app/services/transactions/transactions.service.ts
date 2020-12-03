@@ -7,6 +7,7 @@ import { ITransaction } from './../../common/models/transaction';
 import { PeriodsService } from './../periods/periods.service';
 import { TransactionsGroupsService } from './../transactions-groups/transactions-groups.service';
 import { UserService } from './../user/user.service';
+import { Cashable } from '../../common/cash/cashable';
 
 @Injectable({
 	providedIn: 'root',
@@ -23,6 +24,9 @@ export class TransactionsService {
 	 * Gets all transactions in current period.
 	 */
 
+	@Cashable({
+		tableName: 'currentTransactions',
+	})
 	getAllCurrent(): Observable<ITransaction[]> {
 		return this._user.getUid$().pipe(
 			switchMap(uid =>

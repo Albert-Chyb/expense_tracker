@@ -9,6 +9,7 @@ import { CompletingData } from 'src/app/common/models/completingData';
 import { Period } from './../../common/models/period';
 import { ISettings } from './../../common/models/settings';
 import { AppUser, IUser } from './../../common/models/user';
+import { Cashable } from 'src/app/common/cash/cashable';
 
 /**
  * Handles user's data.
@@ -70,6 +71,13 @@ export class UserService {
 	 */
 
 	get user$(): Observable<IUser> {
+		return this._getUser$();
+	}
+
+	@Cashable({
+		tableName: 'user',
+	})
+	private _getUser$() {
 		return this._user$;
 	}
 

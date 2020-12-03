@@ -1,3 +1,4 @@
+import { firestore } from 'firebase';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -56,8 +57,12 @@ export class HomeComponent implements OnInit {
 		);
 	}
 
-	private dateNormalizer(data: FirestoreTimestamp): number {
-		return data.toDate().setHours(0, 0, 0, 0);
+	private dateNormalizer(date: FirestoreTimestamp): number {
+		// Cashed data does not have methods.
+		// This is why we re-create firestore timestamp to avoid errors
+		date = new firestore.Timestamp(date.seconds, date.nanoseconds);
+
+		return date.toDate().setHours(0, 0, 0, 0);
 	}
 
 	private calculateStatistics(transactions: ITransaction[]) {
