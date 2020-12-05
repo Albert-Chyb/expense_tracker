@@ -37,7 +37,7 @@ import {
 		]),
 	],
 	host: {
-		'[@notificationAnimation]': 'true',
+		'[@notificationAnimation]': '',
 	},
 })
 export class NotificationComponent implements AfterViewInit {

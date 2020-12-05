@@ -1,3 +1,4 @@
+import { PortalModule } from '@angular/cdk/portal';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -6,7 +7,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import {
+	NoopAnimationsModule,
+	BrowserAnimationsModule,
+} from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormErrorsComponent } from 'src/app/components/form-errors/form-errors.component';
 import { UserService } from 'src/app/services/user/user.service';

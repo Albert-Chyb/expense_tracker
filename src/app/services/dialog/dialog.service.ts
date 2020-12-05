@@ -1,3 +1,4 @@
+import { first } from 'rxjs/operators';
 import { ConfirmDialogData } from './../../components/confirm-dialog/confirm-dialog.component';
 import { DIALOG_SERVICE } from './../../common/models/dialog';
 import { ComponentType } from '@angular/cdk/portal';
@@ -95,14 +96,13 @@ export function Confirmable(data: ConfirmDialogData) {
 		descriptor.value = function (...args: any[]) {
 			const dialogService = ExposedInjector.injector.get(DialogService);
 			const dialogRef = dialogService.openConfirm(data.title, data.description);
-			const s = dialogRef.afterClosed.subscribe((isConfirmed: boolean) => {
-				s.unsubscribe();
+			dialogRef.afterClosed.pipe(first()).subscribe((isConfirmed: boolean) => {
 				if (isConfirmed) {
 					return originalMethod.apply(this, args);
-				} else {
-					return null;
 				}
 			});
 		};
+
+		return descriptor;
 	};
 }

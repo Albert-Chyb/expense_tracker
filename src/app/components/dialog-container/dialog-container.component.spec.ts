@@ -1,3 +1,4 @@
+import { PortalModule } from '@angular/cdk/portal';
 import { DialogService } from './../../services/dialog/dialog.service';
 import { DIALOG_DATA, DIALOG_SERVICE } from './../../common/models/dialog';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
@@ -11,6 +12,7 @@ describe('DialogContainerComponent', () => {
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			declarations: [DialogContainerComponent],
+			imports: [PortalModule],
 			providers: [
 				{ provide: DIALOG_DATA, useValue: {} },
 				{ provide: DIALOG_SERVICE, useClass: DialogService },

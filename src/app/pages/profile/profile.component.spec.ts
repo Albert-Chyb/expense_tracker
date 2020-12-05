@@ -1,8 +1,6 @@
-import { TestingProviders } from './../../common/test-stubs/testing-providers';
-import { periodsServiceTestProvider } from './../../common/test-stubs/periods.service-stub';
-import { userServiceTestProvider } from './../../common/test-stubs/user.service-stub';
-import { of } from 'rxjs';
-import { Component, Injectable } from '@angular/core';
+import { PortalModule } from '@angular/cdk/portal';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Component } from '@angular/core';
 import {
 	async,
 	ComponentFixture,
@@ -12,13 +10,14 @@ import {
 import { AngularFireModule } from '@angular/fire';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ExposedInjector } from 'src/app/services/dialog/dialog.service';
 
 import { environment } from './../../../environments/environment';
 import { Pages } from './../../common/routing/routesUrls';
+import { TestingProviders } from './../../common/test-stubs/testing-providers';
 import { LoaderComponent } from './../../components/loader/loader.component';
 import { AuthService } from './../../services/auth/auth.service';
 import { PeriodsService } from './../../services/periods/periods.service';
-import { UserService } from './../../services/user/user.service';
 import { ProfileComponent } from './profile.component';
 
 @Component({})
@@ -39,10 +38,13 @@ describe('ProfileComponent', () => {
 						component: TestComponent,
 					},
 				]),
+				BrowserAnimationsModule,
+				PortalModule,
 			],
 			providers: [
 				TestingProviders.UserService,
 				TestingProviders.PeriodsService,
+				ExposedInjector,
 			],
 		}).compileComponents();
 	}));
@@ -50,6 +52,7 @@ describe('ProfileComponent', () => {
 	beforeEach(() => {
 		fixture = TestBed.createComponent(ProfileComponent);
 		component = fixture.componentInstance;
+		TestBed.inject(ExposedInjector);
 		fixture.detectChanges();
 	});
 
@@ -61,11 +64,11 @@ describe('ProfileComponent', () => {
 		it('should call service to end current period', inject(
 			[PeriodsService],
 			(periods: PeriodsService) => {
-				const spy = spyOn(periods, 'endCurrent').and.returnValue(
+				const spy = spyOn(periods as any, 'endCurrent').and.returnValue(
 					Promise.resolve()
 				);
 
-				component.endPeriod();
+				component['_endPeriod']();
 
 				expect(spy).toHaveBeenCalled();
 			}
@@ -80,7 +83,7 @@ describe('ProfileComponent', () => {
 					Promise.resolve()
 				);
 
-				component.openPeriod();
+				component['_openPeriod']();
 
 				expect(spy).toHaveBeenCalled();
 			}
@@ -93,7 +96,7 @@ describe('ProfileComponent', () => {
 			(auth: AuthService) => {
 				const spy = spyOn(auth, 'logout').and.returnValue(Promise.resolve());
 
-				component.logOut();
+				component['_logOut']();
 
 				expect(spy).toHaveBeenCalled();
 			}
@@ -107,7 +110,7 @@ describe('ProfileComponent', () => {
 					Promise.resolve(true)
 				);
 
-				await component.logOut();
+				await component['_logOut']();
 
 				expect(spy).toHaveBeenCalledWith(Pages.Login);
 			}

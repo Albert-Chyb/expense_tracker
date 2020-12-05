@@ -43,7 +43,7 @@ export class ProfileComponent implements OnInit {
 		description: `Czy napewno chcesz zamknąć ten okres rozliczeniowy ? Będziesz mógł go ponownie otworyć do północy.`,
 	})
 	endPeriod() {
-		this._periods.endCurrent();
+		this._endPeriod();
 	}
 
 	@Confirmable({
@@ -51,7 +51,7 @@ export class ProfileComponent implements OnInit {
 		description: `Czy napewno chcesz ponownie otworzyć obency okres ?`,
 	})
 	openPeriod() {
-		this._periods.openCurrent();
+		this._openPeriod();
 	}
 
 	@Confirmable({
@@ -60,6 +60,18 @@ export class ProfileComponent implements OnInit {
 			'Czy napewno chcesz się wylogować ? Aby ponownie skorzystać z aplkiacji będzie wymagane ponowne logowanie.',
 	})
 	async logOut() {
+		await this._logOut();
+	}
+
+	private _endPeriod() {
+		this._periods.endCurrent();
+	}
+
+	private _openPeriod() {
+		this._periods.openCurrent();
+	}
+
+	private async _logOut() {
 		await this._auth.logout();
 		this._router.navigateByUrl(Pages.Login);
 	}

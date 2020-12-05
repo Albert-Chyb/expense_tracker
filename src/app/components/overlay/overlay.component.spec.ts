@@ -1,3 +1,4 @@
+import { PortalModule } from '@angular/cdk/portal';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { OverlayService } from './../../services/overlay/overlay.service';
 import { OVERLAY_SERVICE } from './../../common/models/overlay';
@@ -12,7 +13,7 @@ describe('OverlayComponent', () => {
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			declarations: [OverlayComponent],
-			imports: [BrowserAnimationsModule],
+			imports: [BrowserAnimationsModule, PortalModule],
 			providers: [{ provide: OVERLAY_SERVICE, useClass: OverlayService }],
 		}).compileComponents();
 	}));

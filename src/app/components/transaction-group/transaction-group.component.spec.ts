@@ -1,3 +1,6 @@
+import { PortalModule } from '@angular/cdk/portal';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ExposedInjector } from './../../services/dialog/dialog.service';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { By } from '@angular/platform-browser';
@@ -15,7 +18,12 @@ describe('TransactionGroupComponent', () => {
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			declarations: [TransactionGroupComponent, GroupIconComponent],
-			imports: [AngularFireModule.initializeApp(environment.firebase)],
+			imports: [
+				AngularFireModule.initializeApp(environment.firebase),
+				BrowserAnimationsModule,
+				PortalModule,
+			],
+			providers: [ExposedInjector],
 		}).compileComponents();
 	}));
 
@@ -30,7 +38,7 @@ describe('TransactionGroupComponent', () => {
 			},
 			id: 'a',
 		} as any;
-
+		TestBed.inject(ExposedInjector);
 		fixture.detectChanges();
 	});
 
@@ -62,19 +70,6 @@ describe('TransactionGroupComponent', () => {
 			expect(el.innerText).toBe(group.name);
 		});
 
-		it('should call delete() method on confirm event from dialog', () => {
-			component.isEditable = true;
-			fixture.detectChanges();
-
-			const de = fixture.debugElement.query(By.css('.btn'));
-			const el: HTMLParagraphElement = de.nativeElement;
-			const spy = spyOn(component, 'delete');
-
-			el.dispatchEvent(new Event('confirm'));
-
-			expect(spy).toHaveBeenCalled();
-		});
-
 		it('should show group actions when isEditable property is set to true', () => {
 			component.isEditable = true;
 			fixture.detectChanges();
@@ -95,7 +90,7 @@ describe('TransactionGroupComponent', () => {
 				Promise.resolve()
 			);
 
-			component.delete();
+			component['_delete']();
 
 			expect(spy).toHaveBeenCalledWith('a');
 		});
