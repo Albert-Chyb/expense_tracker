@@ -9,7 +9,7 @@ import { CompletingData } from 'src/app/common/models/completingData';
 import { Period } from './../../common/models/period';
 import { ISettings } from './../../common/models/settings';
 import { AppUser, IUser } from './../../common/models/user';
-import { Cashable } from 'src/app/common/cash/cashable';
+import { Cacheable } from 'src/app/common/cash/cashable';
 
 /**
  * Handles user's data.
@@ -74,7 +74,7 @@ export class UserService {
 		return this._getUser$();
 	}
 
-	@Cashable({
+	@Cacheable({
 		tableName: 'user',
 	})
 	private _getUser$() {

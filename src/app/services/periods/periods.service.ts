@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { firestore } from 'firebase';
 import { Observable } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
-import { Cashable } from 'src/app/common/cash/cashable';
+import { Cacheable } from 'src/app/common/cash/cashable';
 
 import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
 import { UserService } from './../user/user.service';
@@ -85,7 +85,7 @@ export class PeriodsService {
 	 * Gets all closed periods.
 	 */
 
-	@Cashable({
+	@Cacheable({
 		tableName: 'closedPeriods',
 	})
 	getAllClosed(): Observable<IClosedPeriod[]> {

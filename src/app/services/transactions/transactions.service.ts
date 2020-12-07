@@ -7,7 +7,7 @@ import { ITransaction } from './../../common/models/transaction';
 import { PeriodsService } from './../periods/periods.service';
 import { TransactionsGroupsService } from './../transactions-groups/transactions-groups.service';
 import { UserService } from './../user/user.service';
-import { Cashable } from '../../common/cash/cashable';
+import { Cacheable } from '../../common/cash/cashable';
 
 @Injectable({
 	providedIn: 'root',
@@ -24,7 +24,7 @@ export class TransactionsService {
 	 * Gets all transactions in current period.
 	 */
 
-	@Cashable({
+	@Cacheable({
 		tableName: 'currentTransactions',
 	})
 	getAllCurrent(): Observable<ITransaction[]> {

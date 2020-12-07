@@ -6,7 +6,7 @@ import { includeDocId } from 'src/app/common/helpers/includeDocId';
 
 import { ITransactionGroup } from './../../common/models/group';
 import { UserService } from './../user/user.service';
-import { Cashable } from 'src/app/common/cash/cashable';
+import { Cacheable } from 'src/app/common/cash/cashable';
 
 @Injectable({
 	providedIn: 'root',
@@ -21,7 +21,7 @@ export class TransactionsGroupsService {
 	 * Returns all groups.
 	 */
 
-	@Cashable({
+	@Cacheable({
 		tableName: 'transactionGroups',
 	})
 	getAll(): Observable<ITransactionGroup[]> {
