@@ -1,18 +1,14 @@
 import { merge, Observable, of, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-/**
- * Config of the Cashable decorator.
- */
-export interface ICashableConfig {
+/** Config of the Cashable decorator. */
+export interface ICacheableConfig {
 	/** Table name to save data to and retrieve data from. */
 	tableName: string;
 }
 
-/**
- * An interface that should be implemented by all storage strategies.
- */
-export interface ICashableStorageStrategy {
+/** An interface that should be implemented by all storage strategies. */
+export interface ICacheableStorageStrategy {
 	/**
 	 * Saves data locally to a table. Overwrites already existing data.
 	 */
@@ -34,10 +30,8 @@ export interface ICashableStorageStrategy {
 	destroy(): void;
 }
 
-/**
- * Strategy that saves data in LocalStorage.
- */
-export class LocaleStorageStrategy implements ICashableStorageStrategy {
+/** Strategy that saves data in LocalStorage. */
+export class LocaleStorageStrategy implements ICacheableStorageStrategy {
 	private readonly usedTables: Set<string> = new Set();
 	private readonly tablePrefix: string = 'cash-';
 
@@ -65,24 +59,22 @@ export class LocaleStorageStrategy implements ICashableStorageStrategy {
  */
 let globalSubscriptions = new Map<string, Subscription>();
 
-/**
- * Chosen storage strategy.
- */
-let storage: ICashableStorageStrategy = new LocaleStorageStrategy();
+/** Chosen storage strategy. */
+let storage: ICacheableStorageStrategy = new LocaleStorageStrategy();
 
 /**
- * Method decorator that cashes data inside of returned observable.
+ * Method decorator that caches data inside of returned observable.
  * Decorated method has to return an observable !
  *
  * It connects local data and data returned from the method as one observable to which you can subscribe.
  * @param config Config
  */
-export function Cashable(config: ICashableConfig) {
+export function Cacheable(config: ICacheableConfig) {
 	return (target: any, key: string, descriptor: PropertyDescriptor) => {
 		const originalMethod: () => Observable<any> = descriptor.value;
 
 		descriptor.value = function (...args: any[]) {
-			const localStream: Observable<any> = of(
+			const cacheStream: Observable<any> = of(
 				storage.read(config.tableName)
 			).pipe(filter(value => value !== null));
 			const originalStream: Observable<any> = originalMethod.call(this, args);
@@ -96,18 +88,21 @@ export function Cashable(config: ICashableConfig) {
 				);
 			}
 
-			return merge(originalStream, localStream);
+			return merge(originalStream, cacheStream);
 		};
 
 		return descriptor;
 	};
 }
 
-/**
- * Removes all cashed data
- */
-export function destroyCash() {
+/** Removes all cached data */
+export function destroyCache() {
 	storage.destroy();
 	globalSubscriptions.forEach(s => s.unsubscribe());
 	globalSubscriptions.clear();
+}
+
+/** Returns current storage strategy.  */
+export function getStorageRef(): ICacheableStorageStrategy {
+	return storage;
 }
