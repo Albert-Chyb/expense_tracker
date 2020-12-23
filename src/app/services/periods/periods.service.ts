@@ -94,7 +94,7 @@ export class PeriodsService {
 				this._afStore
 					.doc(`users/${uid}`)
 					.collection<IClosedPeriod>('periods', ref =>
-						ref.where('isClosed', '==', true)
+						ref.where('isClosed', '==', true).orderBy('date.start', 'desc')
 					)
 					.valueChanges({ idField: 'id' })
 			)
