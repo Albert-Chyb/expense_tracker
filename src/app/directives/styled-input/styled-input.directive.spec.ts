@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
@@ -23,7 +23,7 @@ describe('StyledInputDirective', () => {
 	let fixture: ComponentFixture<TestComponent>;
 	let component: TestComponent;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [StyledInputDirective, TestComponent],
 			imports: [ReactiveFormsModule],

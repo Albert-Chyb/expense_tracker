@@ -1,9 +1,4 @@
-import {
-	async,
-	ComponentFixture,
-	inject,
-	TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -21,7 +16,7 @@ describe('ManageGroupsComponent', () => {
 	let component: ManageGroupsComponent;
 	let fixture: ComponentFixture<ManageGroupsComponent>;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [
 				ManageGroupsComponent,

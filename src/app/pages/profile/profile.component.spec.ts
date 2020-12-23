@@ -1,12 +1,7 @@
 import { PortalModule } from '@angular/cdk/portal';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Component } from '@angular/core';
-import {
-	async,
-	ComponentFixture,
-	inject,
-	TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -27,7 +22,7 @@ describe('ProfileComponent', () => {
 	let component: ProfileComponent;
 	let fixture: ComponentFixture<ProfileComponent>;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [ProfileComponent, LoaderComponent],
 			imports: [

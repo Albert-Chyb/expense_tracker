@@ -1,7 +1,7 @@
 import { PortalModule } from '@angular/cdk/portal';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExposedInjector } from './../../services/dialog/dialog.service';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { By } from '@angular/platform-browser';
 import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
@@ -15,7 +15,7 @@ describe('TransactionGroupComponent', () => {
 	let component: TransactionGroupComponent;
 	let fixture: ComponentFixture<TransactionGroupComponent>;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [TransactionGroupComponent, GroupIconComponent],
 			imports: [

@@ -1,4 +1,4 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
@@ -89,7 +89,7 @@ describe('NotificationsService', () => {
 	});
 
 	describe('scheduleDismiss', () => {
-		it('should dismiss passed notification after specified timeout', async(() => {
+		it('should dismiss passed notification after specified timeout', waitForAsync(() => {
 			const fakeNotification = {
 				dismiss: () => null,
 			} as any;
@@ -136,7 +136,7 @@ describe('NotificationsService', () => {
 			expect(spy).toHaveBeenCalled();
 		});
 
-		it('should position other notifications after after overflowing notification`s animation completes', async(() => {
+		it('should position other notifications after after overflowing notification`s animation completes', waitForAsync(() => {
 			const fakeNotification = {
 				componentRef: {
 					destroy: () => null,

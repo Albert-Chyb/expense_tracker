@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -18,7 +18,7 @@ describe('PeriodsComponent', () => {
 	let component: PeriodsComponent;
 	let fixture: ComponentFixture<PeriodsComponent>;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [
 				PeriodsComponent,

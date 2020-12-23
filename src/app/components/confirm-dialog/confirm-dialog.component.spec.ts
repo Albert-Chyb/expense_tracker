@@ -1,5 +1,5 @@
 import { DIALOG_REF } from './../../common/models/dialog';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { DIALOG_DATA } from 'src/app/common/models/dialog';
 
 import {
@@ -12,7 +12,7 @@ describe('ConfirmDialogComponent', () => {
 	let fixture: ComponentFixture<ConfirmDialogComponent>;
 	let dialogData: ConfirmDialogData;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		dialogData = {
 			title: 'A',
 			description: 'B',

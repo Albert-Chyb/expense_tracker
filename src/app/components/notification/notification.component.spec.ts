@@ -7,7 +7,7 @@ import {
 	NOTIFICATIONS_SETTINGS,
 	NOTIFICATIONS_SERVICE,
 } from './../../common/models/notifications';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DebugElement } from '@angular/core';
@@ -18,7 +18,7 @@ describe('NotificationComponent', () => {
 	let de: DebugElement;
 	let el: HTMLElement;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [NotificationComponent],
 			imports: [BrowserAnimationsModule],

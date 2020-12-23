@@ -7,7 +7,7 @@ import { StyledInputComponent } from './../../components/styled-input/styled-inp
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AddGroupComponent } from './add-group.component';
 
@@ -15,7 +15,7 @@ describe('AddGroupComponent', () => {
 	let component: AddGroupComponent;
 	let fixture: ComponentFixture<AddGroupComponent>;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [
 				AddGroupComponent,

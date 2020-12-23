@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RippleDirective } from './ripple.directive';
 import { waitPromise } from '../../common/helpers/waitPromise';
@@ -14,7 +14,7 @@ describe('RippleDirective', () => {
 	let fixture: ComponentFixture<TestComponent>;
 	let directive: RippleDirective;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [RippleDirective, TestComponent],
 		}).compileComponents();

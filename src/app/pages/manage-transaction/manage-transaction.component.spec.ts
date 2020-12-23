@@ -1,5 +1,5 @@
 import { PortalModule } from '@angular/cdk/portal';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -26,7 +26,7 @@ describe('ManageTransactionComponent', () => {
 	let component: ManageTransactionComponent;
 	let fixture: ComponentFixture<ManageTransactionComponent>;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [
 				ManageTransactionComponent,

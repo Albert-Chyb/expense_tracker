@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
-import {
-	async,
-	ComponentFixture,
-	inject,
-	TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
@@ -39,7 +34,7 @@ describe('ConfirmActionDirective', () => {
 	let component: TestComponent;
 	let directive: ConfirmActionDirective;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [ConfirmActionDirective, TestComponent],
 		}).compileComponents();

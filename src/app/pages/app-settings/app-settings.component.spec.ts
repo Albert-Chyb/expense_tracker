@@ -1,9 +1,4 @@
-import {
-	async,
-	ComponentFixture,
-	inject,
-	TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,7 +20,7 @@ describe('AppSettingsComponent', () => {
 	let component: AppSettingsComponent;
 	let fixture: ComponentFixture<AppSettingsComponent>;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [
 				AppSettingsComponent,

@@ -9,12 +9,7 @@ import { UserService } from './../../services/user/user.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from './../../../environments/environment';
 import { AngularFireModule } from '@angular/fire';
-import {
-	async,
-	ComponentFixture,
-	inject,
-	TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SetupAccountComponent } from './setup-account.component';
 import { Router } from '@angular/router';
@@ -28,7 +23,7 @@ describe('SetupAccountComponent', () => {
 	let component: SetupAccountComponent;
 	let fixture: ComponentFixture<SetupAccountComponent>;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [
 				SetupAccountComponent,

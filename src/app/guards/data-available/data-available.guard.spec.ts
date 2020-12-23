@@ -5,7 +5,7 @@ import { UserService } from './../../services/user/user.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from './../../../environments/environment';
 import { AngularFireModule } from '@angular/fire';
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed, inject, waitForAsync } from '@angular/core/testing';
 
 import { DataAvailableGuard } from './data-available.guard';
 import { Component } from '@angular/core';

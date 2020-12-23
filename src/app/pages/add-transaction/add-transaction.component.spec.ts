@@ -1,9 +1,4 @@
-import {
-	async,
-	ComponentFixture,
-	inject,
-	TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -30,7 +25,7 @@ describe('AddTransactionComponent', () => {
 	let component: AddTransactionComponent;
 	let fixture: ComponentFixture<AddTransactionComponent>;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [
 				AddTransactionComponent,
