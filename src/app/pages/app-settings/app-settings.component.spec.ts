@@ -1,4 +1,9 @@
-import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
+import {
+	ComponentFixture,
+	inject,
+	TestBed,
+	waitForAsync,
+} from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,27 +25,29 @@ describe('AppSettingsComponent', () => {
 	let component: AppSettingsComponent;
 	let fixture: ComponentFixture<AppSettingsComponent>;
 
-	beforeEach(waitForAsync(() => {
-		TestBed.configureTestingModule({
-			declarations: [
-				AppSettingsComponent,
-				ZippyComponent,
-				ZippyStaticComponent,
-				ZippyContentComponent,
-				CheckboxComponent,
-			],
-			imports: [
-				AngularFireModule.initializeApp(environment.firebase),
-				ReactiveFormsModule,
-				MatFormFieldModule,
-				MatSelectModule,
-				FormsModule,
-				NoopAnimationsModule,
-				RouterTestingModule,
-			],
-			providers: [TestingProviders.UserService],
-		}).compileComponents();
-	}));
+	beforeEach(
+		waitForAsync(() => {
+			TestBed.configureTestingModule({
+				declarations: [
+					AppSettingsComponent,
+					ZippyComponent,
+					ZippyStaticComponent,
+					ZippyContentComponent,
+					CheckboxComponent,
+				],
+				imports: [
+					AngularFireModule.initializeApp(environment.firebase),
+					ReactiveFormsModule,
+					MatFormFieldModule,
+					MatSelectModule,
+					FormsModule,
+					NoopAnimationsModule,
+					RouterTestingModule,
+				],
+				providers: [TestingProviders.UserService],
+			}).compileComponents();
+		})
+	);
 
 	beforeEach(() => {
 		fixture = TestBed.createComponent(AppSettingsComponent);
@@ -80,7 +87,7 @@ describe('AppSettingsComponent', () => {
 
 				component.changeTheme('a' as any);
 
-				expect(spy).toHaveBeenCalledWith('a');
+				expect(spy).toHaveBeenCalledWith('a' as any);
 			}
 		));
 	});

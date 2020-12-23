@@ -9,7 +9,12 @@ import { UserService } from './../../services/user/user.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { environment } from './../../../environments/environment';
 import { AngularFireModule } from '@angular/fire';
-import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
+import {
+	ComponentFixture,
+	inject,
+	TestBed,
+	waitForAsync,
+} from '@angular/core/testing';
 
 import { SetupAccountComponent } from './setup-account.component';
 import { Router } from '@angular/router';
@@ -23,29 +28,31 @@ describe('SetupAccountComponent', () => {
 	let component: SetupAccountComponent;
 	let fixture: ComponentFixture<SetupAccountComponent>;
 
-	beforeEach(waitForAsync(() => {
-		TestBed.configureTestingModule({
-			declarations: [
-				SetupAccountComponent,
-				StyledInputComponent,
-				FormErrorsComponent,
-				FormErrorsDirective,
-				ZippyComponent,
-				ZippyStaticComponent,
-				ZippyContentComponent,
-				CheckboxComponent,
-			],
-			imports: [
-				AngularFireModule.initializeApp(environment.firebase),
-				RouterTestingModule,
-				ReactiveFormsModule,
-				FormsModule,
-				MatFormFieldModule,
-				MatSelectModule,
-				NoopAnimationsModule,
-			],
-		}).compileComponents();
-	}));
+	beforeEach(
+		waitForAsync(() => {
+			TestBed.configureTestingModule({
+				declarations: [
+					SetupAccountComponent,
+					StyledInputComponent,
+					FormErrorsComponent,
+					FormErrorsDirective,
+					ZippyComponent,
+					ZippyStaticComponent,
+					ZippyContentComponent,
+					CheckboxComponent,
+				],
+				imports: [
+					AngularFireModule.initializeApp(environment.firebase),
+					RouterTestingModule,
+					ReactiveFormsModule,
+					FormsModule,
+					MatFormFieldModule,
+					MatSelectModule,
+					NoopAnimationsModule,
+				],
+			}).compileComponents();
+		})
+	);
 
 	beforeEach(() => {
 		fixture = TestBed.createComponent(SetupAccountComponent);
@@ -63,7 +70,7 @@ describe('SetupAccountComponent', () => {
 			(user: UserService) => {
 				const formData = {
 					balance: 1,
-				};
+				} as any;
 				const spy = spyOn(user, 'createData').and.returnValue(
 					Promise.resolve()
 				);
