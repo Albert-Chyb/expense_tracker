@@ -26,10 +26,6 @@
 	&__user-avatar {
 		@include square(rem(30px));
 		border-radius: 100%;
-
-		&:active {
-			transform: scale(0.9);
-		}
 	}
 
 	&__icon {
