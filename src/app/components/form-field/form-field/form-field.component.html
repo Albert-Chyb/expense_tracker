@@ -1,0 +1,21 @@
+<div
+	class="form-field"
+	[ngClass]="{
+		'form-field--label-should-float': shouldLabelFloat,
+		'form-field--valid': isValid,
+		'form-field--invalid': isInvalid,
+		'form-field--touched': isTouched
+	}"
+>
+	<div class="form-field__input-container">
+		<ng-content select="input[formFieldInput]"></ng-content>
+	</div>
+
+	<div class="form-field__label-container">
+		<ng-content select="form-field-label"></ng-content>
+	</div>
+
+	<div class="form-field__prefix-container">
+		<ng-content select="form-field-prefix"></ng-content>
+	</div>
+</div>

@@ -1,0 +1,55 @@
+@import 'utils/functions';
+@import 'utils/variables';
+@import 'utils/mixins';
+
+:host {
+	display: block;
+}
+
+.form-field {
+	--border-size: #{rem(1px)};
+	--border-color: var(--bg-color-2);
+
+	box-shadow: 0px 0px 0px var(--border-size) var(--border-color);
+	background-color: var(--bg-color-1);
+	padding: rem(25px) rem(10px);
+	border-radius: rem(4px);
+
+	color: var(--text-color-1);
+	transition: box-shadow 0.2s linear;
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+
+	&__input-container {
+		width: 100%;
+	}
+
+	&__label-container {
+		position: absolute;
+		transition: transform 0.2s ease-out;
+		transform-origin: top left;
+		pointer-events: none;
+		user-select: none;
+		font-weight: bolder;
+	}
+
+	&--label-should-float &__label-container {
+		transition-timing-function: ease-in;
+		transform: scale(0.8) translateY(rem(-25px));
+	}
+
+	&--label-should-float {
+		--border-size: #{rem(2px)};
+	}
+
+	&--valid#{&}--touched {
+		--border-color: var(--color-success);
+		color: var(--color-success);
+	}
+
+	&--invalid#{&}--touched {
+		--border-color: var(--color-danger);
+		color: var(--color-danger);
+	}
+}

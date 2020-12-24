@@ -3,11 +3,10 @@
 	class="transaction"
 	*ngIf="data$ | async as data; else loader"
 >
-	<styled-input class="transaction__detail" appearance="filled">
-		<input formErrors styledInput type="number" formControlName="amount" />
-		<span styledInputSuffix>PLN</span>
-		<span class="label">Wartość</span>
-	</styled-input>
+	<form-field>
+		<input formFieldInput type="number" formControlName="amount" />
+		<form-field-label>Kwota</form-field-label>
+	</form-field>
 
 	<form-errors
 		class="transaction__error"
@@ -56,15 +55,10 @@
 		[control]="form.get('date')"
 	></form-errors>
 
-	<styled-input class="transaction__detail" appearance="filled">
-		<textarea
-			formErrors
-			styledInput
-			type="text"
-			formControlName="description"
-		></textarea>
-		<span class="label">Opis transakcji</span>
-	</styled-input>
+	<form-field>
+		<input formFieldInput type="text" formControlName="description" />
+		<form-field-label>Opis transakcji</form-field-label>
+	</form-field>
 
 	<form-errors
 		class="transaction__error"

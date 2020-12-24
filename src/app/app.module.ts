@@ -61,6 +61,9 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
+import { FormFieldComponent } from './components/form-field/form-field/form-field.component';
+import { FormFieldLabelComponent } from './components/form-field/form-field-label/form-field-label.component';
+import { FormFieldInputDirective } from './components/form-field/form-field-input.directive';
 
 /*
 	To speed up development process, app uses date picker and select component from Angular Material.
@@ -103,6 +106,9 @@ import { UserService } from './services/user/user.service';
 		ConfirmDialogComponent,
 		DialogContainerComponent,
 		ConfirmActionDirective,
+		FormFieldComponent,
+		FormFieldLabelComponent,
+		FormFieldInputDirective,
 	],
 	imports: [
 		BrowserModule,
