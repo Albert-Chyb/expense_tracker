@@ -1,18 +1,19 @@
 import { NgControl } from '@angular/forms';
-import { Subject, Observable } from 'rxjs';
-export interface FormFieldControl {
+import { Observable, Subject } from 'rxjs';
+
+export abstract class FormFieldControl {
 	/** Indicates if label of the form field should be placed on top or in middle. */
 	shouldLabelFloat: boolean;
-
-	/** Current value of the control. */
-	value: any;
 
 	/** Exposed standard NgControl. */
 	ngControl: NgControl;
 
 	/** Triggers parent change detection whenever emits a value. */
-	onStateChange: Observable<void>;
+	onStateChange: Observable<void> | Subject<void>;
+
+	/** Indicates if control is currently focused. */
+	isFocused: boolean;
 
 	/** Called every time when user clicked on the container */
-	onContainerClick(): void;
+	onContainerClick(): void {}
 }
