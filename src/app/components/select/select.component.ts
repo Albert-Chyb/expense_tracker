@@ -1,5 +1,4 @@
-import { fadeIn, fadeOut } from './../../animations';
-import { trigger, useAnimation, transition } from '@angular/animations';
+import { transition, trigger, useAnimation } from '@angular/animations';
 import {
 	AfterContentInit,
 	Component,
@@ -19,7 +18,11 @@ import {
 } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 
-import { FormFieldControl } from './../form-field/form-field-control';
+import { fadeIn, fadeOut } from './../../animations';
+import {
+	FormFieldControl,
+	IFormFieldRefs,
+} from './../form-field/form-field-control';
 import { SelectOptionComponent } from './../select-option/select-option.component';
 
 @Component({
@@ -60,6 +63,7 @@ export class SelectComponent
 	private _onTouched: () => void;
 	private _isDisabled: boolean;
 	private _initialValue: string;
+	private _labelId: string;
 
 	/** Id of the element that displays currently selected option. Mainly for aria attributes. */
 	private _selectedOptionElID: string = `select-btn-${window[
@@ -91,7 +95,6 @@ export class SelectComponent
 
 	// FormFieldControl implementation
 	get shouldLabelFloat(): boolean {
-		console.log('Changed Detection');
 		return this._isOpened || this.currentOption.value !== '';
 	}
 
@@ -105,6 +108,10 @@ export class SelectComponent
 
 	onContainerClick(): void {
 		this.toggle();
+	}
+
+	registerFormFieldRefs(refs: IFormFieldRefs) {
+		this._labelId = refs.label.id;
 	}
 	// ^^^ FormFieldControl implementation ^^^
 
@@ -256,8 +263,14 @@ export class SelectComponent
 		return this._selectedOptionElID;
 	}
 
+	/** Indicates if select dropdown is opened. */
 	get isOpened(): boolean {
 		return this._isOpened;
+	}
+
+	/** Id of the form field label. */
+	get labelId(): string {
+		return this._labelId;
 	}
 
 	/**
@@ -273,24 +286,31 @@ export class SelectComponent
 		return option;
 	}
 
-	/** Called when user clicked an option */
+	/**
+	 * Called when user clicked an option.
+	 * @param chosenOption Option that was chose by user.
+	 */
 	private _onOptionChoose(chosenOption: SelectOptionComponent) {
 		this.choose(chosenOption);
 	}
 
+	/** Called when there is a change in an option. */
 	private _onOptionChange() {
 		// Rebinding helps with cached data.
 		this._bindListenersToOptions();
 		this.onStateChange.next();
 	}
 
+	/** Binds methods to options. */
 	private _bindListenersToOptions() {
+		// Bind method to onChoose event.
 		this.options.forEach(option =>
 			this._optionsSubscriptions.add(
 				option.onChoose.subscribe(this._onOptionChoose.bind(this))
 			)
 		);
 
+		// Bind method to run every time there is a change in an option.
 		this._optionsSubscriptions.add(
 			this.options.changes.subscribe(this._onOptionChange.bind(this))
 		);

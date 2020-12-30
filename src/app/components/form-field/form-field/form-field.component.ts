@@ -1,13 +1,12 @@
+import { FormFieldLabelComponent } from './../form-field-label/form-field-label.component';
 import {
 	AfterContentInit,
 	ChangeDetectorRef,
 	Component,
 	ContentChild,
-	ElementRef,
 	HostListener,
 	OnDestroy,
 	OnInit,
-	ViewChild,
 } from '@angular/core';
 import { merge, Subscription } from 'rxjs';
 
@@ -23,6 +22,7 @@ export class FormFieldComponent implements OnInit, AfterContentInit, OnDestroy {
 
 	private readonly _subscriptions = new Subscription();
 
+	@ContentChild(FormFieldLabelComponent) label: FormFieldLabelComponent;
 	@ContentChild(FormFieldControl) control: FormFieldControl;
 	@HostListener('click', ['$event']) onClick($event: MouseEvent) {
 		this.control.onContainerClick();
@@ -43,6 +43,12 @@ export class FormFieldComponent implements OnInit, AfterContentInit, OnDestroy {
 				this.control.onStateChange
 			).subscribe(this._onChildStateChange.bind(this))
 		);
+
+		if ('registerFormFieldRefs' in this.control) {
+			this.control.registerFormFieldRefs({
+				label: this.label,
+			});
+		}
 
 		this._changeDetector.detectChanges();
 	}

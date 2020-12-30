@@ -4,6 +4,7 @@
 		class="select__selected-option"
 		aria-haspopup="listbox"
 		[attr.aria-expanded]="isOpened"
+		[attr.aria-labelledby]="labelId + ' ' + selectedOptionElID"
 		[id]="selectedOptionElID"
 	>
 		{{ currentOption.value ? currentOption.displayValue : ' ' }}
@@ -14,6 +15,7 @@
 		tabindex="-1"
 		role="listbox"
 		[attr.aria-activedescendant]="currentOption.id"
+		[attr.aria-labelledby]="labelId"
 		@dropdownAnimation
 		class="select__options"
 		*ngIf="isOpened"

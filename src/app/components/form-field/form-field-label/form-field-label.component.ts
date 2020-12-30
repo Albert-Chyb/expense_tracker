@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
 	selector: 'form-field-label',
 	templateUrl: './form-field-label.component.html',
 	styleUrls: ['./form-field-label.component.scss'],
 })
-export class FormFieldLabelComponent implements OnInit {
-	constructor() {}
-
-	ngOnInit(): void {}
+export class FormFieldLabelComponent {
+	id: string = `form-field-label-${window['uniqueNumber']++}`;
 }
