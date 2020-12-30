@@ -42,6 +42,14 @@ import { SelectOptionComponent } from './../select-option/select-option.componen
 			transition(':leave', useAnimation(fadeOut)),
 		]),
 	],
+	host: {
+		'(document:keydown.escape)': 'close()',
+		'(document:keydown.arrowDown)': 'focusNextOption($event)',
+		'(document:keydown.arrowUp)': 'focusPrevOption($event)',
+		'(document:keydown.home)': 'focusFirstOption($event)',
+		'(document:keydown.end)': 'focusLastOption($event)',
+		'(document:keydown.enter)': 'chooseCurrentlyFocusedOption($event)',
+	},
 })
 export class SelectComponent
 	implements
@@ -125,7 +133,6 @@ export class SelectComponent
 	}
 
 	/** Closes select dropdown */
-	@HostListener('document:keydown.escape')
 	close() {
 		if (this._isOpened) {
 			this._isOpened = false;
@@ -140,7 +147,6 @@ export class SelectComponent
 	}
 
 	/** Focuses next option relative to the currently focused/selected option */
-	@HostListener('document:keydown.arrowDown', ['$event'])
 	focusNextOption($event: KeyboardEvent) {
 		if (!this._isOpened) return;
 		$event.preventDefault();
@@ -149,7 +155,6 @@ export class SelectComponent
 	}
 
 	/** Focuses next option relative to the currently focused/selected option */
-	@HostListener('document:keydown.arrowUp', ['$event'])
 	focusPrevOption($event: KeyboardEvent) {
 		if (!this._isOpened) return;
 		$event.preventDefault();
@@ -157,7 +162,6 @@ export class SelectComponent
 		this.moveFocus('up');
 	}
 
-	@HostListener('document:keydown.home', ['$event'])
 	focusFirstOption($event: KeyboardEvent) {
 		if (!this._isOpened) return;
 		$event.preventDefault();
@@ -165,7 +169,6 @@ export class SelectComponent
 		this.focusOption(this.options.first);
 	}
 
-	@HostListener('document:keydown.end', ['$event'])
 	focusLastOption($event: KeyboardEvent) {
 		if (!this._isOpened) return;
 		$event.preventDefault();
@@ -174,7 +177,6 @@ export class SelectComponent
 	}
 
 	/** Selects currently focused option. */
-	@HostListener('document:keydown.enter', ['$event'])
 	chooseCurrentlyFocusedOption($event: KeyboardEvent) {
 		if (!this._isOpened) return;
 		$event.preventDefault();
