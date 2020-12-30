@@ -15,15 +15,16 @@
 	></form-errors>
 
 	<ng-container *ngIf="data.groups.length; else noGroupsInfo">
-		<mat-form-field class="transaction__detail" appearance="fill">
-			<mat-label>Grupa</mat-label>
-			<mat-select formControlName="group">
-				<mat-option> Wybierz </mat-option>
-				<mat-option *ngFor="let group of data.groups" [value]="group.id">
-					{{ group.name }}
-				</mat-option>
-			</mat-select>
-		</mat-form-field>
+		<form-field>
+			<form-field-label> Grupa </form-field-label>
+
+			<app-select formControlName="group">
+				<select-option value="">Wybierz</select-option>
+				<select-option *ngFor="let group of data.groups" [value]="group.id">{{
+					group.name
+				}}</select-option>
+			</app-select>
+		</form-field>
 
 		<form-errors
 			class="transaction__error"

@@ -1,0 +1,23 @@
+<div class="select">
+	<button
+		type="button"
+		class="select__selected-option"
+		aria-haspopup="listbox"
+		[attr.aria-expanded]="isOpened"
+		[id]="selectedOptionElID"
+	>
+		{{ currentOption.value ? currentOption.displayValue : ' ' }}
+	</button>
+
+	<div
+		id="select-dropdown"
+		tabindex="-1"
+		role="listbox"
+		[attr.aria-activedescendant]="currentOption.id"
+		@dropdownAnimation
+		class="select__options"
+		*ngIf="isOpened"
+	>
+		<ng-content select="select-option"></ng-content>
+	</div>
+</div>

@@ -1,0 +1,30 @@
+@import 'utils/functions';
+@import 'utils/variables';
+@import 'utils/mixins';
+
+.select {
+	position: relative;
+	cursor: pointer;
+
+	&__selected-option {
+		background-color: transparent;
+		border: none;
+		font-size: inherit;
+		color: inherit;
+	}
+
+	&__options {
+		scroll-behavior: smooth;
+		position: absolute;
+		background-color: var(--bg-color-1);
+		z-index: 10;
+		width: 100%;
+		top: 0px;
+		left: 0px;
+		max-height: $option-height * 4;
+		overflow-y: scroll;
+		border-radius: rem(3px);
+		color: var(--text-color-0);
+		border: rem(2px) solid var(--bg-color-2);
+	}
+}

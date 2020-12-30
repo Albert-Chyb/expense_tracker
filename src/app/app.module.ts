@@ -29,12 +29,20 @@ import { ClueComponent } from './components/clue/clue.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { DialogContainerComponent } from './components/dialog-container/dialog-container.component';
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
+import { FormFieldInputDirective } from './components/form-field/form-field-input.directive';
+import { FormFieldLabelComponent } from './components/form-field/form-field-label/form-field-label.component';
+import { FormFieldComponent } from './components/form-field/form-field/form-field.component';
 import { GroupIconComponent } from './components/group-icon/group-icon.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
+import { SelectOptionComponent } from './components/select-option/select-option.component';
+import {
+	SelectComponent,
+	SelectComponentControlDirective,
+} from './components/select/select.component';
 import { StyledInputComponent } from './components/styled-input/styled-input.component';
 import { SummaryCardComponent } from './components/summary-card/summary-card.component';
 import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
@@ -61,9 +69,6 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
-import { FormFieldComponent } from './components/form-field/form-field/form-field.component';
-import { FormFieldLabelComponent } from './components/form-field/form-field-label/form-field-label.component';
-import { FormFieldInputDirective } from './components/form-field/form-field-input.directive';
 
 /*
 	To speed up development process, app uses date picker and select component from Angular Material.
@@ -109,6 +114,9 @@ import { FormFieldInputDirective } from './components/form-field/form-field-inpu
 		FormFieldComponent,
 		FormFieldLabelComponent,
 		FormFieldInputDirective,
+		SelectComponent,
+		SelectOptionComponent,
+		SelectComponentControlDirective,
 	],
 	imports: [
 		BrowserModule,
