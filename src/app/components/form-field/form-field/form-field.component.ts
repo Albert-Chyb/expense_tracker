@@ -1,14 +1,17 @@
-import { merge, Subscription } from 'rxjs';
-import { FormFieldInputDirective } from './../form-field-input.directive';
 import {
-	Component,
-	OnInit,
 	AfterContentInit,
-	ContentChild,
 	ChangeDetectorRef,
+	Component,
+	ContentChild,
+	ElementRef,
 	HostListener,
 	OnDestroy,
+	OnInit,
+	ViewChild,
 } from '@angular/core';
+import { merge, Subscription } from 'rxjs';
+
+import { FormFieldControl } from './../form-field-control';
 
 @Component({
 	selector: 'form-field',
@@ -20,9 +23,9 @@ export class FormFieldComponent implements OnInit, AfterContentInit, OnDestroy {
 
 	private readonly _subscriptions = new Subscription();
 
-	@ContentChild(FormFieldInputDirective) input: FormFieldInputDirective;
-	@HostListener('click') onClick() {
-		this.input.onContainerClick();
+	@ContentChild(FormFieldControl) control: FormFieldControl;
+	@HostListener('click', ['$event']) onClick($event: MouseEvent) {
+		this.control.onContainerClick();
 	}
 
 	ngOnInit(): void {
@@ -36,8 +39,8 @@ export class FormFieldComponent implements OnInit, AfterContentInit, OnDestroy {
 	ngAfterContentInit() {
 		this._subscriptions.add(
 			merge(
-				this.input.ngControl.statusChanges,
-				this.input.onStateChange
+				this.control.ngControl.statusChanges,
+				this.control.onStateChange
 			).subscribe(this._onChildStateChange.bind(this))
 		);
 
@@ -45,7 +48,7 @@ export class FormFieldComponent implements OnInit, AfterContentInit, OnDestroy {
 	}
 
 	get shouldLabelFloat(): boolean {
-		return this.input.shouldLabelFloat;
+		return this.control.shouldLabelFloat;
 	}
 
 	/** Should be called whenever change detection is required */
@@ -54,14 +57,14 @@ export class FormFieldComponent implements OnInit, AfterContentInit, OnDestroy {
 	}
 
 	get isValid() {
-		return this.input.ngControl.valid;
+		return this.control.ngControl.valid;
 	}
 
 	get isInvalid() {
-		return this.input.ngControl.invalid;
+		return this.control.ngControl.invalid;
 	}
 
 	get isTouched() {
-		return this.input.ngControl.touched;
+		return this.control.ngControl.touched;
 	}
 }

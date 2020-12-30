@@ -1,14 +1,16 @@
 <div
+	#formField
 	class="form-field"
 	[ngClass]="{
 		'form-field--label-should-float': shouldLabelFloat,
 		'form-field--valid': isValid,
 		'form-field--invalid': isInvalid,
-		'form-field--touched': isTouched
+		'form-field--touched': isTouched,
+		'form-field--focused': control.isFocused
 	}"
 >
 	<div class="form-field__input-container">
-		<ng-content select="input[formFieldInput]"></ng-content>
+		<ng-content select="input[formFieldInput], app-select"></ng-content>
 	</div>
 
 	<div class="form-field__label-container">

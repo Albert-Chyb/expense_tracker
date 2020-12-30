@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { mapTo } from 'rxjs/operators';
@@ -10,6 +10,12 @@ import { FormFieldControl } from './form-field-control';
 	host: {
 		class: 'form-field-input',
 	},
+	providers: [
+		{
+			provide: FormFieldControl,
+			useExisting: FormFieldInputDirective,
+		},
+	],
 })
 export class FormFieldInputDirective implements FormFieldControl {
 	constructor(
@@ -35,6 +41,10 @@ export class FormFieldInputDirective implements FormFieldControl {
 	}
 	set value(newValue: string) {
 		this._hostEl.nativeElement.value = newValue;
+	}
+
+	get isFocused() {
+		return this._isFocused;
 	}
 
 	get ngControl() {
