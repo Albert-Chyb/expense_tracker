@@ -17,7 +17,6 @@
 	}
 
 	&--focused {
-		border-top: 2px solid red;
-		border-bottom: 2px solid red;
+		background-color: var(--bg-color-3);
 	}
 }
