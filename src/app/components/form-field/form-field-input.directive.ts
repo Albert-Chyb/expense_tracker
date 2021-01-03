@@ -1,7 +1,7 @@
 import { Directive, ElementRef } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { fromEvent, merge, Observable } from 'rxjs';
-import { mapTo } from 'rxjs/operators';
+import { mapTo, tap } from 'rxjs/operators';
 
 import { FormFieldControl } from './form-field-control';
 
@@ -24,13 +24,14 @@ export class FormFieldInputDirective implements FormFieldControl {
 	) {}
 
 	private _onStateChange = merge(
-		fromEvent(this._hostEl.nativeElement, 'blur'),
-		fromEvent(this._hostEl.nativeElement, 'focus')
-	).pipe(mapTo(null));
+		fromEvent(this._hostEl.nativeElement, 'blur').pipe(mapTo(false)),
+		fromEvent(this._hostEl.nativeElement, 'focus').pipe(mapTo(true))
+	).pipe(
+		tap(isFocused => (this._isFocused = isFocused)),
+		mapTo(null)
+	);
 
-	private get _isFocused() {
-		return this._hostEl.nativeElement.matches(':focus');
-	}
+	private _isFocused: boolean;
 
 	get shouldLabelFloat(): boolean {
 		return this._isFocused || this.value !== '';
@@ -38,9 +39,6 @@ export class FormFieldInputDirective implements FormFieldControl {
 
 	get value(): string {
 		return this._hostEl.nativeElement.value;
-	}
-	set value(newValue: string) {
-		this._hostEl.nativeElement.value = newValue;
 	}
 
 	get isFocused() {
