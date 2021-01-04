@@ -1,4 +1,3 @@
-import { FormFieldLabelComponent } from './../form-field-label/form-field-label.component';
 import {
 	AfterContentInit,
 	ChangeDetectorRef,
@@ -11,6 +10,7 @@ import {
 import { merge, Subscription } from 'rxjs';
 
 import { FormFieldControl } from './../form-field-control';
+import { FormFieldLabelComponent } from './../form-field-label/form-field-label.component';
 
 @Component({
 	selector: 'form-field',
@@ -24,7 +24,7 @@ export class FormFieldComponent implements OnInit, AfterContentInit, OnDestroy {
 
 	@ContentChild(FormFieldLabelComponent) label: FormFieldLabelComponent;
 	@ContentChild(FormFieldControl) control: FormFieldControl;
-	@HostListener('click', ['$event']) onClick($event: MouseEvent) {
+	@HostListener('click') onClick() {
 		this.control.onContainerClick();
 	}
 
