@@ -73,4 +73,8 @@ export class FormFieldComponent implements OnInit, AfterContentInit, OnDestroy {
 	get isTouched() {
 		return this.control.ngControl.touched;
 	}
+
+	get isDisabled() {
+		return this.control.ngControl.disabled;
+	}
 }
