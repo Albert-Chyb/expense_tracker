@@ -1,11 +1,11 @@
 import { transition, trigger, useAnimation } from '@angular/animations';
 import {
 	AfterContentInit,
+	ChangeDetectorRef,
 	Component,
 	ContentChildren,
 	Directive,
 	forwardRef,
-	HostListener,
 	Injector,
 	OnDestroy,
 	OnInit,
@@ -24,6 +24,18 @@ import {
 	IFormFieldRefs,
 } from './../form-field/form-field-control';
 import { SelectOptionComponent } from './../select-option/select-option.component';
+
+/*
+	TODO: Move dropdown as separate component.
+	This will help insert it into overlay.
+	
+	TODO: As soon as it has been inserted into overlay position in in case it falls off-screen.
+
+	TODO: Add possibility to disable select.
+	* add styles to this state
+	* disabled option should not display dropdown list
+	* if select was disabled when dropdown is opened, it should be closed immediately
+*/
 
 @Component({
 	selector: 'app-select',
@@ -58,7 +70,10 @@ export class SelectComponent
 		ControlValueAccessor,
 		AfterContentInit,
 		OnDestroy {
-	constructor(private readonly _injector: Injector) {}
+	constructor(
+		private readonly _injector: Injector,
+		private readonly _changeDetector: ChangeDetectorRef
+	) {}
 
 	@ContentChildren(SelectOptionComponent)
 	options: QueryList<SelectOptionComponent>;
@@ -69,9 +84,9 @@ export class SelectComponent
 	private _currentlyFocusedOption: SelectOptionComponent;
 	private _onChange: (value: string) => void;
 	private _onTouched: () => void;
-	private _isDisabled: boolean;
-	private _initialValue: string;
-	private _labelId: string;
+	private _isDisabled: boolean = false;
+	private _initialValue: string = '';
+	private _labelId: string = '';
 
 	/** Id of the element that displays currently selected option. Mainly for aria attributes. */
 	private _selectedOptionElID: string = `select-btn-${window[
@@ -96,8 +111,10 @@ export class SelectComponent
 		this._onTouched = fn;
 	}
 
-	setDisabledState?(isDisabled: boolean): void {
+	setDisabledState(isDisabled: boolean): void {
 		this._isDisabled = isDisabled;
+		this._changeDetector.markForCheck();
+		if (isDisabled) this.close();
 	}
 	// ^^^ ControlValueAccessor implementation ^^^
 
@@ -125,7 +142,7 @@ export class SelectComponent
 
 	/** Opens select dropdown */
 	open() {
-		if (!this._isOpened) {
+		if (!this._isOpened && !this._isDisabled) {
 			this._isOpened = true;
 			this.focusOption(this.currentOption);
 			this.onStateChange.next();
@@ -273,6 +290,10 @@ export class SelectComponent
 	/** Id of the form field label. */
 	get labelId(): string {
 		return this._labelId;
+	}
+
+	get isDisabled(): boolean {
+		return this._isDisabled;
 	}
 
 	/**

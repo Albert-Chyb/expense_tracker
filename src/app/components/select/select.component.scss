@@ -28,3 +28,7 @@
 		border: rem(2px) solid var(--bg-color-2);
 	}
 }
+
+:host-context(.form-field--disabled) .select {
+	cursor: not-allowed;
+}
