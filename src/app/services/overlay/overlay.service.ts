@@ -31,6 +31,9 @@ export interface IOverlaySettings {
 	transparent: boolean;
 }
 export const OVERLAY_SETTINGS = new InjectionToken('OVERLAY_SETTINGS');
+const DEFAULT_SETTINGS: IOverlaySettings = {
+	transparent: false,
+};
 
 @Injectable({
 	providedIn: 'root',
@@ -76,7 +79,7 @@ export class OverlayService {
 	open<T>(
 		Component?: ComponentType<T> | TemplateRef<T>,
 		injector?: Injector,
-		settings?: IOverlaySettings
+		settings: IOverlaySettings = DEFAULT_SETTINGS
 	): ComponentRef<T> | EmbeddedViewRef<T> | null {
 		if (this._isOpened) return null;
 		this._isOpened = true;

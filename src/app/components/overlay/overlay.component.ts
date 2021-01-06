@@ -99,8 +99,4 @@ export class OverlayComponent {
 	get portal() {
 		return this._portal;
 	}
-
-	ngOnInit() {
-		console.log(this.settings);
-	}
 }
