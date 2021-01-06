@@ -2,7 +2,7 @@ import { first } from 'rxjs/operators';
 import { ConfirmDialogData } from './../../components/confirm-dialog/confirm-dialog.component';
 import { DIALOG_SERVICE } from './../../common/models/dialog';
 import { ComponentType } from '@angular/cdk/portal';
-import { Injectable, Injector } from '@angular/core';
+import { ComponentRef, Injectable, Injector } from '@angular/core';
 
 import { DIALOG_DATA } from '../../common/models/dialog';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
@@ -38,10 +38,10 @@ export class DialogService {
 				{ provide: DIALOG_SERVICE, useValue: this },
 			],
 		});
-		const dialogContainer = this._overlay.open(
+		const dialogContainer = (this._overlay.open(
 			DialogContainerComponent,
 			injector
-		);
+		) as any) as ComponentRef<DialogContainerComponent>;
 
 		dialogContainer.instance.insertContent(DialogComponent);
 
