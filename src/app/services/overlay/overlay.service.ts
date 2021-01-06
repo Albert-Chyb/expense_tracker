@@ -8,10 +8,12 @@ import {
 	ApplicationRef,
 	ComponentFactoryResolver,
 	ComponentRef,
+	EmbeddedViewRef,
 	Inject,
 	Injectable,
 	Injector,
 	RendererFactory2,
+	TemplateRef,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { first } from 'rxjs/operators';
@@ -66,9 +68,9 @@ export class OverlayService {
 	 * @returns ComponentRef of the created component
 	 */
 	open<T>(
-		Component?: ComponentType<T>,
+		Component?: ComponentType<T> | TemplateRef<T>,
 		injector?: Injector
-	): ComponentRef<T> | null {
+	): ComponentRef<T> | EmbeddedViewRef<T> | null {
 		if (this._isOpened) return null;
 		this._isOpened = true;
 

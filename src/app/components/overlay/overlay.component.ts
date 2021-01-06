@@ -8,8 +8,16 @@ import {
 	CdkPortalOutlet,
 	ComponentPortal,
 	ComponentType,
+	TemplatePortal,
 } from '@angular/cdk/portal';
-import { Component, HostListener, Injector, ViewChild } from '@angular/core';
+import {
+	Component,
+	HostListener,
+	Injector,
+	TemplateRef,
+	ViewChild,
+	ViewContainerRef,
+} from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { OVERLAY_SERVICE } from '../../common/models/overlay';
@@ -28,7 +36,7 @@ import { fadeIn, fadeOut } from './../../animations';
 		'(@overlayAnimation.done)': '_onAnimationEnd.next($event)',
 	},
 	template: `
-		<div class="overlay">
+		<div class="overlay" #overlay>
 			<ng-template [cdkPortalOutlet]="portal"> </ng-template>
 		</div>
 	`,
@@ -39,6 +47,8 @@ export class OverlayComponent {
 	private readonly _overlay = this._injector.get(OVERLAY_SERVICE);
 	private _portal: ComponentPortal<any>;
 
+	@ViewChild('overlay', { read: ViewContainerRef })
+	overlayRef: ViewContainerRef;
 	@ViewChild(CdkPortalOutlet, { static: true }) portalOutlet: CdkPortalOutlet;
 	@HostListener('click', ['$event']) onClick($event: MouseEvent) {
 		this._overlay.onClick$.next($event);
@@ -52,12 +62,21 @@ export class OverlayComponent {
 	 * @param injector Injector that will be used when creating the component
 	 * @returns instance of created component
 	 */
-	insertComponent<T>(Component: ComponentType<T>, injector?: Injector) {
+	insertComponent<T>(
+		Component: ComponentType<T> | TemplateRef<T>,
+		injector?: Injector
+	) {
 		const injectorToUse = injector || this._injector;
 
-		return this.portalOutlet.attach(
-			new ComponentPortal(Component, null, injectorToUse)
-		);
+		if (Component instanceof TemplateRef) {
+			return this.portalOutlet.attach(
+				new TemplatePortal(Component, this.overlayRef)
+			);
+		} else {
+			return this.portalOutlet.attach(
+				new ComponentPortal(Component, null, injectorToUse)
+			);
+		}
 	}
 
 	/** Emits an AnimationEvent when animation of overlay ended */
