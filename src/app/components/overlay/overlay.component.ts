@@ -1,4 +1,8 @@
 import {
+	IOverlaySettings,
+	OVERLAY_SETTINGS,
+} from './../../services/overlay/overlay.service';
+import {
 	AnimationEvent,
 	transition,
 	trigger,
@@ -13,6 +17,7 @@ import {
 import {
 	Component,
 	HostListener,
+	Inject,
 	Injector,
 	TemplateRef,
 	ViewChild,
@@ -36,13 +41,20 @@ import { fadeIn, fadeOut } from './../../animations';
 		'(@overlayAnimation.done)': '_onAnimationEnd.next($event)',
 	},
 	template: `
-		<div class="overlay" #overlay>
+		<div
+			class="overlay"
+			#overlay
+			[ngClass]="{ 'overlay--transparent': settings.transparent }"
+		>
 			<ng-template [cdkPortalOutlet]="portal"> </ng-template>
 		</div>
 	`,
 })
 export class OverlayComponent {
-	constructor(private readonly _injector: Injector) {}
+	constructor(
+		private readonly _injector: Injector,
+		@Inject(OVERLAY_SETTINGS) public readonly settings: IOverlaySettings
+	) {}
 
 	private readonly _overlay = this._injector.get(OVERLAY_SERVICE);
 	private _portal: ComponentPortal<any>;
@@ -86,5 +98,9 @@ export class OverlayComponent {
 
 	get portal() {
 		return this._portal;
+	}
+
+	ngOnInit() {
+		console.log(this.settings);
 	}
 }

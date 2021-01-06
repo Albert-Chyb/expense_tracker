@@ -11,6 +11,7 @@ import {
 	EmbeddedViewRef,
 	Inject,
 	Injectable,
+	InjectionToken,
 	Injector,
 	RendererFactory2,
 	TemplateRef,
@@ -20,6 +21,16 @@ import { first } from 'rxjs/operators';
 
 import { OVERLAY_SERVICE } from '../../common/models/overlay';
 import { OverlayComponent } from './../../components/overlay/overlay.component';
+
+/*
+	TODO: Add the ability to make overlay transparent.
+*/
+
+export interface IOverlaySettings {
+	/** Indicates if overlay should be transparent */
+	transparent: boolean;
+}
+export const OVERLAY_SETTINGS = new InjectionToken('OVERLAY_SETTINGS');
 
 @Injectable({
 	providedIn: 'root',
@@ -48,11 +59,6 @@ export class OverlayService {
 		this._appRef,
 		this._injector
 	);
-	private readonly _overlayComponentPortal = new ComponentPortal(
-		OverlayComponent,
-		null,
-		this._createInjectorForOverlayComponent()
-	);
 
 	/**
 	 * Opens overlay. You can pass a class of a component that will be created and inserted
@@ -69,12 +75,19 @@ export class OverlayService {
 	 */
 	open<T>(
 		Component?: ComponentType<T> | TemplateRef<T>,
-		injector?: Injector
+		injector?: Injector,
+		settings?: IOverlaySettings
 	): ComponentRef<T> | EmbeddedViewRef<T> | null {
 		if (this._isOpened) return null;
 		this._isOpened = true;
 
-		const component = this._overlayComponentPortal.attach(this._portalHost);
+		const portal = new ComponentPortal(
+			OverlayComponent,
+			null,
+			this._createInjectorForOverlayComponent(settings)
+		);
+
+		const component = portal.attach(this._portalHost);
 		this._overlayRef = component.instance;
 
 		if (Component)
@@ -88,7 +101,7 @@ export class OverlayService {
 	async close(): Promise<void> {
 		if (!this._isOpened) return null;
 
-		this._overlayComponentPortal.detach();
+		this._portalHost.detach();
 		await this._overlayRef.onAnimationEnd$.pipe(first()).toPromise();
 		this._overlayRef = null;
 		this._isOpened = false;
@@ -99,10 +112,16 @@ export class OverlayService {
 		return this._isOpened;
 	}
 
-	private _createInjectorForOverlayComponent() {
+	private _createInjectorForOverlayComponent(settings: IOverlaySettings) {
 		return Injector.create({
 			parent: this._injector,
-			providers: [{ provide: OVERLAY_SERVICE, useValue: this }],
+			providers: [
+				{ provide: OVERLAY_SERVICE, useValue: this },
+				{
+					provide: OVERLAY_SETTINGS,
+					useValue: settings,
+				},
+			],
 		});
 	}
 }
