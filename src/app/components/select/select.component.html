@@ -10,16 +10,18 @@
 		{{ currentOption.value ? currentOption.displayValue : ' ' }}
 	</button>
 
-	<div
-		id="select-dropdown"
-		tabindex="-1"
-		role="listbox"
-		[attr.aria-activedescendant]="currentOption.id"
-		[attr.aria-labelledby]="labelId"
-		@dropdownAnimation
-		class="select__options"
-		*ngIf="isOpened"
-	>
-		<ng-content select="select-option"></ng-content>
-	</div>
+	<ng-template #selectDropdown>
+		<div
+			#dropdown
+			id="select-dropdown"
+			tabindex="-1"
+			role="listbox"
+			[attr.aria-activedescendant]="currentOption.id"
+			[attr.aria-labelledby]="labelId"
+			@dropdownAnimation
+			class="select__options"
+		>
+			<ng-content select="select-option"></ng-content>
+		</div>
+	</ng-template>
 </div>

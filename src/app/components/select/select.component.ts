@@ -1,3 +1,5 @@
+import { first } from 'rxjs/operators';
+import { OverlayService } from './../../services/overlay/overlay.service';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import {
 	AfterContentInit,
@@ -5,11 +7,16 @@ import {
 	Component,
 	ContentChildren,
 	Directive,
+	ElementRef,
+	EmbeddedViewRef,
 	forwardRef,
 	Injector,
 	OnDestroy,
 	OnInit,
 	QueryList,
+	Renderer2,
+	TemplateRef,
+	ViewChild,
 } from '@angular/core';
 import {
 	ControlValueAccessor,
@@ -25,17 +32,11 @@ import {
 } from './../form-field/form-field-control';
 import { SelectOptionComponent } from './../select-option/select-option.component';
 
-/*
-	TODO: Move dropdown as separate component.
-	This will help insert it into overlay.
-	
-	TODO: As soon as it has been inserted into overlay position in in case it falls off-screen.
+/** Option height in em unit. */
+export const SELECT_OPTION_HEIGHT_EM = 2.625;
 
-	TODO: Add possibility to disable select.
-	* add styles to this state
-	* disabled option should not display dropdown list
-	* if select was disabled when dropdown is opened, it should be closed immediately
-*/
+/** How many options are visible at once */
+export const SELECT_OPTION_VISIBLE_COUNT = 4;
 
 @Component({
 	selector: 'app-select',
@@ -72,8 +73,13 @@ export class SelectComponent
 		OnDestroy {
 	constructor(
 		private readonly _injector: Injector,
-		private readonly _changeDetector: ChangeDetectorRef
+		private readonly _changeDetector: ChangeDetectorRef,
+		private readonly _overlay: OverlayService,
+		private readonly _hostRef: ElementRef<HTMLElement>,
+		private readonly _renderer: Renderer2
 	) {}
+
+	@ViewChild('selectDropdown') dropdownRef: TemplateRef<HTMLElement>;
 
 	@ContentChildren(SelectOptionComponent)
 	options: QueryList<SelectOptionComponent>;
@@ -145,6 +151,13 @@ export class SelectComponent
 		if (!this._isOpened && !this._isDisabled) {
 			this._isOpened = true;
 			this.focusOption(this.currentOption);
+			const dropdownViewRef = this._overlay.open(this.dropdownRef, null, {
+				transparent: true,
+			}) as EmbeddedViewRef<HTMLElement>;
+
+			this._positionDropdown(dropdownViewRef.rootNodes[0] as HTMLElement);
+
+			this._overlay.onClick$.pipe(first()).subscribe(() => this.close());
 			this.onStateChange.next();
 		}
 	}
@@ -154,6 +167,7 @@ export class SelectComponent
 		if (this._isOpened) {
 			this._isOpened = false;
 			this._currentlyFocusedOption.isFocused = false;
+			this._overlay.close();
 			this.onStateChange.next();
 		}
 	}
@@ -260,6 +274,7 @@ export class SelectComponent
 
 		this.currentOption.isSelected = true;
 		this._onChange(this.currentOption.value);
+		this.onStateChange.next();
 	}
 
 	ngOnInit(): void {
@@ -299,7 +314,7 @@ export class SelectComponent
 	/**
 	 * Determines which option should be displayed by default.
 	 *
-	 * Firstly an option without value has priority.
+	 * Firstly an option without value has the priority.
 	 * If no such option is found then display first option from all of them.
 	 */
 	private _determineFirstOption() {
@@ -319,7 +334,6 @@ export class SelectComponent
 
 	/** Called when there is a change in an option. */
 	private _onOptionChange() {
-		// Rebinding helps with cached data.
 		this._bindListenersToOptions();
 		this.onStateChange.next();
 	}
@@ -337,6 +351,52 @@ export class SelectComponent
 		this._optionsSubscriptions.add(
 			this.options.changes.subscribe(this._onOptionChange.bind(this))
 		);
+	}
+
+	/** Positions dropdown element */
+	private _positionDropdown(dropdownElement: HTMLElement) {
+		const hostPosition = this._hostRef.nativeElement.getBoundingClientRect();
+		const offscreenInfo = this._fallsOffScreen(hostPosition);
+		const offset = offscreenInfo.offscreenTop
+			? offscreenInfo.offsetTop
+			: -offscreenInfo.offsetBottom;
+
+		[
+			['width', `${hostPosition.width}px`],
+			['top', `${hostPosition.top + offset}px`],
+			['left', `${hostPosition.left}px`],
+		].forEach(style =>
+			this._renderer.setStyle(dropdownElement, style[0], style[1])
+		);
+	}
+
+	/** Checks if dropdown falls off screen. */
+	private _fallsOffScreen(hostRect: DOMRect) {
+		const dropdownHeight: number =
+			this._transformEmToPx(SELECT_OPTION_HEIGHT_EM) *
+			SELECT_OPTION_VISIBLE_COUNT;
+		const offscreenTop: boolean = hostRect.top < 0;
+		const offscreenBottom: boolean =
+			hostRect.top + dropdownHeight > window.outerHeight;
+
+		return {
+			offscreen: offscreenBottom || offscreenTop,
+			offsetTop: offscreenTop ? Math.abs(hostRect.top) : 0,
+			offsetBottom: offscreenBottom
+				? Math.abs(hostRect.top + dropdownHeight - window.outerHeight)
+				: 0,
+			offscreenBottom,
+			offscreenTop,
+		};
+	}
+
+	/** Transforms css em unit to px based on host font-size value. */
+	private _transformEmToPx(em: number): number {
+		const fontSize = +getComputedStyle(this._hostRef.nativeElement)
+			.getPropertyValue('font-size')
+			.replace('px', '');
+
+		return em * fontSize;
 	}
 }
 
