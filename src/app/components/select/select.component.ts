@@ -56,12 +56,7 @@ export const SELECT_OPTION_VISIBLE_COUNT = 4;
 		]),
 	],
 	host: {
-		'(document:keydown.escape)': 'close()',
-		'(document:keydown.arrowDown)': 'focusNextOption($event)',
-		'(document:keydown.arrowUp)': 'focusPrevOption($event)',
-		'(document:keydown.home)': 'focusFirstOption($event)',
-		'(document:keydown.end)': 'focusLastOption($event)',
-		'(document:keydown.enter)': 'chooseCurrentlyFocusedOption($event)',
+		'(document:keydown)': '_dropdownKeyboardNavigation($event)',
 	},
 })
 export class SelectComponent
@@ -150,7 +145,7 @@ export class SelectComponent
 	open() {
 		if (!this._isOpened && !this._isDisabled) {
 			this._isOpened = true;
-			this.focusOption(this.currentOption);
+			this._focusOption(this.currentOption);
 			const dropdownViewRef = this._overlay.open(this.dropdownRef, null, {
 				transparent: true,
 			}) as EmbeddedViewRef<HTMLElement>;
@@ -178,40 +173,25 @@ export class SelectComponent
 	}
 
 	/** Focuses next option relative to the currently focused/selected option */
-	focusNextOption($event: KeyboardEvent) {
-		if (!this._isOpened) return;
-		$event.preventDefault();
-
+	focusNextOption() {
 		this.moveFocus('down');
 	}
 
 	/** Focuses next option relative to the currently focused/selected option */
-	focusPrevOption($event: KeyboardEvent) {
-		if (!this._isOpened) return;
-		$event.preventDefault();
-
+	focusPrevOption() {
 		this.moveFocus('up');
 	}
 
-	focusFirstOption($event: KeyboardEvent) {
-		if (!this._isOpened) return;
-		$event.preventDefault();
-
-		this.focusOption(this.options.first);
+	focusFirstOption() {
+		this._focusOption(this.options.first);
 	}
 
-	focusLastOption($event: KeyboardEvent) {
-		if (!this._isOpened) return;
-		$event.preventDefault();
-
-		this.focusOption(this.options.last);
+	focusLastOption() {
+		this._focusOption(this.options.last);
 	}
 
 	/** Selects currently focused option. */
-	chooseCurrentlyFocusedOption($event: KeyboardEvent) {
-		if (!this._isOpened) return;
-		$event.preventDefault();
-
+	chooseCurrentlyFocusedOption() {
 		this.choose(this._currentlyFocusedOption);
 		this.close();
 	}
@@ -232,14 +212,14 @@ export class SelectComponent
 				? nextOptionIndex >= 0
 				: nextOptionIndex < this.options.length;
 
-		if (canMoveFocus) this.focusOption(optionsArray[nextOptionIndex]);
+		if (canMoveFocus) this._focusOption(optionsArray[nextOptionIndex]);
 	}
 
 	/**
 	 * Focuses the option and scrolls it into the view.
 	 * @param newFocusedOption Option to be marked as focused.
 	 */
-	private focusOption(newFocusedOption: SelectOptionComponent) {
+	private _focusOption(newFocusedOption: SelectOptionComponent) {
 		if (this._currentlyFocusedOption)
 			this._currentlyFocusedOption.isFocused = false;
 		this._currentlyFocusedOption = newFocusedOption;
@@ -252,6 +232,8 @@ export class SelectComponent
 	 * @param chosenOption Chosen option or its value.
 	 */
 	choose(chosenOption: SelectOptionComponent | string) {
+		if (this.options.length === 0) return null;
+
 		if (this.currentOption) {
 			this.currentOption.isSelected = false;
 			this._onTouched();
@@ -397,6 +379,41 @@ export class SelectComponent
 			.replace('px', '');
 
 		return em * fontSize;
+	}
+
+	/**
+	 * Used to navigate dropdown by keyboard, when dropdown is opened.
+	 */
+	private _dropdownKeyboardNavigation($event: KeyboardEvent) {
+		if (!this._isOpened) return;
+		$event.preventDefault();
+		const { key } = $event;
+
+		switch (key) {
+			case 'Escape':
+				this.close();
+				break;
+
+			case 'ArrowDown':
+				this.focusNextOption();
+				break;
+
+			case 'ArrowUp':
+				this.focusPrevOption();
+				break;
+
+			case 'Home':
+				this.focusFirstOption();
+				break;
+
+			case 'End':
+				this.focusLastOption();
+				break;
+
+			case 'Enter':
+				this.chooseCurrentlyFocusedOption();
+				break;
+		}
 	}
 }
 
