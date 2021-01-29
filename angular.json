@@ -66,6 +66,21 @@
 							],
 							"serviceWorker": true,
 							"ngswConfigPath": "ngsw-config.json"
+						},
+						"disableOptimization": {
+							"fileReplacements": [
+								{
+									"replace": "src/environments/environment.ts",
+									"with": "src/environments/environment.prod.ts"
+								}
+							],
+							"optimization": false,
+							"outputHashing": "none",
+							"sourceMap": false,
+							"namedChunks": false,
+							"extractLicenses": true,
+							"vendorChunk": false,
+							"buildOptimizer": false
 						}
 					}
 				},
@@ -77,6 +92,9 @@
 					"configurations": {
 						"production": {
 							"browserTarget": "expenseTracker:build:production"
+						},
+						"disableOptimization": {
+							"browserTarget": "expenseTracker:build:disableOptimization"
 						}
 					}
 				},
