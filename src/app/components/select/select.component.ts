@@ -145,7 +145,7 @@ export class SelectComponent
 	open() {
 		if (!this._isOpened && !this._isDisabled) {
 			this._isOpened = true;
-			this._focusOption(this.currentOption);
+			this.focusOption(this.currentOption);
 			const dropdownViewRef = this._overlay.open(this.dropdownRef, null, {
 				transparent: true,
 			}) as EmbeddedViewRef<HTMLElement>;
@@ -161,7 +161,7 @@ export class SelectComponent
 	close() {
 		if (this._isOpened) {
 			this._isOpened = false;
-			this._currentlyFocusedOption.isFocused = false;
+			this._currentlyFocusedOption.blur();
 			this._overlay.close();
 			this.onStateChange.next();
 		}
@@ -177,17 +177,19 @@ export class SelectComponent
 		this.moveFocus('down');
 	}
 
-	/** Focuses next option relative to the currently focused/selected option */
+	/** Focuses previous option relative to the currently focused/selected option */
 	focusPrevOption() {
 		this.moveFocus('up');
 	}
 
+	/** Focuses first option */
 	focusFirstOption() {
-		this._focusOption(this.options.first);
+		this.focusOption(this.options.first);
 	}
 
+	/** Focuses last option */
 	focusLastOption() {
-		this._focusOption(this.options.last);
+		this.focusOption(this.options.last);
 	}
 
 	/** Selects currently focused option. */
@@ -212,19 +214,18 @@ export class SelectComponent
 				? nextOptionIndex >= 0
 				: nextOptionIndex < this.options.length;
 
-		if (canMoveFocus) this._focusOption(optionsArray[nextOptionIndex]);
+		if (canMoveFocus) this.focusOption(optionsArray[nextOptionIndex]);
 	}
 
 	/**
 	 * Focuses the option and scrolls it into the view.
 	 * @param newFocusedOption Option to be marked as focused.
 	 */
-	private _focusOption(newFocusedOption: SelectOptionComponent) {
-		if (this._currentlyFocusedOption)
-			this._currentlyFocusedOption.isFocused = false;
+	focusOption(newFocusedOption: SelectOptionComponent) {
+		if (this._currentlyFocusedOption) this._currentlyFocusedOption.blur();
 		this._currentlyFocusedOption = newFocusedOption;
-		this._currentlyFocusedOption.isFocused = true;
-		this._currentlyFocusedOption.elementRef.nativeElement.scrollIntoView();
+		this._currentlyFocusedOption.focus();
+		this._currentlyFocusedOption.scrollIntoView();
 	}
 
 	/**
@@ -235,7 +236,7 @@ export class SelectComponent
 		if (this.options.length === 0) return null;
 
 		if (this.currentOption) {
-			this.currentOption.isSelected = false;
+			this.currentOption.unselect();
 			this._onTouched();
 		}
 
@@ -254,7 +255,7 @@ export class SelectComponent
 			this.currentOption = foundOption;
 		}
 
-		this.currentOption.isSelected = true;
+		this.currentOption.select();
 		this._onChange(this.currentOption.value);
 		this.onStateChange.next();
 	}
@@ -381,9 +382,7 @@ export class SelectComponent
 		return em * fontSize;
 	}
 
-	/**
-	 * Used to navigate dropdown by keyboard, when dropdown is opened.
-	 */
+	/** Used to navigate dropdown by keyboard, when dropdown is opened. */
 	private _dropdownKeyboardNavigation($event: KeyboardEvent) {
 		if (!this._isOpened) return;
 		$event.preventDefault();
