@@ -20,7 +20,7 @@ export abstract class FormFieldControl {
 	isFocused: boolean;
 
 	/** Called every time when user clicked on the container */
-	onContainerClick(): void {}
+	onContainerClick?(): void {}
 
 	/**
 	 * Allows to get reference to form fields component such as prefix or label.

@@ -7,7 +7,7 @@
 		[attr.aria-labelledby]="labelId + ' ' + selectedOptionElID"
 		[id]="selectedOptionElID"
 	>
-		{{ currentOption.value ? currentOption.displayValue : ' ' }}
+		{{ currentOption?.value ? currentOption.displayValue : ' ' }}
 	</button>
 
 	<ng-template #selectDropdown>

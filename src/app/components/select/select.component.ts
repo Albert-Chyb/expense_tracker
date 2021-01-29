@@ -172,32 +172,6 @@ export class SelectComponent
 		this._isOpened ? this.close() : this.open();
 	}
 
-	/** Focuses next option relative to the currently focused/selected option */
-	focusNextOption() {
-		this.moveFocus('down');
-	}
-
-	/** Focuses previous option relative to the currently focused/selected option */
-	focusPrevOption() {
-		this.moveFocus('up');
-	}
-
-	/** Focuses first option */
-	focusFirstOption() {
-		this.focusOption(this.options.first);
-	}
-
-	/** Focuses last option */
-	focusLastOption() {
-		this.focusOption(this.options.last);
-	}
-
-	/** Selects currently focused option. */
-	chooseCurrentlyFocusedOption() {
-		this.choose(this._currentlyFocusedOption);
-		this.close();
-	}
-
 	/**
 	 * Moves focus onto the next option in desired direction based on the currently focused option.
 	 * @param direction Direction of the movement
@@ -348,8 +322,8 @@ export class SelectComponent
 			['width', `${hostPosition.width}px`],
 			['top', `${hostPosition.top + offset}px`],
 			['left', `${hostPosition.left}px`],
-		].forEach(style =>
-			this._renderer.setStyle(dropdownElement, style[0], style[1])
+		].forEach(([style, value]) =>
+			this._renderer.setStyle(dropdownElement, style, value)
 		);
 	}
 
@@ -394,23 +368,24 @@ export class SelectComponent
 				break;
 
 			case 'ArrowDown':
-				this.focusNextOption();
+				this.moveFocus('down');
 				break;
 
 			case 'ArrowUp':
-				this.focusPrevOption();
+				this.moveFocus('up');
 				break;
 
 			case 'Home':
-				this.focusFirstOption();
+				this.focusOption(this.options.first);
 				break;
 
 			case 'End':
-				this.focusLastOption();
+				this.focusOption(this.options.last);
 				break;
 
 			case 'Enter':
-				this.chooseCurrentlyFocusedOption();
+				this.choose(this._currentlyFocusedOption);
+				this.close();
 				break;
 		}
 	}

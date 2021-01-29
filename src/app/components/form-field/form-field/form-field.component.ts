@@ -25,7 +25,9 @@ export class FormFieldComponent implements OnInit, AfterContentInit, OnDestroy {
 	@ContentChild(FormFieldLabelComponent) label: FormFieldLabelComponent;
 	@ContentChild(FormFieldControl) control: FormFieldControl;
 	@HostListener('click') onClick() {
-		this.control.onContainerClick();
+		if ('onContainerClick' in this.control) {
+			this.control.onContainerClick();
+		}
 	}
 
 	ngOnInit(): void {
