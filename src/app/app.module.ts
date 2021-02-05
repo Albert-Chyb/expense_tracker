@@ -1,4 +1,3 @@
-import { FormSelectModule } from './components/form-select/form-select.module';
 import { PortalModule } from '@angular/cdk/portal';
 import {
 	APP_INITIALIZER,
@@ -30,24 +29,17 @@ import { ClueComponent } from './components/clue/clue.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { DialogContainerComponent } from './components/dialog-container/dialog-container.component';
 import { FormFieldModule } from './components/form-field/form-field.module';
+import { FormSelectModule } from './components/form-select/form-select.module';
 import { GroupIconComponent } from './components/group-icon/group-icon.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
-import { SelectOptionComponent } from './components/form-select/select-option/select-option.component';
-import {
-	SelectComponent,
-	SelectComponentControlDirective,
-} from './components/form-select/select/select.component';
 import { SummaryCardComponent } from './components/summary-card/summary-card.component';
 import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
 import { TransactionGroupComponent } from './components/transaction-group/transaction-group.component';
-import { ZippyContentComponent } from './components/zippy-components/zippy-content/zippy-content.component';
-import { ZippyListComponent } from './components/zippy-components/zippy-list/zippy-list.component';
-import { ZippyStaticComponent } from './components/zippy-components/zippy-static/zippy-static.component';
-import { ZippyComponent } from './components/zippy-components/zippy/zippy.component';
+import { ZippyModule } from './components/zippy-components/zippy.module';
 import { ConfirmActionDirective } from './directives/confirm-action/confirm-action.directive';
 import { RippleDirective } from './directives/ripple/ripple.directive';
 import { FormFieldErrorsModule } from './form-field-errors.module';
@@ -64,7 +56,6 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
-import { ZippyModule } from './components/zippy-components/zippy.module';
 
 @NgModule({
 	declarations: [
