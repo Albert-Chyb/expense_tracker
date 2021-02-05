@@ -49,8 +49,6 @@ import { ZippyStaticComponent } from './components/zippy-components/zippy-static
 import { ZippyComponent } from './components/zippy-components/zippy/zippy.component';
 import { ConfirmActionDirective } from './directives/confirm-action/confirm-action.directive';
 import { RippleDirective } from './directives/ripple/ripple.directive';
-import { StyledInputSuffixDirective } from './directives/styled-input-suffix/styled-input-suffix.directive';
-import { StyledInputDirective } from './directives/styled-input/styled-input.directive';
 import { FormFieldErrorsModule } from './form-field-errors.module';
 import { AddGroupComponent } from './pages/add-group/add-group.component';
 import { AddTransactionComponent } from './pages/add-transaction/add-transaction.component';
@@ -66,9 +64,6 @@ import { SetupAccountComponent } from './pages/setup-account/setup-account.compo
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
 
-/*
-	To speed up development process, app uses date picker and select component from Angular Material.
-*/
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -77,8 +72,6 @@ import { UserService } from './services/user/user.service';
 		TransactionCardComponent,
 		MainHeaderComponent,
 		ManageTransactionComponent,
-		StyledInputDirective,
-		StyledInputSuffixDirective,
 		TransactionGroupComponent,
 		GroupIconComponent,
 		AddGroupComponent,
