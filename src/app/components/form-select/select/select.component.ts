@@ -1,5 +1,5 @@
 import { first } from 'rxjs/operators';
-import { OverlayService } from './../../services/overlay/overlay.service';
+import { OverlayService } from '../../../services/overlay/overlay.service';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import {
 	AfterContentInit,
@@ -25,12 +25,12 @@ import {
 } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 
-import { fadeIn, fadeOut } from './../../animations';
+import { fadeIn, fadeOut } from '../../../animations';
 import {
 	FormFieldControl,
 	IFormFieldRefs,
-} from './../form-field/form-field-control';
-import { SelectOptionComponent } from './../select-option/select-option.component';
+} from '../../form-field/form-field-control';
+import { SelectOptionComponent } from '../select-option/select-option.component';
 
 /** Option height in em unit. */
 export const SELECT_OPTION_HEIGHT_EM = 2.625;

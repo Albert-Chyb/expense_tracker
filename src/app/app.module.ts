@@ -1,3 +1,4 @@
+import { FormSelectModule } from './components/form-select/form-select.module';
 import { PortalModule } from '@angular/cdk/portal';
 import {
 	APP_INITIALIZER,
@@ -35,11 +36,11 @@ import { MainHeaderComponent } from './components/main-header/main-header.compon
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
-import { SelectOptionComponent } from './components/select-option/select-option.component';
+import { SelectOptionComponent } from './components/form-select/select-option/select-option.component';
 import {
 	SelectComponent,
 	SelectComponentControlDirective,
-} from './components/select/select.component';
+} from './components/form-select/select/select.component';
 import { SummaryCardComponent } from './components/summary-card/summary-card.component';
 import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
 import { TransactionGroupComponent } from './components/transaction-group/transaction-group.component';
@@ -80,10 +81,6 @@ import { UserService } from './services/user/user.service';
 		ProfileComponent,
 		PeriodsComponent,
 		LoginComponent,
-		ZippyComponent,
-		ZippyStaticComponent,
-		ZippyContentComponent,
-		ZippyListComponent,
 		SetupAccountComponent,
 		RippleDirective,
 		AddTransactionComponent,
@@ -97,9 +94,10 @@ import { UserService } from './services/user/user.service';
 		ConfirmDialogComponent,
 		DialogContainerComponent,
 		ConfirmActionDirective,
-		SelectComponent,
-		SelectOptionComponent,
-		SelectComponentControlDirective,
+		ZippyComponent,
+		ZippyStaticComponent,
+		ZippyContentComponent,
+		ZippyListComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -122,6 +120,7 @@ import { UserService } from './services/user/user.service';
 		PortalModule,
 		FormFieldModule,
 		FormFieldErrorsModule,
+		FormSelectModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

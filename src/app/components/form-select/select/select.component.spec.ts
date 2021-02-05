@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
-import { OverlayService } from './../../services/overlay/overlay.service';
-import { FormFieldComponent } from './../form-field/form-field/form-field.component';
+import { OverlayService } from '../../../services/overlay/overlay.service';
+import { FormFieldComponent } from '../../form-field/form-field/form-field.component';
 import { Component, Provider, TemplateRef } from '@angular/core';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { FormControl, NgControl, ReactiveFormsModule } from '@angular/forms';
