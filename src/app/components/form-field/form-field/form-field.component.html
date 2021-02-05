@@ -22,3 +22,7 @@
 		<ng-content select="form-field-prefix"></ng-content>
 	</div>
 </div>
+
+<div class="form-field__errors" *ngIf="isInvalid && isTouched">
+	<p class="form-field__error" *ngFor="let error of errors">{{ error }}</p>
+</div>

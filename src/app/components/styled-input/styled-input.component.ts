@@ -1,14 +1,16 @@
 import { AfterContentInit, Component, ContentChild } from '@angular/core';
 
 import { StyledInputDirective } from './../../directives/styled-input/styled-input.directive';
-
+/** @deprecated */
 @Component({
 	selector: 'styled-input',
 	templateUrl: './styled-input.component.html',
 	styleUrls: ['./styled-input.component.scss'],
 })
 export class StyledInputComponent implements AfterContentInit {
-	constructor() {}
+	constructor() {
+		console.warn('StyledInputComponent is deprecated !');
+	}
 
 	@ContentChild(StyledInputDirective, { static: true })
 	input: StyledInputDirective;

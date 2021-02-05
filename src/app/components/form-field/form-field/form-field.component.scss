@@ -2,6 +2,11 @@
 @import 'utils/variables';
 @import 'utils/mixins';
 
+:host {
+	display: block;
+	margin-bottom: rem(20px);
+}
+
 .form-field {
 	--border-size: #{rem(1px)};
 	--border-color: var(--bg-color-2);
@@ -55,5 +60,12 @@
 	&--invalid#{&}--touched {
 		--border-color: var(--color-danger);
 		color: var(--color-danger);
+	}
+
+	&__error {
+		margin: 0px;
+		font-size: rem(14px);
+		color: var(--color-danger);
+		margin-top: rem(5px);
 	}
 }

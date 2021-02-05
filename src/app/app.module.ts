@@ -28,10 +28,7 @@ import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { ClueComponent } from './components/clue/clue.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { DialogContainerComponent } from './components/dialog-container/dialog-container.component';
-import { FormErrorsComponent } from './components/form-errors/form-errors.component';
-import { FormFieldInputDirective } from './components/form-field/form-field-input.directive';
-import { FormFieldLabelComponent } from './components/form-field/form-field-label/form-field-label.component';
-import { FormFieldComponent } from './components/form-field/form-field/form-field.component';
+import { FormFieldModule } from './components/form-field/form-field.module';
 import { GroupIconComponent } from './components/group-icon/group-icon.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
@@ -43,7 +40,6 @@ import {
 	SelectComponent,
 	SelectComponentControlDirective,
 } from './components/select/select.component';
-import { StyledInputComponent } from './components/styled-input/styled-input.component';
 import { SummaryCardComponent } from './components/summary-card/summary-card.component';
 import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
 import { TransactionGroupComponent } from './components/transaction-group/transaction-group.component';
@@ -52,10 +48,10 @@ import { ZippyListComponent } from './components/zippy-components/zippy-list/zip
 import { ZippyStaticComponent } from './components/zippy-components/zippy-static/zippy-static.component';
 import { ZippyComponent } from './components/zippy-components/zippy/zippy.component';
 import { ConfirmActionDirective } from './directives/confirm-action/confirm-action.directive';
-import { FormErrorsDirective } from './directives/form-errors/form-errors.directive';
 import { RippleDirective } from './directives/ripple/ripple.directive';
 import { StyledInputSuffixDirective } from './directives/styled-input-suffix/styled-input-suffix.directive';
 import { StyledInputDirective } from './directives/styled-input/styled-input.directive';
+import { FormFieldErrorsModule } from './form-field-errors.module';
 import { AddGroupComponent } from './pages/add-group/add-group.component';
 import { AddTransactionComponent } from './pages/add-transaction/add-transaction.component';
 import { AppSettingsComponent } from './pages/app-settings/app-settings.component';
@@ -81,7 +77,6 @@ import { UserService } from './services/user/user.service';
 		TransactionCardComponent,
 		MainHeaderComponent,
 		ManageTransactionComponent,
-		StyledInputComponent,
 		StyledInputDirective,
 		StyledInputSuffixDirective,
 		TransactionGroupComponent,
@@ -99,8 +94,6 @@ import { UserService } from './services/user/user.service';
 		SetupAccountComponent,
 		RippleDirective,
 		AddTransactionComponent,
-		FormErrorsComponent,
-		FormErrorsDirective,
 		NotFoundComponent,
 		CheckboxComponent,
 		ClueComponent,
@@ -111,9 +104,6 @@ import { UserService } from './services/user/user.service';
 		ConfirmDialogComponent,
 		DialogContainerComponent,
 		ConfirmActionDirective,
-		FormFieldComponent,
-		FormFieldLabelComponent,
-		FormFieldInputDirective,
 		SelectComponent,
 		SelectOptionComponent,
 		SelectComponentControlDirective,
@@ -137,6 +127,8 @@ import { UserService } from './services/user/user.service';
 			enabled: environment.production,
 		}),
 		PortalModule,
+		FormFieldModule,
+		FormFieldErrorsModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

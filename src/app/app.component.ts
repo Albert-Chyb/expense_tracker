@@ -8,7 +8,6 @@ import { environment } from 'src/environments/environment';
 
 import { routeAnimation } from './animations';
 import { DeviceService } from './services/device/device.service';
-import { FormErrorsService } from './services/form-errors/form-errors.service';
 import { ThemesService } from './services/themes/themes.service';
 import { UserService } from './services/user/user.service';
 
@@ -27,7 +26,6 @@ export class AppComponent implements OnInit {
 	constructor(
 		private readonly _user: UserService,
 		private readonly _themes: ThemesService,
-		private readonly _formErrors: FormErrorsService,
 		private readonly _pwaUpdates: SwUpdate,
 		private readonly _device: DeviceService,
 		@Inject(DOCUMENT) private readonly _docRef: Document
@@ -42,17 +40,6 @@ export class AppComponent implements OnInit {
 			functions().useFunctionsEmulator('http://localhost:5001');
 
 		this.listenForPWAUpdates();
-
-		this._formErrors
-			.add('required', 'To pole jest wymagane')
-			.add('blackList', 'Podana wartość nie jest właściwa')
-			.add('maxlength', 'Za długi tekst')
-			.add('isNaN', 'Podana wartośc nie jest liczbą')
-			.add(
-				'invalidFontAwesomeTemplate',
-				'Podana wartośc nie jest poprawnym schematem ikony'
-			)
-			.add('whiteList', 'Podana wartośc nie jest właściwa');
 	}
 
 	prepareRoute(outlet: RouterOutlet) {

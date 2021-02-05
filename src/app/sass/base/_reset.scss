@@ -30,3 +30,7 @@ img {
 .mat-form-field-wrapper {
 	margin-bottom: -1.25em;
 }
+
+mat-form-field {
+	margin-bottom: rem(20px) !important;
+}

@@ -1,3 +1,4 @@
+import { FormFieldErrorsService } from './../form-field-errors.service';
 import {
 	AfterContentInit,
 	ChangeDetectorRef,
@@ -18,7 +19,10 @@ import { FormFieldLabelComponent } from './../form-field-label/form-field-label.
 	styleUrls: ['./form-field.component.scss'],
 })
 export class FormFieldComponent implements OnInit, AfterContentInit, OnDestroy {
-	constructor(private readonly _changeDetector: ChangeDetectorRef) {}
+	constructor(
+		private readonly _changeDetector: ChangeDetectorRef,
+		private readonly _errors: FormFieldErrorsService
+	) {}
 
 	private readonly _subscriptions = new Subscription();
 
@@ -78,5 +82,11 @@ export class FormFieldComponent implements OnInit, AfterContentInit, OnDestroy {
 
 	get isDisabled() {
 		return this.control.ngControl.disabled;
+	}
+
+	get errors(): string[] {
+		return Object.keys(this.control.ngControl.errors).map(error =>
+			this._errors.getMessage(error)
+		);
 	}
 }

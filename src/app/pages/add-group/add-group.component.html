@@ -1,17 +1,13 @@
 <form [formGroup]="form" class="group">
-	<styled-input>
-		<input formErrors styledInput type="text" formControlName="name" />
-		<span class="label">Nazwa</span>
-	</styled-input>
+	<form-field>
+		<input formFieldInput type="text" formControlName="name" />
+		<form-field-label>Nazwa</form-field-label>
+	</form-field>
 
-	<form-errors class="group__errors" [control]="form.get('name')"></form-errors>
-
-	<styled-input>
-		<input formErrors styledInput type="text" formControlName="icon" />
-		<span class="label">Ikona</span>
-	</styled-input>
-
-	<form-errors class="group__errors" [control]="form.get('icon')"></form-errors>
+	<form-field>
+		<input formFieldInput type="text" formControlName="icon" />
+		<form-field-label>Ikona</form-field-label>
+	</form-field>
 
 	<h2 class="group__heading">Podgląd</h2>
 

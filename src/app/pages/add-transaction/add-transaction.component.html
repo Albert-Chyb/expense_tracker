@@ -8,11 +8,6 @@
 		<form-field-label>Kwota</form-field-label>
 	</form-field>
 
-	<form-errors
-		class="transaction__error"
-		[control]="form.get('amount')"
-	></form-errors>
-
 	<ng-container *ngIf="data.groups.length; else noGroupsInfo">
 		<form-field>
 			<form-field-label> Grupa </form-field-label>
@@ -24,11 +19,6 @@
 				}}</select-option>
 			</app-select>
 		</form-field>
-
-		<form-errors
-			class="transaction__error"
-			[control]="form.get('group')"
-		></form-errors>
 	</ng-container>
 
 	<ng-template #noGroupsInfo>
@@ -51,20 +41,10 @@
 		<mat-datepicker #picker></mat-datepicker>
 	</mat-form-field>
 
-	<form-errors
-		class="transaction__error"
-		[control]="form.get('date')"
-	></form-errors>
-
 	<form-field>
 		<input formFieldInput type="text" formControlName="description" />
 		<form-field-label>Opis transakcji</form-field-label>
 	</form-field>
-
-	<form-errors
-		class="transaction__error"
-		[control]="form.get('description')"
-	></form-errors>
 
 	<div class="transaction__actions">
 		<button

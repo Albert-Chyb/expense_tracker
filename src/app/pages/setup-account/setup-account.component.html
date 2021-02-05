@@ -4,22 +4,16 @@
 	(ngSubmit)="completeCreatingAccount()"
 >
 	<section class="complete-login__section">
-		<styled-input>
+		<form-field>
 			<input
-				styledInput
-				formErrors
+				formFieldInput
 				type="number"
 				formControlName="balance"
 				inputmode="decimal"
 			/>
 
-			<span class="label">Aktualny balans pieniędzy</span>
-		</styled-input>
-
-		<form-errors
-			class="complete-login__errors"
-			[control]="form.get('balance')"
-		></form-errors>
+			<form-field-label>Aktualna ilość pieniędzy</form-field-label>
+		</form-field>
 
 		<p class="complete-login__description paragraph-description">
 			Wartości tej <strong>nie można</strong> póżniej zmienić !
