@@ -64,6 +64,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
+import { ZippyModule } from './components/zippy-components/zippy.module';
 
 @NgModule({
 	declarations: [
@@ -94,10 +95,6 @@ import { UserService } from './services/user/user.service';
 		ConfirmDialogComponent,
 		DialogContainerComponent,
 		ConfirmActionDirective,
-		ZippyComponent,
-		ZippyStaticComponent,
-		ZippyContentComponent,
-		ZippyListComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -121,6 +118,7 @@ import { UserService } from './services/user/user.service';
 		FormFieldModule,
 		FormFieldErrorsModule,
 		FormSelectModule,
+		ZippyModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },
