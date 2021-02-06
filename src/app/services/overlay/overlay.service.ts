@@ -11,7 +11,6 @@ import {
 	EmbeddedViewRef,
 	Inject,
 	Injectable,
-	InjectionToken,
 	Injector,
 	RendererFactory2,
 	TemplateRef,
@@ -21,16 +20,8 @@ import { first } from 'rxjs/operators';
 
 import { OVERLAY_SERVICE } from '../../common/models/overlay';
 import { OverlayComponent } from './../../components/overlay/overlay.component';
+import { IOverlaySettings, OVERLAY_SETTINGS } from './overlay';
 
-/*
-	TODO: Add the ability to make overlay transparent.
-*/
-
-export interface IOverlaySettings {
-	/** Indicates if overlay should be transparent */
-	transparent: boolean;
-}
-export const OVERLAY_SETTINGS = new InjectionToken('OVERLAY_SETTINGS');
 const DEFAULT_SETTINGS: IOverlaySettings = {
 	transparent: false,
 };

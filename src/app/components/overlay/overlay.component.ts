@@ -1,7 +1,7 @@
 import {
 	IOverlaySettings,
 	OVERLAY_SETTINGS,
-} from './../../services/overlay/overlay.service';
+} from './../../services/overlay/overlay';
 import {
 	AnimationEvent,
 	transition,
