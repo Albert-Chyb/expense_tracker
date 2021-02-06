@@ -13,6 +13,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -96,6 +98,7 @@ import { UserService } from './services/user/user.service';
 		MatDatepickerModule,
 		MatFormFieldModule,
 		MatNativeDateModule,
+		MatInputModule,
 		AngularFireAuthGuardModule,
 		FormsModule,
 		ServiceWorkerModule.register('ngsw-worker.js', {
