@@ -8,19 +8,22 @@
 			</zippy-static>
 
 			<zippy-content [state]="form.get('autoEndPeriod').value">
-				<mat-form-field class="settings__select" appearance="fill">
-					<mat-label>Automatycznie zakończ za</mat-label>
-					<mat-select formControlName="autoEndAfter">
-						<mat-option> Wybierz </mat-option>
-						<mat-option [value]="7"> Tydzień</mat-option>
-						<mat-option [value]="30"> Miesiąc</mat-option>
-					</mat-select>
-				</mat-form-field>
+				<div class="zippy-content">
+					<form-field>
+						<form-field-label>Częstotliwość</form-field-label>
 
-				<p class="settings__description settings__item paragraph-description">
-					Okres zostanie automatycznie zakończony za wybraną ilość dni, licząc
-					od daty rozpoczęcia obecnego.
-				</p>
+						<app-select formControlName="autoEndAfter">
+							<select-option value="">Wybierz</select-option>
+							<select-option [value]="7">Tydzień</select-option>
+							<select-option [value]="30">Miesiąc</select-option>
+						</app-select>
+					</form-field>
+
+					<p class="settings__description settings__item paragraph-description">
+						Okres zostanie automatycznie zakończony za wybraną ilość dni, licząc
+						od daty rozpoczęcia obecnego.
+					</p>
+				</div>
 			</zippy-content>
 		</zippy>
 	</form>
@@ -37,14 +40,15 @@
 		</section>
 
 		<section class="settings__item">
-			<mat-form-field class="settings__select" appearance="fill">
-				<mat-label>Motyw</mat-label>
-				<mat-select [formControl]="theme">
-					<mat-option value="light">Jasny</mat-option>
-					<mat-option value="dark">Ciemny</mat-option>
-					<mat-option value="auto">Motyw urządzenia</mat-option>
-				</mat-select>
-			</mat-form-field>
+			<form-field>
+				<form-field-label>Motyw</form-field-label>
+
+				<app-select [formControl]="theme">
+					<select-option value="light">Jasny</select-option>
+					<select-option value="dark">Ciemny</select-option>
+					<select-option value="auto">Motyw urządzenia</select-option>
+				</app-select>
+			</form-field>
 
 			<p class="settings__description paragraph-description">
 				Zmień motyw aplikacji.
