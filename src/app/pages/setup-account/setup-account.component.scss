@@ -2,18 +2,16 @@
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
 
-
 .complete-login {
+	&__section {
+		margin-bottom: rem(30px);
+	}
 
-  &__section {
-    margin-bottom: rem(40px);
-  }
+	&__select {
+		padding: rem(2px);
+	}
 
-  &__select {
-    width: 100%;
-  }
-
-  &__errors {
-    margin-top: rem(10px);
-  }
+	&__errors {
+		margin-top: rem(10px);
+	}
 }
