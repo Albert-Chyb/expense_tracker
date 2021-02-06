@@ -206,7 +206,7 @@ export class SelectComponent
 	 * Chooses option.
 	 * @param chosenOption Chosen option or its value.
 	 */
-	choose(chosenOption: SelectOptionComponent | string) {
+	choose(chosenOption: SelectOptionComponent | string | number) {
 		if (this.options.length === 0) return null;
 
 		if (this.currentOption) {
@@ -216,7 +216,7 @@ export class SelectComponent
 
 		if (chosenOption instanceof SelectOptionComponent) {
 			this.currentOption = chosenOption;
-		} else if (typeof chosenOption === 'string') {
+		} else {
 			const foundOption = this.options.find(
 				option => option.value === chosenOption
 			);
