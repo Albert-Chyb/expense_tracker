@@ -56,6 +56,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
+import { DatepickerModule } from './components/datepicker/datepicker.module';
 
 @NgModule({
 	declarations: [
@@ -109,6 +110,7 @@ import { UserService } from './services/user/user.service';
 		FormFieldErrorsModule,
 		FormSelectModule,
 		ZippyModule,
+		DatepickerModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

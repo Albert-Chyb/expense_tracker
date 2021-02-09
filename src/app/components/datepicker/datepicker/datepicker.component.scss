@@ -1,0 +1,50 @@
+@import 'utils/functions';
+@import 'utils/variables';
+@import 'utils/mixins';
+
+.datepicker {
+	background-color: var(--bg-color-1);
+	border-radius: rem(3px);
+	border: rem(2px) solid var(--bg-color-2);
+
+	&__header {
+		padding: rem(20px);
+		display: flex;
+		justify-content: space-between;
+	}
+
+	&__month {
+		border-collapse: collapse;
+		width: 100%;
+	}
+
+	&__nav-btn {
+		&:first-child {
+			margin-right: rem(20px);
+		}
+	}
+
+	& th,
+	& td {
+		text-align: center;
+		border: rem(1px) solid var(--bg-color-2);
+		padding: rem(20px) 0px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: var(--bg-color-3);
+		}
+
+		&:last-child {
+			border-right: none;
+		}
+
+		&:first-child {
+			border-left: none;
+		}
+	}
+
+	& tr:last-child td {
+		border-bottom: none;
+	}
+}
