@@ -1,86 +1,95 @@
 .btn {
-  @include resetDefaultButton();
+	@include resetDefaultButton();
 
-  &:disabled {
-    opacity: .7;
-    cursor: default;
-  }
+	&:disabled {
+		opacity: 0.7;
+		cursor: default;
+	}
 
-  &--block {
-    width: 100%;
-  }
+	&--block {
+		width: 100%;
+	}
 
-  &--secondary {
-    @include buttonTheme(var(--color-secondary), var(--text-on-secondary));
-  }
+	&--secondary {
+		@include buttonTheme(var(--color-secondary), var(--text-on-secondary));
+	}
 
-  &--danger {
-    @include buttonTheme(var(--color-danger), var(--text-on-danger));
-  }
+	&--danger {
+		@include buttonTheme(var(--color-danger), var(--text-on-danger));
+	}
 
-  &--success {
-    @include buttonTheme(var(--color-success), var(--text-on-success));
-  }
+	&--success {
+		@include buttonTheme(var(--color-success), var(--text-on-success));
+	}
 
-  &--warning {
-    @include buttonTheme(var(--color-warning), var(--text-on-warning));
-  }
+	&--warning {
+		@include buttonTheme(var(--color-warning), var(--text-on-warning));
+	}
 
-  &--circle {
-    background-color: var(--color-primary);
-    color: var(--text-on-primary) !important;
-    width: rem(65px);
-    height: rem(65px);
-    border-radius: 100%;
-    filter: drop-shadow(0px rem(4px) rem(10px) rgba(0, 0, 0, 0.25));
-    text-align: center;
-    line-height: rem(65px);
-    font-size: rem(48px);
-  }
+	&--circle {
+		background-color: var(--color-primary);
+		color: var(--text-on-primary) !important;
+		width: rem(65px);
+		height: rem(65px);
+		border-radius: 100%;
+		filter: drop-shadow(0px rem(4px) rem(10px) rgba(0, 0, 0, 0.25));
+		text-align: center;
+		line-height: rem(65px);
+		font-size: rem(48px);
+	}
+
+	&--empty {
+		@include buttonTheme(transparent, var(--text-on-primary));
+		padding: rem(10px) rem(20px);
+		min-width: rem(50px);
+
+		&:hover {
+			backdrop-filter: brightness(90%);
+		}
+	}
 }
 
-
 .auth-btn {
-  @include resetDefaultButton();
-  border-radius: rem(3px);
-  height: rem(60px);
-  font-size: rem(18px);
-  font-weight: 500;
-  position: relative;
-  width: 100%;
-  border: none;
-  padding-left: rem(60px);
+	@include resetDefaultButton();
+	border-radius: rem(3px);
+	height: rem(60px);
+	font-size: rem(18px);
+	font-weight: 500;
+	position: relative;
+	width: 100%;
+	border: none;
+	padding-left: rem(60px);
 
-  &::after {
-    content: '';
-    height: rem(50px);
-    width: rem(50px);
-    position: absolute;
-    top: rem(5px);
-    left: rem(5px);
-    background-color: #FFF;
-    border-radius: rem(3px);
-  }
+	&::after {
+		content: '';
+		height: rem(50px);
+		width: rem(50px);
+		position: absolute;
+		top: rem(5px);
+		left: rem(5px);
+		background-color: #fff;
+		border-radius: rem(3px);
+	}
 
-  &--google {
-    background-color: #4285F4;
-    color: #FFF;
+	&--google {
+		background-color: #4285f4;
+		color: #fff;
 
-    &::after {
-      background-image: url('/assets/images/google_logo.png');
-      background-size: contain;
-    }
-  }
+		&::after {
+			background-image: url('/assets/images/google_logo.png');
+			background-size: contain;
+		}
+	}
 
-  &--ghost {
-    background-color: var(--color-warning);
-    color: var(--text-on-warning);
+	&--ghost {
+		background-color: var(--color-warning);
+		color: var(--text-on-warning);
 
-    &::after {
-      @include fontAwesomeIcon('\f6e2', 'free', 'solid');
-      color: var(--text-color-0);
-      line-height: rem(50px);
-      font-size: rem(30px);
-    }
-  }
+		&::after {
+			@include fontAwesomeIcon('\f6e2', 'free', 'solid');
+			color: var(--text-color-0);
+			line-height: rem(50px);
+			font-size: rem(30px);
+		}
+	}
 }
