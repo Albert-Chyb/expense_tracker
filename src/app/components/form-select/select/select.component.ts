@@ -151,6 +151,7 @@ export class SelectComponent
 			}) as EmbeddedViewRef<HTMLElement>;
 
 			this._positionDropdown(dropdownViewRef.rootNodes[0] as HTMLElement);
+			this._scrollToCurrentOption(dropdownViewRef.rootNodes[0] as HTMLElement);
 
 			this._overlay.onClick$.pipe(first()).subscribe(() => this.close());
 			this.onStateChange.next();
@@ -203,7 +204,7 @@ export class SelectComponent
 	}
 
 	/**
-	 * Chooses option.
+	 * Chooses an option.
 	 * @param chosenOption Chosen option or its value.
 	 */
 	choose(chosenOption: SelectOptionComponent | string | number) {
@@ -264,6 +265,7 @@ export class SelectComponent
 		return this._labelId;
 	}
 
+	/** Indicates if the select is disabled. */
 	get isDisabled(): boolean {
 		return this._isDisabled;
 	}
@@ -271,8 +273,8 @@ export class SelectComponent
 	/**
 	 * Determines which option should be displayed by default.
 	 *
-	 * Firstly an option without value has the priority.
-	 * If no such option is found then display first option from all of them.
+	 * Firstly an option without a value has the priority.
+	 * If no such option is found then display the first option from all of them.
 	 */
 	private _determineFirstOption() {
 		let placeholderOption = this.options.find(option => option.value === '');
@@ -324,6 +326,18 @@ export class SelectComponent
 			['left', `${hostPosition.left}px`],
 		].forEach(([style, value]) =>
 			this._renderer.setStyle(dropdownElement, style, value)
+		);
+	}
+
+	/** Scrolls currently chosen option into the view. */
+	private _scrollToCurrentOption(dropdownElement: HTMLElement) {
+		const currentOptionIndex = this.options
+			.toArray()
+			.findIndex(option => option === this.currentOption);
+
+		dropdownElement.scrollBy(
+			0,
+			this._transformEmToPx(SELECT_OPTION_HEIGHT_EM) * currentOptionIndex
 		);
 	}
 
