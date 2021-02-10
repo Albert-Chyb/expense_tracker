@@ -246,22 +246,22 @@ export class DatepickerComponent implements OnInit {
 		this.currentPage.prev();
 	}
 
-	/** Returns currently chosen year */
+	/** Returns year */
 	get year(): number {
 		return this.date.getFullYear();
 	}
 
-	/** Returns currently chosen month */
+	/** Returns month */
 	get month(): number {
 		return this.date.getMonth();
 	}
 
-	/** Returns currently chosen day of the month */
+	/** Returns day of the month */
 	get day(): number {
 		return this.date.getDate();
 	}
 
-	/** Returns currently chosen day of the week */
+	/** Returns day of the week */
 	get weekDay(): number {
 		return this.date.getDay();
 	}
