@@ -140,7 +140,7 @@ class ChooseYearPage extends DatepickerPage implements IDatepickerPage {
 		super(name, hostRef);
 		this.data = this._generateYears();
 	}
-	private _startYear: number = this.hostRef.date.getFullYear();
+	private _startYear: number = this.hostRef.year;
 	private readonly _yearsPerPage = 12;
 	data: number[][];
 
@@ -219,21 +219,21 @@ export class DatepickerComponent implements OnInit {
 	 * @param newDay Day to switch to
 	 */
 	setNewDate(newYear?: number, newMonth?: number, newDay?: number) {
-		const year = newYear ?? this.date.getFullYear();
-		const month = newMonth ?? this.date.getMonth();
-		const day = newDay ?? this.date.getDate();
+		const year = newYear ?? this.year;
+		const month = newMonth ?? this.month;
+		const day = newDay ?? this.day;
 
 		this.date = new Date(year, month, day, 0, 0, 0, 0);
 	}
 
 	/** Switches to the next month. */
 	nextMonth() {
-		this.setNewDate(null, this.date.getMonth() + 1, null);
+		this.setNewDate(null, this.month + 1, null);
 	}
 
 	/** Switches to the previous month. */
 	prevMonth() {
-		this.setNewDate(null, this.date.getMonth() - 1, null);
+		this.setNewDate(null, this.month - 1, null);
 	}
 
 	/** Function that is invoked when next button in the template is clicked. */
@@ -241,8 +241,28 @@ export class DatepickerComponent implements OnInit {
 		this.currentPage.next();
 	}
 
-	/**Function that is invoked when previous button the in template is clicked. */
+	/** Function that is invoked when previous button the in template is clicked. */
 	prev() {
 		this.currentPage.prev();
+	}
+
+	/** Returns currently chosen year */
+	get year(): number {
+		return this.date.getFullYear();
+	}
+
+	/** Returns currently chosen month */
+	get month(): number {
+		return this.date.getMonth();
+	}
+
+	/** Returns currently chosen day of the month */
+	get day(): number {
+		return this.date.getDate();
+	}
+
+	/** Returns currently chosen day of the week */
+	get weekDay(): number {
+		return this.date.getDay();
 	}
 }
