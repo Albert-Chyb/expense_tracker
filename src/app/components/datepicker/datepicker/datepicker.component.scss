@@ -13,14 +13,20 @@
 		justify-content: space-between;
 	}
 
-	&__month {
-		border-collapse: collapse;
-		width: 100%;
-	}
-
 	&__nav-btn {
 		&:first-child {
 			margin-right: rem(20px);
+		}
+	}
+}
+
+.table {
+	border-collapse: collapse;
+	width: 100%;
+
+	&__cell {
+		&--chosen {
+			background-color: red;
 		}
 	}
 
