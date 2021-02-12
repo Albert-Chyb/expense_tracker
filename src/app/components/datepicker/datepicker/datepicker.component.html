@@ -31,14 +31,22 @@
 	<main class="datepicker__main">
 		<table class="table">
 			<thead>
-				<tr *ngIf="currentPage.hasHeadData">
-					<th *ngFor="let data of currentPage.headData">{{ data }}</th>
+				<tr *ngIf="page.hasHeadData">
+					<th *ngFor="let data of page.headData">{{ data }}</th>
 				</tr>
 			</thead>
 
 			<tbody>
-				<tr *ngFor="let row of currentPage.data">
-					<td *ngFor="let cell of row">{{ cell || '' }}</td>
+				<tr *ngFor="let row of page.data">
+					<td
+						*ngFor="let cell of row"
+						[ngClass]="{
+							'table__cell--chosen': isSelected(cell)
+						}"
+						(click)="onCellClick(cell)"
+					>
+						{{ cell || '' }}
+					</td>
 				</tr>
 			</tbody>
 		</table>

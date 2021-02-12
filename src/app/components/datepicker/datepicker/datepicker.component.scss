@@ -5,7 +5,6 @@
 .datepicker {
 	background-color: var(--bg-color-1);
 	border-radius: rem(3px);
-	border: rem(2px) solid var(--bg-color-2);
 
 	&__header {
 		padding: rem(20px);
@@ -26,7 +25,7 @@
 
 	&__cell {
 		&--chosen {
-			background-color: red;
+			box-shadow: inset 0px 0px 0px rem(2px) var(--color-warning);
 		}
 	}
 
