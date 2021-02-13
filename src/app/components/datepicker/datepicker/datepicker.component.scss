@@ -23,14 +23,13 @@
 	border-collapse: collapse;
 	width: 100%;
 
-	&__cell {
-		&--chosen {
-			box-shadow: inset 0px 0px 0px rem(2px) var(--color-warning);
+	&__row {
+		&:last-child td {
+			border-bottom: none;
 		}
 	}
 
-	& th,
-	& td {
+	&__cell {
 		text-align: center;
 		border: rem(1px) solid var(--bg-color-2);
 		padding: rem(20px) 0px;
@@ -47,9 +46,18 @@
 		&:first-child {
 			border-left: none;
 		}
-	}
 
-	& tr:last-child td {
-		border-bottom: none;
+		&--selected {
+			box-shadow: inset 0px 0px 0px rem(2px) var(--color-warning);
+		}
+
+		&--disabled {
+			color: var(--text-color-1);
+			cursor: not-allowed;
+
+			&:hover {
+				background-color: initial;
+			}
+		}
 	}
 }

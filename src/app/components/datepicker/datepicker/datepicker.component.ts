@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
 	IDatepickerPage,
 	MonthPage,
@@ -12,6 +12,8 @@ import {
 	styleUrls: ['./datepicker.component.scss'],
 })
 export class DatepickerComponent {
+	@Input('min') minDate: Date = new Date(2021, 1, 10, 1, 0, 0, 0);
+	@Input('max') maxDate: Date = new Date(2021, 3, 15, 1, 0, 0, 0);
 	date = new Date(new Date().setHours(1, 0, 0, 0));
 	page: IDatepickerPage = new MonthPage('month', this);
 
@@ -50,8 +52,11 @@ export class DatepickerComponent {
 		const year = newYear ?? this.year;
 		const month = newMonth ?? this.month;
 		const day = newDay ?? this.day;
+		const newDate = new Date(year, month, day, 1, 0, 0, 0);
 
-		this.date = new Date(year, month, day, 1, 0, 0, 0);
+		if (newDate > this.maxDate || newDate < this.minDate) return;
+
+		this.date = newDate;
 	}
 
 	/** Function that is invoked when next button in the template is clicked. */
@@ -69,7 +74,8 @@ export class DatepickerComponent {
 	 * @param cellValue Value of the clicked cell.
 	 */
 	onCellClick(cellValue: number) {
-		this.page.choose(cellValue);
+		if (!this.isSelectable(cellValue)) return;
+		this.page.select(cellValue);
 
 		this.switchPage(this._routesOrder[this.page.name]);
 	}
@@ -78,8 +84,16 @@ export class DatepickerComponent {
 	 * Determines if passed cell value is currently selected.
 	 * @param cellValue Value of a cell.
 	 */
-	isSelected(cellValue: number) {
+	isSelected(cellValue: number | string) {
 		return this.page.isSelected(cellValue);
+	}
+
+	/**
+	 * Determines if cell value can be selected.
+	 * @param cellValue Value of a cell
+	 */
+	isSelectable(cellValue: number | string) {
+		return this.page.isSelectable(cellValue);
 	}
 
 	/** Returns year */

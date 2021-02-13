@@ -31,17 +31,21 @@
 	<main class="datepicker__main">
 		<table class="table">
 			<thead>
-				<tr *ngIf="page.hasHeadData">
-					<th *ngFor="let data of page.headData">{{ data }}</th>
+				<tr class="table__row" *ngIf="page.hasHeadData">
+					<th class="table__cell" *ngFor="let data of page.headData">
+						{{ data }}
+					</th>
 				</tr>
 			</thead>
 
 			<tbody>
-				<tr *ngFor="let row of page.data">
+				<tr class="table__row" *ngFor="let row of page.data">
 					<td
 						*ngFor="let cell of row"
+						class="table__cell"
 						[ngClass]="{
-							'table__cell--chosen': isSelected(cell)
+							'table__cell--selected': isSelected(cell),
+							'table__cell--disabled': !isSelectable(cell)
 						}"
 						(click)="onCellClick(cell)"
 					>

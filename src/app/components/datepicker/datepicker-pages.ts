@@ -6,7 +6,8 @@ export interface IDatepickerPage {
 	next(): void;
 	prev(): void;
 	isSelected(cellValue: number | string): boolean;
-	choose(cellValue: number | string): void;
+	select(cellValue: number | string): void;
+	isSelectable(cellValue: number | string): boolean;
 	name: string;
 	data: any[][];
 	headData: any[];
@@ -71,6 +72,14 @@ export abstract class DatepickerPage {
 
 		return newArray;
 	}
+
+	protected isInRange(
+		value: number | Date,
+		min: number | Date,
+		max: number | Date
+	) {
+		return value >= min && value <= max;
+	}
 }
 
 export class MonthPage extends DatepickerPage implements IDatepickerPage {
@@ -95,8 +104,23 @@ export class MonthPage extends DatepickerPage implements IDatepickerPage {
 		return day === this.hostRef.day;
 	}
 
-	choose(day: number) {
+	select(day: number) {
 		this.hostRef.setNewDate(null, null, day);
+	}
+
+	isSelectable(day: number) {
+		const { minDate, maxDate } = this.hostRef;
+		const date = new Date(
+			this.hostRef.year,
+			this.hostRef.month,
+			day,
+			1,
+			0,
+			0,
+			0
+		);
+
+		return this.isInRange(date, minDate, maxDate);
 	}
 
 	/**
@@ -169,8 +193,16 @@ export class ChooseYearPage extends DatepickerPage implements IDatepickerPage {
 		return year === this.hostRef.year;
 	}
 
-	choose(year: number) {
+	select(year: number) {
 		this.hostRef.year = year;
+	}
+
+	isSelectable(year: number) {
+		return this.isInRange(
+			year,
+			this.hostRef.minDate.getFullYear(),
+			this.hostRef.maxDate.getFullYear()
+		);
 	}
 
 	private _generateYears() {
@@ -214,8 +246,17 @@ export class ChooseMonthPage extends DatepickerPage implements IDatepickerPage {
 		return monthIndex === this.hostRef.month;
 	}
 
-	choose(month: string) {
+	select(month: string) {
 		this.hostRef.month = this._getMonthIndex(month);
+	}
+
+	isSelectable(month: string) {
+		const monthIndex = this._getMonthIndex(month);
+		return this.isInRange(
+			monthIndex,
+			this.hostRef.minDate.getMonth(),
+			this.hostRef.maxDate.getMonth()
+		);
 	}
 
 	private _getMonthIndex(month: string) {
