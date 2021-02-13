@@ -3,7 +3,7 @@ import {
 	IDatepickerPage,
 	MonthPage,
 	DatepickerPageName,
-	datepickerPages,
+	DatepickerPages,
 } from '../datepicker-pages';
 
 interface DateParts {
@@ -12,14 +12,25 @@ interface DateParts {
 	day?: number;
 }
 
+const MAX_TIMESTAMP = 8640000000000000;
+const MIN_TIMESTAMP = -8640000000000000;
+
 @Component({
 	selector: 'datepicker',
 	templateUrl: './datepicker.component.html',
 	styleUrls: ['./datepicker.component.scss'],
 })
 export class DatepickerComponent {
-	@Input('min') minDate: Date = new Date(2021, 1, 10, 1, 0, 0, 0);
-	@Input('max') maxDate: Date = new Date(2021, 3, 15, 1, 0, 0, 0);
+	@Input('min') minDate: Date = new Date(MIN_TIMESTAMP);
+	@Input('max') maxDate: Date = new Date(
+		2021,
+		1,
+		5,
+		1,
+		0,
+		0,
+		0
+	) /*new Date(MAX_TIMESTAMP)*/;
 	date = new Date(new Date().setHours(1, 0, 0, 0));
 	page: IDatepickerPage = new MonthPage('month', this);
 
@@ -36,7 +47,7 @@ export class DatepickerComponent {
 	switchPage(pageName: DatepickerPageName) {
 		if (pageName === this.page.name) return;
 
-		this.page = new (datepickerPages.get(pageName))(pageName, this);
+		this.page = new (DatepickerPages.get(pageName))(pageName, this);
 	}
 
 	/** Function that is called when the button with date is clicked. */
@@ -61,8 +72,6 @@ export class DatepickerComponent {
 			dateParts
 		);
 		const newDate = new Date(year, month, day, 1, 0, 0, 0);
-
-		if (newDate > this.maxDate || newDate < this.minDate) return;
 
 		this.date = newDate;
 	}

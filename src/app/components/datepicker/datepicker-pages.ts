@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 
 export type DatepickerPageName = 'month' | 'chooseYear' | 'chooseMonth';
@@ -44,7 +45,7 @@ export abstract class DatepickerPage {
 	 * @param emptyValue Fill blank spaces in a row with this value
 	 * @param equalLastRowSize If there is no enough data in the last row start inserting empty value to complete it.
 	 */
-	protected groupIntoRows<T>(
+	protected _groupIntoRows<T>(
 		array: T[],
 		rowSize: number,
 		startAt = 0,
@@ -73,12 +74,14 @@ export abstract class DatepickerPage {
 		return newArray;
 	}
 
-	protected isInRange(
-		value: number | Date,
-		min: number | Date,
-		max: number | Date
-	) {
-		return value >= min && value <= max;
+	/**
+	 * Checks if a date is contained within min and max Date.
+	 * @param date Date to check if it`s in range
+	 */
+	protected _isInRange(date: Date) {
+		const { minDate, maxDate } = this.hostRef;
+
+		return date >= minDate && date <= maxDate;
 	}
 }
 
@@ -109,18 +112,10 @@ export class MonthPage extends DatepickerPage implements IDatepickerPage {
 	}
 
 	isSelectable(day: number) {
-		const { minDate, maxDate } = this.hostRef;
-		const date = new Date(
-			this.hostRef.year,
-			this.hostRef.month,
-			day,
-			1,
-			0,
-			0,
-			0
-		);
+		const { year, month } = this.hostRef;
+		const date = new Date(year, month, day);
 
-		return this.isInRange(date, minDate, maxDate);
+		return this._isInRange(date);
 	}
 
 	/**
@@ -140,7 +135,7 @@ export class MonthPage extends DatepickerPage implements IDatepickerPage {
 		for (let i = firstDayIndex; i < numberOfDays + firstDayIndex; i++)
 			month[i] = i - firstDayIndex + 1;
 
-		return this.groupIntoRows(
+		return this._groupIntoRows(
 			month,
 			this.headData.length,
 			firstDayIndex,
@@ -198,11 +193,7 @@ export class ChooseYearPage extends DatepickerPage implements IDatepickerPage {
 	}
 
 	isSelectable(year: number) {
-		return this.isInRange(
-			year,
-			this.hostRef.minDate.getFullYear(),
-			this.hostRef.maxDate.getFullYear()
-		);
+		return this._isInRange(new Date(year, 0, 1));
 	}
 
 	private _generateYears() {
@@ -215,7 +206,7 @@ export class ChooseYearPage extends DatepickerPage implements IDatepickerPage {
 			data.push(i);
 		}
 
-		return this.groupIntoRows(data, 4, 0, 0, false);
+		return this._groupIntoRows(data, 4, 0, 0, false);
 	}
 }
 
@@ -226,20 +217,7 @@ export class ChooseMonthPage extends DatepickerPage implements IDatepickerPage {
 		['Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
 	];
 
-	private readonly _months = [
-		'Styczeń',
-		'Luty',
-		'Marzec',
-		'Kwiecień',
-		'Maj',
-		'Czerwiec',
-		'Lipiec',
-		'Sierpień',
-		'Wrzesień',
-		'Październik',
-		'Listopad',
-		'Grudzień',
-	];
+	private readonly _months = this.data.flat(Infinity);
 
 	isSelected(month: string) {
 		const monthIndex = this._getMonthIndex(month);
@@ -252,11 +230,8 @@ export class ChooseMonthPage extends DatepickerPage implements IDatepickerPage {
 
 	isSelectable(month: string) {
 		const monthIndex = this._getMonthIndex(month);
-		return this.isInRange(
-			monthIndex,
-			this.hostRef.minDate.getMonth(),
-			this.hostRef.maxDate.getMonth()
-		);
+
+		return this._isInRange(new Date(this.hostRef.year, monthIndex, 1));
 	}
 
 	private _getMonthIndex(month: string) {
@@ -264,7 +239,7 @@ export class ChooseMonthPage extends DatepickerPage implements IDatepickerPage {
 	}
 }
 
-export const datepickerPages = new Map<DatepickerPageName, any>([
+export const DatepickerPages = new Map<DatepickerPageName, any>([
 	['month', MonthPage],
 	['chooseYear', ChooseYearPage],
 	['chooseMonth', ChooseMonthPage],
