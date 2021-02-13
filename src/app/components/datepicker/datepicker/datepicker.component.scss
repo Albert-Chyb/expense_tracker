@@ -13,6 +13,11 @@
 	}
 
 	&__nav-btn {
+		&--disabled {
+			color: var(--text-color-1);
+			cursor: not-allowed;
+		}
+
 		&:first-child {
 			margin-right: rem(20px);
 		}

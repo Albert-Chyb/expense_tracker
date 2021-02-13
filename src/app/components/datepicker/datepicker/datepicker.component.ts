@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import {
 	IDatepickerPage,
-	MonthPage,
+	ChooseDayPage,
 	DatepickerPageName,
 	DatepickerPages,
 } from '../datepicker-pages';
@@ -21,18 +21,11 @@ const MIN_TIMESTAMP = -8640000000000000;
 	styleUrls: ['./datepicker.component.scss'],
 })
 export class DatepickerComponent {
-	@Input('min') minDate: Date = new Date(MIN_TIMESTAMP);
-	@Input('max') maxDate: Date = new Date(
-		2021,
-		1,
-		5,
-		1,
-		0,
-		0,
-		0
-	) /*new Date(MAX_TIMESTAMP)*/;
+	@Input('min') minDate: Date = new Date(2020, 1, 25);
+	@Input('max') maxDate: Date = new Date(2021, 2, 24);
+
 	date = new Date(new Date().setHours(1, 0, 0, 0));
-	page: IDatepickerPage = new MonthPage('month', this);
+	page: IDatepickerPage = new ChooseDayPage('month', this);
 
 	private readonly _routesOrder = {
 		month: 'month',
@@ -78,12 +71,12 @@ export class DatepickerComponent {
 
 	/** Function that is invoked when next button in the template is clicked. */
 	next() {
-		this.page.next();
+		if (this.page.canGenerateNext) this.page.next();
 	}
 
 	/** Function that is invoked when previous button the in template is clicked. */
 	prev() {
-		this.page.prev();
+		if (this.page.canGeneratePrev) this.page.prev();
 	}
 
 	/**

@@ -13,6 +13,9 @@
 			<button
 				type="button"
 				class="btn btn--empty datepicker__nav-btn"
+				[ngClass]="{
+					'datepicker__nav-btn--disabled': !page.canGeneratePrev
+				}"
 				(click)="prev()"
 			>
 				<i class="fas fa-angle-left"></i>
@@ -21,6 +24,9 @@
 			<button
 				type="button"
 				class="btn btn--empty datepicker__nav-btn"
+				[ngClass]="{
+					'datepicker__nav-btn--disabled': !page.canGenerateNext
+				}"
 				(click)="next()"
 			>
 				<i class="fas fa-angle-right"></i>
