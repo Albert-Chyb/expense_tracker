@@ -105,7 +105,7 @@ export class MonthPage extends DatepickerPage implements IDatepickerPage {
 	}
 
 	select(day: number) {
-		this.hostRef.setNewDate(null, null, day);
+		this.hostRef.day = day;
 	}
 
 	isSelectable(day: number) {

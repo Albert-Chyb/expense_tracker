@@ -6,6 +6,12 @@ import {
 	datepickerPages,
 } from '../datepicker-pages';
 
+interface DateParts {
+	year?: number;
+	month?: number;
+	day?: number;
+}
+
 @Component({
 	selector: 'datepicker',
 	templateUrl: './datepicker.component.html',
@@ -42,16 +48,18 @@ export class DatepickerComponent {
 
 	/**
 	 * Replaces current date with date build from passed arguments.
-	 * Not every argument is required, if you don't want to change a certain value just pass null as a value.
 	 *
-	 * @param newYear Year to switch to
-	 * @param newMonth Month to switch to
-	 * @param newDay Day to switch to
+	 * @param dateParts Information about a date that will be used to build the new date.
 	 */
-	setNewDate(newYear?: number, newMonth?: number, newDay?: number) {
-		const year = newYear ?? this.year;
-		const month = newMonth ?? this.month;
-		const day = newDay ?? this.day;
+	setNewDate(dateParts: DateParts) {
+		const { year, month, day } = Object.assign(
+			{
+				year: this.year,
+				month: this.month,
+				day: this.day,
+			},
+			dateParts
+		);
 		const newDate = new Date(year, month, day, 1, 0, 0, 0);
 
 		if (newDate > this.maxDate || newDate < this.minDate) return;
@@ -101,7 +109,7 @@ export class DatepickerComponent {
 		return this.date.getFullYear();
 	}
 	set year(newYear: number) {
-		this.setNewDate(newYear, null, null);
+		this.setNewDate({ year: newYear });
 	}
 
 	/** Returns month */
@@ -109,7 +117,7 @@ export class DatepickerComponent {
 		return this.date.getMonth();
 	}
 	set month(newMonth: number) {
-		this.setNewDate(null, newMonth, null);
+		this.setNewDate({ month: newMonth });
 	}
 
 	/** Returns day of the month */
@@ -117,7 +125,7 @@ export class DatepickerComponent {
 		return this.date.getDate();
 	}
 	set day(newDay: number) {
-		this.setNewDate(null, null, newDay);
+		this.setNewDate({ day: newDay });
 	}
 
 	/** Returns day of the week */
