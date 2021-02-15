@@ -1,9 +1,26 @@
-import { Component, Input } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import {
-	IDatepickerPage,
+	Component,
+	Directive,
+	ElementRef,
+	forwardRef,
+	Input,
+	OnDestroy,
+	OnInit,
+} from '@angular/core';
+import {
+	ControlValueAccessor,
+	NG_VALUE_ACCESSOR,
+	NgControl,
+} from '@angular/forms';
+import { fromEvent, merge, Observable, Subject, Subscription } from 'rxjs';
+import { filter, mapTo } from 'rxjs/operators';
+
+import {
 	ChooseDayPage,
 	DatepickerPageName,
 	DatepickerPages,
+	IDatepickerPage,
 } from '../datepicker-pages';
 
 interface DateParts {
@@ -15,23 +32,44 @@ interface DateParts {
 const MAX_TIMESTAMP = 8640000000000000;
 const MIN_TIMESTAMP = -8640000000000000;
 
+/**
+ * TODO: Write validators to check if date is valid, is withing the range.
+ */
+
 @Component({
 	selector: 'datepicker',
 	templateUrl: './datepicker.component.html',
 	styleUrls: ['./datepicker.component.scss'],
 })
-export class DatepickerComponent {
+export class DatepickerComponent implements OnInit {
+	/** The earliest date that can be selected. */
 	@Input('min') minDate: Date = new Date(2020, 1, 25);
+
+	/** The latest date that can be selected. */
 	@Input('max') maxDate: Date = new Date(2021, 2, 24);
 
-	date = new Date(new Date().setHours(1, 0, 0, 0));
+	/** Currently selected date. */
+	date = new Date(new Date().setHours(0, 0, 0, 0));
 	page: IDatepickerPage = new ChooseDayPage('month', this);
 
+	/** NgControl of associated input. */
+	private _ngControl: NgControl;
+	private readonly _subscriptions = new Subscription();
+	private readonly _onValueChanges = new Subject<Date>();
 	private readonly _routesOrder = {
 		month: 'month',
 		chooseYear: 'chooseMonth',
 		chooseMonth: 'month',
 	};
+
+	ngOnInit() {
+		this._subscriptions.add(
+			this._ngControl.valueChanges.subscribe((date: Date) => {
+				this.date = date;
+			})
+		);
+		this.date = this._ngControl.value;
+	}
 
 	/**
 	 * Changes the page that is currently visible.
@@ -64,9 +102,10 @@ export class DatepickerComponent {
 			},
 			dateParts
 		);
-		const newDate = new Date(year, month, day, 1, 0, 0, 0);
+		const newDate = new Date(year, month, day);
 
 		this.date = newDate;
+		this._ngControl.control.setValue(this.date);
 	}
 
 	/** Function that is invoked when next button in the template is clicked. */
@@ -103,10 +142,10 @@ export class DatepickerComponent {
 	 * @param cellValue Value of a cell
 	 */
 	isSelectable(cellValue: number | string) {
-		return this.page.isSelectable(cellValue);
+		return this.page.isSelectable(cellValue) && cellValue !== 0;
 	}
 
-	/** Returns year */
+	/** Returns the year */
 	get year(): number {
 		return this.date.getFullYear();
 	}
@@ -114,7 +153,7 @@ export class DatepickerComponent {
 		this.setNewDate({ year: newYear });
 	}
 
-	/** Returns month */
+	/** Returns the month */
 	get month(): number {
 		return this.date.getMonth();
 	}
@@ -133,5 +172,93 @@ export class DatepickerComponent {
 	/** Returns day of the week */
 	get weekDay(): number {
 		return this.date.getDay();
+	}
+
+	/** Emits every time a new date is selected. */
+	get onValueChanges(): Observable<Date> {
+		return this._onValueChanges;
+	}
+
+	/** Setter of the associated input`s NgControl */
+	set ngControl(ngControlRef: NgControl) {
+		this._ngControl = ngControlRef;
+	}
+}
+
+@Directive({
+	selector: 'input[datepicker]',
+	providers: [
+		{
+			provide: NG_VALUE_ACCESSOR,
+			useExisting: forwardRef(() => DatepickerInputDirective),
+			multi: true,
+		},
+	],
+})
+export class DatepickerInputDirective
+	implements ControlValueAccessor, OnInit, OnDestroy {
+	constructor(private readonly _inputElRef: ElementRef<HTMLInputElement>) {}
+
+	private readonly _datePipe = new DatePipe(navigator.language);
+	private readonly _onStateChange = merge(
+		fromEvent(this._input, 'focus').pipe(mapTo(true)),
+		fromEvent(this._input, 'blur').pipe(mapTo(false))
+	);
+	private readonly _subscriptions = new Subscription();
+	private _onChange: Function;
+	private _onTouch: Function;
+
+	writeValue(date: Date): void {
+		this._input.value = this._dateToView(date);
+	}
+
+	registerOnChange(fn: any): void {
+		this._onChange = fn;
+	}
+
+	registerOnTouched(fn: any): void {
+		this._onTouch = fn;
+	}
+
+	setDisabledState?(isDisabled: boolean): void {
+		this._input.disabled = isDisabled;
+	}
+
+	ngOnInit() {
+		this._subscriptions.add(
+			this._onStateChange.subscribe(() => this._onTouch())
+		);
+
+		this._subscriptions.add(
+			this._onStateChange
+				.pipe(filter(isFocused => !isFocused))
+				.subscribe(() => {
+					const viewDate = this._dateToView(this.value);
+					const date = new Date(viewDate);
+					this.value = viewDate;
+
+					date.setHours(0, 0, 0, 0);
+					this._onChange(date);
+				})
+		);
+	}
+
+	ngOnDestroy() {
+		this._subscriptions.unsubscribe();
+	}
+
+	get value(): string {
+		return this._input.value;
+	}
+	set value(newValue: string) {
+		this._input.value = newValue;
+	}
+
+	private get _input() {
+		return this._inputElRef.nativeElement;
+	}
+
+	private _dateToView(date: Date | number | string) {
+		return this._datePipe.transform(date, 'yyyy-MM-dd');
 	}
 }

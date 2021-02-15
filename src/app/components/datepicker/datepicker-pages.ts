@@ -50,8 +50,8 @@ export abstract class DatepickerPage {
 		array: T[],
 		rowSize: number,
 		startAt = 0,
-		emptyValue: any,
-		equalLastRowSize: boolean
+		emptyValue: any = 0,
+		equalLastRowSize: boolean = false
 	): Array<Array<T>> {
 		if (array.length === 0) return [[]];
 		let index = 0;
