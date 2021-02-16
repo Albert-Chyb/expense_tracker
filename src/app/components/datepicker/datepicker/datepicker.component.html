@@ -14,7 +14,7 @@
 				type="button"
 				class="btn btn--empty datepicker__nav-btn"
 				[ngClass]="{
-					'datepicker__nav-btn--disabled': !page.canGeneratePrev
+					'datepicker__nav-btn--disabled': !canGeneratePrev
 				}"
 				(click)="prev()"
 			>
@@ -25,7 +25,7 @@
 				type="button"
 				class="btn btn--empty datepicker__nav-btn"
 				[ngClass]="{
-					'datepicker__nav-btn--disabled': !page.canGenerateNext
+					'datepicker__nav-btn--disabled': !canGenerateNext
 				}"
 				(click)="next()"
 			>
@@ -37,15 +37,15 @@
 	<main class="datepicker__main">
 		<table class="table">
 			<thead>
-				<tr class="table__row" *ngIf="page.hasHeadData">
-					<th class="table__cell" *ngFor="let data of page.headData">
+				<tr class="table__row" *ngIf="hasHeadData">
+					<th class="table__cell" *ngFor="let data of headData">
 						{{ data }}
 					</th>
 				</tr>
 			</thead>
 
 			<tbody>
-				<tr class="table__row" *ngFor="let row of page.data">
+				<tr class="table__row" *ngFor="let row of data">
 					<td
 						*ngFor="let cell of row"
 						class="table__cell"

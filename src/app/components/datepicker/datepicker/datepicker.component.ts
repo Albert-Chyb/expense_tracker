@@ -1,9 +1,12 @@
+import { isDateWithinRange } from './../../../common/validators/isDateWithinRange';
+import { isValidDate } from './../../../common/validators/isValidDate';
 import { DatePipe } from '@angular/common';
 import {
 	Component,
 	Directive,
 	ElementRef,
 	forwardRef,
+	Injector,
 	Input,
 	OnDestroy,
 	OnInit,
@@ -34,6 +37,11 @@ const MIN_TIMESTAMP = -8640000000000000;
 
 /**
  * TODO: Write validators to check if date is valid, is withing the range.
+ * Datepicker helps selecting a date in the form field input.
+ * When you attach it to an input it will register validators that check
+ * if entered value is a valid date string.
+ *
+ * It is meant to replace standard datepicker that is available in browser.
  */
 
 @Component({
@@ -42,33 +50,60 @@ const MIN_TIMESTAMP = -8640000000000000;
 	styleUrls: ['./datepicker.component.scss'],
 })
 export class DatepickerComponent implements OnInit {
+	@Input('min')
+	set minDate(date: Date) {
+		if (date >= this.maxDate)
+			throw new Error('Tried to set min date that is later than max date !');
+
+		this._rangeDates.min = date;
+	}
 	/** The earliest date that can be selected. */
-	@Input('min') minDate: Date = new Date(2020, 1, 25);
+	get minDate() {
+		return this._rangeDates.min;
+	}
 
 	/** The latest date that can be selected. */
-	@Input('max') maxDate: Date = new Date(2021, 2, 24);
+	@Input('max')
+	set maxDate(date: Date) {
+		if (date <= this.minDate)
+			throw new Error('Tried to set max date that is earlier than min date !');
+
+		this._rangeDates.max = date;
+	}
+	get maxDate() {
+		return this._rangeDates.max;
+	}
 
 	/** Currently selected date. */
 	date = new Date(new Date().setHours(0, 0, 0, 0));
-	page: IDatepickerPage = new ChooseDayPage('month', this);
 
 	/** NgControl of associated input. */
 	private _ngControl: NgControl;
+	private _page: IDatepickerPage = new ChooseDayPage('chooseDay', this);
 	private readonly _subscriptions = new Subscription();
 	private readonly _onValueChanges = new Subject<Date>();
 	private readonly _routesOrder = {
-		month: 'month',
+		chooseDay: 'chooseDay',
 		chooseYear: 'chooseMonth',
-		chooseMonth: 'month',
+		chooseMonth: 'chooseDay',
+	};
+	private readonly _rangeDates = {
+		min: new Date(MIN_TIMESTAMP),
+		max: new Date(MAX_TIMESTAMP),
 	};
 
 	ngOnInit() {
 		this._subscriptions.add(
 			this._ngControl.valueChanges.subscribe((date: Date) => {
-				this.date = date;
+				if (date && this.isInRange(date)) this.date = date;
 			})
 		);
 		this.date = this._ngControl.value;
+
+		this._ngControl.control.setValidators([
+			isValidDate,
+			isDateWithinRange(this._rangeDates),
+		]);
 	}
 
 	/**
@@ -76,16 +111,18 @@ export class DatepickerComponent implements OnInit {
 	 * @param pageName Name of the page to switch to.
 	 */
 	switchPage(pageName: DatepickerPageName) {
-		if (pageName === this.page.name) return;
+		if (pageName === this._page.name) return;
+		if (!DatepickerPages.has(pageName))
+			throw new Error(`No page with given name (${pageName}) !`);
 
-		this.page = new (DatepickerPages.get(pageName))(pageName, this);
+		this._page = new (DatepickerPages.get(pageName))(pageName, this);
 	}
 
 	/** Function that is called when the button with date is clicked. */
 	onMainBtnClick() {
-		this.page.name === 'month'
+		this._page.name === 'chooseDay'
 			? this.switchPage('chooseYear')
-			: this.switchPage('month');
+			: this.switchPage('chooseDay');
 	}
 
 	/**
@@ -110,12 +147,12 @@ export class DatepickerComponent implements OnInit {
 
 	/** Function that is invoked when next button in the template is clicked. */
 	next() {
-		if (this.page.canGenerateNext) this.page.next();
+		if (this._page.canGenerateNext) this._page.next();
 	}
 
 	/** Function that is invoked when previous button the in template is clicked. */
 	prev() {
-		if (this.page.canGeneratePrev) this.page.prev();
+		if (this._page.canGeneratePrev) this._page.prev();
 	}
 
 	/**
@@ -124,9 +161,9 @@ export class DatepickerComponent implements OnInit {
 	 */
 	onCellClick(cellValue: number) {
 		if (!this.isSelectable(cellValue)) return;
-		this.page.select(cellValue);
+		this._page.select(cellValue);
 
-		this.switchPage(this._routesOrder[this.page.name]);
+		this.switchPage(this._routesOrder[this._page.name]);
 	}
 
 	/**
@@ -134,7 +171,7 @@ export class DatepickerComponent implements OnInit {
 	 * @param cellValue Value of a cell.
 	 */
 	isSelected(cellValue: number | string) {
-		return this.page.isSelected(cellValue);
+		return this._page.isSelected(cellValue);
 	}
 
 	/**
@@ -142,7 +179,15 @@ export class DatepickerComponent implements OnInit {
 	 * @param cellValue Value of a cell
 	 */
 	isSelectable(cellValue: number | string) {
-		return this.page.isSelectable(cellValue) && cellValue !== 0;
+		return this._page.isSelectable(cellValue) && cellValue !== 0;
+	}
+
+	/**
+	 * Checks if a date is contained within min and max Date.
+	 * @param date Date to check if it`s in range
+	 */
+	isInRange(date: Date) {
+		return date >= this.minDate && date <= this.maxDate;
 	}
 
 	/** Returns the year */
@@ -174,6 +219,31 @@ export class DatepickerComponent implements OnInit {
 		return this.date.getDay();
 	}
 
+	/** Whether head data is present. */
+	get hasHeadData(): boolean {
+		return this._page.hasHeadData;
+	}
+
+	/** Data that should be displayed as headings. */
+	get headData() {
+		return this._page.headData;
+	}
+
+	/** Data of the current page. */
+	get data() {
+		return this._page.data;
+	}
+
+	/** Whether previous set of data of the current page can be generated. */
+	get canGeneratePrev() {
+		return this._page.canGeneratePrev;
+	}
+
+	/** Whether next set of data of the current page can be generated. */
+	get canGenerateNext() {
+		return this._page.canGenerateNext;
+	}
+
 	/** Emits every time a new date is selected. */
 	get onValueChanges(): Observable<Date> {
 		return this._onValueChanges;
@@ -197,7 +267,10 @@ export class DatepickerComponent implements OnInit {
 })
 export class DatepickerInputDirective
 	implements ControlValueAccessor, OnInit, OnDestroy {
-	constructor(private readonly _inputElRef: ElementRef<HTMLInputElement>) {}
+	constructor(
+		private readonly _inputElRef: ElementRef<HTMLInputElement>,
+		private readonly _injector: Injector
+	) {}
 
 	private readonly _datePipe = new DatePipe(navigator.language);
 	private readonly _onStateChange = merge(
@@ -233,6 +306,8 @@ export class DatepickerInputDirective
 			this._onStateChange
 				.pipe(filter(isFocused => !isFocused))
 				.subscribe(() => {
+					if (!Date.parse(this.value)) return this._onChange(null);
+
 					const viewDate = this._dateToView(this.value);
 					const date = new Date(viewDate);
 					this.value = viewDate;

@@ -14,6 +14,8 @@ const formFieldErrors: Errors = new Map([
 		'Wpisana wartość nie jest poprawnym schematem ikony.',
 	],
 	['whiteList', 'Wpisana wartość nie jest dozwolona.'],
+	['invalidDate', 'Wpisana wartość nie jest datą.'],
+	['dateNotInRange', 'Wpisana data nie jest w dozwolonym przedziale.'],
 ]);
 
 @NgModule({

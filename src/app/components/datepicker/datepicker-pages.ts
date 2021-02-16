@@ -1,6 +1,6 @@
 import { DatepickerComponent } from './datepicker/datepicker.component';
 
-export type DatepickerPageName = 'month' | 'chooseYear' | 'chooseMonth';
+export type DatepickerPageName = 'chooseDay' | 'chooseYear' | 'chooseMonth';
 
 export interface IDatepickerPage {
 	next(): void;
@@ -74,16 +74,6 @@ export abstract class DatepickerPage {
 
 		return newArray;
 	}
-
-	/**
-	 * Checks if a date is contained within min and max Date.
-	 * @param date Date to check if it`s in range
-	 */
-	protected _isInRange(date: Date) {
-		const { minDate, maxDate } = this.hostRef;
-
-		return date >= minDate && date <= maxDate;
-	}
 }
 
 export class ChooseDayPage extends DatepickerPage implements IDatepickerPage {
@@ -116,21 +106,21 @@ export class ChooseDayPage extends DatepickerPage implements IDatepickerPage {
 		const { year, month } = this.hostRef;
 		const date = new Date(year, month, day);
 
-		return this._isInRange(date);
+		return this.hostRef.isInRange(date);
 	}
 
 	get canGenerateNext(): boolean {
 		const { year, month } = this.hostRef;
 		const date = new Date(year, month + 1, 1);
 
-		return this._isInRange(date);
+		return this.hostRef.isInRange(date);
 	}
 
 	get canGeneratePrev(): boolean {
 		const { year, month } = this.hostRef;
 		const date = new Date(year, month - 1, new Date(year, month, 0).getDate());
 
-		return this._isInRange(date);
+		return this.hostRef.isInRange(date);
 	}
 
 	/**
@@ -208,7 +198,7 @@ export class ChooseMonthPage extends DatepickerPage implements IDatepickerPage {
 				: -Infinity;
 
 		const day = Math.max(1, minDay);
-		return this._isInRange(new Date(this.hostRef.year, monthIndex, day));
+		return this.hostRef.isInRange(new Date(this.hostRef.year, monthIndex, day));
 	}
 
 	private _getMonthIndex(month: string) {
@@ -281,7 +271,7 @@ export class ChooseYearPage extends DatepickerPage implements IDatepickerPage {
 }
 
 export const DatepickerPages = new Map<DatepickerPageName, any>([
-	['month', ChooseDayPage],
+	['chooseDay', ChooseDayPage],
 	['chooseYear', ChooseYearPage],
 	['chooseMonth', ChooseMonthPage],
 ]);
