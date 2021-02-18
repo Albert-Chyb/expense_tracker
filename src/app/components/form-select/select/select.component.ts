@@ -231,7 +231,7 @@ export class SelectComponent
 
 		this.currentOption.select();
 		this._onChange(this.currentOption.value);
-		this.onStateChange.next();
+		this.close();
 	}
 
 	ngOnInit(): void {
