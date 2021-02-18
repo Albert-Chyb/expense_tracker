@@ -24,6 +24,14 @@
 
 	&__input-container {
 		width: 100%;
+		height: rem(18px);
+	}
+
+	&__prefix-container {
+		height: rem(18px);
+		display: flex;
+		align-items: center;
+		overflow: visible;
 	}
 
 	&__label-container {
