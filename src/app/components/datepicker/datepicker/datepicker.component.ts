@@ -1,11 +1,12 @@
-import { isDateWithinRange } from './../../../common/validators/isDateWithinRange';
-import { isValidDate } from './../../../common/validators/isValidDate';
 import { DatePipe } from '@angular/common';
 import {
 	Component,
 	Directive,
 	ElementRef,
 	forwardRef,
+	HostListener,
+	Inject,
+	InjectionToken,
 	Injector,
 	Input,
 	OnDestroy,
@@ -17,7 +18,7 @@ import {
 	NgControl,
 } from '@angular/forms';
 import { fromEvent, merge, Observable, Subject, Subscription } from 'rxjs';
-import { filter, mapTo } from 'rxjs/operators';
+import { filter, first, mapTo } from 'rxjs/operators';
 
 import {
 	ChooseDayPage,
@@ -25,6 +26,7 @@ import {
 	DatepickerPages,
 	IDatepickerPage,
 } from '../datepicker-pages';
+import { OverlayService } from './../../../services/overlay/overlay.service';
 
 interface DateParts {
 	year?: number;
@@ -32,24 +34,31 @@ interface DateParts {
 	day?: number;
 }
 
+interface IDatepickerInputs {
+	minDate: Date;
+	maxDate: Date;
+	ngControl: NgControl;
+}
+const DATEPICKER_INPUTS = new InjectionToken('DATEPICKER_INPUTS');
 const MAX_TIMESTAMP = 8640000000000000;
 const MIN_TIMESTAMP = -8640000000000000;
 
 /**
- * TODO: Write validators to check if date is valid, is withing the range.
  * Datepicker helps selecting a date in the form field input.
- * When you attach it to an input it will register validators that check
- * if entered value is a valid date string.
  *
- * It is meant to replace standard datepicker that is available in browser.
+ * It is meant to replace standard datepicker that is available in the browser.
  */
 
 @Component({
-	selector: 'datepicker',
+	selector: '',
 	templateUrl: './datepicker.component.html',
 	styleUrls: ['./datepicker.component.scss'],
 })
-export class DatepickerComponent implements OnInit {
+export class DatepickerComponent implements OnInit, OnDestroy {
+	constructor(
+		@Inject(DATEPICKER_INPUTS) private readonly _inputs: IDatepickerInputs
+	) {}
+
 	@Input('min')
 	set minDate(date: Date) {
 		if (date >= this.maxDate)
@@ -74,8 +83,7 @@ export class DatepickerComponent implements OnInit {
 		return this._rangeDates.max;
 	}
 
-	/** Currently selected date. */
-	date = new Date(new Date().setHours(0, 0, 0, 0));
+	private _date = new Date(new Date().setHours(0, 0, 0, 0));
 
 	/** NgControl of associated input. */
 	private _ngControl: NgControl;
@@ -93,17 +101,19 @@ export class DatepickerComponent implements OnInit {
 	};
 
 	ngOnInit() {
+		this.minDate = this._inputs.minDate;
+		this.maxDate = this._inputs.maxDate;
+		this.ngControl = this._inputs.ngControl;
 		this._subscriptions.add(
 			this._ngControl.valueChanges.subscribe((date: Date) => {
-				if (date && this.isInRange(date)) this.date = date;
+				if (date && this.isInRange(date)) this._date = date;
 			})
 		);
-		this.date = this._ngControl.value;
+		this._date = this._ngControl.value || this._date;
+	}
 
-		this._ngControl.control.setValidators([
-			isValidDate,
-			isDateWithinRange(this._rangeDates),
-		]);
+	ngOnDestroy() {
+		this._subscriptions.unsubscribe();
 	}
 
 	/**
@@ -141,8 +151,8 @@ export class DatepickerComponent implements OnInit {
 		);
 		const newDate = new Date(year, month, day);
 
-		this.date = newDate;
-		this._ngControl.control.setValue(this.date);
+		this._date = newDate;
+		this._ngControl.control.setValue(this._date);
 	}
 
 	/** Function that is invoked when next button in the template is clicked. */
@@ -175,7 +185,7 @@ export class DatepickerComponent implements OnInit {
 	}
 
 	/**
-	 * Determines if cell value can be selected.
+	 * Determines if the cell value can be selected.
 	 * @param cellValue Value of a cell
 	 */
 	isSelectable(cellValue: number | string) {
@@ -192,7 +202,7 @@ export class DatepickerComponent implements OnInit {
 
 	/** Returns the year */
 	get year(): number {
-		return this.date.getFullYear();
+		return this._date.getFullYear();
 	}
 	set year(newYear: number) {
 		this.setNewDate({ year: newYear });
@@ -200,7 +210,7 @@ export class DatepickerComponent implements OnInit {
 
 	/** Returns the month */
 	get month(): number {
-		return this.date.getMonth();
+		return this._date.getMonth();
 	}
 	set month(newMonth: number) {
 		this.setNewDate({ month: newMonth });
@@ -208,7 +218,7 @@ export class DatepickerComponent implements OnInit {
 
 	/** Returns day of the month */
 	get day(): number {
-		return this.date.getDate();
+		return this._date.getDate();
 	}
 	set day(newDay: number) {
 		this.setNewDate({ day: newDay });
@@ -216,7 +226,7 @@ export class DatepickerComponent implements OnInit {
 
 	/** Returns day of the week */
 	get weekDay(): number {
-		return this.date.getDay();
+		return this._date.getDay();
 	}
 
 	/** Whether head data is present. */
@@ -253,6 +263,11 @@ export class DatepickerComponent implements OnInit {
 	set ngControl(ngControlRef: NgControl) {
 		this._ngControl = ngControlRef;
 	}
+
+	/** Currently selected date. */
+	get date() {
+		return this._date;
+	}
 }
 
 @Directive({
@@ -267,10 +282,7 @@ export class DatepickerComponent implements OnInit {
 })
 export class DatepickerInputDirective
 	implements ControlValueAccessor, OnInit, OnDestroy {
-	constructor(
-		private readonly _inputElRef: ElementRef<HTMLInputElement>,
-		private readonly _injector: Injector
-	) {}
+	constructor(private readonly _inputElRef: ElementRef<HTMLInputElement>) {}
 
 	private readonly _datePipe = new DatePipe(navigator.language);
 	private readonly _onStateChange = merge(
@@ -307,7 +319,6 @@ export class DatepickerInputDirective
 				.pipe(filter(isFocused => !isFocused))
 				.subscribe(() => {
 					if (!Date.parse(this.value)) return this._onChange(null);
-
 					const viewDate = this._dateToView(this.value);
 					const date = new Date(viewDate);
 					this.value = viewDate;
@@ -335,5 +346,86 @@ export class DatepickerInputDirective
 
 	private _dateToView(date: Date | number | string) {
 		return this._datePipe.transform(date, 'yyyy-MM-dd');
+	}
+}
+
+/** Allows opening assigned datepicker. */
+@Directive({
+	selector: '[triggerDatepicker]',
+})
+export class TriggerDatepickerDirective {
+	@Input('triggerDatepicker') datepickerManager: DatepickerManager;
+
+	@HostListener('click')
+	open() {
+		this.datepickerManager.open();
+	}
+}
+
+/**
+ * Datepicker manager is a bridge between template and opened overlay.
+ * It reflects changes in inputs on datepicker instance.
+ */
+@Component({
+	selector: 'datepicker',
+	template: '',
+})
+export class DatepickerManager {
+	constructor(
+		private readonly _overlay: OverlayService,
+		private readonly _injector: Injector
+	) {}
+
+	private readonly _inputs: IDatepickerInputs = {
+		minDate: new Date(MIN_TIMESTAMP),
+		maxDate: new Date(MAX_TIMESTAMP),
+		ngControl: null,
+	};
+	private _isOpened = false;
+	private _datepickerRef: DatepickerComponent;
+
+	@Input('min') set minDate(minDate: Date) {
+		this._target.minDate = minDate;
+	}
+	@Input('max') set maxDate(maxDate: Date) {
+		this._target.maxDate = maxDate;
+	}
+	set ngControl(ngControl: NgControl) {
+		this._target.ngControl = ngControl;
+	}
+
+	@HostListener('click')
+	open() {
+		if (this._isOpened) return;
+
+		this._isOpened = true;
+		this._datepickerRef = (this._overlay.open(
+			DatepickerComponent,
+			this._createInjector()
+		) as any).instance;
+		this._overlay.onClick$.pipe(first()).subscribe(() => this.close());
+	}
+
+	close() {
+		if (this._isClosed) return;
+
+		this._isOpened = false;
+		this._overlay.close();
+		this._datepickerRef = null;
+	}
+
+	private get _isClosed() {
+		return !this._isOpened;
+	}
+
+	private _createInjector() {
+		return Injector.create({
+			providers: [{ provide: DATEPICKER_INPUTS, useValue: this._inputs }],
+			parent: this._injector,
+		});
+	}
+
+	private get _target() {
+		return this._datepickerRef ?? this._inputs;
 	}
 }
