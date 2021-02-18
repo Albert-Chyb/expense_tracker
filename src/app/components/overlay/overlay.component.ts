@@ -16,6 +16,7 @@ import {
 } from '@angular/cdk/portal';
 import {
 	Component,
+	ElementRef,
 	HostListener,
 	Inject,
 	Injector,
@@ -63,7 +64,8 @@ export class OverlayComponent {
 	overlayRef: ViewContainerRef;
 	@ViewChild(CdkPortalOutlet, { static: true }) portalOutlet: CdkPortalOutlet;
 	@HostListener('click', ['$event']) onClick($event: MouseEvent) {
-		this._overlay.onClick$.next($event);
+		if ($event.target === this.overlayRef.element.nativeElement)
+			this._overlay.onClick$.next($event);
 	}
 	private readonly _onAnimationEnd = new Subject<AnimationEvent>();
 
