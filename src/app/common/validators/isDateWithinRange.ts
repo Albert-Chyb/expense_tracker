@@ -1,9 +1,19 @@
 import { ValidatorFn } from '@angular/forms';
 
-export const isDateWithinRange = (dates: {
+const MAX_TIMESTAMP = 8640000000000000;
+const MIN_TIMESTAMP = -8640000000000000;
+
+export class DateRange {
+	constructor(minDate?: Date, maxDate?: Date) {
+		this.min = minDate ?? new Date(MIN_TIMESTAMP);
+		this.max = maxDate ?? new Date(MAX_TIMESTAMP);
+	}
+
 	min: Date;
 	max: Date;
-}): ValidatorFn => control => {
+}
+
+export const isDateWithinRange = (dates: DateRange): ValidatorFn => control => {
 	const { min, max } = dates;
 	let date: Date;
 

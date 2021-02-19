@@ -32,11 +32,6 @@ export class FormFieldInputDirective implements FormFieldControl {
 		mapTo(null)
 	);
 
-	@Input('datepicker')
-	set datepicker(ref: DatepickerComponent) {
-		ref.ngControl = this._ngControl;
-	}
-
 	private _isFocused: boolean;
 
 	get shouldLabelFloat(): boolean {

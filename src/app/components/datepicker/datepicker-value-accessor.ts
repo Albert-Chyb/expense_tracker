@@ -1,14 +1,22 @@
 import { DatePipe } from '@angular/common';
 import {
 	Directive,
-	forwardRef,
-	OnInit,
-	OnDestroy,
 	ElementRef,
+	forwardRef,
+	Injector,
+	Input,
+	OnDestroy,
+	OnInit,
 } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import { merge, fromEvent, Subscription } from 'rxjs';
-import { mapTo, filter } from 'rxjs/operators';
+import {
+	ControlValueAccessor,
+	NG_VALUE_ACCESSOR,
+	NgControl,
+} from '@angular/forms';
+import { fromEvent, merge, Subscription } from 'rxjs';
+import { filter, mapTo } from 'rxjs/operators';
+
+import { DatepickerManager } from './datepicker/datepicker.component';
 
 /**
  * Directive that provides custom value accessor for the input that is connected with datepicker.
@@ -26,7 +34,10 @@ import { mapTo, filter } from 'rxjs/operators';
 })
 export class DatepickerInputDirective
 	implements ControlValueAccessor, OnInit, OnDestroy {
-	constructor(private readonly _inputElRef: ElementRef<HTMLInputElement>) {}
+	constructor(
+		private readonly _inputElRef: ElementRef<HTMLInputElement>,
+		private readonly _injector: Injector
+	) {}
 
 	private readonly _datePipe = new DatePipe(navigator.language);
 	private readonly _onStateChange = merge(
@@ -36,6 +47,27 @@ export class DatepickerInputDirective
 	private readonly _subscriptions = new Subscription();
 	private _onChange: Function;
 	private _onTouch: Function;
+	private _datepickerRef: DatepickerManager;
+	private readonly _dateRanges = {
+		minDate: new Date(-8640000000000000),
+		maxDate: new Date(8640000000000000),
+	};
+
+	@Input('min') set minDate(date: Date) {
+		this._target.minDate = date;
+	}
+
+	@Input('max') set maxDate(date: Date) {
+		this._target.maxDate = date;
+	}
+
+	@Input('datepicker') set datepicker(ref: DatepickerManager) {
+		const ngControl = this._injector.get(NgControl);
+		this._datepickerRef = ref;
+		ref.ngControl = ngControl;
+		ref.maxDate = this._dateRanges.maxDate;
+		ref.minDate = this._dateRanges.minDate;
+	}
 
 	writeValue(date: Date): void {
 		this._input.value = this._dateToView(date);
@@ -86,6 +118,10 @@ export class DatepickerInputDirective
 
 	private get _input() {
 		return this._inputElRef.nativeElement;
+	}
+
+	private get _target() {
+		return this._datepickerRef ?? this._dateRanges;
 	}
 
 	private _dateToView(date: Date | number | string) {

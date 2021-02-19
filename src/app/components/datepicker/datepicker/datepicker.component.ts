@@ -291,8 +291,9 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 export class TriggerDatepickerDirective {
 	@Input('triggerDatepicker') datepickerManager: DatepickerManager;
 
-	@HostListener('click')
-	open() {
+	@HostListener('click', ['$event'])
+	open($event: MouseEvent) {
+		$event.stopPropagation();
 		this.datepickerManager.open();
 	}
 }
@@ -319,12 +320,14 @@ export class DatepickerManager {
 	private _isOpened = false;
 	private _datepickerRef: DatepickerComponent;
 
-	@Input('min') set minDate(minDate: Date) {
+	set minDate(minDate: Date) {
 		this._target.minDate = minDate;
 	}
-	@Input('max') set maxDate(maxDate: Date) {
+
+	set maxDate(maxDate: Date) {
 		this._target.maxDate = maxDate;
 	}
+
 	set ngControl(ngControl: NgControl) {
 		this._target.ngControl = ngControl;
 	}
