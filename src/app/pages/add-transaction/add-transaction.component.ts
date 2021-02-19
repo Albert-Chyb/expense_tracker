@@ -1,3 +1,9 @@
+import { tap } from 'rxjs/operators';
+import {
+	isDateWithinRange,
+	DateRange,
+} from './../../common/validators/isDateWithinRange';
+import { isValidDate } from './../../common/validators/isValidDate';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -26,6 +32,8 @@ export class AddTransactionComponent implements OnInit {
 		private readonly _periods: PeriodsService
 	) {}
 
+	private _rangeDates = new DateRange();
+
 	form = new FormGroup({
 		group: new FormControl('', Validators.required),
 		amount: new FormControl(null, [
@@ -33,7 +41,11 @@ export class AddTransactionComponent implements OnInit {
 			blackListValidator(0),
 			isNotANumberValidator,
 		]),
-		date: new FormControl(new Date(), Validators.required),
+		date: new FormControl(new Date(), [
+			Validators.required,
+			isValidDate,
+			isDateWithinRange(this._rangeDates),
+		]),
 		description: new FormControl('', [
 			Validators.required,
 			Validators.maxLength(255),
@@ -50,7 +62,8 @@ export class AddTransactionComponent implements OnInit {
 		const groups$ = this._groups.getAll();
 		const period$ = this._periods.getCurrent();
 		this.data$ = combineLatest([groups$, period$]).pipe(
-			map(([groups, period]) => ({ groups, period }))
+			map(([groups, period]) => ({ groups, period })),
+			tap(({ period }) => (this._rangeDates.min = period.date.start.toDate()))
 		);
 	}
 
