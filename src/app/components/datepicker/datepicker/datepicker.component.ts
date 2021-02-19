@@ -80,10 +80,9 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 		return this._rangeDates.max;
 	}
 
-	private _date = new Date(new Date().setHours(0, 0, 0, 0));
-
 	/** NgControl of associated input. */
 	private _ngControl: NgControl;
+	private _date = new Date(new Date().setHours(0, 0, 0, 0));
 	private _page: IDatepickerPage = new ChooseDayPage('chooseDay', this);
 	private readonly _subscriptions = new Subscription();
 	private readonly _onValueChanges = new Subject<Date>();
@@ -103,12 +102,10 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 		this.ngControl = this._inputs.ngControl;
 
 		this._subscriptions.add(
-			this._ngControl.valueChanges.subscribe(
-				(date: Date) => (this._date = this._determineDate(date))
-			)
+			this._ngControl.valueChanges.subscribe((date: Date) => (this.date = date))
 		);
 
-		this._date = this._determineDate(this._ngControl.value);
+		this.date = this._ngControl.value;
 	}
 
 	ngOnDestroy() {
@@ -266,6 +263,9 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 	/** Currently selected date. */
 	get date() {
 		return this._date;
+	}
+	set date(date: Date) {
+		this._date = this._determineDate(date);
 	}
 
 	/**
