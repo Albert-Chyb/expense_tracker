@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
 	DatepickerComponent,
-	DatepickerInputDirective,
 	DatepickerManager,
 	TriggerDatepickerDirective,
 } from './datepicker/datepicker.component';
+import { DatepickerInputDirective } from './datepicker-value-accessor';
 
 @NgModule({
 	declarations: [

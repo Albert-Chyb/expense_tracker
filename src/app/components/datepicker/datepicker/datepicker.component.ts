@@ -1,9 +1,6 @@
-import { DatePipe } from '@angular/common';
 import {
 	Component,
 	Directive,
-	ElementRef,
-	forwardRef,
 	HostListener,
 	Inject,
 	InjectionToken,
@@ -12,13 +9,9 @@ import {
 	OnDestroy,
 	OnInit,
 } from '@angular/core';
-import {
-	ControlValueAccessor,
-	NG_VALUE_ACCESSOR,
-	NgControl,
-} from '@angular/forms';
-import { fromEvent, merge, Observable, Subject, Subscription } from 'rxjs';
-import { filter, first, mapTo } from 'rxjs/operators';
+import { NgControl } from '@angular/forms';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 import {
 	ChooseDayPage,
@@ -42,6 +35,10 @@ interface IDatepickerInputs {
 const DATEPICKER_INPUTS = new InjectionToken('DATEPICKER_INPUTS');
 const MAX_TIMESTAMP = 8640000000000000;
 const MIN_TIMESTAMP = -8640000000000000;
+
+/*
+	TODO: Use OnPush change detection.
+*/
 
 /**
  * Datepicker helps selecting a date in the form field input.
@@ -104,12 +101,14 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 		this.minDate = this._inputs.minDate;
 		this.maxDate = this._inputs.maxDate;
 		this.ngControl = this._inputs.ngControl;
+
 		this._subscriptions.add(
-			this._ngControl.valueChanges.subscribe((date: Date) => {
-				if (date && this.isInRange(date)) this._date = date;
-			})
+			this._ngControl.valueChanges.subscribe(
+				(date: Date) => (this._date = this._determineDate(date))
+			)
 		);
-		this._date = this._ngControl.value || this._date;
+
+		this._date = this._determineDate(this._ngControl.value);
 	}
 
 	ngOnDestroy() {
@@ -151,7 +150,7 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 		);
 		const newDate = new Date(year, month, day);
 
-		this._date = newDate;
+		this._date = this._determineDate(newDate);
 		this._ngControl.control.setValue(this._date);
 	}
 
@@ -268,84 +267,20 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 	get date() {
 		return this._date;
 	}
-}
 
-@Directive({
-	selector: 'input[datepicker]',
-	providers: [
-		{
-			provide: NG_VALUE_ACCESSOR,
-			useExisting: forwardRef(() => DatepickerInputDirective),
-			multi: true,
-		},
-	],
-})
-export class DatepickerInputDirective
-	implements ControlValueAccessor, OnInit, OnDestroy {
-	constructor(private readonly _inputElRef: ElementRef<HTMLInputElement>) {}
+	/**
+	 * It does not allow to set a date that is outside of the range.
+	 * @param date Date that is meant to be set.
+	 */
+	private _determineDate(date: Date): Date {
+		let newDate: Date;
 
-	private readonly _datePipe = new DatePipe(navigator.language);
-	private readonly _onStateChange = merge(
-		fromEvent(this._input, 'focus').pipe(mapTo(true)),
-		fromEvent(this._input, 'blur').pipe(mapTo(false))
-	);
-	private readonly _subscriptions = new Subscription();
-	private _onChange: Function;
-	private _onTouch: Function;
+		if (!date) newDate = this._date;
+		else if (this.isInRange(date)) newDate = date;
+		else if (date > this.maxDate) newDate = this.maxDate;
+		else if (date < this.minDate) newDate = this.minDate;
 
-	writeValue(date: Date): void {
-		this._input.value = this._dateToView(date);
-	}
-
-	registerOnChange(fn: any): void {
-		this._onChange = fn;
-	}
-
-	registerOnTouched(fn: any): void {
-		this._onTouch = fn;
-	}
-
-	setDisabledState?(isDisabled: boolean): void {
-		this._input.disabled = isDisabled;
-	}
-
-	ngOnInit() {
-		this._subscriptions.add(
-			this._onStateChange.subscribe(() => this._onTouch())
-		);
-
-		this._subscriptions.add(
-			this._onStateChange
-				.pipe(filter(isFocused => !isFocused))
-				.subscribe(() => {
-					if (!Date.parse(this.value)) return this._onChange(null);
-					const viewDate = this._dateToView(this.value);
-					const date = new Date(viewDate);
-					this.value = viewDate;
-
-					date.setHours(0, 0, 0, 0);
-					this._onChange(date);
-				})
-		);
-	}
-
-	ngOnDestroy() {
-		this._subscriptions.unsubscribe();
-	}
-
-	get value(): string {
-		return this._input.value;
-	}
-	set value(newValue: string) {
-		this._input.value = newValue;
-	}
-
-	private get _input() {
-		return this._inputElRef.nativeElement;
-	}
-
-	private _dateToView(date: Date | number | string) {
-		return this._datePipe.transform(date, 'yyyy-MM-dd');
+		return newDate;
 	}
 }
 
