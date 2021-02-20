@@ -10,10 +10,6 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -95,10 +91,6 @@ import { UserService } from './services/user/user.service';
 		AngularFireAuthModule,
 		BrowserAnimationsModule,
 		ReactiveFormsModule,
-		MatDatepickerModule,
-		MatFormFieldModule,
-		MatNativeDateModule,
-		MatInputModule,
 		AngularFireAuthGuardModule,
 		FormsModule,
 		ServiceWorkerModule.register('ngsw-worker.js', {
@@ -113,7 +105,6 @@ import { UserService } from './services/user/user.service';
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },
-		MatDatepickerModule,
 		{
 			provide: SETTINGS,
 			useValue: environment.firebaseEmulators.enabled

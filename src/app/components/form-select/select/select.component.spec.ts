@@ -1,16 +1,16 @@
-import { Subject } from 'rxjs';
-import { OverlayService } from '../../../services/overlay/overlay.service';
-import { FormFieldComponent } from '../../form-field/form-field/form-field.component';
-import { Component, Provider, TemplateRef } from '@angular/core';
-import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { Component, Provider } from '@angular/core';
+import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { FormControl, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Subject } from 'rxjs';
 
+import { OverlayService } from '../../../services/overlay/overlay.service';
+import { FormFieldComponent } from '../../form-field/form-field/form-field.component';
 import { SelectOptionComponent } from '../select-option/select-option.component';
 import {
+	SELECT_OPTION_VISIBLE_COUNT,
 	SelectComponent,
 	SelectComponentControlDirective,
-	SELECT_OPTION_VISIBLE_COUNT,
 } from './select.component';
 
 @Component({
@@ -36,7 +36,7 @@ class MockedOverlayService {
 	close = jasmine.createSpy('close').and.resolveTo();
 }
 
-fdescribe('SelectComponent', () => {
+describe('SelectComponent', () => {
 	let component: SelectComponent;
 	let fixture: ComponentFixture<TestComponent>;
 	const providers: Provider[] = [
