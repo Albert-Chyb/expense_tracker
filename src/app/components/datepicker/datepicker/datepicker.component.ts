@@ -32,7 +32,7 @@ interface IDatepickerInputs {
 	maxDate: Date;
 	ngControl: NgControl;
 }
-const DATEPICKER_INPUTS = new InjectionToken('DATEPICKER_INPUTS');
+export const DATEPICKER_INPUTS = new InjectionToken('DATEPICKER_INPUTS');
 const MAX_TIMESTAMP = 8640000000000000;
 const MIN_TIMESTAMP = -8640000000000000;
 
@@ -53,7 +53,8 @@ const MIN_TIMESTAMP = -8640000000000000;
 })
 export class DatepickerComponent implements OnInit, OnDestroy {
 	constructor(
-		@Inject(DATEPICKER_INPUTS) private readonly _inputs: IDatepickerInputs
+		@Inject(DATEPICKER_INPUTS)
+		private readonly _inputs: IDatepickerInputs
 	) {}
 
 	@Input('min')
