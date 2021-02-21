@@ -1,0 +1,84 @@
+@import 'utils/functions';
+@import 'utils/variables';
+@import 'utils/mixins';
+@import 'utils/mediaBreakpoints';
+
+:host {
+	display: block;
+	width: min(700px, 95vw);
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.datepicker {
+	background-color: var(--bg-color-1);
+	border-radius: rem(3px);
+
+	&__header {
+		padding: rem(20px);
+		display: flex;
+		justify-content: space-between;
+	}
+
+	&__nav-btn {
+		&--disabled {
+			color: var(--text-color-1);
+			cursor: not-allowed;
+		}
+
+		&:first-child {
+			margin-right: rem(20px);
+		}
+	}
+}
+
+.table {
+	border-collapse: collapse;
+	width: 100%;
+
+	&__row {
+		&:last-child td {
+			border-bottom: none;
+		}
+	}
+
+	&__cell {
+		text-align: center;
+		border: rem(1px) solid var(--bg-color-2);
+		padding: rem(20px) 0px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: var(--bg-color-3);
+		}
+
+		&:last-child {
+			border-right: none;
+		}
+
+		&:first-child {
+			border-left: none;
+		}
+
+		&--selected {
+			box-shadow: inset 0px 0px 0px rem(2px) var(--color-warning);
+		}
+
+		&--disabled {
+			color: var(--text-color-1);
+			cursor: not-allowed;
+
+			&:hover {
+				background-color: initial;
+			}
+		}
+	}
+
+	@include respondTo('mobile-l', 'max') {
+		&__cell {
+			padding: rem(10px);
+		}
+	}
+}

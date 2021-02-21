@@ -1,28 +1,25 @@
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { CheckboxComponent } from './../../components/checkbox/checkbox.component';
-import { FormErrorsDirective } from './../../directives/form-errors/form-errors.directive';
-import { StyledInputComponent } from './../../components/styled-input/styled-input.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Pages } from './../../common/routing/routesUrls';
-import { UserService } from './../../services/user/user.service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { environment } from './../../../environments/environment';
-import { AngularFireModule } from '@angular/fire';
+import { FormSelectModule } from './../../components/form-select/form-select.module';
 import {
 	ComponentFixture,
 	inject,
 	TestBed,
 	waitForAsync,
 } from '@angular/core/testing';
-
-import { SetupAccountComponent } from './setup-account.component';
+import { AngularFireModule } from '@angular/fire';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
-import { FormErrorsComponent } from 'src/app/components/form-errors/form-errors.component';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ZippyContentComponent } from 'src/app/components/zippy-components/zippy-content/zippy-content.component';
 import { ZippyStaticComponent } from 'src/app/components/zippy-components/zippy-static/zippy-static.component';
 import { ZippyComponent } from 'src/app/components/zippy-components/zippy/zippy.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
+import { environment } from './../../../environments/environment';
+import { Pages } from './../../common/routing/routesUrls';
+import { CheckboxComponent } from './../../components/checkbox/checkbox.component';
+import { FormFieldModule } from './../../components/form-field/form-field.module';
+import { UserService } from './../../services/user/user.service';
+import { SetupAccountComponent } from './setup-account.component';
 
 describe('SetupAccountComponent', () => {
 	let component: SetupAccountComponent;
@@ -33,9 +30,6 @@ describe('SetupAccountComponent', () => {
 			TestBed.configureTestingModule({
 				declarations: [
 					SetupAccountComponent,
-					StyledInputComponent,
-					FormErrorsComponent,
-					FormErrorsDirective,
 					ZippyComponent,
 					ZippyStaticComponent,
 					ZippyContentComponent,
@@ -46,8 +40,8 @@ describe('SetupAccountComponent', () => {
 					RouterTestingModule,
 					ReactiveFormsModule,
 					FormsModule,
-					MatFormFieldModule,
-					MatSelectModule,
+					FormFieldModule,
+					FormSelectModule,
 					NoopAnimationsModule,
 				],
 			}).compileComponents();

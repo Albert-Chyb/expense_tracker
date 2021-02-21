@@ -29,17 +29,28 @@
 		>
 	</ng-template>
 
-	<mat-form-field class="transaction__detail" appearance="fill">
-		<mat-label>Wybierz datę</mat-label>
+	<form-field>
 		<input
+			formFieldInput
+			[datepicker]="datepicker"
 			[min]="data.period.date.start.toDate()"
-			matInput
-			[matDatepicker]="picker"
+			type="text"
 			formControlName="date"
 		/>
-		<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-		<mat-datepicker #picker></mat-datepicker>
-	</mat-form-field>
+
+		<datepicker #datepicker></datepicker>
+
+		<form-field-label>Data transakcji</form-field-label>
+		<form-field-prefix>
+			<button
+				[triggerDatepicker]="datepicker"
+				type="button"
+				class="btn btn--icon"
+			>
+				<i class="fas fa-calendar-alt"></i>
+			</button>
+		</form-field-prefix>
+	</form-field>
 
 	<form-field>
 		<input formFieldInput type="text" formControlName="description" />

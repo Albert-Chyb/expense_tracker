@@ -1,3 +1,4 @@
+import { FormSelectModule } from './../../components/form-select/form-select.module';
 import {
 	ComponentFixture,
 	inject,
@@ -6,8 +7,6 @@ import {
 } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserService } from 'src/app/services/user/user.service';
@@ -15,6 +14,7 @@ import { environment } from 'src/environments/environment';
 
 import { TestingProviders } from './../../common/test-stubs/testing-providers';
 import { CheckboxComponent } from './../../components/checkbox/checkbox.component';
+import { FormFieldModule } from './../../components/form-field/form-field.module';
 import { ZippyContentComponent } from './../../components/zippy-components/zippy-content/zippy-content.component';
 import { ZippyStaticComponent } from './../../components/zippy-components/zippy-static/zippy-static.component';
 import { ZippyComponent } from './../../components/zippy-components/zippy/zippy.component';
@@ -38,11 +38,11 @@ describe('AppSettingsComponent', () => {
 				imports: [
 					AngularFireModule.initializeApp(environment.firebase),
 					ReactiveFormsModule,
-					MatFormFieldModule,
-					MatSelectModule,
 					FormsModule,
 					NoopAnimationsModule,
 					RouterTestingModule,
+					FormSelectModule,
+					FormFieldModule,
 				],
 				providers: [TestingProviders.UserService],
 			}).compileComponents();

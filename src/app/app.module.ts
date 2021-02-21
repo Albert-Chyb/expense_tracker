@@ -10,11 +10,6 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -27,6 +22,7 @@ import { UserDataInitializer } from './common/initializers/user-data';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { ClueComponent } from './components/clue/clue.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { DatepickerModule } from './components/datepicker/datepicker.module';
 import { DialogContainerComponent } from './components/dialog-container/dialog-container.component';
 import { FormFieldModule } from './components/form-field/form-field.module';
 import { FormSelectModule } from './components/form-select/form-select.module';
@@ -95,10 +91,6 @@ import { UserService } from './services/user/user.service';
 		AngularFireAuthModule,
 		BrowserAnimationsModule,
 		ReactiveFormsModule,
-		MatDatepickerModule,
-		MatFormFieldModule,
-		MatNativeDateModule,
-		MatInputModule,
 		AngularFireAuthGuardModule,
 		FormsModule,
 		ServiceWorkerModule.register('ngsw-worker.js', {
@@ -109,10 +101,10 @@ import { UserService } from './services/user/user.service';
 		FormFieldErrorsModule,
 		FormSelectModule,
 		ZippyModule,
+		DatepickerModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },
-		MatDatepickerModule,
 		{
 			provide: SETTINGS,
 			useValue: environment.firebaseEmulators.enabled

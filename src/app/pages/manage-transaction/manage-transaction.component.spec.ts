@@ -1,4 +1,3 @@
-import { PortalModule } from '@angular/cdk/portal';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { AngularFireModule } from '@angular/fire';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -7,53 +6,42 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import {
-	NoopAnimationsModule,
-	BrowserAnimationsModule,
-} from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FormErrorsComponent } from 'src/app/components/form-errors/form-errors.component';
-import { UserService } from 'src/app/services/user/user.service';
 import { environment } from 'src/environments/environment';
 
 import { TestingProviders } from './../../common/test-stubs/testing-providers';
 import { LoaderComponent } from './../../components/loader/loader.component';
-import { StyledInputComponent } from './../../components/styled-input/styled-input.component';
-import { FormErrorsDirective } from './../../directives/form-errors/form-errors.directive';
 import { ManageTransactionComponent } from './manage-transaction.component';
 
 describe('ManageTransactionComponent', () => {
 	let component: ManageTransactionComponent;
 	let fixture: ComponentFixture<ManageTransactionComponent>;
 
-	beforeEach(waitForAsync(() => {
-		TestBed.configureTestingModule({
-			declarations: [
-				ManageTransactionComponent,
-				FormErrorsComponent,
-				FormErrorsDirective,
-				StyledInputComponent,
-				LoaderComponent,
-			],
-			imports: [
-				AngularFireModule.initializeApp(environment.firebase),
-				RouterTestingModule,
-				ReactiveFormsModule,
-				MatFormFieldModule,
-				MatSelectModule,
-				MatDatepickerModule,
-				MatInputModule,
-				MatNativeDateModule,
-				NoopAnimationsModule,
-			],
-			providers: [
-				MatDatepickerModule,
-				TestingProviders.TransactionsGroupsService,
-				TestingProviders.TransactionsService,
-				TestingProviders.PeriodsService,
-			],
-		}).compileComponents();
-	}));
+	beforeEach(
+		waitForAsync(() => {
+			TestBed.configureTestingModule({
+				declarations: [ManageTransactionComponent, LoaderComponent],
+				imports: [
+					AngularFireModule.initializeApp(environment.firebase),
+					RouterTestingModule,
+					ReactiveFormsModule,
+					MatFormFieldModule,
+					MatSelectModule,
+					MatDatepickerModule,
+					MatInputModule,
+					MatNativeDateModule,
+					NoopAnimationsModule,
+				],
+				providers: [
+					MatDatepickerModule,
+					TestingProviders.TransactionsGroupsService,
+					TestingProviders.TransactionsService,
+					TestingProviders.PeriodsService,
+				],
+			}).compileComponents();
+		})
+	);
 
 	beforeEach(() => {
 		fixture = TestBed.createComponent(ManageTransactionComponent);
