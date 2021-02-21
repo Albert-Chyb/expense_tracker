@@ -84,7 +84,7 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 	/** NgControl of associated input. */
 	private _ngControl: NgControl;
 	private _date = new Date(new Date().setHours(0, 0, 0, 0));
-	private _page: IDatepickerPage = new ChooseDayPage('chooseDay', this);
+	private _page: IDatepickerPage = new ChooseDayPage(this);
 	private readonly _subscriptions = new Subscription();
 	private readonly _onValueChanges = new Subject<Date>();
 	private readonly _routesOrder = {
@@ -122,7 +122,7 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 		if (!DatepickerPages.has(pageName))
 			throw new Error(`No page with given name (${pageName}) !`);
 
-		this._page = new (DatepickerPages.get(pageName))(pageName, this);
+		this._page = new (DatepickerPages.get(pageName))(this);
 	}
 
 	/** Function that is called when the button with date is clicked. */

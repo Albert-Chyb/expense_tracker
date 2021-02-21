@@ -17,10 +17,7 @@ export interface IDatepickerPage {
 }
 
 export abstract class DatepickerPage {
-	constructor(
-		public name: DatepickerPageName,
-		protected readonly hostRef: DatepickerComponent
-	) {}
+	constructor(protected readonly hostRef: DatepickerComponent) {}
 	/** Data of this page. The data is represented as 2D array. */
 	data = [[]];
 
@@ -77,12 +74,13 @@ export abstract class DatepickerPage {
 }
 
 export class ChooseDayPage extends DatepickerPage implements IDatepickerPage {
-	constructor(name: DatepickerPageName, hostRef: DatepickerComponent) {
-		super(name, hostRef);
+	constructor(hostRef: DatepickerComponent) {
+		super(hostRef);
 		this.data = this._generateMonth();
 	}
 	data: number[][];
 	headData = ['P', 'W', 'Ś', 'C', 'P', 'S', 'N'];
+	readonly name: DatepickerPageName = 'chooseDay';
 
 	next() {
 		this.hostRef.month += 1;
@@ -171,9 +169,9 @@ export class ChooseDayPage extends DatepickerPage implements IDatepickerPage {
 }
 
 export class ChooseMonthPage extends DatepickerPage implements IDatepickerPage {
-	constructor(name, host) {
-		super(name, host);
-		const months = [
+	constructor(host) {
+		super(host);
+		this._months = [
 			'Styczeń',
 			'Luty',
 			'Marzec',
@@ -188,14 +186,15 @@ export class ChooseMonthPage extends DatepickerPage implements IDatepickerPage {
 			'Grudzień',
 		];
 
-		this.data = this._transformIntoTable(months, 3);
+		this.data = this._transformIntoTable(this._months, 3);
 	}
 
 	canGenerateNext = false;
 	canGeneratePrev = false;
 	data: string[][];
+	readonly name: DatepickerPageName = 'chooseMonth';
 
-	private readonly _months = this.data.flat(Infinity);
+	private readonly _months: string[];
 
 	isSelected(month: string) {
 		const monthIndex = this._getMonthIndex(month);
@@ -223,13 +222,14 @@ export class ChooseMonthPage extends DatepickerPage implements IDatepickerPage {
 }
 
 export class ChooseYearPage extends DatepickerPage implements IDatepickerPage {
-	constructor(name: DatepickerPageName, hostRef: DatepickerComponent) {
-		super(name, hostRef);
+	constructor(hostRef: DatepickerComponent) {
+		super(hostRef);
 		this.data = this._generateYears();
 	}
 	private _startYear: number = this.hostRef.year;
 	private readonly _yearsPerPage = 12;
 	data: number[][];
+	readonly name: DatepickerPageName = 'chooseYear';
 
 	next() {
 		this._startYear += this._yearsPerPage;
