@@ -171,13 +171,29 @@ export class ChooseDayPage extends DatepickerPage implements IDatepickerPage {
 }
 
 export class ChooseMonthPage extends DatepickerPage implements IDatepickerPage {
+	constructor(name, host) {
+		super(name, host);
+		const months = [
+			'Styczeń',
+			'Luty',
+			'Marzec',
+			'Kwiecień',
+			'Maj',
+			'Czerwiec',
+			'Lipiec',
+			'Sierpień',
+			'Wrzesień',
+			'Październik',
+			'Listopad',
+			'Grudzień',
+		];
+
+		this.data = this._transformIntoTable(months, 3);
+	}
+
 	canGenerateNext = false;
 	canGeneratePrev = false;
-	data = [
-		['Styczeń', 'Luty', 'Marzec', 'Kwiecień'],
-		['Maj', 'Czerwiec', 'Lipiec', 'Sierpień'],
-		['Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
-	];
+	data: string[][];
 
 	private readonly _months = this.data.flat(Infinity);
 

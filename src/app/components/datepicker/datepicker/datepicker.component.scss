@@ -1,6 +1,7 @@
 @import 'utils/functions';
 @import 'utils/variables';
 @import 'utils/mixins';
+@import 'utils/mediaBreakpoints';
 
 :host {
 	display: block;
@@ -72,6 +73,12 @@
 			&:hover {
 				background-color: initial;
 			}
+		}
+	}
+
+	@include respondTo('mobile-l', 'max') {
+		&__cell {
+			padding: rem(10px);
 		}
 	}
 }
