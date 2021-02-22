@@ -6,7 +6,7 @@ import {
 	OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { FirebaseError } from 'firebase';
+import firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -59,7 +59,7 @@ export class LoginComponent implements OnDestroy, OnInit {
 			this.handleError(error);
 		}
 	}
-	private handleError(error: FirebaseError) {
+	private handleError(error: firebase.FirebaseError) {
 		switch (error.code) {
 			case 'auth/popup-closed-by-user':
 				this._errors.notifyUser(ErrorsMessages.PopupClosedByUser);

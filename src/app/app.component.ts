@@ -3,7 +3,7 @@ import localePL from '@angular/common/locales/pl';
 import { Component, Inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
-import { functions } from 'firebase';
+import firebase from 'firebase/app';
 import { environment } from 'src/environments/environment';
 
 import { routeAnimation } from './animations';
@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
 
 		// Change to local cloud functions in development environment.
 		if (environment.firebaseEmulators.enabled)
-			functions().useFunctionsEmulator('http://localhost:5001');
+			firebase.functions().useFunctionsEmulator('http://localhost:5001');
 
 		this.listenForPWAUpdates();
 	}

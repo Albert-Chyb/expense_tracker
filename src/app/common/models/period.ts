@@ -1,5 +1,5 @@
 import { FirestoreTimestamp } from './firestoreTimestamp';
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 /**
  * Represents one period in database.
  * Period describes form when to when user want to monitor his budget.
@@ -84,7 +84,7 @@ export class Period {
 	static buildOpened(): IOpenedPeriod {
 		return {
 			date: {
-				start: firestore.FieldValue.serverTimestamp() as FirestoreTimestamp,
+				start: firebase.firestore.FieldValue.serverTimestamp() as FirestoreTimestamp,
 			},
 			isClosed: false,
 		};

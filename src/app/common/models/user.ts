@@ -1,4 +1,4 @@
-import { User } from 'firebase';
+import firebase from 'firebase/app';
 import { FirestoreTimestamp } from './firestoreTimestamp';
 import { ISettings } from './settings';
 
@@ -44,7 +44,7 @@ export class AppUser {
 	 * Picks all fields from firebase user.
 	 * @param user Firebase user
 	 */
-	static buildFromFirebaseUser(user: User) {
+	static buildFromFirebaseUser(user: firebase.User) {
 		if (!user) return null;
 
 		return {

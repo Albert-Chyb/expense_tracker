@@ -1,6 +1,6 @@
+import firebase from 'firebase/app';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { auth, User } from 'firebase/app';
 import { from, Subject } from 'rxjs';
 import { mapTo, switchMap } from 'rxjs/operators';
 import { destroyCache } from 'src/app/common/cash/cashable';
@@ -19,7 +19,7 @@ export class AuthService {
 		});
 	}
 
-	private readonly _onLogin$ = new Subject<User>();
+	private readonly _onLogin$ = new Subject<firebase.User>();
 	private readonly _onLogout$ = new Subject<null>();
 
 	/**
@@ -27,7 +27,7 @@ export class AuthService {
 	 */
 
 	async loginWithGoogle() {
-		const provider = new auth.GoogleAuthProvider();
+		const provider = new firebase.auth.GoogleAuthProvider();
 		const credentials = await this._afAuth.signInWithPopup(provider);
 		this._onLogin$.next(credentials.user);
 		return credentials;

@@ -2,7 +2,7 @@ import { ICompletingData } from './../../common/models/completingData';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { User } from 'firebase';
+import firebase from 'firebase/app';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { filter, first, map, switchMap, tap } from 'rxjs/operators';
 import { CompletingData } from 'src/app/common/models/completingData';
@@ -145,7 +145,7 @@ export class UserService {
 	 * @param user Firebase user
 	 */
 
-	async informAppIfUserDataIsAvailable(user: User) {
+	async informAppIfUserDataIsAvailable(user: firebase.User) {
 		if (!user) {
 			this._hasCreatedData.next(false);
 			return null;
@@ -162,7 +162,7 @@ export class UserService {
 	 * @param user Firebase user.
 	 */
 
-	private async updateUserCredentials(user: User): Promise<void> {
+	private async updateUserCredentials(user: firebase.User): Promise<void> {
 		if (!user || !(await this.hasCreatedData)) return null;
 		this.update(await this.getUserData());
 	}
@@ -172,7 +172,7 @@ export class UserService {
 	 * @param user Firebase user.
 	 */
 
-	private getUserFromDatabase(user: User): Observable<IUser> {
+	private getUserFromDatabase(user: firebase.User): Observable<IUser> {
 		if (user)
 			return this._afStore
 				.doc<IUser>(`users/${user.uid}`)

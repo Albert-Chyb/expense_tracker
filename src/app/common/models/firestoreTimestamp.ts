@@ -1,1 +1,3 @@
-export type FirestoreTimestamp = import('firebase').firestore.Timestamp;
+import firebase from 'firebase/app';
+
+export type FirestoreTimestamp = firebase.firestore.Timestamp;

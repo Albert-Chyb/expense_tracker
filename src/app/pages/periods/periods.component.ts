@@ -1,10 +1,10 @@
-import { firestore } from 'firebase';
-import { tap, map } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { PeriodsService } from './../../services/periods/periods.service';
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { map } from 'rxjs/operators';
 
 import { IClosedPeriod } from './../../common/models/period';
+import { PeriodsService } from './../../services/periods/periods.service';
 
 @Component({
 	templateUrl: './periods.component.html',
@@ -20,11 +20,11 @@ export class PeriodsComponent implements OnInit {
 		this.periods$ = this._periods.getAllClosed().pipe(
 			map(periods =>
 				periods.map(period => {
-					period.date.end = new firestore.Timestamp(
+					period.date.end = new firebase.firestore.Timestamp(
 						period.date.end.seconds,
 						period.date.end.nanoseconds
 					);
-					period.date.start = new firestore.Timestamp(
+					period.date.start = new firebase.firestore.Timestamp(
 						period.date.start.seconds,
 						period.date.start.nanoseconds
 					);

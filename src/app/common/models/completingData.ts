@@ -1,5 +1,5 @@
 import { IUser, AppUser } from './user';
-import { User } from 'firebase';
+import firebase from 'firebase/app';
 import { ISettings } from './settings';
 
 export interface ICompletingData {
@@ -13,7 +13,7 @@ export class CompletingData {
 	 * @param user Firebase user
 	 * @param data Completing data
 	 */
-	static buildUser(user: User, data: ICompletingData): IUser {
+	static buildUser(user: firebase.User, data: ICompletingData): IUser {
 		if (!user || !data) return null;
 
 		return {

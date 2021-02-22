@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { firestore } from 'firebase';
+import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
 import { Cacheable } from 'src/app/common/cash/cashable';
@@ -49,9 +49,9 @@ export class PeriodsService {
 						first(),
 
 						switchMap(period =>
-							this._afStore
-								.doc(`users/${uid}/periods/${period.id}`)
-								.update({ 'date.end': firestore.FieldValue.serverTimestamp() })
+							this._afStore.doc(`users/${uid}/periods/${period.id}`).update({
+								'date.end': firebase.firestore.FieldValue.serverTimestamp(),
+							})
 						)
 					)
 				)
@@ -73,7 +73,7 @@ export class PeriodsService {
 						switchMap(period =>
 							this._afStore
 								.doc(`users/${uid}/periods/${period.id}`)
-								.update({ 'date.end': firestore.FieldValue.delete() })
+								.update({ 'date.end': firebase.firestore.FieldValue.delete() })
 						)
 					)
 				)
