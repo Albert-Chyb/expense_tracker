@@ -1,10 +1,8 @@
-import { registerLocaleData, DOCUMENT } from '@angular/common';
+import { DOCUMENT, registerLocaleData } from '@angular/common';
 import localePL from '@angular/common/locales/pl';
 import { Component, Inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
-import firebase from 'firebase/app';
-import { environment } from 'src/environments/environment';
 
 import { routeAnimation } from './animations';
 import { DeviceService } from './services/device/device.service';
@@ -34,10 +32,6 @@ export class AppComponent implements OnInit {
 	ngOnInit() {
 		window['uniqueNumber'] = 0;
 		registerLocaleData(localePL);
-
-		// Change to local cloud functions in development environment.
-		if (environment.firebaseEmulators.enabled)
-			firebase.functions().useFunctionsEmulator('http://localhost:5001');
 
 		this.listenForPWAUpdates();
 	}

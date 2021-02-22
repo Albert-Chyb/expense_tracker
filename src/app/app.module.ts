@@ -6,9 +6,16 @@ import {
 	NgModule,
 } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuthModule } from '@angular/fire/auth';
+import {
+	AngularFireAuthModule,
+	USE_EMULATOR as USE_AUTH_EMULATOR,
+} from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
-import { AngularFirestoreModule, SETTINGS } from '@angular/fire/firestore';
+import {
+	AngularFirestoreModule,
+	USE_EMULATOR as USE_FIRESTORE_EMULATOR,
+} from '@angular/fire/firestore';
+import { USE_EMULATOR as USE_FUNCTIONS_EMULATOR } from '@angular/fire/functions';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,6 +25,7 @@ import { environment } from './../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GlobalErrorHandler } from './common/errors/globalErrorHandler';
+import { getEmulatorConfig } from './common/helpers/getEmulatorConfig';
 import { UserDataInitializer } from './common/initializers/user-data';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { ClueComponent } from './components/clue/clue.component';
@@ -105,12 +113,6 @@ import { UserService } from './services/user/user.service';
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },
-		{
-			provide: SETTINGS,
-			useValue: environment.firebaseEmulators.enabled
-				? environment.firebaseEmulators.firestore
-				: undefined,
-		},
 		{ provide: ErrorHandler, useClass: GlobalErrorHandler },
 		{
 			provide: APP_INITIALIZER,
@@ -119,6 +121,18 @@ import { UserService } from './services/user/user.service';
 			deps: [UserService],
 		},
 		ExposedInjector,
+		{
+			provide: USE_FUNCTIONS_EMULATOR,
+			useValue: getEmulatorConfig('functions'),
+		},
+		{
+			provide: USE_FIRESTORE_EMULATOR,
+			useValue: getEmulatorConfig('firestore'),
+		},
+		{
+			provide: USE_AUTH_EMULATOR,
+			useValue: getEmulatorConfig('auth'),
+		},
 	],
 	bootstrap: [AppComponent],
 })

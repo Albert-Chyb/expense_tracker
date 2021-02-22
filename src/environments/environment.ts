@@ -17,8 +17,16 @@ export const environment = {
 	firebaseEmulators: {
 		enabled: true,
 		firestore: {
-			host: 'localhost:8080',
-			ssl: false,
+			host: 'localhost',
+			port: 8080,
+		},
+		auth: {
+			host: 'localhost',
+			port: 9099,
+		},
+		functions: {
+			host: 'localhost',
+			port: 5001,
 		},
 	},
 };
