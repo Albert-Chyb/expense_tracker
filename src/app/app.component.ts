@@ -3,6 +3,7 @@ import localePL from '@angular/common/locales/pl';
 import { Component, Inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
+import 'firebase/auth';
 
 import { routeAnimation } from './animations';
 import { DeviceService } from './services/device/device.service';
