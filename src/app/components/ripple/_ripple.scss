@@ -1,0 +1,32 @@
+.ripple {
+	overflow: hidden;
+	position: relative;
+
+	--ripple-color: #fff;
+	--ripple-duration: 300ms;
+	--ripple-x: 0px;
+	--ripple-y: 0px;
+	--ripple-size: 50px;
+
+	&::before {
+		content: '';
+		position: absolute;
+		width: var(--ripple-size);
+		height: var(--ripple-size);
+		top: var(--ripple-y);
+		left: var(--ripple-x);
+		background-color: var(--ripple-color);
+		border-radius: 100%;
+
+		transform: scale(0);
+		opacity: 0.3;
+	}
+
+	&--rippling::before {
+		$transition: var(--ripple-duration) cubic-bezier(0, 0, 0.2, 1);
+
+		transition: transform $transition, opacity $transition;
+		transform: scale(1);
+		opacity: 0;
+	}
+}

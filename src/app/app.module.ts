@@ -6,10 +6,7 @@ import {
 	NgModule,
 } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
-import {
-	AngularFireAuthModule,
-	USE_EMULATOR as USE_AUTH_EMULATOR,
-} from '@angular/fire/auth';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 import {
 	AngularFirestoreModule,
@@ -40,12 +37,12 @@ import { MainHeaderComponent } from './components/main-header/main-header.compon
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
+import { RippleModule } from './components/ripple/ripple.module';
 import { SummaryCardComponent } from './components/summary-card/summary-card.component';
 import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
 import { TransactionGroupComponent } from './components/transaction-group/transaction-group.component';
 import { ZippyModule } from './components/zippy-components/zippy.module';
 import { ConfirmActionDirective } from './directives/confirm-action/confirm-action.directive';
-import { RippleDirective } from './directives/ripple/ripple.directive';
 import { FormFieldErrorsModule } from './form-field-errors.module';
 import { AddGroupComponent } from './pages/add-group/add-group.component';
 import { AddTransactionComponent } from './pages/add-transaction/add-transaction.component';
@@ -78,7 +75,6 @@ import { UserService } from './services/user/user.service';
 		PeriodsComponent,
 		LoginComponent,
 		SetupAccountComponent,
-		RippleDirective,
 		AddTransactionComponent,
 		NotFoundComponent,
 		CheckboxComponent,
@@ -110,6 +106,7 @@ import { UserService } from './services/user/user.service';
 		FormSelectModule,
 		ZippyModule,
 		DatepickerModule,
+		RippleModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },
@@ -129,10 +126,10 @@ import { UserService } from './services/user/user.service';
 			provide: USE_FIRESTORE_EMULATOR,
 			useValue: getEmulatorConfig('firestore'),
 		},
-		{
-			provide: USE_AUTH_EMULATOR,
-			useValue: getEmulatorConfig('auth'),
-		},
+		// {
+		// 	provide: USE_AUTH_EMULATOR,
+		// 	useValue: getEmulatorConfig('auth'),
+		// },
 	],
 	bootstrap: [AppComponent],
 })
