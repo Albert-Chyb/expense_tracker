@@ -26,34 +26,40 @@ const updateUserBalance = async (id: string, amount: number) => {
  * Updates user's balance whenever a transaction is created.
  */
 
-export const onCreate = transactionRef.onCreate((snap, context) => {
-	const transaction = snap.data();
+export const manageBalanceOnCreate = transactionRef.onCreate(
+	(snap, context) => {
+		const transaction = snap.data();
 
-	return updateUserBalance(context.params.userId, transaction.amount);
-});
+		return updateUserBalance(context.params.userId, transaction.amount);
+	}
+);
 
 /**
  * Updates user's balance whenever a transaction is updated.
  */
 
-export const onUpdate = transactionRef.onUpdate((snap, context) => {
-	const transactionBefore = snap.before.data();
-	const transactionAfter = snap.after.data();
+export const manageBalanceOnUpdate = transactionRef.onUpdate(
+	(snap, context) => {
+		const transactionBefore = snap.before.data();
+		const transactionAfter = snap.after.data();
 
-	// If transaction amount is not changed, then no further actions are required.
-	if (transactionAfter.amount === transactionBefore.amount) return null;
+		// If transaction amount is not changed, then no further actions are required.
+		if (transactionAfter.amount === transactionBefore.amount) return null;
 
-	const balance = (transactionBefore.amount - transactionAfter.amount) * -1;
+		const balance = (transactionBefore.amount - transactionAfter.amount) * -1;
 
-	return updateUserBalance(context.params.userId, balance);
-});
+		return updateUserBalance(context.params.userId, balance);
+	}
+);
 
 /**
  * Updates user's balance whenever a transaction is deleted.
  */
 
-export const onDelete = transactionRef.onDelete(async (snap, context) => {
-	const transaction = snap.data();
+export const manageBalanceOnDelete = transactionRef.onDelete(
+	async (snap, context) => {
+		const transaction = snap.data();
 
-	return updateUserBalance(context.params.userId, transaction.amount * -1);
-});
+		return updateUserBalance(context.params.userId, transaction.amount * -1);
+	}
+);
