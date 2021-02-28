@@ -22,7 +22,6 @@ import { environment } from './../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GlobalErrorHandler } from './common/errors/globalErrorHandler';
-import { getEmulatorConfig } from './common/helpers/getEmulatorConfig';
 import { UserDataInitializer } from './common/initializers/user-data';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { ClueComponent } from './components/clue/clue.component';
@@ -120,11 +119,15 @@ import { UserService } from './services/user/user.service';
 		ExposedInjector,
 		{
 			provide: USE_FUNCTIONS_EMULATOR,
-			useValue: getEmulatorConfig('functions'),
+			useValue: environment.firebaseEmulators.enabled
+				? ['localhost', 5001]
+				: null,
 		},
 		{
 			provide: USE_FIRESTORE_EMULATOR,
-			useValue: getEmulatorConfig('firestore'),
+			useValue: environment.firebaseEmulators.enabled
+				? ['localhost', 8080]
+				: null,
 		},
 		// {
 		// 	provide: USE_AUTH_EMULATOR,
