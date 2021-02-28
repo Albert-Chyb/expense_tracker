@@ -50,10 +50,10 @@ export class LoginComponent implements OnDestroy, OnInit {
 
 	async loginWithGoogle() {
 		try {
-			await this._auth.loginWithGoogle();
+			const { user } = await this._auth.loginWithGoogle();
 			this._notifications.success(
-				'Poprawnie zalogowano za pomocą konta Google',
-				'Witaj w naszej aplikacji !'
+				'Poprawnie zalogowaliśmy Cię do aplikacji.',
+				`Witaj, ${user.displayName} !`
 			);
 		} catch (error) {
 			this.handleError(error);
