@@ -1,21 +1,43 @@
 body.theme--dark {
-	--color-primary: #171717;
-	--color-secondary: #8d29f8;
-	--color-danger: #e01506;
-	--color-success: #1cbc8a;
-	--color-warning: #ffc857;
+	--color-primary: hsl(40, 100%, 64%);
+	--color-primary-1: hsl(40, 100%, 60%);
+	--color-primary-2: hsl(40, 100%, 55%);
 
-	--text-on-primary: #fff;
-	--text-on-secondary: #fff;
-	--text-on-danger: #fff;
-	--text-on-success: #fff;
-	--text-on-warning: #171717;
+	--color-secondary: hsl(206, 100%, 68%);
+	--color-secondary-1: hsl(206, 100%, 63%);
+	--color-secondary-2: hsl(206, 100%, 57%);
 
-	--text-color-0: #ececec;
-	--text-color-1: #a5a5a5;
+	--color-success: hsl(131, 76%, 69%);
+	--color-success-1: hsl(131, 76%, 63%);
+	--color-success-2: hsl(131, 76%, 57%);
 
-	--bg-color-0: #303030;
-	--bg-color-1: #4a4a4a;
-	--bg-color-2: #636363;
-	--bg-color-3: #545454;
+	--color-danger: hsl(16, 100%, 62%);
+	--color-danger-1: hsl(16, 100%, 57%);
+	--color-danger-2: hsl(16, 100%, 52%);
+
+	--color-warning: hsl(60, 100%, 68%);
+	--color-warning-1: hsl(60, 100%, 63%);
+	--color-warning-2: hsl(60, 100%, 58%);
+
+	--text-on-primary: hsl(0, 0%, 0%);
+	--text-on-secondary: hsl(0, 0%, 0%);
+	--text-on-danger: hsl(0, 0%, 0%);
+	--text-on-success: hsl(0, 0%, 0%);
+	--text-on-warning: hsl(0, 0%, 0%);
+
+	--text-color-0: hsl(0, 0%, 100%);
+	--text-color-1: hsl(0, 0%, 87%);
+	--text-color-2: hsl(0, 0%, 60%);
+	--text-color-3: hsl(0, 0%, 38%);
+
+	--bg-color-0: hsl(0, 0%, 7%);
+	--bg-color-1: hsl(0, 0%, 11%);
+	--bg-color-2: hsl(0, 0%, 13%);
+	--bg-color-3: hsl(0, 0%, 14%);
+	--bg-color-4: hsl(0, 0%, 15%);
+	--bg-color-6: hsl(0, 0%, 17%);
+	--bg-color-8: hsl(0, 0%, 18%);
+	--bg-color-12: hsl(0, 0%, 20%);
+	--bg-color-16: hsl(0, 0%, 21%);
+	--bg-color-24: hsl(0, 0%, 22%);
 }
