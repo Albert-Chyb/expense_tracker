@@ -3,23 +3,26 @@
 @import '../../sass/utils/mixins';
 
 .group-icon {
-  border-radius: rem(15px);
-  width: rem(50px);
-  height: rem(50px);
-  text-align: center;
-  line-height: rem(50px);
-  font-size: rem(20px);
-  color: #F8F1FE;
+	border-radius: rem(15px);
+	width: rem(50px);
+	height: rem(50px);
+	text-align: center;
+	line-height: rem(50px);
+	font-size: rem(20px);
+	color: #f8f1fe;
 
-  &--income {
-    background-color: var(--color-success);
-  }
+	&--income {
+		background-color: var(--color-success);
+		color: var(--text-on-success-color);
+	}
 
-  &--outcome {
-    background-color: var(--color-danger);
-  }
+	&--outcome {
+		background-color: var(--color-danger);
+		color: var(--text-on-danger-color);
+	}
 
-  &--neutral {
-    background-color: var(--color-secondary);
-  }
+	&--neutral {
+		background-color: var(--color-secondary);
+		color: var(--text-on-secondary-color);
+	}
 }

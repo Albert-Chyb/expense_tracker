@@ -11,19 +11,19 @@
 	}
 
 	&--secondary {
-		@include buttonTheme(var(--color-secondary), var(--text-on-secondary));
+		@include buttonTheme(--color-secondary, --text-on-secondary);
 	}
 
 	&--danger {
-		@include buttonTheme(var(--color-danger), var(--text-on-danger));
+		@include buttonTheme(--color-danger, --text-on-danger);
 	}
 
 	&--success {
-		@include buttonTheme(var(--color-success), var(--text-on-success));
+		@include buttonTheme(--color-success, --text-on-success);
 	}
 
 	&--warning {
-		@include buttonTheme(var(--color-warning), var(--text-on-warning));
+		@include buttonTheme(--color-warning, --text-on-warning);
 	}
 
 	&--circle {
@@ -32,7 +32,6 @@
 		width: rem(65px);
 		height: rem(65px);
 		border-radius: 100%;
-		filter: drop-shadow(0px rem(4px) rem(10px) rgba(0, 0, 0, 0.25));
 		text-align: center;
 		line-height: rem(65px);
 		font-size: rem(48px);
@@ -44,7 +43,7 @@
 		min-width: rem(50px);
 
 		&:hover {
-			backdrop-filter: brightness(90%);
+			background-color: var(--bg-color-1);
 		}
 	}
 
@@ -60,7 +59,7 @@
 		height: var(--icon-size);
 
 		&:hover {
-			background-color: rgba(255, 255, 255, 0.1);
+			background-color: var(--bg-color-6);
 		}
 	}
 }

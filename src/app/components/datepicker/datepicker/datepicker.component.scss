@@ -13,7 +13,8 @@
 }
 
 .datepicker {
-	background-color: var(--bg-color-1);
+	background-color: var(--bg-color-0);
+	color: var(--text-color-0);
 	border-radius: rem(3px);
 
 	&__header {
@@ -24,7 +25,7 @@
 
 	&__nav-btn {
 		&--disabled {
-			color: var(--text-color-1);
+			color: var(--text-color-3);
 			cursor: not-allowed;
 		}
 
@@ -63,11 +64,11 @@
 		}
 
 		&--selected {
-			box-shadow: inset 0px 0px 0px rem(2px) var(--color-warning);
+			box-shadow: inset 0px 0px 0px rem(2px) var(--color-secondary);
 		}
 
 		&--disabled {
-			color: var(--text-color-1);
+			color: var(--text-color-3);
 			cursor: not-allowed;
 
 			&:hover {

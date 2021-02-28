@@ -4,7 +4,6 @@
 
 .summary {
 	border-radius: rem(25px);
-	// box-shadow: rem(-3px) rem(4px) rem(7px) rgba(0, 0, 0, 0.25);
 	display: grid;
 	font-size: 1rem;
 	align-items: center;
@@ -49,7 +48,7 @@
 		@include summaryCardTheme(
 			var(--color-primary),
 			var(--text-on-primary),
-			var(--text-color-1)
+			var(--text-on-primary)
 		);
 	}
 

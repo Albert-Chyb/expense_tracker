@@ -1,23 +1,11 @@
 @mixin summaryCardTheme($bgColor, $textColor, $subtleTextColor) {
 	background-color: $bgColor;
 	color: $textColor;
-
-	& .summary__title {
-		color: $subtleTextColor;
-	}
-
-	& .summary__icon {
-		color: $subtleTextColor;
-	}
-
-	& .summary__currency {
-		color: $subtleTextColor;
-	}
 }
 
 @mixin buttonTheme($bgColor, $textColor) {
-	background-color: $bgColor;
-	color: $textColor;
+	background-color: var(#{$bgColor});
+	color: var(#{$textColor});
 	padding: rem(15px) rem(20px);
 	border-radius: rem(7px);
 	min-width: rem(100px);
@@ -28,7 +16,11 @@
 	}
 
 	&:not(:disabled):hover {
-		filter: brightness(0.95);
+		background-color: var(#{$bgColor + '-1'});
+	}
+
+	&:not(:disabled):active {
+		background-color: var(#{$bgColor + '-2'});
 	}
 }
 

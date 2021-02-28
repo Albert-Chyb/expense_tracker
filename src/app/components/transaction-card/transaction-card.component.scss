@@ -1,70 +1,79 @@
+@import '../../sass/themes/theme';
 @import '../../sass/utils/functions';
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
 
 :host {
-  display: block;
+	display: block;
 }
 
 .transaction {
-  display: grid;
-  grid-template-columns: rem(50px) auto minmax(rem(60px), rem(80px));
-  grid-template-rows: repeat(2, 1fr);
-  grid-template-areas:
-    'icon title amount'
-    'icon description amount'
-  ;
-  column-gap: rem(10px);
-  background-color: var(--bg-color-1);
-  padding: rem(15px);
-  border-radius: rem(15px);
+	display: grid;
+	grid-template-columns: rem(50px) auto minmax(rem(60px), rem(80px));
+	grid-template-rows: repeat(2, 1fr);
+	grid-template-areas:
+		'icon title amount'
+		'icon description amount';
+	column-gap: rem(10px);
 
-  &__icon {
-    grid-area: icon;
-    place-items: center;
-  }
+	@include elevation(2);
 
-  &__title {
-    grid-area: title;
-    align-self: center;
-    font-size: rem(14px);
-    margin-bottom: 0px;
-  }
+	&:hover {
+		@include elevation(4);
+	}
 
-  &__description {
-    grid-area: description;
-    color: var(--text-color-1);
-    font-size: rem(12px);
-    align-self: center;
-    margin-bottom: 0px;
-    @include ellipsis();
-  }
+	&:active {
+		@include elevation(1);
+	}
 
-  &__amount {
-    grid-area: amount;
-    place-self: center;
-    margin-bottom: 0px;
-  }
+	padding: rem(15px);
+	border-radius: rem(15px);
+
+	&__icon {
+		grid-area: icon;
+		place-items: center;
+	}
+
+	&__title {
+		grid-area: title;
+		align-self: center;
+		font-size: rem(14px);
+		margin-bottom: 0px;
+	}
+
+	&__description {
+		grid-area: description;
+		color: var(--text-color-1);
+		font-size: rem(12px);
+		align-self: center;
+		margin-bottom: 0px;
+		@include ellipsis();
+	}
+
+	&__amount {
+		grid-area: amount;
+		place-self: center;
+		margin-bottom: 0px;
+	}
 }
 
 .transaction--ghost {
-  row-gap: 10px;
+	row-gap: 10px;
 
-  .transaction__icon {
-    @include loadingPlaceholder();
-    height: 50px;
-  }
+	.transaction__icon {
+		@include loadingPlaceholder();
+		height: 50px;
+	}
 
-  .transaction__title {
-    @include loadingPlaceholder();
-  }
+	.transaction__title {
+		@include loadingPlaceholder();
+	}
 
-  .transaction__description {
-    @include loadingPlaceholder();
-  }
+	.transaction__description {
+		@include loadingPlaceholder();
+	}
 
-  .transaction__amount {
-    @include loadingPlaceholder();
-  }
-
+	.transaction__amount {
+		@include loadingPlaceholder();
+	}
 }

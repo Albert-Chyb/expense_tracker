@@ -2,11 +2,12 @@
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
 @import '../../sass/utils/mediaBreakpoints';
+@import '../../sass/themes/theme';
 
 .period {
-	background-color: var(--color-primary);
+	@include elevation(2);
 	border-radius: rem(10px);
-	color: var(--text-on-primary);
+	color: var(--text-color-0);
 	padding: rem(20px) 0px;
 	margin-bottom: rem(10px);
 

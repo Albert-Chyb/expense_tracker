@@ -1,3 +1,4 @@
+@import '../../sass/themes/theme';
 @import 'utils/functions';
 @import 'utils/variables';
 @import 'utils/mixins';
@@ -8,7 +9,6 @@
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
-	background-color: var(--bg-color-1);
 	height: $mainNavHeight;
 	display: flex;
 	flex-wrap: nowrap;
@@ -18,6 +18,8 @@
 	padding-bottom: env(safe-area-inset-bottom);
 	transform: translateY(calc(100% + env(safe-area-inset-bottom)));
 	transition: transform 0.3s ease-out;
+
+	@include elevation(24);
 
 	&--shown {
 		transition: transform 0.3s ease-in;
@@ -32,7 +34,7 @@
 		font-weight: 400;
 
 		&--active {
-			color: var(--color-warning);
+			color: var(--color-secondary);
 		}
 
 		&::after {

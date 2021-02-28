@@ -2,6 +2,7 @@
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
 @import '../../sass/utils/mediaBreakpoints';
+@import '../../sass/themes/theme';
 
 .home {
 	&__add-transaction {
@@ -77,16 +78,6 @@
 	&__transaction {
 		margin-bottom: rem(10px);
 		transition: transform 150ms ease-in-out;
-
-		@media (hover: hover) {
-			&:hover {
-				transform: scale(1.01);
-			}
-		}
-
-		&:active {
-			transform: scale(0.97);
-		}
 	}
 
 	h2#{&}__heading {

@@ -34,14 +34,14 @@
 			width: rem(40px);
 			border-radius: rem(20px);
 			background-color: var(--bg-color-1);
-			border: var(--bg-color-2) rem(2px) solid;
+			border: var(--bg-color-6) rem(2px) solid;
 			z-index: 1;
 		}
 
 		// The dot inside
 		&::before {
 			@include square(rem(16px));
-			background-color: var(--color-warning);
+			background-color: var(--color-secondary);
 			z-index: 2;
 			border-radius: 100%;
 			top: rem(2px);
