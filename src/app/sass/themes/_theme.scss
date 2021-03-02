@@ -1,3 +1,23 @@
+@use 'sass:color';
+@use 'sass:list';
+@use 'sass:map';
+
+$dark-theme-colors: (
+	'primary': hsl(40, 100%, 64%),
+	'secondary': hsl(206, 100%, 68%),
+	'success': hsl(131, 76%, 69%),
+	'danger': hsl(16, 100%, 62%),
+	'warning': hsl(60, 100%, 68%),
+);
+
+$light-theme-colors: (
+	'primary': hsl(35, 96%, 49%),
+	'secondary': hsl(206, 100%, 31%),
+	'success': hsl(140, 100%, 27%),
+	'danger': hsl(0, 100%, 38%),
+	'warning': hsl(61, 100%, 40%),
+);
+
 @mixin shadow-elevation($dp) {
 	@if $dp==0 {
 		box-shadow: none;
@@ -45,5 +65,52 @@
 		@include shadow-elevation($dp);
 		transition: box-shadow 0.1s linear;
 		background: var(--bg-color-0);
+	}
+}
+
+@mixin generate-color-variables($theme, $name, $color) {
+	$modification: 1;
+	@if $theme == 'dark' {
+		$modification: -1;
+	}
+
+	--color-#{$name}-hsl: #{color.hue($color)}, #{color.saturation($color)},
+		#{color.lightness($color)};
+	--color-#{$name}: #{$color};
+	--color-#{$name}-0: #{$color};
+	--color-#{$name}-1: #{color.adjust($color, $lightness: 5 * $modification)};
+	--color-#{$name}-2: #{color.adjust($color, $lightness: 10 * $modification)};
+}
+
+@function get-theme-colors($theme) {
+	@if ($theme == 'dark') {
+		@return $dark-theme-colors;
+	} @else if($theme == 'light') {
+		@return $light-theme-colors;
+	} @else {
+		@error "Unknown theme !";
+	}
+}
+
+@function get-color($color-name, $variant) {
+	$variants: '0', '1', '2', 'hsl';
+	$colors: get-theme-colors('dark');
+
+	@if not list.index($variants, $variant) {
+		@error 'Unknown variant. Expected: #{list.zip($variants)}';
+	}
+	@if not map.get($colors, $color-name) {
+		@error 'Unknown color.';
+	}
+
+	@return --color-#{$color-name}-#{$variant};
+}
+
+@mixin generate-color-palette($theme) {
+	$colors: get-theme-colors($theme);
+	$text: get-color('primary', 'hsl');
+
+	@each $color-name, $color in $colors {
+		@include generate-color-variables($theme, $color-name, $color);
 	}
 }

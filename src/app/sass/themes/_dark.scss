@@ -1,23 +1,7 @@
+@use './theme';
+
 body.theme--dark {
-	--color-primary: hsl(40, 100%, 64%);
-	--color-primary-1: hsl(40, 100%, 60%);
-	--color-primary-2: hsl(40, 100%, 55%);
-
-	--color-secondary: hsl(206, 100%, 68%);
-	--color-secondary-1: hsl(206, 100%, 63%);
-	--color-secondary-2: hsl(206, 100%, 57%);
-
-	--color-success: hsl(131, 76%, 69%);
-	--color-success-1: hsl(131, 76%, 63%);
-	--color-success-2: hsl(131, 76%, 57%);
-
-	--color-danger: hsl(16, 100%, 62%);
-	--color-danger-1: hsl(16, 100%, 57%);
-	--color-danger-2: hsl(16, 100%, 52%);
-
-	--color-warning: hsl(60, 100%, 68%);
-	--color-warning-1: hsl(60, 100%, 63%);
-	--color-warning-2: hsl(60, 100%, 58%);
+	@include theme.generate-color-palette('dark');
 
 	--text-on-primary: hsl(0, 0%, 0%);
 	--text-on-secondary: hsl(0, 0%, 0%);
