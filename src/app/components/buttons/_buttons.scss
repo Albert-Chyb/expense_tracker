@@ -1,0 +1,83 @@
+@use '../../sass/themes/theme';
+
+@mixin basic-btn-theme($color-name) {
+	&--#{$color-name} {
+		--bg-color: hsla(#{theme.get-color($color-name, 'hsl')}, 0);
+		--font-color: hsla(#{theme.get-color($color-name, 'hsl')}, 1);
+		--bg-on-hover-color: hsla(#{theme.get-color($color-name, 'hsl')}, 0.1);
+	}
+}
+
+@mixin filled-btn-theme($color-name) {
+	&--#{$color-name} {
+		--bg-color: #{theme.get-color($color-name, '0')};
+		--bg-on-hover-color: #{theme.get-color($color-name, '0')};
+		--font-color: var(--text-on-#{$color-name});
+	}
+}
+
+%button {
+	--bg-color: transparent;
+	--bg-on-hover-color: transparent;
+	--font-color: inherit;
+	--border: none;
+
+	background-color: var(--bg-color);
+	color: var(--font-color);
+	border: var(--border);
+
+	padding: rem(10px) rem(15px);
+	border-radius: rem(3px);
+	cursor: pointer;
+	outline: none;
+	user-select: none;
+	font: {
+		size: rem(14px);
+		weight: 700;
+	}
+
+	&[disabled] {
+		cursor: default;
+		opacity: 0.3;
+
+		&:hover {
+			background-color: var(--bg-color);
+		}
+	}
+
+	&:hover {
+		background-color: var(--bg-on-hover-color);
+	}
+
+	&:link,
+	&:visited,
+	&:hover {
+		color: var(--font-color);
+	}
+}
+
+.basic-btn {
+	@extend %button;
+	--bg-color: hsla(0, 0%, 100%, 0);
+	--bg-on-hover-color: hsla(0, 0%, 100%, 0.1);
+	--font-color: hsl(0, 0%, 100%);
+
+	&--stroked {
+		--border: #{rem(1px)} solid var(--text-color-3);
+	}
+
+	@each $name in theme.get-colors-names() {
+		@include basic-btn-theme($name);
+	}
+}
+
+.filled-btn {
+	@extend %button;
+	--bg-color: var(--bg-color-6);
+	--bg-on-hover-color: var(--bg-color);
+	--font-color: var(--text-color-0);
+
+	@each $name in theme.get-colors-names() {
+		@include filled-btn-theme($name);
+	}
+}
