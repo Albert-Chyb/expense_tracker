@@ -5,9 +5,8 @@ import {
 	IRippleProperty,
 	RippleCenterPositioningStrategy,
 	RippleDynamicPositioningStrategy,
-	RipplePositionStrategy,
-	RipplePositionStrategyName,
-	RippleTheme,
+	RipplePositioningStrategy,
+	RipplePositioningStrategyName,
 } from './ripple.models';
 
 /**
@@ -17,7 +16,7 @@ import {
  * 2. It sets position to relative
  * 3. It sets overflow to hidden
  *
- * If those properties somehow collides with your element, consider wrapping it
+ * If those properties somehow collides with your styles, consider wrapping it
  * in a div, and attach directive to it.
  */
 @Directive({
@@ -51,19 +50,11 @@ export class Ripple {
 	};
 
 	/**
-	 * Changes the theme of the ripple.
-	 *
-	 * For example if the ripple is on a darker background you might want to switch it to the light
-	 * theme to be more visible, and vice-versa.
-	 */
-	@Input('theme') theme: RippleTheme = 'light';
-
-	/**
 	 * How position of the ripple is calculated.
 	 * If it's set to dynamic, the ripple is placed based on where user clicked.
 	 * If it's set to center, the ripple always begins at the center of the element.
 	 */
-	@Input('position') position: RipplePositionStrategyName = 'dynamic';
+	@Input('position') position: RipplePositioningStrategyName = 'dynamic';
 
 	/**
 	 * Starts the ripple animation.
@@ -77,7 +68,8 @@ export class Ripple {
 		this._setRippleProperties(
 			{ name: 'x', value: `${x}px` },
 			{ name: 'y', value: `${y}px` },
-			{ name: 'size', value: `${size}px` }
+			{ name: 'size', value: `${size}px` },
+			{ name: 'color', value: this._fontColor }
 		);
 
 		setTimeout(() => {
@@ -129,8 +121,8 @@ export class Ripple {
 	 * @param strategy Name of a strategy
 	 */
 	private _getRipplePositioningStrategy(
-		strategy: RipplePositionStrategyName
-	): RipplePositionStrategy {
+		strategy: RipplePositioningStrategyName
+	): RipplePositioningStrategy {
 		switch (strategy) {
 			case 'dynamic':
 				return RippleDynamicPositioningStrategy;
@@ -146,5 +138,10 @@ export class Ripple {
 	/** Host element. */
 	private get _el(): HTMLElement {
 		return this._hostRef.nativeElement;
+	}
+
+	private get _fontColor(): string {
+		const { color } = getComputedStyle(this._el);
+		return color;
 	}
 }

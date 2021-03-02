@@ -1,11 +1,11 @@
 export type RipplePropertyName = 'duration' | 'x' | 'y' | 'size' | 'color';
-export type RipplePositionStrategyName = 'center' | 'dynamic';
-export type RippleTheme = 'dark' | 'light';
+export type RipplePositioningStrategyName = 'center' | 'dynamic';
 
 export interface IRippleProperty {
 	name: RipplePropertyName;
 	value: string;
 }
+
 export interface IRippleConfig {
 	x: number;
 	y: number;
@@ -19,7 +19,7 @@ export interface IRipplePositioningStrategy {
 	): { x: number; y: number };
 }
 
-export abstract class RipplePositionStrategy
+export abstract class RipplePositioningStrategy
 	implements IRipplePositioningStrategy {
 	getPosition(
 		$event: MouseEvent,
@@ -29,7 +29,7 @@ export abstract class RipplePositionStrategy
 	}
 }
 
-export class RippleDynamicPositioningStrategy extends RipplePositionStrategy {
+export class RippleDynamicPositioningStrategy extends RipplePositioningStrategy {
 	static getPosition($event: MouseEvent, hostRef: HTMLElement) {
 		const { offsetX, offsetY } = $event;
 
@@ -40,7 +40,7 @@ export class RippleDynamicPositioningStrategy extends RipplePositionStrategy {
 	}
 }
 
-export class RippleCenterPositioningStrategy extends RipplePositionStrategy {
+export class RippleCenterPositioningStrategy extends RipplePositioningStrategy {
 	static getPosition($event: MouseEvent, hostRef: HTMLElement) {
 		const { width, height } = hostRef.getBoundingClientRect();
 
