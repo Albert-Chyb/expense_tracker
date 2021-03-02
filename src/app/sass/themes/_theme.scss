@@ -92,6 +92,10 @@ $light-theme-colors: (
 	}
 }
 
+@function get-colors-names() {
+	@return map.keys($dark-theme-colors);
+}
+
 @function get-color($color-name, $variant) {
 	$variants: '0', '1', '2', 'hsl';
 	$colors: get-theme-colors('dark');
@@ -103,7 +107,7 @@ $light-theme-colors: (
 		@error 'Unknown color.';
 	}
 
-	@return --color-#{$color-name}-#{$variant};
+	@return var(--color-#{$color-name}-#{$variant});
 }
 
 @mixin generate-color-palette($theme) {
