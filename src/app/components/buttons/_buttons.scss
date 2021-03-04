@@ -1,6 +1,11 @@
 @use '../../sass/themes/theme';
 
-@mixin basic-btn-theme($color-name) {
+// Mixin for buttons that their normal state has no background.
+@mixin empty-bg-theme($color-name) {
+	--bg-color: hsla(var(--text-color-hsl), 0);
+	--bg-on-hover-color: hsla(var(--text-color-hsl), 0.1);
+	--font-color: var(--text-color-0);
+
 	&--#{$color-name} {
 		--bg-color: hsla(#{theme.get-color($color-name, 'hsl')}, 0);
 		--font-color: hsla(#{theme.get-color($color-name, 'hsl')}, 1);
@@ -8,7 +13,12 @@
 	}
 }
 
-@mixin filled-btn-theme($color-name) {
+// Mixin for buttons that their normal state has a solid background.
+@mixin solid-bg-theme($color-name) {
+	--bg-color: var(--bg-color-12);
+	--bg-on-hover-color: var(--bg-color);
+	--font-color: var(--text-color-0);
+
 	&--#{$color-name} {
 		--bg-color: #{theme.get-color($color-name, '0')};
 		--bg-on-hover-color: #{theme.get-color($color-name, '0')};
@@ -16,6 +26,7 @@
 	}
 }
 
+// Base styles for every button
 %button {
 	--bg-color: transparent;
 	--bg-on-hover-color: transparent;
@@ -54,30 +65,57 @@
 	&:hover {
 		color: var(--font-color);
 	}
-}
 
-.basic-btn {
-	@extend %button;
-	--bg-color: hsla(0, 0%, 100%, 0);
-	--bg-on-hover-color: hsla(0, 0%, 100%, 0.1);
-	--font-color: hsl(0, 0%, 100%);
-
-	&--stroked {
-		--border: #{rem(1px)} solid var(--text-color-3);
-	}
-
-	@each $name in theme.get-colors-names() {
-		@include basic-btn-theme($name);
+	// Font awesome somehow breaks the offset property present in the click event in JS.
+	// Setting removing pointer events from the icon inside the button fixes this issue.
+	& i[class^='fa'] {
+		pointer-events: none;
 	}
 }
 
-.filled-btn {
+// Empty background buttons
+.icon-btn,
+.basic-btn,
+.stroked-btn {
 	@extend %button;
-	--bg-color: var(--bg-color-6);
-	--bg-on-hover-color: var(--bg-color);
-	--font-color: var(--text-color-0);
 
 	@each $name in theme.get-colors-names() {
-		@include filled-btn-theme($name);
+		@include empty-bg-theme($name);
 	}
+}
+
+.stroked-btn {
+	--border: #{rem(1px)} solid var(--text-color-3);
+}
+
+.icon-btn {
+	$size: rem(45px);
+
+	padding: 0px;
+	border-radius: 50%;
+	height: $size;
+	width: $size;
+	line-height: $size;
+	text-align: center;
+}
+
+// Solid background buttons
+.filled-btn,
+.fab-btn {
+	@extend %button;
+
+	@each $name in theme.get-colors-names() {
+		@include solid-bg-theme($name);
+	}
+}
+
+.fab-btn {
+	$size: rem(65px);
+
+	border-radius: 50%;
+	width: $size;
+	height: $size;
+	line-height: $size;
+	text-align: center;
+	padding: 0px;
 }

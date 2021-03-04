@@ -17,10 +17,10 @@ import {
  * 3. It sets overflow to hidden
  *
  * If those properties somehow collides with your styles, consider wrapping it
- * in a div, and attach directive to it.
+ * in a div, and attach the directive to it.
  */
 @Directive({
-	selector: '[ripple]',
+	selector: '[ripple], [appButton]',
 	host: {
 		class: 'ripple',
 		'(mousedown)': '_onHostClick($event)',
