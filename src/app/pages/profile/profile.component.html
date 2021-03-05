@@ -13,7 +13,12 @@
 			ponowne otwarcie okresu.
 		</p>
 
-		<button class="btn btn--secondary btn--block" (click)="endPeriod()">
+		<button
+			appButton
+			btnColor="primary"
+			class="profile__btn"
+			(click)="endPeriod()"
+		>
 			Zakończ
 		</button>
 	</section>
@@ -28,7 +33,12 @@
 				Otwórz ponownie obecny okres rozliczeniowy. Masz czas do północy.
 			</p>
 
-			<button class="btn btn--secondary btn--block" (click)="openPeriod()">
+			<button
+				appButton
+				btnColor="primary"
+				class="profile__btn"
+				(click)="openPeriod()"
+			>
 				Otwórz
 			</button>
 		</section>
@@ -41,7 +51,12 @@
 			Wyloguj się z obecnego konta.
 		</p>
 
-		<button class="btn btn--secondary btn--block" (click)="logOut()">
+		<button
+			appButton
+			btnColor="primary"
+			class="profile__btn"
+			(click)="logOut()"
+		>
 			Wyloguj się
 		</button>
 	</section>

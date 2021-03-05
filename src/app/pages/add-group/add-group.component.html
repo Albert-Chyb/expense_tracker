@@ -18,8 +18,10 @@
 
 	<button
 		(click)="add()"
-		class="btn btn--secondary btn--block"
+		appButton
+		btnColor="secondary"
 		[disabled]="form.invalid"
+		class="group__add"
 	>
 		Zapisz
 	</button>

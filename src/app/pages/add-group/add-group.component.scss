@@ -3,18 +3,21 @@
 @import 'utils/mixins';
 
 .group {
+	&__heading {
+		margin: rem(20px) 0px;
+		font-size: rem(18px);
+		font-weight: 500;
+	}
 
-  &__heading {
-    margin: rem(20px) 0px;
-    font-size: rem(18px);
-    font-weight: 500;
-  }
+	&__transaction-preview {
+		margin: rem(20px) 0px;
+	}
 
-  &__transaction-preview {
-    margin: rem(20px) 0px;
-  }
+	&__errors {
+		margin-top: rem(10px);
+	}
 
-  &__errors {
-    margin-top: rem(10px);
-  }
+	&__add {
+		width: 100%;
+	}
 }

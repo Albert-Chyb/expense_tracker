@@ -1,11 +1,14 @@
-import { NgModule } from '@angular/core';
+import { RippleModule } from './../ripple/ripple.module';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+
+import { ButtonModule } from './../buttons/button.module';
+import { DatepickerInputDirective } from './datepicker-value-accessor';
 import {
 	DatepickerComponent,
 	DatepickerManager,
 	TriggerDatepickerDirective,
 } from './datepicker/datepicker.component';
-import { DatepickerInputDirective } from './datepicker-value-accessor';
 
 @NgModule({
 	declarations: [
@@ -14,7 +17,7 @@ import { DatepickerInputDirective } from './datepicker-value-accessor';
 		DatepickerManager,
 		TriggerDatepickerDirective,
 	],
-	imports: [CommonModule],
+	imports: [CommonModule, ButtonModule, RippleModule],
 	exports: [
 		DatepickerComponent,
 		DatepickerInputDirective,

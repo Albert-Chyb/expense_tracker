@@ -45,7 +45,8 @@
 			<button
 				[triggerDatepicker]="datepicker"
 				type="button"
-				class="btn btn--icon"
+				appButton
+				btnType="icon"
 			>
 				<i class="fas fa-calendar-alt"></i>
 			</button>
@@ -59,9 +60,11 @@
 
 	<div class="transaction__actions">
 		<button
+			appButton
+			btnColor="secondary"
 			[disabled]="form.invalid"
 			(click)="addTransaction()"
-			class="btn btn--secondary btn--block transaction__action"
+			class="transaction__action"
 		>
 			Dodaj
 		</button>

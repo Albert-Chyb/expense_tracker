@@ -6,8 +6,8 @@
 	<p class="group__name">{{ group.name }}</p>
 
 	<div class="group__actions" *ngIf="isEditable">
-		<button class="btn" (click)="delete()">
-			<i class="group__action group__action--danger far fa-trash-alt fa-lg"></i>
+		<button appButton btnType="icon" btnColor="danger" (click)="delete()">
+			<i class="far fa-trash-alt"></i>
 		</button>
 	</div>
 </section>

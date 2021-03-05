@@ -5,16 +5,22 @@
 	</p>
 	<div class="dialog__actions">
 		<button
-			class="btn btn--success btn--block dialog__action"
-			(click)="confirm()"
-		>
-			OK
-		</button>
-		<button
-			class="btn btn--danger btn--block dialog__action"
+			appButton
+			btnType="basic"
+			btnColor="danger"
+			class="dialog__action"
 			(click)="reject()"
 		>
 			Anuluj
+		</button>
+		<button
+			appButton
+			btnType="basic"
+			btnColor="success"
+			class="dialog__action"
+			(click)="confirm()"
+		>
+			OK
 		</button>
 	</div>
 </section>

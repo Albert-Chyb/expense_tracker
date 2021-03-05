@@ -21,11 +21,14 @@
 </ng-container>
 
 <a
+	appButton
+	btnType="fab"
+	btnColor="secondary"
 	aria-label="Dodaj nową grupę"
-	class="btn btn--circle groups__add"
+	class="groups__add"
 	[routerLink]="Pages.AddGroup"
-	>+</a
->
+	><i class="fas fa-plus"></i
+></a>
 
 <ng-template #loader>
 	<loader [isFixed]="true"></loader>

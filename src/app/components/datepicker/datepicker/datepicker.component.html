@@ -1,8 +1,10 @@
 <section class="datepicker">
 	<header class="datepicker__header">
 		<button
+			appButton
+			btnType="stroked"
 			type="button"
-			class="datepicker__choose-date btn btn--empty"
+			class="datepicker__choose-date"
 			(click)="onMainBtnClick()"
 		>
 			{{ date | date: 'dd MMM yyyy' | uppercase }}
@@ -11,22 +13,22 @@
 
 		<div class="datepicker__nav">
 			<button
+				appButton
+				btnType="icon"
 				type="button"
-				class="btn btn--icon datepicker__nav-btn datepicker__nav-btn--prev"
-				[ngClass]="{
-					'datepicker__nav-btn--disabled': !canGeneratePrev
-				}"
+				class="datepicker__nav-btn datepicker__nav-btn--prev"
+				[disabled]="!canGeneratePrev"
 				(click)="prev()"
 			>
 				<i class="fas fa-angle-left"></i>
 			</button>
 
 			<button
+				appButton
+				btnType="icon"
 				type="button"
-				class="btn btn--icon datepicker__nav-btn datepicker__nav-btn--next"
-				[ngClass]="{
-					'datepicker__nav-btn--disabled': !canGenerateNext
-				}"
+				class="datepicker__nav-btn datepicker__nav-btn--next"
+				[disabled]="!canGenerateNext"
 				(click)="next()"
 			>
 				<i class="fas fa-angle-right"></i>
