@@ -38,6 +38,8 @@ export enum Pages {
 	/** Page where initial data can be created */
 	SetupAccount = '/setup-account',
 
+	Dashboard = '/dashboard',
+
 	/** 404 fallback */
 	NotFound = '**',
 }

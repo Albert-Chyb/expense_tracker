@@ -1,3 +1,4 @@
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { DataUnavailableGuard } from './guards/data-unavailable/data-unavailable.guard';
 import { DataAvailableGuard } from './guards/data-available/data-available.guard';
@@ -97,6 +98,15 @@ const routes: Routes = [
 			authGuardPipe: redirectUnauthorizedToLogin,
 		},
 		canActivate: [DataUnavailableGuard, AngularFireAuthGuard],
+	},
+	{
+		path: 'dashboard',
+		component: DashboardComponent,
+		data: {
+			name: 'Statystyki',
+			authGuardPipe: redirectUnauthorizedToLogin,
+		},
+		canActivate: [DataAvailableGuard, AngularFireAuthGuard],
 	},
 	{
 		path: '**',

@@ -57,6 +57,7 @@ import { SetupAccountComponent } from './pages/setup-account/setup-account.compo
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
 import { ButtonModule } from './components/buttons/button.module';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 @NgModule({
 	declarations: [
@@ -86,6 +87,7 @@ import { ButtonModule } from './components/buttons/button.module';
 		ConfirmDialogComponent,
 		DialogContainerComponent,
 		ConfirmActionDirective,
+		DashboardComponent,
 	],
 	imports: [
 		BrowserModule,
