@@ -10,7 +10,7 @@ import {
 } from './ripple.models';
 
 /**
- * Gives element ripple every time user clicks on it.
+ * Gives element ripple every time user clicks on it. The ripple has a color of the host`s font color.
  * You should be aware of a few things that may break your styles:
  * 1. It uses ::before pseudo element
  * 2. It sets position to relative
@@ -35,7 +35,7 @@ export class Ripple {
 	) {}
 
 	/** The duration of the ripple animation. */
-	private _duration = 300;
+	private _duration = 500;
 
 	/** Indicates if the ripple animation is currently playing. */
 	private _isRippling = false;
