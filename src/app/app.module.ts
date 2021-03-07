@@ -1,3 +1,4 @@
+import { NgxEchartsModule } from 'ngx-echarts';
 import { PortalModule } from '@angular/cdk/portal';
 import {
 	APP_INITIALIZER,
@@ -58,6 +59,10 @@ import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
 import { ButtonModule } from './components/buttons/button.module';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { CurrentWeekChartComponent } from './components/dashboard/current-week-chart/current-week-chart.component';
+import { LastMonthsChartComponent } from './components/dashboard/last-months-chart/last-months-chart.component';
+import { GroupedOutcomesChartComponent } from './components/dashboard/grouped-outcomes-chart/grouped-outcomes-chart.component';
+import { DashboardComponentsModule } from './components/dashboard/dashboard-components.module';
 
 @NgModule({
 	declarations: [
@@ -110,6 +115,10 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 		DatepickerModule,
 		RippleModule,
 		ButtonModule,
+		NgxEchartsModule.forRoot({
+			echarts: () => import('echarts'),
+		}),
+		DashboardComponentsModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

@@ -1,1 +1,98 @@
-<p>dashboard works!</p>
+<div class="dashboard">
+	<section class="card dashboard__card dashboard__card--big">
+		<header class="card__header card__header--no-margin">
+			<h2>Bierzący tydzień</h2>
+		</header>
+
+		<div class="card__body">
+			<dashboard-current-week-chart
+				[data]="[1, 20, 3, 4, 5, 6, 7]"
+			></dashboard-current-week-chart>
+		</div>
+	</section>
+
+	<section class="card">
+		<header class="card__header card__header--no-margin">
+			<h2>Ostatnie miesiące</h2>
+		</header>
+
+		<div class="card__body">
+			<last-months-chart
+				[data]="[
+					[1, 2, 3, 4, 5, 6],
+					[-7, -6, -5, -4, -3, -2]
+				]"
+			>
+			</last-months-chart>
+		</div>
+	</section>
+
+	<div class="dashboard__subdashboard">
+		<section class="card card--reversed">
+			<header class="card__header">
+				<h2>Zarobiono więcej niż miesiąc temu</h2>
+			</header>
+
+			<div class="card__body"><p>290 zł</p></div>
+		</section>
+
+		<section class="card card--reversed">
+			<header class="card__header">
+				<h2>Wydano mniej niż miesiąc temu</h2>
+			</header>
+
+			<div class="card__body"><p>175 zł</p></div>
+		</section>
+
+		<section class="card card--reversed">
+			<header class="card__header">
+				<h2>Oszczędności</h2>
+			</header>
+
+			<div class="card__body"><p>155 zł</p></div>
+		</section>
+	</div>
+
+	<section class="card dashboard__card dashboard__card--big">
+		<header class="card__header card__header--no-margin">
+			<h2>Wydatki w grupach</h2>
+		</header>
+
+		<div class="card__body">
+			<grouped-outcomes-chart
+				[data]="[
+				{ value: 456.23, name: 'Jedzenie' },
+				{ value: 356.23, name: 'Imprezy' },
+				{ value: 326.23, name: 'Kosmetyki' },
+				{ value: 236.23, name: 'Transport' },
+				{ value: 756.23, name: 'Paliwo' },
+				{ value: 126.23, name: 'Zwierzęta' },
+			]"
+			></grouped-outcomes-chart>
+		</div>
+	</section>
+
+	<section class="card card--reversed">
+		<header class="card__header">
+			<h2>Zarobiono w tym roku</h2>
+		</header>
+
+		<div class="card__body"><p>2000 zł</p></div>
+	</section>
+
+	<section class="card card--reversed">
+		<header class="card__header">
+			<h2>Wydano w tym roku</h2>
+		</header>
+
+		<div class="card__body"><p>1785 zł</p></div>
+	</section>
+
+	<section class="card card--reversed">
+		<header class="card__header">
+			<h2>Zaoszczędzono w tym roku</h2>
+		</header>
+
+		<div class="card__body"><p>260 zł</p></div>
+	</section>
+</div>

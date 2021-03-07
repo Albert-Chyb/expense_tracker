@@ -64,6 +64,29 @@ export class TransactionsService {
 	}
 
 	/**
+	 * Returns transaction between two dates.
+	 * @param startAt The earliest date
+	 * @param endAt The latest date
+	 */
+	getBetween(startAt: Date, endAt: Date): Observable<ITransaction[]> {
+		if (startAt > endAt)
+			throw new Error('Start date cannot be later that end date.');
+
+		return this._user.getUid$().pipe(
+			switchMap(uid =>
+				this._afStore
+					.collection<ITransaction>(`users/${uid}/transactions/`, ref =>
+						ref
+							.where('date', '>=', startAt)
+							.where('date', '<=', endAt)
+							.orderBy('date', 'desc')
+					)
+					.valueChanges()
+			)
+		);
+	}
+
+	/**
 	 * Saves transaction in the database.
 	 * Automatically replaces transaction id in group field with actual data of the group.
 	 * @param transaction Transaction object to save on the server

@@ -100,4 +100,19 @@ export class PeriodsService {
 			)
 		);
 	}
+
+	getClosedBetween(startAt: Date, endAt: Date): Observable<IClosedPeriod[]> {
+		return this._user.getUid$().pipe(
+			switchMap(uid =>
+				this._afStore
+					.collection<IClosedPeriod>(`users/${uid}/periods`, ref =>
+						ref
+							.where('isClosed', '==', true)
+							.where('date.end', '>=', startAt)
+							.where('date.end', '<=', endAt)
+					)
+					.valueChanges({ idField: 'id' })
+			)
+		);
+	}
 }

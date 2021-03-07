@@ -1,0 +1,56 @@
+@use '../../sass/themes/theme';
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
+.card {
+	@include theme.elevation(1);
+	border-radius: rem(6px);
+	padding: rem(20px);
+
+	&__header {
+		&--no-margin {
+			h2 {
+				margin: 0px;
+			}
+		}
+	}
+
+	&--reversed &__header * {
+		font-size: rem(16px);
+		color: var(--text-color-2);
+	}
+
+	&--reversed &__body * {
+		font-size: rem(36px);
+	}
+}
+
+.dashboard {
+	$gap: rem(10px);
+
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: $gap;
+
+	&__subdashboard {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		& > * {
+			flex-basis: 100%;
+			&:not(:last-child) {
+				margin-bottom: $gap;
+			}
+		}
+	}
+
+	&__card {
+		grid-column: span 1;
+
+		&--big {
+			grid-column: span 2;
+		}
+	}
+}
