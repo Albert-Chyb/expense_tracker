@@ -8,6 +8,15 @@ import { Cacheable } from 'src/app/common/cash/cashable';
 import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
 import { UserService } from './../user/user.service';
 
+interface QuerySettings {
+	limit?: number;
+	orderDirection?: 'asc' | 'desc';
+}
+const DEFAULT_QUERY_SETTINGS: QuerySettings = {
+	limit: null,
+	orderDirection: 'desc',
+};
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -88,14 +97,25 @@ export class PeriodsService {
 	@Cacheable({
 		tableName: 'closedPeriods',
 	})
-	getAllClosed(): Observable<IClosedPeriod[]> {
+	getAllClosed(settings?: QuerySettings): Observable<IClosedPeriod[]> {
+		const { limit, orderDirection } = Object.assign(
+			{ ...DEFAULT_QUERY_SETTINGS },
+			settings
+		);
+
 		return this._user.getUid$().pipe(
 			switchMap(uid =>
 				this._afStore
 					.doc(`users/${uid}`)
-					.collection<IClosedPeriod>('periods', ref =>
-						ref.where('isClosed', '==', true).orderBy('date.start', 'desc')
-					)
+					.collection<IClosedPeriod>('periods', ref => {
+						let query = ref
+							.where('isClosed', '==', true)
+							.orderBy('date.start', orderDirection);
+
+						if (limit) query = query.limit(limit);
+
+						return query;
+					})
 					.valueChanges({ idField: 'id' })
 			)
 		);
@@ -108,8 +128,8 @@ export class PeriodsService {
 					.collection<IClosedPeriod>(`users/${uid}/periods`, ref =>
 						ref
 							.where('isClosed', '==', true)
-							.where('date.end', '>=', startAt)
-							.where('date.end', '<=', endAt)
+							.where('date.start', '>=', startAt)
+							.where('date.start', '<=', endAt)
 					)
 					.valueChanges({ idField: 'id' })
 			)
