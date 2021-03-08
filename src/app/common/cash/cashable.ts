@@ -77,7 +77,7 @@ export function Cacheable(config: ICacheableConfig) {
 			const cacheStream: Observable<any> = of(
 				storage.read(config.tableName)
 			).pipe(filter(value => value !== null));
-			const originalStream: Observable<any> = originalMethod.call(this, args);
+			const originalStream: Observable<any> = originalMethod.apply(this, args);
 
 			if (!globalSubscriptions.has(config.tableName)) {
 				globalSubscriptions.set(
