@@ -1,1 +1,6 @@
-<div echarts [options]="options"></div>
+<div *ngIf="hasData; else nodata" echarts [options]="options"></div>
+
+<ng-template #nodata>
+	<img src="assets/images/no_data_3.svg" alt="Nie znaleziono danych" />
+	<p class="no-data-info">Na chwilę obecną nie masz zakończonych okresów.</p>
+</ng-template>

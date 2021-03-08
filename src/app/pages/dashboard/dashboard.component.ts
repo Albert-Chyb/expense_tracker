@@ -1,18 +1,33 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import * as echarts from 'echarts';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import DARK_THEME from 'src/app/common/charts/dark-theme';
+import { ITransaction } from 'src/app/common/models/transaction';
 import { TransactionsService } from 'src/app/services/transactions/transactions.service';
 
-import { ITransaction } from './../../common/models/transaction';
+import { IClosedPeriod } from './../../common/models/period';
 import { PeriodsService } from './../../services/periods/periods.service';
 
-// TODO: Find a better place for this line.
-echarts.registerTheme('dark', DARK_THEME);
+interface IStatistics {
+	incomes: number;
+	expenses: number;
+}
 
-// TODO: Make every chart as separate component
-// TODO: Finish querying periods between 2 dates
+interface IDashboardData {
+	/** Transactions in the current week. */
+	week: ITransaction[];
+
+	/** Last 6 periods. */
+	months: IClosedPeriod[];
+
+	/** Information about the current period. */
+	current: IStatistics;
+
+	/** Information about the period prior to the current one. */
+	last: IStatistics;
+
+	/** Information about the current year. */
+	year: IStatistics;
+}
 
 @Component({
 	templateUrl: './dashboard.component.html',
@@ -25,43 +40,38 @@ export class DashboardComponent implements OnInit {
 		private readonly _periods: PeriodsService
 	) {}
 
+	data$: Observable<IDashboardData>;
+
 	ngOnInit(): void {
-		this._getTransactionsInCurrentWeek().pipe(
-			map(transactions =>
-				transactions.reduce((prev, transaction: ITransaction) => {
-					const date = transaction.date.toDate();
-					const weekDay = date.getDay();
-
-					prev[weekDay] += transaction.amount;
-					return prev;
-				}, new Array(7).fill(0))
-			)
+		this.data$ = combineLatest([
+			this._transactionsInCurrentWeek(),
+			this._lastSixPeriods(),
+			this._transactionsInCurrentPeriod(),
+			this._periodsFromYearBeginning(),
+		]).pipe(
+			map(([week, periods, transactions, periodsFromYearBeginning]) => ({
+				week,
+				months: periods,
+				current: this._statsFromTransactions(transactions),
+				year: this._statsFromPeriods(periodsFromYearBeginning),
+				last: this._statsFromPeriods([periods[0]]),
+			}))
 		);
-		// .subscribe(console.log);
-
-		this._periods.getAllClosed().pipe(
-			map(periods => {
-				return periods.reduce(
-					(prev: number[][], curr, index) => {
-						const { incomes, outcomes } = curr;
-
-						prev[0].push(incomes);
-						prev[1].push(outcomes);
-
-						return prev;
-					},
-					[[], []]
-				);
-			})
-		);
-		// .subscribe(console.log);
 	}
 
-	private _getTransactionsInCurrentWeek(): Observable<ITransaction[]> {
+	private _transactionsInCurrentPeriod(): Observable<ITransaction[]> {
+		return this._transactions.getAllCurrent();
+	}
+
+	/**
+	 * Returns transactions that were made in current week.
+	 * @returns Observable of transactions
+	 */
+	private _transactionsInCurrentWeek(): Observable<ITransaction[]> {
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
 
-		// Gets day of the week, assuming that Monday is the first day of the week.
+		// Gets day index of the week, assuming that Monday is the first day of the week.
 		const getWeekDay = () => {
 			return (today.getDay() || 7) - 1;
 		};
@@ -79,5 +89,58 @@ export class DashboardComponent implements OnInit {
 		);
 
 		return this._transactions.getBetween(weekBeginning, weekEnding);
+	}
+
+	/**
+	 * Returns last six periods prior to the current one.
+	 * @returns Observable of closed periods.
+	 */
+	private _lastSixPeriods(): Observable<IClosedPeriod[]> {
+		return this._periods.getAllClosed({ limit: 6, orderDirection: 'desc' });
+	}
+
+	/**
+	 * Returns all periods in current year.
+	 * @returns Observable of closed periods
+	 */
+	private _periodsFromYearBeginning(): Observable<IClosedPeriod[]> {
+		const yearBeginning = new Date(new Date().getFullYear(), 0, 1);
+		const today = new Date();
+
+		return this._periods.getClosedBetween(yearBeginning, today);
+	}
+
+	/**
+	 * Calculates statistics from passed periods
+	 * @param periods Array of periods
+	 * @returns Statistics from periods
+	 */
+	private _statsFromPeriods(periods: IClosedPeriod[]): IStatistics {
+		return periods.reduce(
+			(prev, curr) => {
+				prev.incomes += curr.incomes;
+				prev.expenses += curr.outcomes;
+				return prev;
+			},
+			{ incomes: 0, expenses: 0 }
+		);
+	}
+
+	/**
+	 * Calculates statistics from passed transactions
+	 * @param transactions Array of transactions
+	 * @returns Statistics from transactions
+	 */
+	private _statsFromTransactions(transactions: ITransaction[]): IStatistics {
+		return transactions.reduce(
+			(prev, curr) => {
+				const type: 'income' | 'outcome' =
+					curr.amount > 0 ? 'income' : 'outcome';
+
+				prev[type] += curr.amount;
+				return prev;
+			},
+			{ incomes: 0, expenses: 0 }
+		);
 	}
 }

@@ -1,3 +1,8 @@
-<div *ngIf="data.length > 0">
-	<div echarts [options]="options" [theme]="theme"></div>
+<div *ngIf="hasExpenses; else nodata">
+	<div echarts [options]="options"></div>
 </div>
+
+<ng-template #nodata>
+	<img class="no-data-image" src="assets/images/no_data_1.svg" />
+	<p class="no-data-info">Brak wydatków w tym tygodniu</p>
+</ng-template>

@@ -1,9 +1,10 @@
-import { NgxEchartsModule } from 'ngx-echarts';
-import { LastMonthsChartComponent } from './last-months-chart/last-months-chart.component';
-import { GroupedOutcomesChartComponent } from './grouped-outcomes-chart/grouped-outcomes-chart.component';
-import { CurrentWeekChartComponent } from './current-week-chart/current-week-chart.component';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { NgxEchartsModule } from 'ngx-echarts';
+
+import { CurrentWeekChartComponent } from './current-week-chart/current-week-chart.component';
+import { GroupedOutcomesChartComponent } from './grouped-outcomes-chart/grouped-outcomes-chart.component';
+import { LastMonthsChartComponent } from './last-months-chart/last-months-chart.component';
 
 @NgModule({
 	declarations: [
