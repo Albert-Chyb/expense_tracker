@@ -68,7 +68,6 @@ export class CurrentWeekChartComponent {
 			const weekDay = (date.getDay() || 7) - 1;
 
 			prev[weekDay] += Math.abs(transaction.amount);
-			console.log(prev);
 			return prev;
 		}, new Array(7).fill(0));
 	}

@@ -67,14 +67,7 @@
 
 		<div class="card__body">
 			<grouped-expenses-chart
-				[data]="[
-				{ value: 456.23, name: 'Jedzenie' },
-				{ value: 356.23, name: 'Imprezy' },
-				{ value: 326.23, name: 'Kosmetyki' },
-				{ value: 236.23, name: 'Transport' },
-				{ value: 756.23, name: 'Paliwo' },
-				{ value: 126.23, name: 'Zwierzęta' },
-			]"
+				[data]="data.transactions"
 			></grouped-expenses-chart>
 		</div>
 	</section>

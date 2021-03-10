@@ -19,6 +19,9 @@ interface IDashboardData {
 	/** Last 6 periods. */
 	periods: IClosedPeriod[];
 
+	/** Transactions in the current period. */
+	transactions: ITransaction[];
+
 	/** Information about the current period. */
 	current: IStatistics;
 
@@ -28,8 +31,6 @@ interface IDashboardData {
 	/** Information about the current year. */
 	year: IStatistics;
 }
-
-// TODO: Rename grouped-outcomes-chart to grouped-expenses-chart
 
 @Component({
 	templateUrl: './dashboard.component.html',
@@ -63,6 +64,7 @@ export class DashboardComponent implements OnInit {
 					current: this._statsFromTransactions(transactions),
 					year: this._statsFromPeriods(periodsFromYearBeginning),
 					last: this._statsFromPeriods(periods[0] ? [periods[0]] : []),
+					transactions,
 				})
 			)
 		);
