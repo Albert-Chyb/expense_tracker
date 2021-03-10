@@ -59,9 +59,6 @@ import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
 import { ButtonModule } from './components/buttons/button.module';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { CurrentWeekChartComponent } from './components/dashboard/current-week-chart/current-week-chart.component';
-import { LastMonthsChartComponent } from './components/dashboard/last-months-chart/last-months-chart.component';
-import { GroupedOutcomesChartComponent } from './components/dashboard/grouped-outcomes-chart/grouped-outcomes-chart.component';
 import { DashboardComponentsModule } from './components/dashboard/dashboard-components.module';
 import { AbsPipe } from './pipes/abs/abs.pipe';
 
@@ -138,12 +135,12 @@ import { AbsPipe } from './pipes/abs/abs.pipe';
 				? ['localhost', 5001]
 				: null,
 		},
-		// {
-		// 	provide: USE_FIRESTORE_EMULATOR,
-		// 	useValue: environment.firebaseEmulators.enabled
-		// 		? ['localhost', 8080]
-		// 		: null,
-		// },
+		{
+			provide: USE_FIRESTORE_EMULATOR,
+			useValue: environment.firebaseEmulators.enabled
+				? ['localhost', 8080]
+				: null,
+		},
 		// {
 		// 	provide: USE_AUTH_EMULATOR,
 		// 	useValue: getEmulatorConfig('auth'),

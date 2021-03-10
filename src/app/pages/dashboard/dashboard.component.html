@@ -14,13 +14,13 @@
 	<section class="card">
 		<header
 			class="card__header"
-			[class.card__header--no-margin]="data.months.length > 0"
+			[class.card__header--no-margin]="data.periods.length > 0"
 		>
 			<h2>Ostatnie okresy</h2>
 		</header>
 
 		<div class="card__body">
-			<last-months-chart [data]="data.months"></last-months-chart>
+			<periods-chart [data]="data.periods"></periods-chart>
 		</div>
 	</section>
 

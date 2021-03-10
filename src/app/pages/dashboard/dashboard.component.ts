@@ -17,7 +17,7 @@ interface IDashboardData {
 	week: ITransaction[];
 
 	/** Last 6 periods. */
-	months: IClosedPeriod[];
+	periods: IClosedPeriod[];
 
 	/** Information about the current period. */
 	current: IStatistics;
@@ -28,6 +28,8 @@ interface IDashboardData {
 	/** Information about the current year. */
 	year: IStatistics;
 }
+
+// TODO: Rename grouped-outcomes-chart to grouped-expenses-chart
 
 @Component({
 	templateUrl: './dashboard.component.html',
@@ -49,16 +51,27 @@ export class DashboardComponent implements OnInit {
 			this._transactionsInCurrentPeriod(),
 			this._periodsFromYearBeginning(),
 		]).pipe(
-			map(([week, periods, transactions, periodsFromYearBeginning]) => ({
-				week,
-				months: periods,
-				current: this._statsFromTransactions(transactions),
-				year: this._statsFromPeriods(periodsFromYearBeginning),
-				last: this._statsFromPeriods([periods[0]]),
-			}))
+			map(
+				([
+					week,
+					periods,
+					transactions,
+					periodsFromYearBeginning,
+				]): IDashboardData => ({
+					week,
+					periods,
+					current: this._statsFromTransactions(transactions),
+					year: this._statsFromPeriods(periodsFromYearBeginning),
+					last: this._statsFromPeriods(periods[0] ? [periods[0]] : []),
+				})
+			)
 		);
 	}
 
+	/**
+	 * Returns transactions in current period.
+	 * @Returns Observable of transactions
+	 */
 	private _transactionsInCurrentPeriod(): Observable<ITransaction[]> {
 		return this._transactions.getAllCurrent();
 	}
@@ -122,7 +135,7 @@ export class DashboardComponent implements OnInit {
 				prev.expenses += curr.outcomes;
 				return prev;
 			},
-			{ incomes: 0, expenses: 0 }
+			{ incomes: 0, expenses: 0 } as IStatistics
 		);
 	}
 
@@ -140,7 +153,7 @@ export class DashboardComponent implements OnInit {
 				prev[type] += curr.amount;
 				return prev;
 			},
-			{ incomes: 0, expenses: 0 }
+			{ incomes: 0, expenses: 0 } as IStatistics
 		);
 	}
 }

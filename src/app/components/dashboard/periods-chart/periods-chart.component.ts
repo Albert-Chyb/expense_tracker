@@ -1,15 +1,18 @@
-import { IClosedPeriod } from './../../../common/models/period';
+import { IClosedPeriod } from '../../../common/models/period';
 import { EChartsOption } from 'echarts';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
+/**
+ * Renders a chart that visualizes received periods.
+ */
 @Component({
-	selector: 'last-months-chart',
-	templateUrl: './last-months-chart.component.html',
-	styleUrls: ['./last-months-chart.component.scss'],
+	selector: 'periods-chart',
+	templateUrl: './periods-chart.component.html',
+	styleUrls: ['./periods-chart.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LastMonthsChartComponent {
+export class PeriodsChartComponent {
 	private _data: number[][] = [[], []];
 	private readonly _datePipe = new DatePipe(navigator.language);
 
