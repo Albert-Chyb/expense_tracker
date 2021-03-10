@@ -3,19 +3,19 @@ import { NgModule } from '@angular/core';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 import { CurrentWeekChartComponent } from './current-week-chart/current-week-chart.component';
-import { GroupedOutcomesChartComponent } from './grouped-expenses-chart/grouped-outcomes-chart.component';
+import { GroupedExpensesChartComponent } from './grouped-expenses-chart/grouped-expenses-chart.component';
 import { PeriodsChartComponent } from './periods-chart/periods-chart.component';
 
 @NgModule({
 	declarations: [
 		CurrentWeekChartComponent,
-		GroupedOutcomesChartComponent,
+		GroupedExpensesChartComponent,
 		PeriodsChartComponent,
 	],
 	imports: [CommonModule, NgxEchartsModule],
 	exports: [
 		CurrentWeekChartComponent,
-		GroupedOutcomesChartComponent,
+		GroupedExpensesChartComponent,
 		PeriodsChartComponent,
 	],
 })

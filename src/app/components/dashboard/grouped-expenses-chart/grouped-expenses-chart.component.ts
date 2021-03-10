@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { EChartsOption } from 'echarts';
 
 @Component({
-	selector: 'grouped-outcomes-chart',
-	templateUrl: './grouped-outcomes-chart.component.html',
-	styleUrls: ['./grouped-outcomes-chart.component.scss'],
+	selector: 'grouped-expenses-chart',
+	templateUrl: './grouped-expenses-chart.component.html',
+	styleUrls: ['./grouped-expenses-chart.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GroupedOutcomesChartComponent {
+export class GroupedExpensesChartComponent {
 	constructor() {}
 
 	private _data: { value: number; name: string }[] = [];
