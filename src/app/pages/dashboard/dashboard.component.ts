@@ -149,8 +149,7 @@ export class DashboardComponent implements OnInit {
 	private _statsFromTransactions(transactions: ITransaction[]): IStatistics {
 		return transactions.reduce(
 			(prev, curr) => {
-				const type: 'income' | 'outcome' =
-					curr.amount > 0 ? 'income' : 'outcome';
+				const type = curr.amount > 0 ? 'incomes' : 'expenses';
 
 				prev[type] += curr.amount;
 				return prev;
