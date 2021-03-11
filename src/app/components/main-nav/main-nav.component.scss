@@ -49,8 +49,8 @@
 			@include fontAwesomeIcon('\f015', 'free', 'solid');
 		}
 
-		&--profile::after {
-			@include fontAwesomeIcon('\f007', 'free', 'solid');
+		&--dashboard::after {
+			@include fontAwesomeIcon('\f080', 'free', 'solid');
 		}
 
 		&--periods::after {
