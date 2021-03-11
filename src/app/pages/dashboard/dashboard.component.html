@@ -12,7 +12,7 @@
 	</section>
 
 	<ng-container *ngIf="data.periods.length > 0">
-		<section class="card">
+		<section class="card dashboard__card">
 			<header
 				class="card__header"
 				[class.card__header--no-margin]="data.periods.length > 0"
@@ -25,13 +25,13 @@
 			</div>
 		</section>
 
-		<div class="dashboard__subdashboard">
+		<div class="dashboard__subdashboard dashboard__card">
 			<section class="card card--reversed">
 				<header class="card__header">
 					<h2>
 						Zarobiono
 						{{ data.current.incomes < data.last.incomes ? 'mniej' : 'więcej' }}
-						niż miesiąc temu o
+						niż w ostatnim okresie o
 					</h2>
 				</header>
 
@@ -49,7 +49,7 @@
 					<h2>
 						Wydano
 						{{ data.current.incomes < data.last.incomes ? 'mniej' : 'więcej' }}
-						niż miesiąc temu o
+						niż w ostatnim okresie o
 					</h2>
 				</header>
 

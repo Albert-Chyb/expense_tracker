@@ -58,4 +58,14 @@
 			grid-column: span 2;
 		}
 	}
+
+	@media (max-width: 425px) {
+		grid-template-columns: 1fr;
+
+		&__card {
+			&--big {
+				grid-column: span 1;
+			}
+		}
+	}
 }
