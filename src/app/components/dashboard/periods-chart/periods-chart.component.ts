@@ -1,6 +1,12 @@
 import { IClosedPeriod } from '../../../common/models/period';
 import { EChartsOption } from 'echarts';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	Inject,
+	Input,
+	LOCALE_ID,
+} from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 /**
@@ -13,8 +19,10 @@ import { DatePipe } from '@angular/common';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PeriodsChartComponent {
+	constructor(@Inject(LOCALE_ID) private readonly _locale: string) {}
+
 	private _data: number[][] = [[], []];
-	private readonly _datePipe = new DatePipe(navigator.language);
+	private readonly _datePipe = new DatePipe(this._locale);
 
 	@Input('data')
 	set data(value: IClosedPeriod[]) {
@@ -49,10 +57,6 @@ export class PeriodsChartComponent {
 		};
 	}
 
-	get hasData(): boolean {
-		return this._data.every(a => a.length > 0);
-	}
-
 	private get _incomes(): number[] {
 		return this._data[0];
 	}
@@ -65,6 +69,7 @@ export class PeriodsChartComponent {
 		return this._data[2] as any;
 	}
 
+	/** Transforms periods into chart data type. */
 	private _transformPeriods(periods: IClosedPeriod[]) {
 		return periods.reduce(
 			(prev: any[][], curr) => {

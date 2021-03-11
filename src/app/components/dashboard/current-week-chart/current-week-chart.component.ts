@@ -1,5 +1,19 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { DatePipe, TitleCasePipe } from '@angular/common';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	Inject,
+	Input,
+	LOCALE_ID,
+} from '@angular/core';
 import { ITransaction } from 'src/app/common/models/transaction';
+
+/**
+ * Visualizes received transactions assigning stats to week days.
+ *
+ * Note that it uses transaction date to determine the day of the week,
+ * but does not check if a transaction is in fact in current week.
+ */
 
 @Component({
 	selector: 'dashboard-current-week-chart',
@@ -8,8 +22,12 @@ import { ITransaction } from 'src/app/common/models/transaction';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CurrentWeekChartComponent {
+	constructor(@Inject(LOCALE_ID) private readonly _locale: string) {}
 	private _data: number[] = [];
 	private _numberOfTransactions = 0;
+
+	private readonly _datePipe = new DatePipe(this._locale);
+	private readonly _capitalizePipe = new TitleCasePipe();
 
 	@Input('data')
 	set data(value: ITransaction[]) {
@@ -29,7 +47,12 @@ export class CurrentWeekChartComponent {
 			tooltip: {},
 			yAxis: {},
 			xAxis: {
-				data: ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'Sb', 'Nd'],
+				data: new Array(7)
+					.fill('')
+					.map((v, index) =>
+						this._datePipe.transform(new Date(2021, 2, index + 1), 'EEEEEE')
+					)
+					.map(name => this._capitalizePipe.transform(name)),
 			},
 			series: [
 				{
@@ -46,10 +69,7 @@ export class CurrentWeekChartComponent {
 		};
 	}
 
-	get hasExpenses() {
-		return this._data.some(n => n > 0);
-	}
-
+	/** Calculates average expenses */
 	private _average() {
 		const average =
 			this._data.reduce((prev, curr) => (prev += curr), 0) /
