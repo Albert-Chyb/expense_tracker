@@ -46,6 +46,7 @@ export class GroupedExpensesChartComponent {
 		};
 	}
 
+	/** Transforms transactions into chart data type. */
 	private _transformTransactions(transactions: ITransaction[]): PieChartData[] {
 		const result = transactions.reduce((prev, transaction) => {
 			prev[transaction.group.id] ||= { name: transaction.group.name, value: 0 };
