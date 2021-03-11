@@ -16,6 +16,11 @@
 		}
 	}
 
+	&__image {
+		width: 70%;
+		margin: 0px auto;
+	}
+
 	&--reversed &__header * {
 		font-size: rem(16px);
 		color: var(--text-color-2);

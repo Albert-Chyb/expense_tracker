@@ -11,56 +11,63 @@
 		</div>
 	</section>
 
-	<section class="card">
-		<header
-			class="card__header"
-			[class.card__header--no-margin]="data.periods.length > 0"
-		>
-			<h2>Ostatnie okresy</h2>
-		</header>
+	<ng-container *ngIf="data.periods.length > 0">
+		<section class="card">
+			<header
+				class="card__header"
+				[class.card__header--no-margin]="data.periods.length > 0"
+			>
+				<h2>Ostatnie okresy</h2>
+			</header>
 
-		<div class="card__body">
-			<periods-chart [data]="data.periods"></periods-chart>
+			<div class="card__body">
+				<periods-chart [data]="data.periods"></periods-chart>
+			</div>
+		</section>
+
+		<div class="dashboard__subdashboard">
+			<section class="card card--reversed">
+				<header class="card__header">
+					<h2>
+						Zarobiono
+						{{ data.current.incomes < data.last.incomes ? 'mniej' : 'więcej' }}
+						niż miesiąc temu o
+					</h2>
+				</header>
+
+				<div class="card__body">
+					<p>
+						{{
+							data.current.incomes - data.last.incomes | abs | currency: 'PLN'
+						}}
+					</p>
+				</div>
+			</section>
+
+			<section class="card card--reversed">
+				<header class="card__header">
+					<h2>
+						Wydano
+						{{ data.current.incomes < data.last.incomes ? 'mniej' : 'więcej' }}
+						niż miesiąc temu o
+					</h2>
+				</header>
+
+				<div class="card__body">
+					<p>
+						{{
+							data.current.expenses - data.last.expenses | abs | currency: 'PLN'
+						}}
+					</p>
+				</div>
+			</section>
 		</div>
-	</section>
+	</ng-container>
 
-	<div class="dashboard__subdashboard">
-		<section class="card card--reversed">
-			<header class="card__header">
-				<h2>
-					Zarobiono
-					{{ data.current.incomes < data.last.incomes ? 'mniej' : 'więcej' }}
-					niż miesiąc temu o
-				</h2>
-			</header>
-
-			<div class="card__body">
-				<p>
-					{{ data.current.incomes - data.last.incomes | abs | currency: 'PLN' }}
-				</p>
-			</div>
-		</section>
-
-		<section class="card card--reversed">
-			<header class="card__header">
-				<h2>
-					Wydano
-					{{ data.current.incomes < data.last.incomes ? 'mniej' : 'więcej' }}
-					niż miesiąc temu o
-				</h2>
-			</header>
-
-			<div class="card__body">
-				<p>
-					{{
-						data.current.expenses - data.last.expenses | abs | currency: 'PLN'
-					}}
-				</p>
-			</div>
-		</section>
-	</div>
-
-	<section class="card dashboard__card dashboard__card--big">
+	<section
+		class="card dashboard__card dashboard__card--big"
+		*ngIf="data.transactions.length > 0"
+	>
 		<header class="card__header card__header--no-margin">
 			<h2>Wydatki w grupach</h2>
 		</header>
