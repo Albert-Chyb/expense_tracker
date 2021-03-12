@@ -83,12 +83,14 @@ export class CurrentWeekChartComponent {
 	 * @returns Array of numbers that will end up in chart.
 	 */
 	private _transformTransactions(transactions: ITransaction[]): number[] {
-		return transactions.reduce((prev: number[], transaction) => {
-			const date = transaction.date.toDate();
-			const weekDay = (date.getDay() || 7) - 1;
+		return transactions
+			.reduce((prev: number[], transaction) => {
+				const date = transaction.date.toDate();
+				const weekDay = (date.getDay() || 7) - 1;
 
-			prev[weekDay] += Math.abs(transaction.amount);
-			return prev;
-		}, new Array(7).fill(0));
+				prev[weekDay] += +Math.abs(transaction.amount);
+				return prev;
+			}, new Array(7).fill(0))
+			.map(n => +n.toFixed(2));
 	}
 }

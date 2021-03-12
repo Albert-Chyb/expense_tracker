@@ -21,6 +21,10 @@ export class TransactionsServiceStub {
 	delete() {
 		return Promise.resolve();
 	}
+
+	getBetween() {
+		return of(undefined);
+	}
 }
 
 export const transactionsServiceTestProvider: Provider = {

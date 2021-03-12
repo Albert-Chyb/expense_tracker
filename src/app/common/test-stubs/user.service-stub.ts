@@ -24,6 +24,10 @@ export class UserServiceStub {
 	}
 	hasCreatedData = Promise.resolve(false);
 	isLoggedIn$ = of(false);
+
+	getUid$() {
+		return of('id');
+	}
 }
 
 export const userServiceTestProvider: Provider = {

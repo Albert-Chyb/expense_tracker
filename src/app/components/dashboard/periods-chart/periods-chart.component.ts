@@ -72,8 +72,8 @@ export class PeriodsChartComponent {
 	/** Transforms periods into chart data type. */
 	private _transformPeriods(periods: IClosedPeriod[]) {
 		return periods.reduce(
-			(prev: any[][], curr) => {
-				const { incomes, outcomes, date } = curr;
+			(prev: any[][], period) => {
+				const { incomes, outcomes, date } = period;
 
 				prev[0].unshift(incomes);
 				prev[1].unshift(outcomes);
