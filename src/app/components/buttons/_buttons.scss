@@ -73,6 +73,16 @@
 	}
 }
 
+// A button that is completely empty with no special effects.
+.none-btn {
+	background-color: transparent;
+	color: inherit;
+	font-family: inherit;
+	border: none;
+	cursor: pointer;
+	outline: none;
+}
+
 // Empty background buttons
 .icon-btn,
 .basic-btn,

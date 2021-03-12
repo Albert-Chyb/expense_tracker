@@ -13,7 +13,12 @@
 		{{ msg }}
 	</p>
 
-	<button (click)="dismiss()" class="btn notification__close no-ripple">
+	<button
+		appButton
+		btnType="none"
+		(click)="dismiss()"
+		class="notification__close"
+	>
 		<i class="far fa-times-circle fa-lg"></i>
 	</button>
 </section>

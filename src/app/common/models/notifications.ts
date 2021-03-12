@@ -2,13 +2,13 @@ import { InjectionToken } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 
 /** Default notifications settings. You can use this token to provide your own settings */
-export const NOTIFICATIONS_GLOBAL_SETTINGS = new InjectionToken<
-	INotificationsSettings
->('NOTIFICATIONS_GLOBAL_SETTINGS');
+export const NOTIFICATIONS_GLOBAL_SETTINGS = new InjectionToken<INotificationsSettings>(
+	'NOTIFICATIONS_GLOBAL_SETTINGS'
+);
 
-export const NOTIFICATIONS_SETTINGS = new InjectionToken<
-	INotificationsSettings
->('NOTIFICATIONS_SETTINGS');
+export const NOTIFICATIONS_SETTINGS = new InjectionToken<INotificationsSettings>(
+	'NOTIFICATIONS_SETTINGS'
+);
 
 /**
  * To avoid circular dependency error in notification component,
@@ -48,7 +48,7 @@ export interface INotificationsSettings {
 export const notificationsDefaultSettings: INotificationsSettings = {
 	posX: NotificationsPosition.Right,
 	posY: NotificationsPosition.Bottom,
-	autoDismiss: true,
+	autoDismiss: false,
 	autoDismissTimeout: 3_500,
 	animationDuration: 300,
 	margin: 10,

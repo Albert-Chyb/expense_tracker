@@ -2,7 +2,13 @@ import { Directive, HostBinding, Input } from '@angular/core';
 
 import { Ripple } from './../ripple/ripple.directive';
 
-export type ButtonType = 'basic' | 'stroked' | 'filled' | 'fab' | 'icon';
+export type ButtonType =
+	| 'basic'
+	| 'stroked'
+	| 'filled'
+	| 'fab'
+	| 'icon'
+	| 'none';
 export type ButtonColor =
 	| 'primary'
 	| 'secondary'
