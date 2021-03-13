@@ -48,7 +48,7 @@ export interface INotificationsSettings {
 export const notificationsDefaultSettings: INotificationsSettings = {
 	posX: NotificationsPosition.Right,
 	posY: NotificationsPosition.Bottom,
-	autoDismiss: false,
+	autoDismiss: true,
 	autoDismissTimeout: 3_500,
 	animationDuration: 300,
 	margin: 10,
