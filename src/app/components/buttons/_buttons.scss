@@ -130,3 +130,52 @@
 	padding: 0px;
 	font-size: rem(22px);
 }
+
+// Auth buttons
+.google-btn {
+	@extend .none-btn;
+	--logo-size: #{rem(38px)};
+
+	background-color: #4285f4;
+	font-weight: 500;
+	font-size: rem(14px);
+	letter-spacing: rem(0.22px);
+	border-radius: rem(2px);
+	height: rem(40px);
+	min-width: rem(185px);
+	text-align: center;
+	position: relative;
+	padding-left: var(--logo-size);
+	color: #fff;
+
+	&[disabled] {
+		background-color: #d9d9d9;
+		color: rgb(141, 141, 141);
+
+		&::after {
+			background-image: url('/assets/logos/google/btn_google_dark_disabled_ios.svg');
+		}
+	}
+
+	&::after {
+		position: absolute;
+		content: '';
+		background: {
+			image: url('/assets/logos/google/btn_google_dark_normal_ios.svg');
+			position: center;
+			repeat: no-repeat;
+		}
+		height: rem(40px);
+		width: rem(40px);
+		top: 0px;
+		left: 0px;
+	}
+
+	&:active {
+		background-color: #3367d6;
+
+		&::after {
+			background-image: url('/assets/logos/google/btn_google_dark_pressed_ios.svg');
+		}
+	}
+}
