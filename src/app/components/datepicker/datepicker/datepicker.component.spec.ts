@@ -149,26 +149,18 @@ describe('DatepickerComponent', () => {
 
 		it('should change the page based on the available routes order', () => {
 			spyOn(component, 'isSelectable').and.returnValue(true);
+			spyOn(component['_page'], 'select');
 			const spy = spyOn(component, 'switchPage');
 
-			component['_page'] = new (DatepickerPages.get('chooseDay'))(
-				'chooseDay',
-				component
-			);
+			component['_page'] = new (DatepickerPages.get('chooseDay'))(component);
 			component.onCellClick(12);
 			expect(spy).toHaveBeenCalledWith('chooseDay');
 
-			component['_page'] = new (DatepickerPages.get('chooseYear'))(
-				'chooseYear',
-				component
-			);
+			component['_page'] = new (DatepickerPages.get('chooseYear'))(component);
 			component.onCellClick(12);
 			expect(spy).toHaveBeenCalledWith('chooseMonth');
 
-			component['_page'] = new (DatepickerPages.get('chooseMonth'))(
-				'chooseMonth',
-				component
-			);
+			component['_page'] = new (DatepickerPages.get('chooseMonth'))(component);
 			component.onCellClick(12);
 			expect(spy).toHaveBeenCalledWith('chooseDay');
 		});
@@ -261,9 +253,6 @@ describe('DatepickerComponent', () => {
 
 	describe('Class bindings', () => {
 		enum ElClass {
-			/** Class that disabled navigation button has. */
-			navBtnDisabled = 'datepicker__nav-btn--disabled',
-
 			/** Class that disabled cell has. */
 			cellDisabled = 'table__cell--disabled',
 
@@ -271,24 +260,24 @@ describe('DatepickerComponent', () => {
 			cellSelected = 'table__cell--selected',
 		}
 
-		it('if previous set of date cannot be generated, the button should have a class that indicates the button is disabled', () => {
+		it('if a previous set of data cannot be generated, the button should be disabled', () => {
 			spyOnProperty(component, 'canGeneratePrev').and.returnValue(false);
 			fixture.detectChanges();
 			const de = fixture.debugElement.query(
 				By.css('.datepicker__nav-btn--prev')
 			);
 
-			expect(de.classes[ElClass.navBtnDisabled]).toBeTruthy();
+			expect(de.properties.disabled).toBeTruthy();
 		});
 
-		it('if next set of data cannot be generated, the button should have a class that indicates that the button is disabled', () => {
+		it('if a next set of data cannot be generated, the button should be disabled', () => {
 			spyOnProperty(component, 'canGenerateNext').and.returnValue(false);
 			fixture.detectChanges();
 			const de = fixture.debugElement.query(
 				By.css('.datepicker__nav-btn--next')
 			);
 
-			expect(de.classes[ElClass.navBtnDisabled]).toBeTruthy();
+			expect(de.properties.disabled).toBeTruthy();
 		});
 
 		it('if a cell contains a value that cannot be selected, it should have a class that indicates it', () => {
