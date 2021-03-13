@@ -78,8 +78,11 @@ $light-theme-colors: (
 		#{color.lightness($color)};
 	--color-#{$name}: #{$color};
 	--color-#{$name}-0: #{$color};
-	--color-#{$name}-1: #{color.adjust($color, $lightness: 5 * $modification)};
-	--color-#{$name}-2: #{color.adjust($color, $lightness: 10 * $modification)};
+	--color-#{$name}-1: #{color.adjust($color, $lightness: 5 * $modification * 1%)};
+	--color-#{$name}-2: #{color.adjust(
+			$color,
+			$lightness: 10 * $modification * 1%
+		)};
 }
 
 @function get-theme-colors($theme) {
