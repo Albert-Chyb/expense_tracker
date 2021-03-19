@@ -1,77 +1,25 @@
-import { switchMap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { includeDocId } from 'src/app/common/helpers/includeDocId';
+import { Injectable, Injector } from '@angular/core';
 
+import { CRUDBuilder } from '../collection-base/collection-base';
+import { Create, Delete, Read } from '../collection-base/models';
 import { ITransactionGroup } from './../../common/models/group';
-import { UserService } from './../user/user.service';
-import { Cacheable } from 'src/app/common/cash/cashable';
+
+interface AttachedMethods
+	extends Create<ITransactionGroup>,
+		Read<ITransactionGroup>,
+		Delete {}
+
+const Class = new CRUDBuilder()
+	.withCreate()
+	.withRead()
+	.withDelete()
+	.build<AttachedMethods>();
 
 @Injectable({
 	providedIn: 'root',
 })
-export class TransactionsGroupsService {
-	constructor(
-		private readonly _user: UserService,
-		private readonly _afStore: AngularFirestore
-	) {}
-
-	/**
-	 * Returns all groups.
-	 */
-
-	@Cacheable({
-		tableName: 'transactionGroups',
-	})
-	getAll(): Observable<ITransactionGroup[]> {
-		return this._user
-			.getUid$()
-			.pipe(
-				switchMap(uid =>
-					this._afStore
-						.doc(`users/${uid}`)
-						.collection<ITransactionGroup>('groups')
-						.valueChanges({ idField: 'id' })
-				)
-			);
-	}
-
-	/**
-	 * Returns one transactions group with given id.
-	 * @param id Id of a transaction group.
-	 */
-
-	get(id: string): Observable<ITransactionGroup> {
-		return this._user
-			.getUid$()
-			.pipe(
-				switchMap(uid =>
-					this._afStore
-						.doc<ITransactionGroup>(`users/${uid}/groups/${id}`)
-						.snapshotChanges()
-						.pipe(includeDocId())
-				)
-			);
-	}
-
-	/**
-	 * Deletes a transaction from database.
-	 * @param id Id of an transaction
-	 */
-
-	async delete(id: string): Promise<void> {
-		const uid = await this._user.getUid();
-		return this._afStore.doc(`users/${uid}/groups/${id}`).delete();
-	}
-
-	/**
-	 * Creates a group in database.
-	 * @param group Group to save in database
-	 */
-
-	async add(group: ITransactionGroup): Promise<DocumentReference> {
-		const uid = await this._user.getUid();
-		return this._afStore.doc(`users/${uid}`).collection('groups').add(group);
+export class TransactionsGroupsService extends Class {
+	constructor(injector: Injector) {
+		super('groups', injector);
 	}
 }

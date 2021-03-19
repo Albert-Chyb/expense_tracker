@@ -1,24 +1,34 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
+import { Injectable, Injector } from '@angular/core';
+import { DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { first, switchMap } from 'rxjs/operators';
+import {
+	between,
+	orderBy,
+	where,
+} from 'src/app/common/dynamic-queries/helpers';
 
+import { Cacheable } from '../../common/cash/cashable';
+import { CRUDBuilder } from '../collection-base/collection-base';
+import { CRUD } from '../collection-base/models';
 import { ITransaction } from './../../common/models/transaction';
 import { PeriodsService } from './../periods/periods.service';
 import { TransactionsGroupsService } from './../transactions-groups/transactions-groups.service';
-import { UserService } from './../user/user.service';
-import { Cacheable } from '../../common/cash/cashable';
+
+interface AttachedMethods extends CRUD<ITransaction> {}
+const Class = new CRUDBuilder().withAll().build<AttachedMethods>();
 
 @Injectable({
 	providedIn: 'root',
 })
-export class TransactionsService {
+export class TransactionsService extends Class {
 	constructor(
-		private readonly _afStore: AngularFirestore,
-		private readonly _user: UserService,
 		private readonly _periods: PeriodsService,
-		private readonly _groups: TransactionsGroupsService
-	) {}
+		private readonly _groups: TransactionsGroupsService,
+		readonly injector: Injector
+	) {
+		super('transactions', injector);
+	}
 
 	/**
 	 * Gets all transactions in current period.
@@ -28,37 +38,14 @@ export class TransactionsService {
 		tableName: 'currentTransactions',
 	})
 	getAllCurrent(): Observable<ITransaction[]> {
-		return this._user.getUid$().pipe(
-			switchMap(uid =>
-				this._periods.getCurrent().pipe(
-					switchMap(period =>
-						this._afStore
-							.doc(`users/${uid}`)
-							.collection<ITransaction>('transactions', ref =>
-								ref
-									.where('date', '>=', period.date.start)
-									.orderBy('date', 'desc')
-							)
-							.valueChanges({ idField: 'id' })
-					)
-				)
-			)
-		);
-	}
-
-	/**
-	 * Gets transaction with given ID.
-	 * @param id Id of a transaction
-	 */
-
-	get(id: string): Observable<ITransaction> {
-		return this._user
-			.getUid$()
+		return this._periods
+			.getCurrent()
 			.pipe(
-				switchMap(uid =>
-					this._afStore
-						.doc<ITransaction>(`users/${uid}/transactions/${id}`)
-						.valueChanges()
+				switchMap(period =>
+					this.query(
+						where('date', '>=', period.date.start),
+						orderBy('date', 'desc')
+					)
 				)
 			);
 	}
@@ -72,18 +59,7 @@ export class TransactionsService {
 		if (startAt > endAt)
 			throw new Error('Start date cannot be later that end date.');
 
-		return this._user.getUid$().pipe(
-			switchMap(uid =>
-				this._afStore
-					.collection<ITransaction>(`users/${uid}/transactions/`, ref =>
-						ref
-							.where('date', '>=', startAt)
-							.where('date', '<=', endAt)
-							.orderBy('date', 'desc')
-					)
-					.valueChanges()
-			)
-		);
+		return this.query(between('date', startAt, endAt), orderBy('date', 'desc'));
 	}
 
 	/**
@@ -96,16 +72,12 @@ export class TransactionsService {
 	async add(
 		transaction: ITransaction,
 		populateLocally = true
-	): Promise<DocumentReference> {
+	): Promise<DocumentReference<ITransaction>> {
 		let data: ITransaction = transaction;
 		if (populateLocally)
 			data = await this.populateTransactionGroup(transaction);
 
-		return this._afStore
-			.collection('users')
-			.doc(await this._user.getUid())
-			.collection<ITransaction>('transactions')
-			.add(data);
+		return super.add(data);
 	}
 
 	/**
@@ -124,20 +96,7 @@ export class TransactionsService {
 		if (populateLocally)
 			data = await this.populateTransactionGroup(transaction);
 
-		return this._afStore
-			.doc(`users/${await this._user.getUid()}/transactions/${id}`)
-			.update(data);
-	}
-
-	/**
-	 * Deletes transaction from database.
-	 * @param id Id of an transaction
-	 */
-
-	async delete(id: string): Promise<void> {
-		return this._afStore
-			.doc(`users/${await this._user.getUid()}/transactions/${id}`)
-			.delete();
+		return super.update(id, data);
 	}
 
 	/**
