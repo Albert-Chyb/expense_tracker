@@ -48,7 +48,7 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.user$ = this._user.user$.pipe(
-			tap(user => this.form.patchValue(user.settings))
+			tap(user => this.form.patchValue(user.settings, { emitEvent: false }))
 		);
 
 		this.subscriptions.add(
