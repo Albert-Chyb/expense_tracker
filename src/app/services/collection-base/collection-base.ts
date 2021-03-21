@@ -7,11 +7,10 @@ import {
 import { Constructor } from '@angular/material/core/common-behaviors/constructor';
 import firebase from 'firebase';
 import { from, Observable, of } from 'rxjs';
-import { filter, first, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { filter, first, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { DynamicQuery } from '../../common/dynamic-queries/models';
 import { UserService } from '../user/user.service';
-import { Read } from './models';
 
 /**
  * A class that exposes basic CRUD operations for the collection
@@ -120,6 +119,9 @@ export class FirebaseCollectionCRUD<T> {
 
 /**
  * Base class for all mixins. It is scoped to the currently logged in user.
+ *
+ * @param _name Name of the collection
+ * @param _injector Injector reference
  */
 export class CollectionBase {
 	constructor(
@@ -137,18 +139,6 @@ export class CollectionBase {
 
 	protected get collection$() {
 		return this._collection$;
-	}
-
-	protected get collectionName() {
-		return this._name;
-	}
-
-	protected get firestore() {
-		return this._firestore;
-	}
-
-	protected get userService() {
-		return this._userService;
 	}
 }
 
@@ -179,28 +169,42 @@ export function ReadMixin<TBase extends Constructor<CollectionBase>>(
 			);
 		}
 
-		// TODO: ↓↓↓ Refactor it so it uses collection property from base class ↓↓↓
-
 		/**
 		 * Queries the collection.
 		 *
 		 * @param queries Array of queries
 		 */
-		query(...queries: Array<DynamicQuery | DynamicQuery[]>) {
-			return this.userService.user$.pipe(
-				switchMap(user =>
-					this.firestore
-						.collection(`users/${user.uid}/${this.collectionName}`, ref => {
-							return queries
-								.flat(1)
-								.reduce(
-									(prev: firebase.firestore.Query, query: DynamicQuery) =>
-										prev[query.name](...query.args),
-									ref
-								);
-						})
-						.valueChanges({ idField: 'id' })
-						.pipe(takeUntil(this.userService.isLoggedIn$.pipe(filter(i => !i))))
+		query(...queries: Array<DynamicQuery | DynamicQuery[]>): Observable<any[]> {
+			return this.collection$.pipe(
+				switchMap(coll => {
+					return new Observable<
+						firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>
+					>(subscriber => {
+						const close = queries
+							.flat(1)
+							.reduce<firebase.firestore.Query>(
+								(prev: firebase.firestore.Query, query: DynamicQuery) =>
+									prev[query.name](...query.args),
+								coll.ref
+							)
+							.onSnapshot(
+								snap => {
+									subscriber.next(snap);
+								},
+								error => subscriber.error(error),
+								() => subscriber.complete()
+							);
+
+						subscriber.add(() => {
+							close();
+						});
+					});
+				}),
+				map(data =>
+					data.docs.map(doc => ({
+						...doc.data(),
+						id: doc.id,
+					}))
 				)
 			);
 		}
@@ -293,6 +297,7 @@ export function DeleteMixin<TBase extends Constructor<CollectionBase>>(
  */
 export class CRUDBuilder {
 	private readonly _mixins: Set<Function> = new Set();
+	private _Base: Constructor<{}> = CollectionBase;
 
 	withCreate() {
 		this._mixins.add(CreateMixin);
@@ -314,6 +319,33 @@ export class CRUDBuilder {
 		return this;
 	}
 
+	with(...methods: ('c' | 'r' | 'u' | 'd')[]) {
+		methods.forEach(method => {
+			switch (method) {
+				case 'c':
+					this.withCreate();
+					break;
+
+				case 'r':
+					this.withRead();
+					break;
+
+				case 'u':
+					this.withUpdate();
+					break;
+
+				case 'd':
+					this.withDelete();
+					break;
+
+				default:
+					throw new Error(`Method with name ${method} was not found.`);
+			}
+		});
+
+		return this;
+	}
+
 	/** Shortcut for adding all methods at once */
 	withAll() {
 		return this.withCreate().withRead().withUpdate().withDelete();
@@ -322,7 +354,7 @@ export class CRUDBuilder {
 	build<T>(): Constructor<CollectionBase & T> {
 		const builtMixins = Array.from(this._mixins.values()).reduce(
 			(prev, curr) => curr(prev),
-			CollectionBase
+			this._Base
 		);
 
 		return builtMixins;
