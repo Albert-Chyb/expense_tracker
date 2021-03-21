@@ -9,11 +9,7 @@ interface AttachedMethods
 		Read<ITransactionGroup>,
 		Delete {}
 
-const Class = new CRUDBuilder()
-	.withCreate()
-	.withRead()
-	.withDelete()
-	.build<AttachedMethods>();
+const Class = new CRUDBuilder().with('c', 'r', 'd').build<AttachedMethods>();
 
 @Injectable({
 	providedIn: 'root',

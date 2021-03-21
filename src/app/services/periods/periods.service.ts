@@ -1,12 +1,18 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Injectable, Injector } from '@angular/core';
 import firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { first, map, switchMap } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 import { Cacheable } from 'src/app/common/cash/cashable';
+import {
+	between,
+	limit,
+	orderBy,
+	where,
+} from 'src/app/common/dynamic-queries/helpers';
 
+import { CRUDBuilder } from '../collection-base/collection-base';
+import { Read, Update } from '../collection-base/models';
 import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
-import { UserService } from './../user/user.service';
 
 interface QuerySettings {
 	limit?: number;
@@ -17,77 +23,50 @@ const DEFAULT_QUERY_SETTINGS: QuerySettings = {
 	orderDirection: 'desc',
 };
 
+type Data = IClosedPeriod | IOpenedPeriod;
+interface AttachedMethods extends Read<Data>, Update<Data> {}
+const Class = new CRUDBuilder().with('r', 'u').build<AttachedMethods>();
+
 @Injectable({
 	providedIn: 'root',
 })
-export class PeriodsService {
-	constructor(
-		private readonly _afStore: AngularFirestore,
-		private readonly _user: UserService
-	) {}
+export class PeriodsService extends Class {
+	constructor(injector: Injector) {
+		super('periods', injector);
+	}
 
 	/**
 	 * Gets currently active period.
 	 */
 
 	getCurrent(): Observable<IOpenedPeriod> {
-		return this._user.getUid$().pipe(
-			switchMap(uid =>
-				this._afStore
-					.collection('users')
-					.doc(uid)
-					.collection<IOpenedPeriod>('periods', ref =>
-						ref.where('isClosed', '==', false)
-					)
-					.valueChanges({ idField: 'id' })
-					.pipe(map(periods => periods[0]))
-			)
-		);
+		return this.query(where('isClosed', '==', false)).pipe(
+			map(periods => periods[0])
+		) as Observable<IOpenedPeriod>;
 	}
 
 	/**
 	 * Ends current period.
 	 */
 
-	endCurrent(): Promise<void> {
-		return this._user
-			.getUid$()
-			.pipe(
-				switchMap(uid =>
-					this.getCurrent().pipe(
-						first(),
+	async endCurrent(): Promise<void> {
+		const { id } = await this.getCurrent().pipe(first()).toPromise();
 
-						switchMap(period =>
-							this._afStore.doc(`users/${uid}/periods/${period.id}`).update({
-								'date.end': firebase.firestore.FieldValue.serverTimestamp(),
-							})
-						)
-					)
-				)
-			)
-			.toPromise();
+		return this.update(id, {
+			'date.end': firebase.firestore.FieldValue.serverTimestamp(),
+		} as any);
 	}
 
 	/**
 	 * If current period is closed but not yet sealed, this function can re-open current period.
 	 */
 
-	openCurrent(): Promise<void> {
-		return this._user
-			.getUid$()
-			.pipe(
-				switchMap(uid =>
-					this.getCurrent().pipe(
-						first(),
-						switchMap(period =>
-							this._afStore
-								.doc(`users/${uid}/periods/${period.id}`)
-								.update({ 'date.end': firebase.firestore.FieldValue.delete() })
-						)
-					)
-				)
-			)
-			.toPromise();
+	async openCurrent(): Promise<void> {
+		const { id } = await this.getCurrent().pipe(first()).toPromise();
+
+		return this.update(id, {
+			'date.end': firebase.firestore.FieldValue.delete(),
+		} as any);
 	}
 
 	/**
@@ -98,41 +77,24 @@ export class PeriodsService {
 		tableName: 'closedPeriods',
 	})
 	getAllClosed(settings?: QuerySettings): Observable<IClosedPeriod[]> {
-		const { limit, orderDirection } = Object.assign(
+		const { limit: maxSize, orderDirection } = Object.assign(
 			{ ...DEFAULT_QUERY_SETTINGS },
 			settings
 		);
 
-		return this._user.getUid$().pipe(
-			switchMap(uid =>
-				this._afStore
-					.doc(`users/${uid}`)
-					.collection<IClosedPeriod>('periods', ref => {
-						let query = ref
-							.where('isClosed', '==', true)
-							.orderBy('date.start', orderDirection);
+		const queries = [
+			where('isClosed', '==', true),
+			orderBy('date.start', orderDirection),
+			maxSize ? limit(maxSize) : [],
+		];
 
-						if (limit) query = query.limit(limit);
-
-						return query;
-					})
-					.valueChanges({ idField: 'id' })
-			)
-		);
+		return this.query(...queries) as Observable<IClosedPeriod[]>;
 	}
 
 	getClosedBetween(startAt: Date, endAt: Date): Observable<IClosedPeriod[]> {
-		return this._user.getUid$().pipe(
-			switchMap(uid =>
-				this._afStore
-					.collection<IClosedPeriod>(`users/${uid}/periods`, ref =>
-						ref
-							.where('isClosed', '==', true)
-							.where('date.start', '>=', startAt)
-							.where('date.start', '<=', endAt)
-					)
-					.valueChanges({ idField: 'id' })
-			)
-		);
+		return this.query(
+			between('date.start', startAt, endAt),
+			where('isClosed', '==', true)
+		) as Observable<IClosedPeriod[]>;
 	}
 }
