@@ -1,4 +1,3 @@
-import { NgxEchartsModule } from 'ngx-echarts';
 import { PortalModule } from '@angular/cdk/portal';
 import {
 	APP_INITIALIZER,
@@ -7,7 +6,10 @@ import {
 	NgModule,
 } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuthModule } from '@angular/fire/auth';
+import {
+	AngularFireAuthModule,
+	USE_EMULATOR as USE_AUTH_EMULATOR,
+} from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 import {
 	AngularFirestoreModule,
@@ -18,15 +20,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { NgxEchartsModule } from 'ngx-echarts';
+import { map } from 'rxjs/operators';
 
 import { environment } from './../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GlobalErrorHandler } from './common/errors/globalErrorHandler';
 import { UserDataInitializer } from './common/initializers/user-data';
+import { ButtonModule } from './components/buttons/button.module';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { ClueComponent } from './components/clue/clue.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { DashboardComponentsModule } from './components/dashboard/dashboard-components.module';
 import { DatepickerModule } from './components/datepicker/datepicker.module';
 import { DialogContainerComponent } from './components/dialog-container/dialog-container.component';
 import { FormFieldModule } from './components/form-field/form-field.module';
@@ -47,6 +53,7 @@ import { FormFieldErrorsModule } from './form-field-errors.module';
 import { AddGroupComponent } from './pages/add-group/add-group.component';
 import { AddTransactionComponent } from './pages/add-transaction/add-transaction.component';
 import { AppSettingsComponent } from './pages/app-settings/app-settings.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ManageGroupsComponent } from './pages/manage-groups/manage-groups.component';
@@ -55,12 +62,10 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { PeriodsComponent } from './pages/periods/periods.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SetupAccountComponent } from './pages/setup-account/setup-account.component';
+import { AbsPipe } from './pipes/abs/abs.pipe';
+import { DEFAULT_COLLECTIONS_SCOPE } from './services/collection-base/collection-base';
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
-import { ButtonModule } from './components/buttons/button.module';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { DashboardComponentsModule } from './components/dashboard/dashboard-components.module';
-import { AbsPipe } from './pipes/abs/abs.pipe';
 
 @NgModule({
 	declarations: [
@@ -128,6 +133,12 @@ import { AbsPipe } from './pipes/abs/abs.pipe';
 			useFactory: user => UserDataInitializer(user),
 			deps: [UserService],
 		},
+		{
+			provide: DEFAULT_COLLECTIONS_SCOPE,
+			deps: [UserService],
+			useFactory: (user: UserService) =>
+				user.user$.pipe(map(({ uid }) => `/users/${uid}`)),
+		},
 		ExposedInjector,
 		{
 			provide: USE_FUNCTIONS_EMULATOR,
@@ -143,7 +154,9 @@ import { AbsPipe } from './pipes/abs/abs.pipe';
 		},
 		// {
 		// 	provide: USE_AUTH_EMULATOR,
-		// 	useValue: getEmulatorConfig('auth'),
+		// 	useValue: environment.firebaseEmulators.enabled
+		// 		? ['localhost', 9099]
+		// 		: null,
 		// },
 	],
 	bootstrap: [AppComponent],

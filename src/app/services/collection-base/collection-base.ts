@@ -1,4 +1,4 @@
-import { Injector } from '@angular/core';
+import { InjectionToken, Injector } from '@angular/core';
 import {
 	AngularFirestore,
 	AngularFirestoreCollection,
@@ -117,26 +117,32 @@ export class FirebaseCollectionCRUD<T> {
 	}
 }
 
+export const DEFAULT_COLLECTIONS_SCOPE = new InjectionToken<Observable<string>>(
+	'DEFAULT_COLLECTIONS_SCOPE'
+);
+
 /**
- * Base class for all mixins. It is scoped to the currently logged in user.
+ * Base class for all mixins. It sets the scope of CRUD operations.
+ * To set the default scope use DEFAULT_COLLECTIONS_SCOPE injection token.
  *
  * @param _name Name of the collection
  * @param _injector Injector reference
+ * @param _scope Observable of a path to a root collection
  */
 export class CollectionBase {
 	constructor(
 		private readonly _name: string,
-		private readonly _injector: Injector
+		private readonly _injector: Injector,
+		private readonly _scope?: Observable<string>
 	) {}
 
 	private readonly _firestore = this._injector.get(AngularFirestore);
-	private readonly _userService: UserService = this._injector.get(UserService);
-	private readonly _collection$: Observable<AngularFirestoreCollection> = this._userService.user$.pipe(
-		switchMap(({ uid }) =>
-			of(this._firestore.collection(`users/${uid}/${this._name}`))
-		)
-	);
+	private readonly _rootScope: Observable<string> =
+		this._scope ?? this._injector.get(DEFAULT_COLLECTIONS_SCOPE);
 
+	private readonly _collection$: Observable<AngularFirestoreCollection> = this._rootScope.pipe(
+		map(path => this._firestore.collection(path + '/' + this._name))
+	);
 	protected get collection$() {
 		return this._collection$;
 	}
