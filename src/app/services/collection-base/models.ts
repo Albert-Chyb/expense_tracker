@@ -1,6 +1,6 @@
 import { DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { DynamicQuery } from 'src/app/common/dynamic-queries/models';
+import { DynamicQuery } from 'src/app/services/collection-base/dynamic-queries/models';
 
 /** An interface for CreateMixin */
 export interface Create<T> {

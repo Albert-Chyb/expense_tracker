@@ -9,13 +9,19 @@ import firebase from 'firebase';
 import { from, Observable, of } from 'rxjs';
 import { filter, first, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
-import { DynamicQuery } from '../../common/dynamic-queries/models';
+import { DynamicQuery } from './dynamic-queries/models';
 import { UserService } from '../user/user.service';
+import {
+	Create as ICrate,
+	Read as IRead,
+	Update as IUpdate,
+	Delete as IDelete,
+} from './models';
 
 /**
  * A class that exposes basic CRUD operations for the collection
  */
-export class FirebaseCollectionCRUD<T> {
+class FirebaseCollectionCRUD<T> {
 	constructor(
 		private readonly _name: string,
 		private readonly _injector: Injector
@@ -117,8 +123,14 @@ export class FirebaseCollectionCRUD<T> {
 	}
 }
 
+/**
+ * Injection token to provide default scope for CRUD operations.
+ */
 export const DEFAULT_COLLECTIONS_SCOPE = new InjectionToken<Observable<string>>(
-	'DEFAULT_COLLECTIONS_SCOPE'
+	'DEFAULT_COLLECTIONS_SCOPE',
+	{
+		factory: () => of(''),
+	}
 );
 
 /**
@@ -152,7 +164,7 @@ export class CollectionBase {
 export function ReadMixin<TBase extends Constructor<CollectionBase>>(
 	Base: TBase
 ) {
-	return class Read extends Base {
+	return class Read extends Base implements IRead<any> {
 		/**
 		 * Returns a single document from the collection.
 		 * @param id Id of an document.
@@ -221,7 +233,7 @@ export function ReadMixin<TBase extends Constructor<CollectionBase>>(
 export function CreateMixin<TBase extends Constructor<CollectionBase>>(
 	Base: TBase
 ) {
-	return class Create extends Base {
+	return class Create extends Base implements ICrate<any> {
 		add(data: any) {
 			return this.collection$
 				.pipe(
@@ -238,7 +250,7 @@ export function CreateMixin<TBase extends Constructor<CollectionBase>>(
 export function UpdateMixin<TBase extends Constructor<CollectionBase>>(
 	Base: TBase
 ) {
-	return class Update extends Base {
+	return class Update extends Base implements IUpdate<any> {
 		/**
 		 * Updates a single document in the collection.
 		 *
@@ -260,7 +272,7 @@ export function UpdateMixin<TBase extends Constructor<CollectionBase>>(
 export function DeleteMixin<TBase extends Constructor<CollectionBase>>(
 	Base: TBase
 ) {
-	return class Delete extends Base {
+	return class Delete extends Base implements IDelete {
 		/**
 		 * Removes a single document from the collection.
 		 * @param id Id of the document
@@ -292,7 +304,7 @@ export function DeleteMixin<TBase extends Constructor<CollectionBase>>(
  * // ↓ You are ready to extend your class with the built one ↓
  * export class TodosService extends BuiltClass {
  * 	constructor( injector: Injector ) {
- * 		// ↓ Super class needs collection name and injector. ↓
+ * 		// ↓ Super class needs collection name and injector and optionally scope. ↓
  * 		super('collectionName', injector)
  * 	}
  *

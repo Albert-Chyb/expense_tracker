@@ -6,7 +6,7 @@ import {
 	between,
 	orderBy,
 	where,
-} from 'src/app/common/dynamic-queries/helpers';
+} from 'src/app/services/collection-base/dynamic-queries/helpers';
 
 import { Cacheable } from '../../common/cash/cashable';
 import { CRUDBuilder } from '../collection-base/collection-base';

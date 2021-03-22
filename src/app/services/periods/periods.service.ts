@@ -8,7 +8,7 @@ import {
 	limit,
 	orderBy,
 	where,
-} from 'src/app/common/dynamic-queries/helpers';
+} from 'src/app/services/collection-base/dynamic-queries/helpers';
 
 import { CRUDBuilder } from '../collection-base/collection-base';
 import { Read, Update } from '../collection-base/models';
