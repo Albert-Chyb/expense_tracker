@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { DocumentReference } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { first, switchMap } from 'rxjs/operators';
 import {
@@ -25,7 +25,7 @@ export class TransactionsService extends Class {
 	constructor(
 		private readonly _periods: PeriodsService,
 		private readonly _groups: TransactionsGroupsService,
-		readonly injector: Injector
+		private readonly injector: Injector
 	) {
 		super('transactions', injector);
 	}
