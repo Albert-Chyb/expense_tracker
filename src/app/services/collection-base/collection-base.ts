@@ -171,7 +171,7 @@ export function ReadMixin<TBase extends Constructor<CollectionBase>>(
 		 */
 		get(id: string) {
 			return this.collection$.pipe(
-				switchMap(coll => coll.doc(id).valueChanges())
+				switchMap(coll => coll.doc(id).valueChanges({ idField: 'id' }))
 			);
 		}
 
@@ -179,7 +179,7 @@ export function ReadMixin<TBase extends Constructor<CollectionBase>>(
 		 * Gets all documents that are present in the collection.
 		 *
 		 * Remember that a collection may be very large.
-		 * Consider using a query to limit number od documents if that's the case.
+		 * Consider using a query to limit number of documents.
 		 */
 		getAll() {
 			return this.collection$.pipe(
@@ -238,8 +238,7 @@ export function CreateMixin<TBase extends Constructor<CollectionBase>>(
 			return this.collection$
 				.pipe(
 					first(),
-					switchMap(coll => from(coll.add(data))),
-					tap(console.log)
+					switchMap(coll => from(coll.add(data)))
 				)
 				.toPromise();
 		}
