@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
+import { DocumentReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { first, switchMap } from 'rxjs/operators';
 import {
@@ -9,19 +9,18 @@ import {
 } from 'src/app/services/collection-base/dynamic-queries/helpers';
 
 import { Cacheable } from '../../common/cash/cashable';
-import { CRUDBuilder } from '../collection-base/collection-base';
+import { CRUDMixins } from '../collection-base/collection-base';
 import { CRUD } from '../collection-base/models';
 import { ITransaction } from './../../common/models/transaction';
 import { PeriodsService } from './../periods/periods.service';
 import { TransactionsGroupsService } from './../transactions-groups/transactions-groups.service';
 
 interface AttachedMethods extends CRUD<ITransaction> {}
-const Class = new CRUDBuilder().withAll().build<AttachedMethods>();
 
 @Injectable({
 	providedIn: 'root',
 })
-export class TransactionsService extends Class {
+export class TransactionsService extends CRUDMixins<AttachedMethods>() {
 	constructor(
 		private readonly _periods: PeriodsService,
 		private readonly _groups: TransactionsGroupsService,

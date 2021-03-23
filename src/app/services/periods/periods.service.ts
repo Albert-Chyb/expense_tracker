@@ -10,7 +10,7 @@ import {
 	where,
 } from 'src/app/services/collection-base/dynamic-queries/helpers';
 
-import { CRUDBuilder } from '../collection-base/collection-base';
+import { CRUDMixins } from '../collection-base/collection-base';
 import { Read, Update } from '../collection-base/models';
 import { IClosedPeriod, IOpenedPeriod } from './../../common/models/period';
 
@@ -25,12 +25,11 @@ const DEFAULT_QUERY_SETTINGS: QuerySettings = {
 
 type Data = IClosedPeriod | IOpenedPeriod;
 interface AttachedMethods extends Read<Data>, Update<Data> {}
-const Class = new CRUDBuilder().with('r', 'u').build<AttachedMethods>();
 
 @Injectable({
 	providedIn: 'root',
 })
-export class PeriodsService extends Class {
+export class PeriodsService extends CRUDMixins<AttachedMethods>('r', 'u') {
 	constructor(injector: Injector) {
 		super('periods', injector);
 	}

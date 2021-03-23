@@ -18,6 +18,14 @@ import {
 	Delete as IDelete,
 } from './models';
 
+type MixinAlias = 'c' | 'r' | 'u' | 'd';
+const MixinsAliases = new Map<MixinAlias, Function>([
+	['c', CreateMixin],
+	['r', ReadMixin],
+	['u', UpdateMixin],
+	['d', DeleteMixin],
+]);
+
 /**
  * A class that exposes basic CRUD operations for the collection
  */
@@ -285,6 +293,33 @@ export function DeleteMixin<TBase extends Constructor<CollectionBase>>(
 				.toPromise();
 		}
 	};
+}
+
+/**
+ * Builds the base class that exposes CRUD operations for a specific firestore collection.
+ * Remember to pass an interface that extends all CRUD interfaces you wish to include in the class,
+ * Typescript won't figure it out on its own.
+ *
+ * Super constructor requires name of the collection, injector reference and optionally path to a root collection in that order.
+ *
+ * @param operations Requested operations (all if not passed eny)
+ */
+export function CRUDMixins<T>(
+	...operations: MixinAlias[]
+): Constructor<CollectionBase & T> {
+	// Indicates if user requested specific operations.
+	const hasSpecified = operations.length > 0;
+	// If he did, use them, if not, add all operations.
+	const chosenOperations: MixinAlias[] = hasSpecified
+		? operations
+		: ['c', 'r', 'u', 'd'];
+	// We don't want aliases to repeat, so we use the Set that automatically remove duplicates.
+	const operationsSet = new Set<MixinAlias>(chosenOperations);
+
+	return Array.from(operationsSet.values()).reduce(
+		(prev, curr) => MixinsAliases.get(curr)(prev),
+		CollectionBase
+	);
 }
 
 /**
