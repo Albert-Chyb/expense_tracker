@@ -65,8 +65,18 @@ export class OverlayService {
 	 *
 	 * @param Component Component class to create and insert into overlay
 	 * @param injector Injector that will be used to create passed Component
-	 * @returns ComponentRef of the created component
+	 * @returns Reference of the created component
 	 */
+	open<T>(
+		Component?: ComponentType<T>,
+		injector?: Injector,
+		settings?: IOverlaySettings
+	): ComponentRef<T>;
+	open<T>(
+		Component?: TemplateRef<T>,
+		injector?: Injector,
+		settings?: IOverlaySettings
+	): EmbeddedViewRef<T>;
 	open<T>(
 		Component?: ComponentType<T> | TemplateRef<T>,
 		injector?: Injector,
