@@ -7,41 +7,24 @@ import {
 } from '@angular/animations';
 import {
 	AfterContentInit,
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
 	ContentChild,
 	ContentChildren,
+	ElementRef,
 	EventEmitter,
 	Input,
 	OnDestroy,
 	Output,
 	QueryList,
+	ViewChild,
 } from '@angular/core';
-import { merge, Observable, Subject, Subscription } from 'rxjs';
+import { fromEvent, merge, Observable, Subject, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 type TZippyState = 'expanded' | 'collapsed';
-
-@Component({
-	selector: 'app-zippy-static',
-	template: '<ng-content></ng-content>',
-	changeDetection: ChangeDetectionStrategy.OnPush,
-	host: {
-		'(click)': '_onClick.next($event)',
-	},
-})
-export class ZippyStaticComponent {
-	/** Wether clicking on static component should toggle content */
-	@Input('toggleOnClick') toggleOnClick = true;
-
-	private readonly _onClick = new Subject<MouseEvent>();
-
-	/** Emits event when toggleOnClick is set to true */
-	get onClick() {
-		return this._onClick.pipe(filter(() => this.toggleOnClick));
-	}
-}
 
 @Component({
 	selector: 'app-zippy-content',
@@ -63,7 +46,9 @@ export class ZippyContentComponent {}
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 		<div class="zippy">
-			<ng-content select="app-zippy-static"></ng-content>
+			<div class="zippy-static" (click)="onStaticClick()">
+				<ng-content></ng-content>
+			</div>
 
 			<div class="zippy-content" *ngIf="isExpanded" @zippyAnimation>
 				<ng-content select="app-zippy-content"></ng-content>
@@ -72,6 +57,10 @@ export class ZippyContentComponent {}
 	`,
 	styles: [
 		`
+			.zippy {
+				background: red;
+			}
+
 			.zippy-content {
 				overflow-y: hidden;
 			}
@@ -86,16 +75,16 @@ export class ZippyContentComponent {}
 		]),
 	],
 })
-export class ZippyComponent implements AfterContentInit {
+export class ZippyComponent {
 	constructor(private readonly _changeDetector: ChangeDetectorRef) {}
-
-	private _isExpanded = false;
-	private readonly _subscriptions = new Subscription();
 
 	@Output('stateChange') onStateChange = new EventEmitter<ZippyComponent>();
 	@Output('collapse') onCollapse = new EventEmitter<ZippyComponent>();
 	@Output('expand') onExpand = new EventEmitter<ZippyComponent>();
-	@ContentChild(ZippyStaticComponent) static: ZippyStaticComponent;
+	/** If clicking on static content should toggle the dynamic content */
+	@Input('autoToggle') autoToggle = true;
+
+	private _isExpanded = false;
 
 	/** Expands the zippy. */
 	expand() {
@@ -117,10 +106,11 @@ export class ZippyComponent implements AfterContentInit {
 		this.onStateChange.emit(this);
 	}
 
-	ngAfterContentInit() {
-		this._subscriptions.add(
-			this.static.onClick.subscribe(this.toggle.bind(this))
-		);
+	/** When static content was clicked */
+	onStaticClick() {
+		if (!this.autoToggle) return;
+
+		this.toggle();
 	}
 
 	/** Indicates if the zippy is currently expanded. */

@@ -4,22 +4,11 @@ import {
 	ZippyListComponent,
 	ZippyComponent,
 	ZippyContentComponent,
-	ZippyStaticComponent,
 } from './zippy.component';
 
 @NgModule({
-	declarations: [
-		ZippyComponent,
-		ZippyContentComponent,
-		ZippyStaticComponent,
-		ZippyListComponent,
-	],
+	declarations: [ZippyComponent, ZippyContentComponent, ZippyListComponent],
 	imports: [CommonModule],
-	exports: [
-		ZippyComponent,
-		ZippyContentComponent,
-		ZippyStaticComponent,
-		ZippyListComponent,
-	],
+	exports: [ZippyComponent, ZippyContentComponent, ZippyListComponent],
 })
 export class ZippyModule {}
