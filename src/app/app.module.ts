@@ -6,10 +6,7 @@ import {
 	NgModule,
 } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
-import {
-	AngularFireAuthModule,
-	USE_EMULATOR as USE_AUTH_EMULATOR,
-} from '@angular/fire/auth';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
 import {
 	AngularFirestoreModule,
@@ -47,7 +44,7 @@ import { RippleModule } from './components/ripple/ripple.module';
 import { SummaryCardComponent } from './components/summary-card/summary-card.component';
 import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
 import { TransactionGroupComponent } from './components/transaction-group/transaction-group.component';
-import { ZippyModule } from './components/zippy-components/zippy.module';
+import { ZippyModule } from './components/zippy/zippy.module';
 import { ConfirmActionDirective } from './directives/confirm-action/confirm-action.directive';
 import { FormFieldErrorsModule } from './form-field-errors.module';
 import { AddGroupComponent } from './pages/add-group/add-group.component';
@@ -115,7 +112,6 @@ import { UserService } from './services/user/user.service';
 		FormFieldModule,
 		FormFieldErrorsModule,
 		FormSelectModule,
-		ZippyModule,
 		DatepickerModule,
 		RippleModule,
 		ButtonModule,
@@ -123,6 +119,7 @@ import { UserService } from './services/user/user.service';
 			echarts: () => import('echarts'),
 		}),
 		DashboardComponentsModule,
+		ZippyModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

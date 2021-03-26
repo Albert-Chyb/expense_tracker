@@ -2,30 +2,21 @@
 	<ul *ngIf="periods.length; else noPeriodsFound">
 		<li *ngFor="let period of periods">
 			<section class="period">
-				<zippy>
-					<zippy-static>
-						<h2 class="period__date">
-							{{ period.date.start.toDate() | date }} -
-							{{ period.date.end.toDate() | date }}
-						</h2>
+				<zippy #zippy>
+					<h2 class="period__date">
+						{{ period.date.start.toDate() | date }} -
+						{{ period.date.end.toDate() | date }}
+					</h2>
 
-						<button
-							appButton
-							btnType="none"
-							class="period__icon"
-							[ngClass]="
-								zippy.isExpanded
-									? 'period__icon--expanded'
-									: 'period__icon--collapsed'
-							"
-						>
-							<i class="fas fa-chevron-down fa-lg"></i>
-						</button>
-					</zippy-static>
-					<zippy-content
-						#zippy
-						[ngClass]="{ 'period--expanded': zippy.isExpanded }"
+					<button
+						appButton
+						btnType="none"
+						class="period__icon period__icon--{{ zippy.state }}"
 					>
+						<i class="fas fa-chevron-down fa-lg"></i>
+					</button>
+
+					<zippy-content>
 						<ul class="period__details">
 							<li>
 								<summary-card type="small" theme="danger">

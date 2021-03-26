@@ -22,31 +22,32 @@
 	</section>
 
 	<section formGroupName="settings">
-		<zippy>
-			<zippy-static toggleOnClick="false">
-				<section class="complete-login__section">
-					<checkbox formControlName="autoEndPeriod" labelId="auto-end-period"
-						>Automatyczne zakańczanie okresu</checkbox
-					>
+		<zippy
+			[autoToggle]="false"
+			[isExpanded]="form.get('settings.autoEndPeriod').value"
+		>
+			<section class="complete-login__section">
+				<checkbox formControlName="autoEndPeriod" labelId="auto-end-period"
+					>Automatyczne zakańczanie okresu</checkbox
+				>
 
-					<p class="complete-login__description paragraph-description">
-						Jeśli chcesz aby twój okres został automatycznie zakańczany zaznacz
-						tą opcję.
-					</p>
-				</section>
-			</zippy-static>
+				<p class="complete-login__description paragraph-description">
+					Jeśli chcesz aby twój okres został automatycznie zakańczany zaznacz tą
+					opcję.
+				</p>
+			</section>
 
-			<zippy-content [state]="form.get('settings.autoEndPeriod').value">
+			<zippy-content>
 				<section class="complete-login__section">
 					<div class="complete-login__select">
 						<form-field>
 							<form-field-label>Częstotliwość</form-field-label>
 
-							<app-select formControlName="autoEndAfter">
+							<select formControlName="autoEndAfter">
 								<select-option value="">Wybierz</select-option>
 								<select-option [value]="7">Tydzień</select-option>
 								<select-option [value]="30">Miesiąc</select-option>
-							</app-select>
+							</select>
 						</form-field>
 
 						<p class="complete-login__description paragraph-description">

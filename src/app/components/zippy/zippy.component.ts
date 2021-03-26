@@ -7,27 +7,22 @@ import {
 } from '@angular/animations';
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	ContentChild,
 	ContentChildren,
-	ElementRef,
 	EventEmitter,
 	Input,
 	OnDestroy,
 	Output,
 	QueryList,
-	ViewChild,
 } from '@angular/core';
-import { fromEvent, merge, Observable, Subject, Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { merge, Observable, Subscription } from 'rxjs';
 
 type TZippyState = 'expanded' | 'collapsed';
 
 @Component({
-	selector: 'app-zippy-content',
+	selector: 'zippy-content',
 	template: '<ng-content></ng-content>',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -42,7 +37,7 @@ export class ZippyContentComponent {}
  * * expand - Whenever zippy was expanded
  */
 @Component({
-	selector: 'app-zippy',
+	selector: 'zippy',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 		<div class="zippy">
@@ -51,7 +46,7 @@ export class ZippyContentComponent {}
 			</div>
 
 			<div class="zippy-content" *ngIf="isExpanded" @zippyAnimation>
-				<ng-content select="app-zippy-content"></ng-content>
+				<ng-content select="zippy-content"></ng-content>
 			</div>
 		</div>
 	`,
@@ -111,8 +106,8 @@ export class ZippyComponent {
 
 	/** Indicates if the zippy is currently expanded. */
 	@Input('isExpanded')
-	set isExpanded(newIsExpanded) {
-		this.state = newIsExpanded ? 'expanded' : 'collapsed';
+	set isExpanded(shouldBeExpanded) {
+		this.state = shouldBeExpanded ? 'expanded' : 'collapsed';
 	}
 	get isExpanded() {
 		return this._isExpanded;
@@ -144,7 +139,7 @@ export class ZippyComponent {
  * Automatically collapses others when a new one is expanded.
  */
 @Component({
-	selector: 'app-zippy-list',
+	selector: 'zippy-list',
 	template: '<ng-content></ng-content>',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

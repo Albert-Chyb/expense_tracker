@@ -1,22 +1,20 @@
 <ng-container *ngIf="user$ | async as user">
 	<form [formGroup]="form" class="settings" (ngSubmit)="updateSettings()">
-		<zippy>
-			<zippy-static toggleOnClick="false">
-				<checkbox class="settings__item" formControlName="autoEndPeriod"
-					>Automatycznie zakańczaj bierzące okresy.</checkbox
-				>
-			</zippy-static>
+		<zippy [isExpanded]="form.get('autoEndPeriod').value" [autoToggle]="false">
+			<checkbox class="settings__item" formControlName="autoEndPeriod"
+				>Automatycznie zakańczaj bierzące okresy.</checkbox
+			>
 
-			<zippy-content [state]="form.get('autoEndPeriod').value">
+			<zippy-content>
 				<div class="zippy-content">
 					<form-field>
 						<form-field-label>Częstotliwość</form-field-label>
 
-						<app-select formControlName="autoEndAfter">
+						<select formControlName="autoEndAfter">
 							<select-option value="">Wybierz</select-option>
 							<select-option [value]="7">Tydzień</select-option>
 							<select-option [value]="30">Miesiąc</select-option>
-						</app-select>
+						</select>
 					</form-field>
 
 					<p class="settings__description settings__item paragraph-description">
