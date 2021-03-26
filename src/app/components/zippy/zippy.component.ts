@@ -37,7 +37,7 @@ export class ZippyContentComponent {}
  * Zippy element that can hide and show its content by clicking header element.
  * It exposes few events that you can listen to.
  *
- * * stateChange - Whenever zippy was collapsed or expanded
+ * * toggle - Whenever zippy was collapsed or expanded
  * * collapse - Whenever zippy was collapsed
  * * expand - Whenever zippy was expanded
  */
@@ -57,10 +57,6 @@ export class ZippyContentComponent {}
 	`,
 	styles: [
 		`
-			.zippy {
-				background: red;
-			}
-
 			.zippy-content {
 				overflow-y: hidden;
 			}
@@ -78,7 +74,7 @@ export class ZippyContentComponent {}
 export class ZippyComponent {
 	constructor(private readonly _changeDetector: ChangeDetectorRef) {}
 
-	@Output('stateChange') onStateChange = new EventEmitter<ZippyComponent>();
+	@Output('toggle') onToggle = new EventEmitter<ZippyComponent>();
 	@Output('collapse') onCollapse = new EventEmitter<ZippyComponent>();
 	@Output('expand') onExpand = new EventEmitter<ZippyComponent>();
 	/** If clicking on static content should toggle the dynamic content */
@@ -103,7 +99,7 @@ export class ZippyComponent {
 	/** Toggles the zippy state. */
 	toggle() {
 		this._isExpanded ? this.collapse() : this.expand();
-		this.onStateChange.emit(this);
+		this.onToggle.emit(this);
 	}
 
 	/** When static content was clicked */
