@@ -129,22 +129,24 @@ export class ZippyComponent {
 				throw new Error(`Unknown zippy state (${newState})`);
 		}
 	}
+	/** Current state of the zippy. */
 	get state(): TZippyState {
 		return this._isExpanded ? 'expanded' : 'collapsed';
 	}
 }
 
 /**
- * Zippy list allows only one zippy to be expanded. Automatically collapses others when a new one is expanded.
- * The list selects only zippers to be displayed, other components are ignored.
+ * Zippy list allows only one zippy to be expanded.
+ * Automatically collapses others when a new one is expanded.
  */
 @Component({
 	selector: 'app-zippy-list',
-	template: '<ng-content select="app-zippy"></ng-content>',
+	template: '<ng-content></ng-content>',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZippyListComponent implements AfterContentInit, OnDestroy {
-	@ContentChildren(ZippyComponent) zippers: QueryList<ZippyComponent>;
+	@ContentChildren(ZippyComponent, { descendants: true })
+	zippers: QueryList<ZippyComponent>;
 	private readonly _subscriptions = new Subscription();
 	private _onAnyExpandSubscription: Subscription;
 	private _lastlyExpanded: ZippyComponent;
