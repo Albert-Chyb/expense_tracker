@@ -110,6 +110,10 @@ export class ZippyComponent {
 	}
 
 	/** Indicates if the zippy is currently expanded. */
+	@Input('isExpanded')
+	set isExpanded(newIsExpanded) {
+		this.state = newIsExpanded ? 'expanded' : 'collapsed';
+	}
 	get isExpanded() {
 		return this._isExpanded;
 	}
