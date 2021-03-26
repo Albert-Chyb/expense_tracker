@@ -6,31 +6,45 @@ import {
 	trigger,
 } from '@angular/animations';
 import {
-	ChangeDetectionStrategy,
-	Component,
-	Output,
-	EventEmitter,
-	OnInit,
-	ContentChildren,
-	QueryList,
 	AfterContentInit,
+	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	OnDestroy,
+	Component,
+	ContentChild,
+	ContentChildren,
+	EventEmitter,
 	Input,
+	OnDestroy,
+	Output,
+	QueryList,
 } from '@angular/core';
-import { merge, Observable, Subscription } from 'rxjs';
+import { merge, Observable, Subject, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 type TZippyState = 'expanded' | 'collapsed';
 
 @Component({
-	selector: 'zippy-static',
+	selector: 'app-zippy-static',
 	template: '<ng-content></ng-content>',
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	host: {
+		'(click)': '_onClick.next($event)',
+	},
 })
-export class ZippyStaticComponent {}
+export class ZippyStaticComponent {
+	/** Wether clicking on static component should toggle content */
+	@Input('toggleOnClick') toggleOnClick = true;
+
+	private readonly _onClick = new Subject<MouseEvent>();
+
+	/** Emits event when toggleOnClick is set to true */
+	get onClick() {
+		return this._onClick.pipe(filter(() => this.toggleOnClick));
+	}
+}
 
 @Component({
-	selector: 'zippy-content',
+	selector: 'app-zippy-content',
 	template: '<ng-content></ng-content>',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -45,15 +59,13 @@ export class ZippyContentComponent {}
  * * expand - Whenever zippy was expanded
  */
 @Component({
-	selector: 'zippy',
+	selector: 'app-zippy',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: `
 		<div class="zippy">
-			<div class="zippy-static" (click)="toggle()">
-				<ng-content select="app-zippy-static"></ng-content>
-			</div>
+			<ng-content select="app-zippy-static"></ng-content>
 
-			<div class="zippy-content" [@zippyAnimation]="state">
+			<div class="zippy-content" *ngIf="isExpanded" @zippyAnimation>
 				<ng-content select="app-zippy-content"></ng-content>
 			</div>
 		</div>
@@ -67,27 +79,23 @@ export class ZippyContentComponent {}
 	],
 	animations: [
 		trigger('zippyAnimation', [
-			state('collapsed', style({ height: 0, opacity: 0 })),
+			state('void', style({ height: 0, opacity: 0 })),
 
-			transition(
-				'collapsed => expanded',
-				animate('500ms cubic-bezier(.62,.28,.23,.99)')
-			),
-			transition(
-				'expanded => collapsed',
-				animate('500ms cubic-bezier(.62,.28,.23,.99)')
-			),
+			transition('void => *', animate('500ms cubic-bezier(.62,.28,.23,.99)')),
+			transition('* => void', animate('500ms cubic-bezier(.62,.28,.23,.99)')),
 		]),
 	],
 })
-export class ZippyComponent {
+export class ZippyComponent implements AfterContentInit {
 	constructor(private readonly _changeDetector: ChangeDetectorRef) {}
 
 	private _isExpanded = false;
+	private readonly _subscriptions = new Subscription();
 
 	@Output('stateChange') onStateChange = new EventEmitter<ZippyComponent>();
 	@Output('collapse') onCollapse = new EventEmitter<ZippyComponent>();
 	@Output('expand') onExpand = new EventEmitter<ZippyComponent>();
+	@ContentChild(ZippyStaticComponent) static: ZippyStaticComponent;
 
 	/** Expands the zippy. */
 	expand() {
@@ -107,6 +115,12 @@ export class ZippyComponent {
 	toggle() {
 		this._isExpanded ? this.collapse() : this.expand();
 		this.onStateChange.emit(this);
+	}
+
+	ngAfterContentInit() {
+		this._subscriptions.add(
+			this.static.onClick.subscribe(this.toggle.bind(this))
+		);
 	}
 
 	/** Indicates if the zippy is currently expanded. */
@@ -139,7 +153,7 @@ export class ZippyComponent {
  * The list selects only zippers to be displayed, other components are ignored.
  */
 @Component({
-	selector: 'zippy-list',
+	selector: 'app-zippy-list',
 	template: '<ng-content select="app-zippy"></ng-content>',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
