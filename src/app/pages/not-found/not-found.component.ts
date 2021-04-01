@@ -8,6 +8,6 @@ export class NotFoundComponent implements OnInit {
 	constructor(private readonly _changeDetector: ChangeDetectorRef) {}
 
 	ngOnInit() {
-		this._changeDetector.detach();
+		// this._changeDetector.detach();
 	}
 }

@@ -1,0 +1,11 @@
+<div
+	class="swipe-actions"
+	#container
+	(pan)="onPanMove($event)"
+	(panstart)="onPanStart($event)"
+	(panend)="onPanEnd($event)"
+>
+	<div class="swipe-actions__front" #front>
+		<ng-content></ng-content>
+	</div>
+</div>

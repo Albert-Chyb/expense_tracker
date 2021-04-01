@@ -14,7 +14,7 @@ import {
 } from '@angular/fire/firestore';
 import { USE_EMULATOR as USE_FUNCTIONS_EMULATOR } from '@angular/fire/functions';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -63,6 +63,8 @@ import { AbsPipe } from './pipes/abs/abs.pipe';
 import { DEFAULT_COLLECTIONS_SCOPE } from './services/collection-base/collection-base';
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
+import { SwipeActionsModule } from './components/swipe-actions/swipe-actions.module';
+import 'hammerjs';
 
 @NgModule({
 	declarations: [
@@ -120,6 +122,8 @@ import { UserService } from './services/user/user.service';
 		}),
 		DashboardComponentsModule,
 		ZippyModule,
+		SwipeActionsModule,
+		HammerModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

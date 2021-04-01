@@ -1,0 +1,16 @@
+:host {
+	display: block;
+}
+
+.swipe-actions {
+	background-color: orchid;
+	overflow: hidden;
+
+	&__front {
+		background-color: orangered;
+
+		&--is-snapping {
+			transition: transform 0.2s ease-in-out;
+		}
+	}
+}
