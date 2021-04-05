@@ -13,6 +13,13 @@ import {
 })
 export class SwipeActionsFrontDirective {}
 
+export enum Side {
+	Left = 1,
+	Right = -1,
+}
+
+const { Left, Right } = Side;
+
 @Component({
 	selector: 'swipe-actions',
 	templateUrl: './swipe-actions.component.html',
@@ -25,11 +32,10 @@ export class SwipeActionsComponent {
 	/** How far front element can be moved away from each side. (In %, relative to container) */
 	@Input('threshold') threshold = 0.2;
 	/** The distance after which front will automatically move to the max distance. (In %, relative to the threshold) */
-	@Input('snap') snapThreshold = 0.3;
+	@Input('snap') snapThreshold = 0.15;
 	@ViewChild('front') frontEl: ElementRef<HTMLElement>;
 
 	// TODO: Prevent default behavior and stop propagation when front element is moving.
-	// TODO: Add snapping
 
 	/** Distance from the left side. Does not include change in position while is dragged (In px) */
 	private _distance = 0;
@@ -44,28 +50,57 @@ export class SwipeActionsComponent {
 	onPanMove($event: HammerInput) {
 		const { deltaX } = $event;
 		const distance = deltaX + this._distance;
-		const direction = distance > 0 ? 1 : -1;
+		const side = this._getSide(distance);
 
 		this._setTranslate(
 			this._maxDistance *
 				this._easing(Math.abs(distance) / this._maxDistance) *
-				direction
+				side
 		);
 	}
 
 	onPanEnd($event: HammerInput) {
-		const newDistance = this._distance + $event.deltaX;
-		const isBeyondSnap =
-			Math.abs(newDistance) > this._maxDistance * this.snapThreshold;
+		let deltaX = $event.deltaX;
+		let distance = this._distance;
+		let newDistance = distance + deltaX;
 
-		if (isBeyondSnap) {
-			this.open(newDistance > 0 ? 'left' : 'right');
+		const isBeyondMaxDistance = Math.abs(newDistance) > this._maxDistance;
+		const newSide = this._getSide(newDistance);
+		const oldSide = this._getSide(distance);
+
+		// If new distance is beyond max distance, the deltaX is not important.
+		if (isBeyondMaxDistance) {
+			return this._moveFront(this._maxDistance * newSide);
+		}
+
+		const changedSides = newSide !== oldSide;
+
+		if (this.isOpened && changedSides) {
+			deltaX = deltaX - distance * -1;
+			newDistance = distance * -1 + deltaX;
+			distance = 0;
+		}
+
+		// We are using deltaX to determine if user moved the front element with intention to toggle state.
+		// If user moved front element by a small amount of pixels, we assume that he didn't want to toggle the current state.
+		// Otherwise we should assume that he wants to toggle the current state.
+		const shouldToggle =
+			Math.abs(deltaX) > this._maxDistance * this.snapThreshold;
+
+		if (shouldToggle) {
+			// Should toggle its state.
+			if (this.isOpened && !changedSides) {
+				this.close();
+			} else {
+				this.snap(this._getSideName(newDistance));
+			}
 		} else {
-			this.close();
+			// Should remain it its state
+			this._moveFront(distance);
 		}
 	}
 
-	open(side: 'left' | 'right') {
+	snap(side: 'left' | 'right') {
 		const direction = side === 'left' ? 1 : -1;
 		const distance = this._maxDistance * direction;
 
@@ -74,6 +109,18 @@ export class SwipeActionsComponent {
 
 	close() {
 		this._moveFront(0);
+	}
+
+	private _getSide(distance: number): Side {
+		return distance > 0 ? Left : Right;
+	}
+
+	private _getSideName(distance: number): 'left' | 'right' {
+		return distance > 0 ? 'left' : 'right';
+	}
+
+	get isOpened() {
+		return Math.abs(this._distance) > 0;
 	}
 
 	private _moveFront(distance: number) {
