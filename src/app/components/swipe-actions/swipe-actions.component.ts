@@ -3,22 +3,29 @@ import {
 	Component,
 	Directive,
 	ElementRef,
+	HostListener,
 	Input,
 	Renderer2,
+	RendererStyleFlags2,
 	ViewChild,
 } from '@angular/core';
 
-@Directive({
-	selector: '[swipe-actions-front]',
-})
-export class SwipeActionsFrontDirective {}
+/**
+ * When user stopped dragging the front element, the click event that was invoked by it, might trigger some actions.
+ * (for instance routerLink might change the route). This is a helper directive that calls stopPropagation and preventDefault methods
+ * on the event object. Make sure that element with this directive is a child of an element that triggers side effects.
+ */
+@Directive({ selector: '[cancel-side-effects]' })
+export class SwipeActionsCancelSideEffects {
+	@Input('cancel-side-effects') swipeActionsRef: SwipeActionsComponent;
 
-export enum Side {
-	Left = 1,
-	Right = -1,
+	@HostListener('click', ['$event']) preventSideEffects($event: MouseEvent) {
+		if (this.swipeActionsRef.isOpened) {
+			$event.stopPropagation();
+			$event.preventDefault();
+		}
+	}
 }
-
-const { Left, Right } = Side;
 
 @Component({
 	selector: 'swipe-actions',
@@ -33,18 +40,22 @@ export class SwipeActionsComponent {
 	@Input('threshold') threshold = 0.2;
 	/** The distance after which front will automatically move to the max distance. (In %, relative to the threshold) */
 	@Input('snap') snapThreshold = 0.15;
-	@ViewChild('front') frontEl: ElementRef<HTMLElement>;
 
-	// TODO: Prevent default behavior and stop propagation when front element is moving.
+	@ViewChild('front') frontEl: ElementRef<HTMLElement>;
+	@ViewChild('container') containerEl: ElementRef<HTMLElement>;
+
+	// TODO: Content might have rounded corners, <- test it !
 
 	/** Distance from the left side. Does not include change in position while is dragged (In px) */
 	private _distance = 0;
 	/** Max distance that front element can be moved by. (In px) */
 	private _maxDistance: number;
+	private _isTransitioning = false;
 
-	onPanStart($event: HammerInput) {
-		const { width } = $event.target.getBoundingClientRect();
+	onPanStart() {
+		const { width } = this.containerEl.nativeElement.getBoundingClientRect();
 		this._maxDistance = width * this.threshold;
+		this._setSideWidth(this._maxDistance);
 	}
 
 	onPanMove($event: HammerInput) {
@@ -111,26 +122,33 @@ export class SwipeActionsComponent {
 		this._moveFront(0);
 	}
 
-	private _getSide(distance: number): Side {
-		return distance > 0 ? Left : Right;
+	get isOpened() {
+		return Math.abs(this._distance) > 0 || this._isTransitioning;
+	}
+
+	private _getSide(distance: number): number {
+		return distance > 0 ? 1 : -1;
 	}
 
 	private _getSideName(distance: number): 'left' | 'right' {
 		return distance > 0 ? 'left' : 'right';
 	}
 
-	get isOpened() {
-		return Math.abs(this._distance) > 0;
-	}
-
-	private _moveFront(distance: number) {
+	private async _moveFront(distance: number) {
 		const snapClass = 'swipe-actions__front--is-snapping';
 
+		this._isTransitioning = true;
 		this._frontEl.classList.add(snapClass);
 		this._setTranslate(distance);
 		this._distance = distance;
 
-		setTimeout(() => this._frontEl.classList.remove(snapClass), 200);
+		return new Promise<void>(resolve => {
+			setTimeout(() => {
+				this._frontEl.classList.remove(snapClass);
+				this._isTransitioning = false;
+				resolve();
+			}, 200);
+		});
 	}
 
 	private _easing(x: number) {
@@ -143,6 +161,15 @@ export class SwipeActionsComponent {
 			this._frontEl,
 			'transform',
 			`translateX(${distance}px)`
+		);
+	}
+
+	private _setSideWidth(width: number) {
+		this._renderer.setStyle(
+			this.containerEl.nativeElement,
+			'--side-width',
+			`${width}px`,
+			RendererStyleFlags2.DashCase
 		);
 	}
 

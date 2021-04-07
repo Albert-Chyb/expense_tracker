@@ -2,9 +2,27 @@
 	class="swipe-actions"
 	#container
 	(pan)="onPanMove($event)"
-	(panstart)="onPanStart($event)"
+	(panstart)="onPanStart()"
 	(panend)="onPanEnd($event)"
 >
+	<div class="swipe-actions__sides">
+		<div class="swipe-actions__side swipe-actions__side--left">
+			<button class="swipe-actions__action">
+				<i class="fas fa-share-square"></i>
+			</button>
+			<button class="swipe-actions__action">
+				<i class="fas fa-print"></i>
+			</button>
+		</div>
+
+		<div class="swipe-actions__side swipe-actions__side--right">
+			<button class="swipe-actions__action"><i class="fas fa-edit"></i></button>
+			<button class="swipe-actions__action">
+				<i class="fas fa-trash"></i>
+			</button>
+		</div>
+	</div>
+
 	<div class="swipe-actions__front" #front>
 		<ng-content></ng-content>
 	</div>

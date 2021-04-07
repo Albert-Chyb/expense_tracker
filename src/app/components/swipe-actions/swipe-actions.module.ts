@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import {
+	SwipeActionsCancelSideEffects,
 	SwipeActionsComponent,
-	SwipeActionsFrontDirective,
 } from './swipe-actions.component';
 
 @NgModule({
-	declarations: [SwipeActionsComponent, SwipeActionsFrontDirective],
+	declarations: [SwipeActionsComponent, SwipeActionsCancelSideEffects],
 	imports: [CommonModule],
-	exports: [SwipeActionsComponent],
+	exports: [SwipeActionsComponent, SwipeActionsCancelSideEffects],
 })
 export class SwipeActionsModule {}

@@ -3,11 +3,43 @@
 }
 
 .swipe-actions {
+	--side-width: 0px;
+
 	background-color: orchid;
 	overflow: hidden;
+	position: relative;
+
+	&__action {
+		background-color: transparent;
+		border: none;
+		color: inherit;
+		font-family: inherit;
+		font-size: 1.3rem;
+		outline: none;
+	}
+
+	&__side {
+		position: absolute;
+		top: 0px;
+		bottom: 0px;
+		width: var(--side-width);
+		display: flex;
+		justify-content: space-around;
+
+		&--left {
+			left: 0px;
+			background-color: rebeccapurple;
+		}
+
+		&--right {
+			right: 0px;
+			background-color: saddlebrown;
+		}
+	}
 
 	&__front {
 		background-color: orangered;
+		transform: translateX(0);
 
 		&--is-snapping {
 			transition: transform 0.2s ease-in-out;
