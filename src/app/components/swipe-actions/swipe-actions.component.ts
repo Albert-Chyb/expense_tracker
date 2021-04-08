@@ -1,10 +1,13 @@
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	Component,
+	ContentChildren,
 	Directive,
 	ElementRef,
 	HostListener,
 	Input,
+	QueryList,
 	Renderer2,
 	RendererStyleFlags2,
 	ViewChild,
@@ -17,7 +20,7 @@ import {
  */
 @Directive({ selector: '[cancel-side-effects]' })
 export class SwipeActionsCancelSideEffects {
-	@Input('cancel-side-effects') swipeActionsRef: SwipeActionsComponent;
+	@Input() swipeActionsRef: SwipeActionsComponent;
 
 	@HostListener('click', ['$event']) preventSideEffects($event: MouseEvent) {
 		if (this.swipeActionsRef.isOpened) {
@@ -33,7 +36,7 @@ export class SwipeActionsCancelSideEffects {
 	styleUrls: ['./swipe-actions.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SwipeActionsComponent {
+export class SwipeActionsComponent implements AfterContentInit {
 	constructor(private readonly _renderer: Renderer2) {}
 
 	/** How far front element can be moved away from each side. (In %, relative to container) */
@@ -43,6 +46,8 @@ export class SwipeActionsComponent {
 
 	@ViewChild('front') frontEl: ElementRef<HTMLElement>;
 	@ViewChild('container') containerEl: ElementRef<HTMLElement>;
+	@ContentChildren(SwipeActionsCancelSideEffects, { descendants: true })
+	sideEffectsElements: QueryList<SwipeActionsCancelSideEffects>;
 
 	// TODO: Content might have rounded corners, <- test it !
 
@@ -120,6 +125,12 @@ export class SwipeActionsComponent {
 
 	close() {
 		this._moveFront(0);
+	}
+
+	ngAfterContentInit() {
+		if (this.sideEffectsElements.length) {
+			this.sideEffectsElements.forEach(el => (el.swipeActionsRef = this));
+		}
 	}
 
 	get isOpened() {
