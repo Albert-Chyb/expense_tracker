@@ -1,5 +1,13 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
 :host {
 	display: block;
+}
+
+:host ::ng-deep button.swipe-actions__action {
+	@extend .swipe-actions__action;
 }
 
 .swipe-actions {
@@ -16,13 +24,15 @@
 		font-family: inherit;
 		font-size: 1.3rem;
 		outline: none;
+		display: block;
+		width: 100%;
 	}
 
 	&__side {
 		position: absolute;
 		top: 0px;
 		bottom: 0px;
-		width: var(--side-width);
+		width: 0%;
 		display: flex;
 		justify-content: space-around;
 
@@ -40,6 +50,7 @@
 	&__front {
 		background-color: orangered;
 		transform: translateX(0);
+		min-height: rem(50px);
 
 		&--is-snapping {
 			transition: transform 0.2s ease-in-out;

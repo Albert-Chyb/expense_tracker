@@ -6,20 +6,18 @@
 	(panend)="onPanEnd($event)"
 >
 	<div class="swipe-actions__sides">
-		<div class="swipe-actions__side swipe-actions__side--left">
-			<button class="swipe-actions__action">
-				<i class="fas fa-share-square"></i>
-			</button>
-			<button class="swipe-actions__action">
-				<i class="fas fa-print"></i>
-			</button>
+		<div
+			class="swipe-actions__side swipe-actions__side--left"
+			[style.width]="threshold * 100 + '%'"
+		>
+			<ng-content select="[swipe-action-left]"></ng-content>
 		</div>
 
-		<div class="swipe-actions__side swipe-actions__side--right">
-			<button class="swipe-actions__action"><i class="fas fa-edit"></i></button>
-			<button class="swipe-actions__action">
-				<i class="fas fa-trash"></i>
-			</button>
+		<div
+			class="swipe-actions__side swipe-actions__side--right"
+			[style.width]="threshold * 100 + '%'"
+		>
+			<ng-content select="[swipe-action-right]"></ng-content>
 		</div>
 	</div>
 

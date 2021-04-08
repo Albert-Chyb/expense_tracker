@@ -30,6 +30,22 @@ export class SwipeActionsCancelSideEffects {
 	}
 }
 
+@Directive({
+	selector: 'button[swipe-action-left]',
+	host: {
+		class: 'swipe-actions__action',
+	},
+})
+export class SwipeActionLeftDirective {}
+
+@Directive({
+	selector: 'button[swipe-action-right]',
+	host: {
+		class: 'swipe-actions__action',
+	},
+})
+export class SwipeActionRightDirective {}
+
 @Component({
 	selector: 'swipe-actions',
 	templateUrl: './swipe-actions.component.html',
@@ -50,6 +66,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 	sideEffectsElements: QueryList<SwipeActionsCancelSideEffects>;
 
 	// TODO: Content might have rounded corners, <- test it !
+	// TODO: When there are no action on a side, block front element from dragging over it.
 
 	/** Distance from the left side. Does not include change in position while is dragged (In px) */
 	private _distance = 0;
@@ -60,7 +77,6 @@ export class SwipeActionsComponent implements AfterContentInit {
 	onPanStart() {
 		const { width } = this.containerEl.nativeElement.getBoundingClientRect();
 		this._maxDistance = width * this.threshold;
-		this._setSideWidth(this._maxDistance);
 	}
 
 	onPanMove($event: HammerInput) {
@@ -172,15 +188,6 @@ export class SwipeActionsComponent implements AfterContentInit {
 			this._frontEl,
 			'transform',
 			`translateX(${distance}px)`
-		);
-	}
-
-	private _setSideWidth(width: number) {
-		this._renderer.setStyle(
-			this.containerEl.nativeElement,
-			'--side-width',
-			`${width}px`,
-			RendererStyleFlags2.DashCase
 		);
 	}
 
