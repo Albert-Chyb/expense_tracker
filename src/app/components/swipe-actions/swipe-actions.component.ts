@@ -157,10 +157,12 @@ export class SwipeActionsComponent implements AfterContentInit {
 		}
 	}
 
+	/** Informs if any actions are currently shown. */
 	get isOpened() {
 		return Math.abs(this._distance) > 0 || this._isTransitioning;
 	}
 
+	/** Returns 1 or -1 depending on which side describes given distance. */
 	private _getSide(distance: number): number {
 		return distance > 0 ? 1 : -1;
 	}
@@ -169,6 +171,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 		return distance > 0 ? 'left' : 'right';
 	}
 
+	/** Moves the front element to the given distance with an animation. */
 	private async _animateTranslate(distance: number) {
 		if (!this._isInRange(distance)) return;
 
@@ -192,6 +195,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 		return x;
 	}
 
+	/** Sets translateX() property on the front element. */
 	private _setTranslate(distance: number) {
 		this._renderer.setStyle(
 			this._frontEl,
@@ -200,22 +204,27 @@ export class SwipeActionsComponent implements AfterContentInit {
 		);
 	}
 
+	/** Checks if the given distance is within allowed range. */
 	private _isInRange(distance: number) {
 		return distance >= this._maxLeft && distance <= this._maxRight;
 	}
 
+	/** Informs if actions on the left side can be shown. */
 	private get _canShowLeft() {
 		return !!this.leftActions.length;
 	}
 
+	/** Informs if actions on the right side can be shown. */
 	private get _canShowRight() {
 		return !!this.rightActions.length;
 	}
 
+	/** Max distance that element can be moved from left side to the left direction. */
 	private get _maxLeft() {
 		return this._canShowRight ? -this._maxDistance : 0;
 	}
 
+	/** Max distance that element can be moved from left side to the right direction. */
 	private get _maxRight() {
 		return this._canShowLeft ? this._maxDistance : 0;
 	}
