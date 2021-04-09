@@ -1,3 +1,4 @@
+import { ThrowStmt } from '@angular/compiler';
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -65,8 +66,13 @@ export class SwipeActionsComponent implements AfterContentInit {
 	@ContentChildren(SwipeActionsCancelSideEffects, { descendants: true })
 	sideEffectsElements: QueryList<SwipeActionsCancelSideEffects>;
 
+	@ContentChildren(SwipeActionLeftDirective)
+	leftActions: QueryList<SwipeActionLeftDirective>;
+
+	@ContentChildren(SwipeActionRightDirective)
+	rightActions: QueryList<SwipeActionRightDirective>;
+
 	// TODO: Content might have rounded corners, <- test it !
-	// TODO: When there are no action on a side, block front element from dragging over it.
 
 	/** Distance from the left side. Does not include change in position while is dragged (In px) */
 	private _distance = 0;
@@ -75,7 +81,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 	private _isTransitioning = false;
 
 	onPanStart() {
-		const { width } = this.containerEl.nativeElement.getBoundingClientRect();
+		const { width } = this._containerEl.getBoundingClientRect();
 		this._maxDistance = width * this.threshold;
 	}
 
@@ -83,6 +89,8 @@ export class SwipeActionsComponent implements AfterContentInit {
 		const { deltaX } = $event;
 		const distance = deltaX + this._distance;
 		const side = this._getSide(distance);
+
+		if (!this._isInRange(distance)) return;
 
 		this._setTranslate(
 			this._maxDistance *
@@ -102,7 +110,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 
 		// If new distance is beyond max distance, the deltaX is not important.
 		if (isBeyondMaxDistance) {
-			return this._moveFront(this._maxDistance * newSide);
+			return this._animateTranslate(this._maxDistance * newSide);
 		}
 
 		const changedSides = newSide !== oldSide;
@@ -128,7 +136,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 			}
 		} else {
 			// Should remain it its state
-			this._moveFront(distance);
+			this._animateTranslate(distance);
 		}
 	}
 
@@ -136,11 +144,11 @@ export class SwipeActionsComponent implements AfterContentInit {
 		const direction = side === 'left' ? 1 : -1;
 		const distance = this._maxDistance * direction;
 
-		this._moveFront(distance);
+		this._animateTranslate(distance);
 	}
 
 	close() {
-		this._moveFront(0);
+		this._animateTranslate(0);
 	}
 
 	ngAfterContentInit() {
@@ -161,7 +169,9 @@ export class SwipeActionsComponent implements AfterContentInit {
 		return distance > 0 ? 'left' : 'right';
 	}
 
-	private async _moveFront(distance: number) {
+	private async _animateTranslate(distance: number) {
+		if (!this._isInRange(distance)) return;
+
 		const snapClass = 'swipe-actions__front--is-snapping';
 
 		this._isTransitioning = true;
@@ -183,7 +193,6 @@ export class SwipeActionsComponent implements AfterContentInit {
 	}
 
 	private _setTranslate(distance: number) {
-		if (Math.abs(distance) > this._maxDistance) return;
 		this._renderer.setStyle(
 			this._frontEl,
 			'transform',
@@ -191,7 +200,31 @@ export class SwipeActionsComponent implements AfterContentInit {
 		);
 	}
 
+	private _isInRange(distance: number) {
+		return distance >= this._maxLeft && distance <= this._maxRight;
+	}
+
+	private get _canShowLeft() {
+		return !!this.leftActions.length;
+	}
+
+	private get _canShowRight() {
+		return !!this.rightActions.length;
+	}
+
+	private get _maxLeft() {
+		return this._canShowRight ? -this._maxDistance : 0;
+	}
+
+	private get _maxRight() {
+		return this._canShowLeft ? this._maxDistance : 0;
+	}
+
 	private get _frontEl(): HTMLElement {
 		return this.frontEl.nativeElement;
+	}
+
+	private get _containerEl(): HTMLElement {
+		return this.containerEl.nativeElement;
 	}
 }
