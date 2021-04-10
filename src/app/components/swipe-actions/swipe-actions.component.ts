@@ -1,4 +1,3 @@
-import { ThrowStmt } from '@angular/compiler';
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -10,7 +9,6 @@ import {
 	Input,
 	QueryList,
 	Renderer2,
-	RendererStyleFlags2,
 	ViewChild,
 } from '@angular/core';
 
@@ -63,6 +61,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 
 	@ViewChild('front') frontEl: ElementRef<HTMLElement>;
 	@ViewChild('container') containerEl: ElementRef<HTMLElement>;
+
 	@ContentChildren(SwipeActionsCancelSideEffects, { descendants: true })
 	sideEffectsElements: QueryList<SwipeActionsCancelSideEffects>;
 
@@ -78,10 +77,12 @@ export class SwipeActionsComponent implements AfterContentInit {
 	private _distance = 0;
 	/** Max distance that front element can be moved by. (In px) */
 	private _maxDistance: number;
+	private _width: number;
 	private _isTransitioning = false;
 
 	onPanStart() {
 		const { width } = this._containerEl.getBoundingClientRect();
+		this._width = width;
 		this._maxDistance = width * this.threshold;
 	}
 
@@ -162,7 +163,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 		return Math.abs(this._distance) > 0 || this._isTransitioning;
 	}
 
-	/** Returns 1 or -1 depending on which side describes given distance. */
+	/** Returns 1 or -1 depending on which side the distance describes. */
 	private _getSide(distance: number): number {
 		return distance > 0 ? 1 : -1;
 	}
@@ -200,7 +201,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 		this._renderer.setStyle(
 			this._frontEl,
 			'transform',
-			`translateX(${distance}px)`
+			`translateX(${(distance / this._width) * 100}%)`
 		);
 	}
 
