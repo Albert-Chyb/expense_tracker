@@ -11,6 +11,7 @@ import {
 	Renderer2,
 	ViewChild,
 } from '@angular/core';
+import { Subject } from 'rxjs';
 
 /**
  * When user stopped dragging the front element, the click event that was invoked by it, might trigger some actions.
@@ -20,12 +21,19 @@ import {
 @Directive({ selector: '[cancel-side-effects]' })
 export class SwipeActionsCancelSideEffects {
 	@Input() swipeActionsRef: SwipeActionsComponent;
+	private _onClick = new Subject<MouseEvent>();
 
 	@HostListener('click', ['$event']) preventSideEffects($event: MouseEvent) {
-		if (this.swipeActionsRef.isOpened) {
+		if (this.swipeActionsRef.ghostClick || this.swipeActionsRef.isOpened) {
 			$event.stopPropagation();
 			$event.preventDefault();
 		}
+
+		this.onClick.next($event);
+	}
+
+	get onClick() {
+		return this._onClick;
 	}
 }
 
@@ -79,6 +87,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 	private _maxDistance: number;
 	private _width: number;
 	private _isTransitioning = false;
+	private _ghostClick = false;
 
 	onPanStart() {
 		const { width } = this._containerEl.getBoundingClientRect();
@@ -87,6 +96,9 @@ export class SwipeActionsComponent implements AfterContentInit {
 	}
 
 	onPanMove($event: HammerInput) {
+		if ($event.isFinal) {
+			this._ghostClick = true;
+		}
 		const { deltaX } = $event;
 		const distance = deltaX + this._distance;
 		const side = this._getSide(distance);
@@ -153,14 +165,20 @@ export class SwipeActionsComponent implements AfterContentInit {
 	}
 
 	ngAfterContentInit() {
-		if (this.sideEffectsElements.length) {
-			this.sideEffectsElements.forEach(el => (el.swipeActionsRef = this));
-		}
+		this.sideEffectsElements?.forEach(el => {
+			el.swipeActionsRef = this;
+			el.onClick.subscribe(() => (this._ghostClick = false));
+		});
 	}
 
-	/** Informs if any actions are currently shown. */
+	/** Informs if any actions are currently visible. */
 	get isOpened() {
 		return Math.abs(this._distance) > 0 || this._isTransitioning;
+	}
+
+	/** When a click was preceded with a pan event. */
+	get ghostClick() {
+		return this._ghostClick;
 	}
 
 	/** Returns 1 or -1 depending on which side the distance describes. */
