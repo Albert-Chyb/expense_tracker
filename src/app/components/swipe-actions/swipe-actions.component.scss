@@ -2,6 +2,12 @@
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
 
+@mixin is-snappable {
+	&--is-snapping {
+		transition: transform 0.2s ease-in-out;
+	}
+}
+
 :host {
 	display: block;
 }
@@ -10,12 +16,27 @@
 	@extend .swipe-actions__action;
 }
 
+:host ::ng-deep button.swipe-actions__action--left {
+	@extend .swipe-actions__action--left;
+}
+
+:host ::ng-deep button.swipe-actions__action--right {
+	@extend .swipe-actions__action--right;
+}
+
+:host ::ng-deep button.swipe-actions__action--is-snapping {
+	@extend .swipe-actions__action--is-snapping;
+}
+
 .swipe-actions {
-	background-color: orchid;
 	overflow: hidden;
 	position: relative;
+	border-radius: 10px;
+	overflow: hidden;
 
 	&__action {
+		@include is-snappable();
+
 		background-color: transparent;
 		border: none;
 		color: inherit;
@@ -24,6 +45,32 @@
 		outline: none;
 		display: block;
 		width: 100%;
+
+		&--left {
+			&:nth-child(1) {
+				background-color: hsl(39, 100%, 50%);
+				transform: translateX(-100%);
+				z-index: 3;
+			}
+
+			&:nth-child(2) {
+				z-index: 2;
+				background-color: hsl(328, 100%, 54%);
+				transform: translateX(-200%);
+			}
+		}
+
+		&--right {
+			&:nth-child(1) {
+				background-color: hsl(268, 80%, 48%);
+				transform: translateX(200%);
+			}
+
+			&:nth-child(2) {
+				background-color: hsl(219, 100%, 50%);
+				transform: translateX(100%);
+			}
+		}
 	}
 
 	&__side {
@@ -36,22 +83,17 @@
 
 		&--left {
 			left: 0px;
-			background-color: rebeccapurple;
 		}
 
 		&--right {
 			right: 0px;
-			background-color: saddlebrown;
 		}
 	}
 
 	&__front {
-		background-color: orangered;
+		@include is-snappable();
+
 		transform: translateX(0);
 		min-height: rem(50px);
-
-		&--is-snapping {
-			transition: transform 0.2s ease-in-out;
-		}
 	}
 }

@@ -5,20 +5,20 @@
 	(panstart)="onPanStart()"
 	(panend)="onPanEnd($event)"
 >
-	<div class="swipe-actions__sides">
-		<div
-			class="swipe-actions__side swipe-actions__side--left"
-			[style.width]="threshold * 100 + '%'"
-		>
-			<ng-content select="[swipe-action-left]"></ng-content>
-		</div>
+	<div
+		*ngIf="canShowLeft"
+		class="swipe-actions__side swipe-actions__side--left"
+		[style.width]="threshold * 100 + '%'"
+	>
+		<ng-content select="[swipe-action-left]"></ng-content>
+	</div>
 
-		<div
-			class="swipe-actions__side swipe-actions__side--right"
-			[style.width]="threshold * 100 + '%'"
-		>
-			<ng-content select="[swipe-action-right]"></ng-content>
-		</div>
+	<div
+		*ngIf="canShowRight"
+		class="swipe-actions__side swipe-actions__side--right"
+		[style.width]="threshold * 100 + '%'"
+	>
+		<ng-content select="[swipe-action-right]"></ng-content>
 	</div>
 
 	<div class="swipe-actions__front" #front>

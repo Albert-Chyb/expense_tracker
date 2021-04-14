@@ -37,21 +37,65 @@ export class SwipeActionsCancelSideEffects {
 	}
 }
 
+abstract class SwipeAction {
+	constructor(
+		private readonly renderer: Renderer2,
+		private readonly hostRef: ElementRef
+	) {}
+
+	private readonly _animationClass = 'swipe-actions__action--is-snapping';
+	private _isAnimationEnabled = false;
+
+	move(distance: number) {
+		this.renderer.setStyle(this._el, 'transform', `translateX(${distance}%)`);
+	}
+
+	enableAnimation() {
+		if (this._isAnimationEnabled) return;
+
+		this.renderer.addClass(this._el, this._animationClass);
+		this._isAnimationEnabled = true;
+	}
+
+	disableAnimation() {
+		if (!this._isAnimationEnabled) return;
+
+		this.renderer.removeClass(this._el, this._animationClass);
+		this._isAnimationEnabled = false;
+	}
+
+	get isAnimationEnabled() {
+		return this._isAnimationEnabled;
+	}
+
+	private get _el() {
+		return this.hostRef.nativeElement;
+	}
+}
+
 @Directive({
 	selector: 'button[swipe-action-left]',
 	host: {
-		class: 'swipe-actions__action',
+		class: 'swipe-actions__action swipe-actions__action--left',
 	},
 })
-export class SwipeActionLeftDirective {}
+export class SwipeActionLeftDirective extends SwipeAction {
+	constructor(renderer: Renderer2, hostRef: ElementRef) {
+		super(renderer, hostRef);
+	}
+}
 
 @Directive({
 	selector: 'button[swipe-action-right]',
 	host: {
-		class: 'swipe-actions__action',
+		class: 'swipe-actions__action swipe-actions__action--right',
 	},
 })
-export class SwipeActionRightDirective {}
+export class SwipeActionRightDirective extends SwipeAction {
+	constructor(renderer: Renderer2, hostRef: ElementRef) {
+		super(renderer, hostRef);
+	}
+}
 
 @Component({
 	selector: 'swipe-actions',
@@ -62,8 +106,8 @@ export class SwipeActionRightDirective {}
 export class SwipeActionsComponent implements AfterContentInit {
 	constructor(private readonly _renderer: Renderer2) {}
 
-	/** How far front element can be moved away from each side. (In %, relative to container) */
-	@Input('threshold') threshold = 0.2;
+	/** How far front element can be moved away from each side. (In %, relative to the container) */
+	@Input('threshold') threshold = 0.3;
 	/** The distance after which front will automatically move to the max distance. (In %, relative to the threshold) */
 	@Input('snap') snapThreshold = 0.15;
 
@@ -79,7 +123,8 @@ export class SwipeActionsComponent implements AfterContentInit {
 	@ContentChildren(SwipeActionRightDirective)
 	rightActions: QueryList<SwipeActionRightDirective>;
 
-	// TODO: Content might have rounded corners, <- test it !
+	// TODO: When threshold is set to more than 50%, positions of buttons overlaps
+	// TODO: Try to move buttons along with swipe.
 
 	/** Distance from the left side. Does not include change in position while is dragged (In px) */
 	private _distance = 0;
@@ -198,12 +243,17 @@ export class SwipeActionsComponent implements AfterContentInit {
 
 		this._isTransitioning = true;
 		this._frontEl.classList.add(snapClass);
+		this.leftActions.forEach(action => action.enableAnimation());
+		this.rightActions.forEach(action => action.enableAnimation());
+
 		this._setTranslate(distance);
 		this._distance = distance;
 
 		return new Promise<void>(resolve => {
 			setTimeout(() => {
 				this._frontEl.classList.remove(snapClass);
+				this.leftActions.forEach(action => action.disableAnimation());
+				this.rightActions.forEach(action => action.disableAnimation());
 				this._isTransitioning = false;
 				resolve();
 			}, 200);
@@ -216,11 +266,29 @@ export class SwipeActionsComponent implements AfterContentInit {
 
 	/** Sets translateX() property on the front element. */
 	private _setTranslate(distance: number) {
+		const moveByFront = (distance / this._width) * 100;
+		const moveByActions = (distance / this._maxDistance) * 100;
+
 		this._renderer.setStyle(
 			this._frontEl,
 			'transform',
-			`translateX(${(distance / this._width) * 100}%)`
+			`translateX(${moveByFront}%)`
 		);
+
+		if (moveByActions >= 0) {
+			this.leftActions.forEach((action, index) =>
+				action.move((-100 + moveByActions) * (index + 1))
+			);
+		}
+
+		if (moveByActions <= 0) {
+			this.rightActions.forEach((action, index) => {
+				const baseTranslate = (100 * this.rightActions.length) / (index + 1);
+				action.move(
+					baseTranslate + moveByActions * (this.rightActions.length - index)
+				);
+			});
+		}
 	}
 
 	/** Checks if the given distance is within allowed range. */
@@ -229,23 +297,23 @@ export class SwipeActionsComponent implements AfterContentInit {
 	}
 
 	/** Informs if actions on the left side can be shown. */
-	private get _canShowLeft() {
+	get canShowLeft() {
 		return !!this.leftActions.length;
 	}
 
 	/** Informs if actions on the right side can be shown. */
-	private get _canShowRight() {
+	get canShowRight() {
 		return !!this.rightActions.length;
 	}
 
 	/** Max distance that element can be moved from left side to the left direction. */
 	private get _maxLeft() {
-		return this._canShowRight ? -this._maxDistance : 0;
+		return this.canShowRight ? -this._maxDistance : 0;
 	}
 
 	/** Max distance that element can be moved from left side to the right direction. */
 	private get _maxRight() {
-		return this._canShowLeft ? this._maxDistance : 0;
+		return this.canShowLeft ? this._maxDistance : 0;
 	}
 
 	private get _frontEl(): HTMLElement {
