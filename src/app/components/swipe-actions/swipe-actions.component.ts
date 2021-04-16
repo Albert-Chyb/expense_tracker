@@ -45,9 +45,16 @@ abstract class SwipeAction {
 
 	private readonly _animationClass = 'swipe-actions__action--is-snapping';
 	private _isAnimationEnabled = false;
+	private _zIndex: number;
+	private _position: number;
+	protected _side: number;
 
 	move(distance: number) {
-		this.renderer.setStyle(this._el, 'transform', `translateX(${distance}%)`);
+		this.renderer.setStyle(
+			this._el,
+			'transform',
+			`translateX(${(100 * this._side + distance) * this._position}%)`
+		);
 	}
 
 	enableAnimation() {
@@ -62,6 +69,21 @@ abstract class SwipeAction {
 
 		this.renderer.removeClass(this._el, this._animationClass);
 		this._isAnimationEnabled = false;
+	}
+
+	set zIndex(value: number) {
+		this._zIndex = value;
+		this.renderer.setStyle(this._el, 'z-index', value);
+	}
+	get zIndex() {
+		return this._zIndex;
+	}
+
+	set position(value: number) {
+		this._position = value;
+	}
+	get position() {
+		return this._position;
 	}
 
 	get isAnimationEnabled() {
@@ -82,6 +104,7 @@ abstract class SwipeAction {
 export class SwipeActionLeftDirective extends SwipeAction {
 	constructor(renderer: Renderer2, hostRef: ElementRef) {
 		super(renderer, hostRef);
+		this._side = -1;
 	}
 }
 
@@ -94,6 +117,7 @@ export class SwipeActionLeftDirective extends SwipeAction {
 export class SwipeActionRightDirective extends SwipeAction {
 	constructor(renderer: Renderer2, hostRef: ElementRef) {
 		super(renderer, hostRef);
+		this._side = 1;
 	}
 }
 
@@ -122,9 +146,6 @@ export class SwipeActionsComponent implements AfterContentInit {
 
 	@ContentChildren(SwipeActionRightDirective)
 	rightActions: QueryList<SwipeActionRightDirective>;
-
-	// TODO: When threshold is set to more than 50%, positions of buttons overlaps
-	// TODO: Try to move buttons along with swipe.
 
 	/** Distance from the left side. Does not include change in position while is dragged (In px) */
 	private _distance = 0;
@@ -214,6 +235,17 @@ export class SwipeActionsComponent implements AfterContentInit {
 			el.swipeActionsRef = this;
 			el.onClick.subscribe(() => (this._ghostClick = false));
 		});
+
+		this.rightActions?.forEach((action, index, { length }) => {
+			action.position = length - index;
+			action.move(0);
+		});
+
+		this.leftActions?.forEach((action, index, { length }) => {
+			action.position = index + 1;
+			action.zIndex = length - index;
+			action.move(0);
+		});
 	}
 
 	/** Informs if any actions are currently visible. */
@@ -275,19 +307,12 @@ export class SwipeActionsComponent implements AfterContentInit {
 			`translateX(${moveByFront}%)`
 		);
 
-		if (moveByActions >= 0) {
-			this.leftActions.forEach((action, index) =>
-				action.move((-100 + moveByActions) * (index + 1))
-			);
+		if (moveByActions >= -1) {
+			this.leftActions.forEach(action => action.move(moveByActions));
 		}
 
-		if (moveByActions <= 0) {
-			this.rightActions.forEach((action, index) => {
-				const baseTranslate = (100 * this.rightActions.length) / (index + 1);
-				action.move(
-					baseTranslate + moveByActions * (this.rightActions.length - index)
-				);
-			});
+		if (moveByActions <= 1) {
+			this.rightActions.forEach(action => action.move(moveByActions));
 		}
 	}
 
