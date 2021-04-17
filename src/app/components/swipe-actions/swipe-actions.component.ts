@@ -238,13 +238,13 @@ export class SwipeActionsComponent implements AfterContentInit {
 
 		this.rightActions?.forEach((action, index, { length }) => {
 			action.position = length - index;
-			action.move(0);
+			action.move(5);
 		});
 
 		this.leftActions?.forEach((action, index, { length }) => {
 			action.position = index + 1;
 			action.zIndex = length - index;
-			action.move(0);
+			action.move(-5);
 		});
 	}
 
@@ -307,12 +307,19 @@ export class SwipeActionsComponent implements AfterContentInit {
 			`translateX(${moveByFront}%)`
 		);
 
-		if (moveByActions >= -1) {
+		if (moveByActions > 0) {
 			this.leftActions.forEach(action => action.move(moveByActions));
 		}
 
-		if (moveByActions <= 1) {
+		if (moveByActions < 0) {
 			this.rightActions.forEach(action => action.move(moveByActions));
+		}
+
+		if (moveByActions === 0) {
+			// For some reason when front element is closed, a fragment of an action may be still visible (like 1px of it but still...).
+			// This is why when front element is not moved at all, we move all actions a little bit further.
+			this.leftActions.forEach(action => action.move(-5));
+			this.rightActions.forEach(action => action.move(5));
 		}
 	}
 
