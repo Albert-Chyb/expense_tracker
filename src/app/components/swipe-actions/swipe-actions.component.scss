@@ -10,6 +10,10 @@
 
 :host {
 	display: block;
+	overflow: hidden;
+
+	// Safari needs this rule to properly animate translate if the wrapper has border radius.
+	mask-image: radial-gradient(white, black);
 }
 
 :host ::ng-deep button.swipe-actions__action {
@@ -31,8 +35,6 @@
 .swipe-actions {
 	overflow: hidden;
 	position: relative;
-	border-radius: 10px;
-	overflow: hidden;
 
 	&__action {
 		@include is-snappable();
@@ -70,11 +72,9 @@
 	&__side {
 		position: absolute;
 		top: 0px;
-		bottom: 0px;
-		width: 0%;
+		height: 100%;
 		display: flex;
 		justify-content: space-around;
-		z-index: 2;
 
 		&--left {
 			left: 0px;
@@ -88,6 +88,5 @@
 	&__front {
 		@include is-snappable();
 		transform: translateX(0);
-		min-height: rem(50px);
 	}
 }
