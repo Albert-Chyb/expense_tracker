@@ -64,9 +64,22 @@
 					class="transactions__transaction"
 					*ngFor="let transaction of transactions[1]"
 				>
-					<a [routerLink]="[Pages.ManageTransaction, transaction.id]"
-						><transaction-card [transaction]="transaction"></transaction-card
-					></a>
+					<swipe-actions class="swipe-actions">
+						<button
+							class="swipe-actions__action--delete"
+							swipe-action-right
+							(click)="deleteTransaction(transaction.id)"
+						>
+							<i class="fas fa-trash-alt"></i>
+						</button>
+
+						<a [routerLink]="[Pages.ManageTransaction, transaction.id]"
+							><transaction-card
+								cancel-side-effects
+								[transaction]="transaction"
+							></transaction-card
+						></a>
+					</swipe-actions>
 				</li>
 			</ul>
 		</section>

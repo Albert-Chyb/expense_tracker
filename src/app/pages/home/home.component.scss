@@ -76,8 +76,9 @@
 	margin-top: rem(30px);
 
 	&__transaction {
-		margin-bottom: rem(10px);
 		transition: transform 150ms ease-in-out;
+		@include elevation(2);
+		border-radius: rem(15px);
 	}
 
 	h2#{&}__heading {
@@ -98,6 +99,15 @@
 
 	&__group {
 		margin-top: rem(30px);
+	}
+}
+
+.swipe-actions {
+	border-radius: rem(15px);
+	margin-bottom: rem(15px);
+
+	&__action--delete {
+		background-color: var(--color-danger);
 	}
 }
 

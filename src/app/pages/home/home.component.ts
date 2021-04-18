@@ -36,6 +36,10 @@ export class HomeComponent implements OnInit {
 		this.setupData();
 	}
 
+	deleteTransaction(id: string) {
+		this._transactions.delete(id);
+	}
+
 	get savings(): number {
 		return this.incomes - this.outcomes;
 	}
