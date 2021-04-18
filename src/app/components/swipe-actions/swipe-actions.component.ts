@@ -3,123 +3,18 @@ import {
 	ChangeDetectionStrategy,
 	Component,
 	ContentChildren,
-	Directive,
 	ElementRef,
-	HostListener,
 	Input,
 	QueryList,
 	Renderer2,
 	ViewChild,
 } from '@angular/core';
-import { Subject } from 'rxjs';
 
-/**
- * When user stopped dragging the front element, the click event that was invoked by it, might trigger some actions.
- * (for instance routerLink might change the route). This is a helper directive that calls stopPropagation and preventDefault methods
- * on the event object. Make sure that element with this directive is a child of an element that triggers side effects.
- */
-@Directive({ selector: '[cancel-side-effects]' })
-export class SwipeActionsCancelSideEffects {
-	@Input() swipeActionsRef: SwipeActionsComponent;
-	private _onClick = new Subject<MouseEvent>();
-
-	@HostListener('click', ['$event']) preventSideEffects($event: MouseEvent) {
-		if (this.swipeActionsRef.ghostClick || this.swipeActionsRef.isOpened) {
-			$event.stopPropagation();
-			$event.preventDefault();
-		}
-
-		this.onClick.next($event);
-	}
-
-	get onClick() {
-		return this._onClick;
-	}
-}
-
-abstract class SwipeAction {
-	constructor(
-		private readonly renderer: Renderer2,
-		private readonly hostRef: ElementRef
-	) {}
-
-	private readonly _animationClass = 'swipe-actions__action--is-snapping';
-	private _isAnimationEnabled = false;
-	private _zIndex: number;
-	private _position: number;
-	protected _side: number;
-
-	move(distance: number) {
-		this.renderer.setStyle(
-			this._el,
-			'transform',
-			`translateX(${(100 * this._side + distance) * this._position}%)`
-		);
-	}
-
-	enableAnimation() {
-		if (this._isAnimationEnabled) return;
-
-		this.renderer.addClass(this._el, this._animationClass);
-		this._isAnimationEnabled = true;
-	}
-
-	disableAnimation() {
-		if (!this._isAnimationEnabled) return;
-
-		this.renderer.removeClass(this._el, this._animationClass);
-		this._isAnimationEnabled = false;
-	}
-
-	set zIndex(value: number) {
-		this._zIndex = value;
-		this.renderer.setStyle(this._el, 'z-index', value);
-	}
-	get zIndex() {
-		return this._zIndex;
-	}
-
-	set position(value: number) {
-		this._position = value;
-	}
-	get position() {
-		return this._position;
-	}
-
-	get isAnimationEnabled() {
-		return this._isAnimationEnabled;
-	}
-
-	private get _el() {
-		return this.hostRef.nativeElement;
-	}
-}
-
-@Directive({
-	selector: 'button[swipe-action-left]',
-	host: {
-		class: 'swipe-actions__action swipe-actions__action--left',
-	},
-})
-export class SwipeActionLeftDirective extends SwipeAction {
-	constructor(renderer: Renderer2, hostRef: ElementRef) {
-		super(renderer, hostRef);
-		this._side = -1;
-	}
-}
-
-@Directive({
-	selector: 'button[swipe-action-right]',
-	host: {
-		class: 'swipe-actions__action swipe-actions__action--right',
-	},
-})
-export class SwipeActionRightDirective extends SwipeAction {
-	constructor(renderer: Renderer2, hostRef: ElementRef) {
-		super(renderer, hostRef);
-		this._side = 1;
-	}
-}
+import { SwipeActionsCancelSideEffects } from './cancel-side-effects.directive';
+import {
+	SwipeActionLeftDirective,
+	SwipeActionRightDirective,
+} from './swipe-action.directive';
 
 @Component({
 	selector: 'swipe-actions',
@@ -133,7 +28,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 	/** How far front element can be moved away from each side. (In %, relative to the container) */
 	@Input('threshold') threshold = 0.3;
 	/** The distance after which front will automatically move to the max distance. (In %, relative to the threshold) */
-	@Input('snap') snapThreshold = 0.15;
+	@Input('snapAfter') snapThreshold = 0.15;
 
 	@ViewChild('front') frontEl: ElementRef<HTMLElement>;
 	@ViewChild('container') containerEl: ElementRef<HTMLElement>;
@@ -151,8 +46,11 @@ export class SwipeActionsComponent implements AfterContentInit {
 	private _distance = 0;
 	/** Max distance that front element can be moved by. (In px) */
 	private _maxDistance: number;
+	/** Width of the front element */
 	private _width: number;
+	/** If front element is during animation */
 	private _isTransitioning = false;
+	/** If a click was preceded with a pan event. */
 	private _ghostClick = false;
 
 	onPanStart() {
@@ -253,7 +151,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 		return Math.abs(this._distance) > 0 || this._isTransitioning;
 	}
 
-	/** When a click was preceded with a pan event. */
+	/** If a click was preceded with a pan event. */
 	get ghostClick() {
 		return this._ghostClick;
 	}
@@ -307,16 +205,19 @@ export class SwipeActionsComponent implements AfterContentInit {
 			`translateX(${moveByFront}%)`
 		);
 
-		if (moveByActions > 0) {
+		// We continue to move actions after they are out of view, because browser seems to throttle events when they occur very quickly.
+		// For this reason a part of actions might still be visible after quick pan.
+		// 20% percent seems to fix this issue.
+		if (moveByActions > -20) {
 			this.leftActions.forEach(action => action.move(moveByActions));
 		}
 
-		if (moveByActions < 0) {
+		if (moveByActions < 20) {
 			this.rightActions.forEach(action => action.move(moveByActions));
 		}
 
 		if (moveByActions === 0) {
-			// For some reason when front element is closed, a fragment of an action may be still visible (like 1px of it but still...).
+			// Sometimes CSS rounds pixels up, and it cosses actions to be a bit visible (like 1 px).
 			// This is why when front element is not moved at all, we move all actions a little bit further.
 			this.leftActions.forEach(action => action.move(-5));
 			this.rightActions.forEach(action => action.move(5));
@@ -325,27 +226,29 @@ export class SwipeActionsComponent implements AfterContentInit {
 
 	/** Checks if the given distance is within allowed range. */
 	private _isInRange(distance: number) {
-		return distance >= this._maxLeft && distance <= this._maxRight;
+		return (
+			distance >= this._maxLeftDistance && distance <= this._maxRightDistance
+		);
 	}
 
 	/** Informs if actions on the left side can be shown. */
-	get canShowLeft() {
+	get hasLeftActions() {
 		return !!this.leftActions.length;
 	}
 
 	/** Informs if actions on the right side can be shown. */
-	get canShowRight() {
+	get hasRightActions() {
 		return !!this.rightActions.length;
 	}
 
 	/** Max distance that element can be moved from left side to the left direction. */
-	private get _maxLeft() {
-		return this.canShowRight ? -this._maxDistance : 0;
+	private get _maxLeftDistance() {
+		return this.hasRightActions ? -this._maxDistance : 0;
 	}
 
 	/** Max distance that element can be moved from left side to the right direction. */
-	private get _maxRight() {
-		return this.canShowLeft ? this._maxDistance : 0;
+	private get _maxRightDistance() {
+		return this.hasLeftActions ? this._maxDistance : 0;
 	}
 
 	private get _frontEl(): HTMLElement {

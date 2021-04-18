@@ -38,8 +38,6 @@
 
 	&__action {
 		@include is-snappable();
-
-		background-color: transparent;
 		border: none;
 		color: inherit;
 		font-family: inherit;
@@ -47,26 +45,6 @@
 		outline: none;
 		display: block;
 		width: 100%;
-
-		&--left {
-			&:nth-child(even) {
-				background-color: hsl(39, 100%, 50%);
-			}
-
-			&:nth-child(odd) {
-				background-color: hsl(328, 100%, 54%);
-			}
-		}
-
-		&--right {
-			&:nth-child(even) {
-				background-color: hsl(268, 80%, 48%);
-			}
-
-			&:nth-child(odd) {
-				background-color: hsl(219, 100%, 50%);
-			}
-		}
 	}
 
 	&__side {

@@ -1,12 +1,27 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
+import {
+	HammerGestureConfig,
+	HammerModule,
+	HAMMER_GESTURE_CONFIG,
+} from '@angular/platform-browser';
 
+import { SwipeActionsCancelSideEffects } from './cancel-side-effects.directive';
 import {
 	SwipeActionLeftDirective,
 	SwipeActionRightDirective,
-	SwipeActionsCancelSideEffects,
-	SwipeActionsComponent,
-} from './swipe-actions.component';
+} from './swipe-action.directive';
+import { SwipeActionsComponent } from './swipe-actions.component';
+import 'hammerjs';
+
+@Injectable()
+class SwipeActionsHammerConfig extends HammerGestureConfig {
+	buildHammer(el: HTMLElement) {
+		return new Hammer(el, {
+			inputClass: Hammer.TouchInput,
+		});
+	}
+}
 
 @NgModule({
 	declarations: [
@@ -15,12 +30,18 @@ import {
 		SwipeActionLeftDirective,
 		SwipeActionRightDirective,
 	],
-	imports: [CommonModule],
+	imports: [CommonModule, HammerModule],
 	exports: [
 		SwipeActionsComponent,
 		SwipeActionsCancelSideEffects,
 		SwipeActionLeftDirective,
 		SwipeActionRightDirective,
+	],
+	providers: [
+		{
+			provide: HAMMER_GESTURE_CONFIG,
+			useClass: SwipeActionsHammerConfig,
+		},
 	],
 })
 export class SwipeActionsModule {}
