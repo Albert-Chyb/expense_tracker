@@ -10,10 +10,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ZippyContentComponent } from 'src/app/components/zippy-components/zippy-content/zippy-content.component';
-import { ZippyStaticComponent } from 'src/app/components/zippy-components/zippy-static/zippy-static.component';
-import { ZippyComponent } from 'src/app/components/zippy-components/zippy/zippy.component';
-
 import { environment } from './../../../environments/environment';
 import { Pages } from './../../common/routing/routesUrls';
 import { CheckboxComponent } from './../../components/checkbox/checkbox.component';
@@ -28,13 +24,7 @@ describe('SetupAccountComponent', () => {
 	beforeEach(
 		waitForAsync(() => {
 			TestBed.configureTestingModule({
-				declarations: [
-					SetupAccountComponent,
-					ZippyComponent,
-					ZippyStaticComponent,
-					ZippyContentComponent,
-					CheckboxComponent,
-				],
+				declarations: [SetupAccountComponent, CheckboxComponent],
 				imports: [
 					AngularFireModule.initializeApp(environment.firebase),
 					RouterTestingModule,

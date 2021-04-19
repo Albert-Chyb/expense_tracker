@@ -15,9 +15,6 @@ import { environment } from 'src/environments/environment';
 import { TestingProviders } from './../../common/test-stubs/testing-providers';
 import { CheckboxComponent } from './../../components/checkbox/checkbox.component';
 import { FormFieldModule } from './../../components/form-field/form-field.module';
-import { ZippyContentComponent } from './../../components/zippy-components/zippy-content/zippy-content.component';
-import { ZippyStaticComponent } from './../../components/zippy-components/zippy-static/zippy-static.component';
-import { ZippyComponent } from './../../components/zippy-components/zippy/zippy.component';
 import { ThemesService } from './../../services/themes/themes.service';
 import { AppSettingsComponent } from './app-settings.component';
 
@@ -28,13 +25,7 @@ describe('AppSettingsComponent', () => {
 	beforeEach(
 		waitForAsync(() => {
 			TestBed.configureTestingModule({
-				declarations: [
-					AppSettingsComponent,
-					ZippyComponent,
-					ZippyStaticComponent,
-					ZippyContentComponent,
-					CheckboxComponent,
-				],
+				declarations: [AppSettingsComponent, CheckboxComponent],
 				imports: [
 					AngularFireModule.initializeApp(environment.firebase),
 					ReactiveFormsModule,
