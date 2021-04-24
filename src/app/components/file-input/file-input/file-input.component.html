@@ -1,0 +1,30 @@
+<label class="file-input__label">
+	<input
+		class="file-input__input"
+		type="file"
+		(change)="handleInputChange($event)"
+	/>
+</label>
+
+<div *ngIf="hasFile" class="file-input__actions">
+	<button
+		(click)="removeFile()"
+		appButton
+		[btnType]="'icon'"
+		class="file-input__action"
+	>
+		<i class="far fa-trash-alt"></i>
+	</button>
+</div>
+
+<img
+	*ngIf="hasFile; else addIcon"
+	[src]="sanitize(base64)"
+	class="file-input__preview"
+/>
+
+<ng-template #addIcon>
+	<span class="file-input__add-icon">
+		<i class="far fa-plus-square"></i>
+	</span>
+</ng-template>
