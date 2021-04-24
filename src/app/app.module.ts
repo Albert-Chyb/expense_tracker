@@ -5,6 +5,7 @@ import {
 	LOCALE_ID,
 	NgModule,
 } from '@angular/core';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
@@ -64,6 +65,7 @@ import { DEFAULT_COLLECTIONS_SCOPE } from './services/collection-base/collection
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
 import { SwipeActionsModule } from './components/swipe-actions/swipe-actions.module';
+import { FileInputModule } from './components/file-input/file-input.module';
 // import 'hammerjs';
 
 @NgModule({
@@ -123,6 +125,8 @@ import { SwipeActionsModule } from './components/swipe-actions/swipe-actions.mod
 		DashboardComponentsModule,
 		ZippyModule,
 		SwipeActionsModule,
+		FileInputModule,
+		AngularFireStorageModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

@@ -1,0 +1,85 @@
+@import 'utils/functions';
+@import 'utils/variables';
+@import 'utils/mixins';
+
+:host {
+	@extend .file-input;
+}
+
+:host(.file-input--loading) {
+	@extend .file-input--loading;
+}
+
+.file-input {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	font-size: rem(70px);
+	width: rem(200px);
+	height: rem(200px);
+	border-radius: rem(9px);
+	overflow: hidden;
+	position: relative;
+	background-color: var(--bg-color-1);
+	border: rem(2px) solid var(--bg-color-6);
+
+	&__input {
+		// Because standard file input cannot be styled,
+		// we hide it from the view, and let the label trigger it.
+		position: absolute;
+		transform: scale(0);
+	}
+
+	&__label {
+		cursor: pointer;
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		bottom: 0px;
+		right: 0px;
+	}
+
+	&__actions {
+		position: absolute;
+		background: linear-gradient(
+			180deg,
+			rgba(0, 0, 0, 1) 0%,
+			rgba(0, 0, 0, 0) 100%
+		);
+		top: 0px;
+		left: 0px;
+		height: 30%;
+		width: 100%;
+		display: flex;
+		justify-content: flex-end;
+		padding: rem(5px);
+		transform: translateY(-100%);
+		transition: transform 300ms ease-in;
+	}
+
+	&__label:hover + &__actions,
+	&__actions:hover {
+		transition-timing-function: ease-out;
+		transform: translateY(0);
+	}
+
+	&--loading {
+	}
+
+	&__preview {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	&__add-icon {
+		color: var(--text-color-2);
+	}
+
+	@media (max-device-width: 768px) {
+		&__actions {
+			transform: translateY(0);
+		}
+	}
+}
