@@ -8,9 +8,9 @@
 
 <div *ngIf="hasFile" class="file-input__actions">
 	<button
-		(click)="removeFile()"
+		(click)="onRemove.emit()"
 		appButton
-		[btnType]="'icon'"
+		btnType="icon"
 		class="file-input__action"
 	>
 		<i class="far fa-trash-alt"></i>
@@ -19,8 +19,11 @@
 
 <img
 	*ngIf="hasFile; else addIcon"
-	[src]="sanitize(base64)"
+	[src]="needsPreview ? preview : sanitize(base64)"
 	class="file-input__preview"
+	[class.file-input__preview--with-external-preview]="
+		needsPreview && !isLoading
+	"
 />
 
 <ng-template #addIcon>

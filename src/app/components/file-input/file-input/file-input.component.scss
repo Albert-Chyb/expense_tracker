@@ -71,6 +71,11 @@
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+
+		&--with-external-preview {
+			width: 60%;
+			height: 60%;
+		}
 	}
 
 	&__add-icon {

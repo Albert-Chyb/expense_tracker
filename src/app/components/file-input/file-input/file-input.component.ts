@@ -4,12 +4,19 @@ import {
 	Component,
 	EventEmitter,
 	forwardRef,
+	Inject,
 	OnInit,
 	Output,
 	Provider,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import {
+	PREVIEW_IMAGES,
+	SUPPORTED_IMG_TYPES,
+	TPreviewImages,
+	TSupportedImgTypes,
+} from './injection-tokens';
 
 const VALUE_ACCESSOR_PROVIDER: Provider = {
 	provide: NG_VALUE_ACCESSOR,
@@ -18,7 +25,6 @@ const VALUE_ACCESSOR_PROVIDER: Provider = {
 };
 
 // TODO: Add loader during file downloading.
-// TODO: Add preview images for files that cannot be displayed in img element.
 
 @Component({
 	selector: 'file',
@@ -35,11 +41,18 @@ const VALUE_ACCESSOR_PROVIDER: Provider = {
 export class FileInputComponent implements OnInit, ControlValueAccessor {
 	constructor(
 		private readonly _changeDetector: ChangeDetectorRef,
-		private readonly _sanitizer: DomSanitizer
+		private readonly _sanitizer: DomSanitizer,
+		@Inject(SUPPORTED_IMG_TYPES)
+		private readonly _supportedImgTypes: TSupportedImgTypes,
+		@Inject(PREVIEW_IMAGES)
+		private readonly _previewImages: TPreviewImages
 	) {}
 
 	@Output('onRemove')
 	onRemove = new EventEmitter();
+
+	@Output('onFileChange')
+	onFileChange = new EventEmitter();
 
 	private readonly _reader = new FileReader();
 	private readonly _urlPattern = new RegExp(
@@ -54,9 +67,10 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 	isDisabled = false;
 
 	async writeValue(obj: any) {
-		const isValidUrl = this._urlPattern.test(obj);
+		if (!obj) return;
+		const isUrl = this._urlPattern.test(obj);
 
-		if (isValidUrl && obj) {
+		if (isUrl) {
 			this._isLoading = true;
 
 			this._changeDetector.detectChanges();
@@ -86,17 +100,13 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 		const { files } = $event.target as HTMLInputElement;
 		const file = files[0];
 
+		this.onFileChange.emit();
+
 		if (file) this.loadFile(file);
 	}
 
 	loadFile(file: File | Blob) {
 		this._reader.readAsDataURL(file);
-	}
-
-	removeFile() {
-		this.base64 = '';
-		this.onChange('');
-		this.onRemove.emit();
 	}
 
 	sanitize(value: string) {
@@ -113,6 +123,15 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 		this.onChange(this.base64);
 		this.onTouched();
 		this._changeDetector.detectChanges();
+	}
+
+	/** Whether the file needs a preview image. */
+	get needsPreview() {
+		return !this._supportedImgTypes.includes(this.type);
+	}
+
+	get preview() {
+		return this._previewImages.get(this.type);
 	}
 
 	get type() {
