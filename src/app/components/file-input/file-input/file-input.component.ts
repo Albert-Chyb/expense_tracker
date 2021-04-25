@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ErrorsService } from 'src/app/services/errors/errors.service';
 import {
 	PREVIEW_IMAGES,
 	SUPPORTED_IMG_TYPES,
@@ -24,7 +25,10 @@ const VALUE_ACCESSOR_PROVIDER: Provider = {
 	multi: true,
 };
 
-// TODO: Add loader during file downloading.
+function delay(time: number) {
+	console.warn('Do not forget to remove this delay !!!');
+	return new Promise(resolve => setTimeout(resolve, time));
+}
 
 @Component({
 	selector: 'file',
@@ -42,6 +46,7 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 	constructor(
 		private readonly _changeDetector: ChangeDetectorRef,
 		private readonly _sanitizer: DomSanitizer,
+		private readonly _errors: ErrorsService,
 		@Inject(SUPPORTED_IMG_TYPES)
 		private readonly _supportedImgTypes: TSupportedImgTypes,
 		@Inject(PREVIEW_IMAGES)
@@ -71,16 +76,14 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 		const isUrl = this._urlPattern.test(obj);
 
 		if (isUrl) {
-			this._isLoading = true;
+			this._setLoadingState(true);
 
-			this._changeDetector.detectChanges();
+			// TODO: Add error handling
 			const response = await fetch(obj);
 			const blob = await response.blob();
-
 			this.loadFile(blob);
 
-			this._isLoading = false;
-			this._changeDetector.detectChanges();
+			this._setLoadingState(false);
 		}
 	}
 
@@ -122,6 +125,11 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 
 		this.onChange(this.base64);
 		this.onTouched();
+		this._changeDetector.detectChanges();
+	}
+
+	private _setLoadingState(isLoading: boolean) {
+		this._isLoading = isLoading;
 		this._changeDetector.detectChanges();
 	}
 

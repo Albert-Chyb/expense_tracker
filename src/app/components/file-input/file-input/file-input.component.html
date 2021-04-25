@@ -6,28 +6,39 @@
 	/>
 </label>
 
-<div *ngIf="hasFile" class="file-input__actions">
-	<button
-		(click)="onRemove.emit()"
-		appButton
-		btnType="icon"
-		class="file-input__action"
-	>
-		<i class="far fa-trash-alt"></i>
-	</button>
-</div>
+<!-- Template when a file is present. -->
+<ng-container *ngIf="hasFile; else noFile">
+	<div class="file-input__actions">
+		<button
+			(click)="onRemove.emit()"
+			appButton
+			btnType="icon"
+			class="file-input__action"
+		>
+			<i class="far fa-trash-alt"></i>
+		</button>
+	</div>
 
-<img
-	*ngIf="hasFile; else addIcon"
-	[src]="needsPreview ? preview : sanitize(base64)"
-	class="file-input__preview"
-	[class.file-input__preview--with-external-preview]="
-		needsPreview && !isLoading
-	"
-/>
+	<img
+		[src]="needsPreview ? preview : sanitize(base64)"
+		class="file-input__preview"
+		[class.file-input__preview--with-external-preview]="
+			needsPreview && !isLoading
+		"
+	/>
+</ng-container>
 
-<ng-template #addIcon>
-	<span class="file-input__add-icon">
-		<i class="far fa-plus-square"></i>
-	</span>
+<!-- Template when a file is not present. -->
+<ng-template #noFile>
+	<!-- TODO: Once a new loader is made, replace this text with it. -->
+
+	<div *ngIf="isLoading; else duringLoading" class="file-input__loader">
+		Pobieranie ...
+	</div>
+
+	<ng-template #duringLoading>
+		<span *ngIf="!isLoading" class="file-input__add-icon">
+			<i class="far fa-plus-square"></i>
+		</span>
+	</ng-template>
 </ng-template>
