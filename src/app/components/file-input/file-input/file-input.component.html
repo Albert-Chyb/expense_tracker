@@ -1,16 +1,8 @@
-<label class="file-input__label">
-	<input
-		class="file-input__input"
-		type="file"
-		(change)="handleInputChange($event)"
-	/>
-</label>
-
 <!-- Template when a file is present. -->
 <ng-container *ngIf="hasFile; else noFile">
 	<div class="file-input__actions">
 		<button
-			(click)="onRemove.emit()"
+			(click)="onRemove.emit(attachment)"
 			appButton
 			btnType="icon"
 			class="file-input__action"
@@ -20,7 +12,7 @@
 	</div>
 
 	<img
-		[src]="needsPreview ? preview : sanitize(base64)"
+		[src]="sanitize(preview)"
 		class="file-input__preview"
 		[class.file-input__preview--with-external-preview]="
 			needsPreview && !isLoading
@@ -32,13 +24,5 @@
 <ng-template #noFile>
 	<!-- TODO: Once a new loader is made, replace this text with it. -->
 
-	<div *ngIf="isLoading; else duringLoading" class="file-input__loader">
-		Pobieranie ...
-	</div>
-
-	<ng-template #duringLoading>
-		<span *ngIf="!isLoading" class="file-input__add-icon">
-			<i class="far fa-plus-square"></i>
-		</span>
-	</ng-template>
+	<div *ngIf="isLoading" class="file-input__loader">Ładowanie ...</div>
 </ng-template>

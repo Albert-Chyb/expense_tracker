@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ErrorsService } from 'src/app/services/errors/errors.service';
+
 import {
 	PREVIEW_IMAGES,
 	SUPPORTED_IMG_TYPES,
@@ -19,16 +19,13 @@ import {
 	TSupportedImgTypes,
 } from './injection-tokens';
 
+type TAttachment = File | Blob;
+
 const VALUE_ACCESSOR_PROVIDER: Provider = {
 	provide: NG_VALUE_ACCESSOR,
 	useExisting: forwardRef(() => FileInputComponent),
 	multi: true,
 };
-
-function delay(time: number) {
-	console.warn('Do not forget to remove this delay !!!');
-	return new Promise(resolve => setTimeout(resolve, time));
-}
 
 @Component({
 	selector: 'file',
@@ -40,13 +37,15 @@ function delay(time: number) {
 		class: 'file-input',
 		'[class.file-input--loading]': 'isLoading',
 		'[class.file-input--has-file]': 'hasFile',
+		'(drop)': '$event.stopPropagation();',
+		'(dragover)': '$event.stopPropagation();',
+		'(dragleave)': '$event.stopPropagation();',
 	},
 })
 export class FileInputComponent implements OnInit, ControlValueAccessor {
 	constructor(
 		private readonly _changeDetector: ChangeDetectorRef,
 		private readonly _sanitizer: DomSanitizer,
-		private readonly _errors: ErrorsService,
 		@Inject(SUPPORTED_IMG_TYPES)
 		private readonly _supportedImgTypes: TSupportedImgTypes,
 		@Inject(PREVIEW_IMAGES)
@@ -54,36 +53,21 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 	) {}
 
 	@Output('onRemove')
-	onRemove = new EventEmitter();
-
-	@Output('onFileChange')
-	onFileChange = new EventEmitter();
+	onRemove = new EventEmitter<TAttachment>();
 
 	private readonly _reader = new FileReader();
-	private readonly _urlPattern = new RegExp(
-		/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
-		'gm'
-	);
 	private _isLoading = false;
-	public base64: string;
+	private _base64: string;
+	private _attachment: TAttachment;
+	public isDisabled = false;
 
-	onChange: (file: any) => void;
+	onChange: (file: TAttachment) => void;
 	onTouched: () => void;
-	isDisabled = false;
 
-	async writeValue(obj: any) {
-		if (!obj) return;
-		const isUrl = this._urlPattern.test(obj);
-
-		if (isUrl) {
-			this._setLoadingState(true);
-
-			// TODO: Add error handling
-			const response = await fetch(obj);
-			const blob = await response.blob();
-			this.loadFile(blob);
-
-			this._setLoadingState(false);
+	writeValue(obj: any) {
+		if (obj instanceof File || obj instanceof Blob) {
+			this._attachment = obj;
+			this.loadFile(obj);
 		}
 	}
 
@@ -95,20 +79,11 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 		this.onTouched = fn;
 	}
 
-	setDisabledState?(isDisabled: boolean): void {
+	setDisabledState(isDisabled: boolean): void {
 		this.isDisabled = isDisabled;
 	}
 
-	handleInputChange($event: Event) {
-		const { files } = $event.target as HTMLInputElement;
-		const file = files[0];
-
-		this.onFileChange.emit();
-
-		if (file) this.loadFile(file);
-	}
-
-	loadFile(file: File | Blob) {
+	loadFile(file: TAttachment) {
 		this._reader.readAsDataURL(file);
 	}
 
@@ -118,12 +93,18 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 
 	ngOnInit(): void {
 		this._reader.addEventListener('load', () => this._onLoad());
+		this._reader.addEventListener('loadstart', () =>
+			this._setLoadingState(true)
+		);
+		this._reader.addEventListener('loadend', () =>
+			this._setLoadingState(false)
+		);
 	}
 
 	private _onLoad() {
-		this.base64 = <string>this._reader.result;
+		this._base64 = <string>this._reader.result;
 
-		this.onChange(this.base64);
+		this.onChange(this._attachment);
 		this.onTouched();
 		this._changeDetector.detectChanges();
 	}
@@ -133,17 +114,18 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 		this._changeDetector.detectChanges();
 	}
 
-	/** Whether the file needs a preview image. */
 	get needsPreview() {
 		return !this._supportedImgTypes.includes(this.type);
 	}
 
-	get preview() {
-		return this._previewImages.get(this.type);
+	get preview(): string {
+		return this.needsPreview
+			? this._previewImages.get(this.type)
+			: this._base64;
 	}
 
 	get type() {
-		return this.base64.split(';', 1)[0].split(':', 2)[1] ?? '';
+		return this._base64.split(';', 1)[0].split(':', 2)[1] ?? '';
 	}
 
 	get isLoading() {
@@ -151,6 +133,10 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 	}
 
 	get hasFile() {
-		return !!this.base64;
+		return !!this._base64;
+	}
+
+	get attachment() {
+		return this._attachment;
 	}
 }

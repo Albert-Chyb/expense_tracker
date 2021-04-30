@@ -10,6 +10,10 @@
 	@extend .file-input--loading;
 }
 
+:host-context(.is-hovered-with-files) {
+	pointer-events: none;
+}
+
 .file-input {
 	display: flex;
 	justify-content: center;
@@ -21,22 +25,6 @@
 	position: relative;
 	background-color: var(--bg-color-1);
 	border: rem(2px) solid var(--bg-color-6);
-
-	&__input {
-		// Because standard file input cannot be styled,
-		// we hide it from the view, and let the label trigger it.
-		position: absolute;
-		transform: scale(0);
-	}
-
-	&__label {
-		cursor: pointer;
-		position: absolute;
-		top: 0px;
-		left: 0px;
-		bottom: 0px;
-		right: 0px;
-	}
 
 	&__actions {
 		position: absolute;
@@ -56,7 +44,7 @@
 		transition: transform 300ms ease-in;
 	}
 
-	&__label:hover + &__actions,
+	&:hover > &__actions,
 	&__actions:hover {
 		transition-timing-function: ease-out;
 		transform: translateY(0);
@@ -77,12 +65,7 @@
 		position: absolute;
 	}
 
-	&__add-icon {
-		font-size: rem(70px);
-		color: var(--text-color-2);
-	}
-
-	@media (max-device-width: 768px) {
+	@media (hover: none) {
 		&__actions {
 			transform: translateY(0);
 		}
