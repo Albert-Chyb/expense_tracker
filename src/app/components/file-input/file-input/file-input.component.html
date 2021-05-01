@@ -1,28 +1,24 @@
-<!-- Template when a file is present. -->
-<ng-container *ngIf="hasFile; else noFile">
-	<div class="file-input__actions">
-		<button
-			(click)="onRemove.emit(attachment)"
-			appButton
-			btnType="icon"
-			class="file-input__action"
-		>
-			<i class="far fa-trash-alt"></i>
-		</button>
-	</div>
+<div class="file__actions">
+	<button
+		(click)="onRemove.emit(attachment)"
+		appButton
+		btnType="icon"
+		class="file__action"
+	>
+		<i class="far fa-trash-alt"></i>
+	</button>
+</div>
 
-	<img
-		[src]="sanitize(preview)"
-		class="file-input__preview"
-		[class.file-input__preview--with-external-preview]="
-			needsPreview && !isLoading
-		"
-	/>
-</ng-container>
+<div class="file__content">
+	<!-- Template when a file is present. -->
+	<ng-container *ngIf="hasFile; else noFile">
+		<img [src]="sanitize(preview)" class="file__preview" />
+	</ng-container>
 
-<!-- Template when a file is not present. -->
-<ng-template #noFile>
-	<!-- TODO: Once a new loader is made, replace this text with it. -->
+	<!-- Template when a file is not present. -->
+	<ng-template #noFile>
+		<!-- TODO: Once a new loader is made, replace this text with it. -->
 
-	<div *ngIf="isLoading" class="file-input__loader">Ładowanie ...</div>
-</ng-template>
+		<div *ngIf="isLoading" class="file__loader">Ładowanie ...</div>
+	</ng-template>
+</div>

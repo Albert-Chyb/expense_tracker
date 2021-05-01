@@ -1,73 +1,55 @@
 @import 'utils/functions';
 @import 'utils/variables';
 @import 'utils/mixins';
+@import '../../../sass/components/responsive-square';
+@import '../file-input';
 
 :host {
-	@extend .file-input;
-}
-
-:host(.file-input--loading) {
-	@extend .file-input--loading;
+	@extend .file;
 }
 
 :host-context(.is-hovered-with-files) {
 	pointer-events: none;
 }
 
-.file-input {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: rem(200px);
-	height: rem(200px);
-	border-radius: rem(9px);
+.file {
+	@include responsive-square;
+	display: block;
 	overflow: hidden;
-	position: relative;
-	background-color: var(--bg-color-1);
-	border: rem(2px) solid var(--bg-color-6);
+	border-radius: $border-radius;
+	border: $border;
 
 	&__actions {
-		position: absolute;
+		position: relative;
+		top: 0px;
+		right: 0px;
+		left: 0px;
+		z-index: 2;
+		display: flex;
+		justify-content: flex-end;
+
 		background: linear-gradient(
 			180deg,
 			rgba(0, 0, 0, 1) 0%,
 			rgba(0, 0, 0, 0) 100%
 		);
-		top: 0px;
-		left: 0px;
-		height: 30%;
-		width: 100%;
-		display: flex;
-		justify-content: flex-end;
-		padding: rem(5px);
 		transform: translateY(-100%);
 		transition: transform 300ms ease-in;
+
+		@media (hover: none) {
+			transform: translateY(0%);
+		}
 	}
 
-	&:hover > &__actions,
+	&:hover &__actions,
 	&__actions:hover {
 		transition-timing-function: ease-out;
-		transform: translateY(0);
+		transform: translateY(0%);
 	}
 
 	&__preview {
-		width: 100%;
-		height: 100%;
+		z-index: 1;
 		object-fit: cover;
-
-		&--with-external-preview {
-			width: 60%;
-			height: 60%;
-		}
-	}
-
-	&__loader {
-		position: absolute;
-	}
-
-	@media (hover: none) {
-		&__actions {
-			transform: translateY(0);
-		}
+		height: 100%;
 	}
 }
