@@ -1,0 +1,90 @@
+@import 'utils/functions';
+@import 'utils/variables';
+@import 'utils/mixins';
+@import '../../../sass/components/responsive-square';
+@import '../file-input';
+
+$padding: rem(20px);
+
+:host {
+	display: block;
+	position: relative;
+}
+
+.overlay {
+	display: grid;
+	place-items: center;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	background-color: hsla(0, 0%, 0%, 0.4);
+	pointer-events: none;
+	text-align: center;
+	border-radius: $border-radius;
+	filter: blur(0.5);
+	backdrop-filter: blur(5px);
+
+	&__container {
+		display: grid;
+		row-gap: rem(30px);
+	}
+}
+
+.drop-area {
+	border: rem(3px) dashed var(--bg-color-6);
+	border-radius: $border-radius;
+
+	&__previews {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(#{rem(150px)}, 1fr));
+		gap: rem(20px);
+		padding: $padding;
+	}
+}
+
+.add-files {
+	@include responsive-square;
+	border-radius: $border-radius;
+	overflow: hidden;
+	cursor: pointer;
+	border: $border;
+	display: block;
+
+	&__icon {
+		background-image: url('/assets/files-icons/add-file.svg');
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
+		width: 100%;
+		height: 60%;
+		align-self: end;
+	}
+
+	&__input {
+		position: absolute;
+		transform: scale(0);
+	}
+
+	&__content {
+		text-align: center;
+		display: grid;
+		place-items: center;
+		grid-template-rows: repeat(2, 1fr);
+		row-gap: rem(10px);
+		padding: rem(5px);
+	}
+
+	&__description {
+		align-self: stretch;
+		font-size: rem(12px);
+	}
+
+	&__loader {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+}
