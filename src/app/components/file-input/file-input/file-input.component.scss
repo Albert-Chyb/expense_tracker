@@ -20,7 +20,7 @@
 	border: $border;
 
 	&__actions {
-		position: relative;
+		position: absolute;
 		top: 0px;
 		right: 0px;
 		left: 0px;
@@ -51,5 +51,11 @@
 		z-index: 1;
 		object-fit: cover;
 		height: 100%;
+
+		// TODO: Center small preview
+		&--small {
+			height: 60%;
+			width: 60%;
+		}
 	}
 }

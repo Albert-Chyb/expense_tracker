@@ -34,7 +34,6 @@ const VALUE_ACCESSOR_PROVIDER: Provider = {
 	providers: [VALUE_ACCESSOR_PROVIDER],
 	templateUrl: './file-input.component.html',
 	host: {
-		class: 'file-input',
 		'[class.file-input--loading]': 'isLoading',
 		'[class.file-input--has-file]': 'hasFile',
 		'(drop)': '$event.stopPropagation();',

@@ -12,7 +12,11 @@
 <div class="file__content">
 	<!-- Template when a file is present. -->
 	<ng-container *ngIf="hasFile; else noFile">
-		<img [src]="sanitize(preview)" class="file__preview" />
+		<img
+			[src]="sanitize(preview)"
+			class="file__preview"
+			[class.file__preview--small]="needsPreview"
+		/>
 	</ng-container>
 
 	<!-- Template when a file is not present. -->
