@@ -1,28 +1,26 @@
-<div class="drop-area">
-	<div class="drop-area__previews">
-		<label class="add-files">
-			<div class="add-files__content">
-				<input
-					class="add-files__input"
-					type="file"
-					multiple
-					(change)="handleInputChange($event)"
-				/>
+<div class="drop-area__previews">
+	<label class="add-files">
+		<div class="add-files__content">
+			<input
+				class="add-files__input"
+				type="file"
+				multiple
+				(change)="handleInputChange($event)"
+			/>
 
-				<div class="add-files__icon"></div>
-				<p class="add-files__description">Kliknij, aby dodać załącznik</p>
-			</div>
-		</label>
+			<div class="add-files__icon"></div>
+			<p class="add-files__description">Kliknij, aby dodać załącznik</p>
+		</div>
+	</label>
 
-		<file
-			*ngFor="let control of formArray.controls"
-			[formControl]="control"
-			(onRemove)="onFileRemove.emit($event)"
-		></file>
-	</div>
+	<file
+		*ngFor="let control of formArray.controls"
+		[formControl]="control"
+		(onRemove)="onFileRemove.emit($event)"
+	></file>
 </div>
 
-<div class="overlay" *ngIf="isFileOver">
+<div class="overlay" *ngIf="isOverlayShown">
 	<div class="overlay__container">
 		<i class="far fa-clone"></i>
 

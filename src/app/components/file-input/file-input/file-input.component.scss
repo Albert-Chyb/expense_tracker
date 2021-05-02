@@ -8,10 +8,6 @@
 	@extend .file;
 }
 
-:host-context(.is-hovered-with-files) {
-	pointer-events: none;
-}
-
 .file {
 	@include responsive-square;
 	display: block;
@@ -27,7 +23,6 @@
 		z-index: 2;
 		display: flex;
 		justify-content: flex-end;
-
 		background: linear-gradient(
 			180deg,
 			rgba(0, 0, 0, 1) 0%,

@@ -7,8 +7,11 @@
 $padding: rem(20px);
 
 :host {
-	display: block;
-	position: relative;
+	@extend .drop-area;
+}
+
+:host(.is-overlay-shown) .drop-area__previews * {
+	pointer-events: none;
 }
 
 .overlay {
@@ -24,7 +27,7 @@ $padding: rem(20px);
 	text-align: center;
 	border-radius: $border-radius;
 	filter: blur(0.5);
-	backdrop-filter: blur(5px);
+	backdrop-filter: blur(2px);
 
 	&__container {
 		display: grid;
@@ -33,14 +36,21 @@ $padding: rem(20px);
 }
 
 .drop-area {
+	display: block;
+	position: relative;
 	border: rem(3px) dashed var(--bg-color-6);
 	border-radius: $border-radius;
 
 	&__previews {
+		pointer-events: none;
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(#{rem(150px)}, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(#{rem(100px)}, 1fr));
 		gap: rem(20px);
 		padding: $padding;
+
+		& * {
+			pointer-events: all;
+		}
 	}
 }
 

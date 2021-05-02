@@ -4,6 +4,7 @@ import {
 	Component,
 	EventEmitter,
 	Input,
+	OnDestroy,
 	OnInit,
 	Output,
 } from '@angular/core';
@@ -20,10 +21,10 @@ import { Subscription } from 'rxjs';
 		'(dragover)': 'onDragOver($event)',
 		'(dragenter)': 'onDragEnter($event)',
 		'(dragleave)': 'onDragLeave($event)',
-		'[class.is-hovered-with-files]': 'isFileOver',
+		'[class.is-overlay-shown]': 'isOverlayShown',
 	},
 })
-export class FilesContainerComponent implements OnInit {
+export class FilesContainerComponent implements OnInit, OnDestroy {
 	constructor(private readonly _changeDetector: ChangeDetectorRef) {}
 
 	@Input('formArray') formArray: FormArray;
@@ -31,7 +32,7 @@ export class FilesContainerComponent implements OnInit {
 	@Output('onFileRemove') onFileRemove = new EventEmitter<File>();
 
 	private readonly _subscriptions = new Subscription();
-	isFileOver = false;
+	isOverlayShown = false;
 
 	ngOnInit(): void {
 		if (!this.formArray) {
@@ -43,27 +44,31 @@ export class FilesContainerComponent implements OnInit {
 				this._changeDetector.detectChanges()
 			)
 		);
+	}
 
-		this.onFileAdd.subscribe(console.log);
+	ngOnDestroy() {
+		this._subscriptions.unsubscribe();
 	}
 
 	onDrop($event: DragEvent) {
 		$event.preventDefault();
+		this.isOverlayShown = false;
 
 		this.addFiles($event.dataTransfer.files);
-
-		this.isFileOver = false;
 	}
 
 	onDragEnter($event: DragEvent) {
 		$event.preventDefault();
-		this.isFileOver = $event.dataTransfer.types.every(type => type === 'Files');
+
+		this.isOverlayShown = $event.dataTransfer.types.every(
+			type => type === 'Files'
+		);
 	}
 
 	onDragLeave($event: DragEvent) {
 		$event.preventDefault();
 
-		this.isFileOver = false;
+		this.isOverlayShown = false;
 	}
 
 	onDragOver($event: DragEvent) {
