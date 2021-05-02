@@ -11,10 +11,6 @@ import {
 import { FormArray, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-export const FilesContainerOverlayMessage = Symbol(
-	'FilesContainerOverlayMessage'
-);
-
 @Component({
 	selector: 'files',
 	templateUrl: './files-container.component.html',
@@ -63,21 +59,23 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 		$event.preventDefault();
 		const { files, types } = $event.dataTransfer;
 
-		this._isOverlayShown = false;
-		if (types.every(type => type === 'Files')) this.addFiles(files);
+		this.hideOverlay();
+		if (types.every(this._isAllowedDraggedType)) this.addFiles(files);
 	}
 
 	onDragEnter($event: DragEvent) {
 		$event.preventDefault();
 		const { types } = $event.dataTransfer;
 
-		this._isOverlayShown = types.every(type => type === 'Files');
+		if (types.every(this._isAllowedDraggedType)) {
+			this.showOverlay();
+		}
 	}
 
 	onDragLeave($event: DragEvent) {
 		$event.preventDefault();
 
-		this._isOverlayShown = false;
+		this.hideOverlay();
 	}
 
 	onDragOver($event: DragEvent) {
@@ -104,11 +102,23 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 		});
 	}
 
+	showOverlay() {
+		this._isOverlayShown = true;
+	}
+
+	hideOverlay() {
+		this._isOverlayShown = false;
+	}
+
 	private _validateFiles(files: FileList): any {
 		const filesArray = Array.from(files);
 		const controls = filesArray.map(file => new FormControl(file));
 
 		return this.formArray.validator(new FormArray(controls));
+	}
+
+	private _isAllowedDraggedType(type: string) {
+		return type === 'Files';
 	}
 
 	get isOverlayShown() {
