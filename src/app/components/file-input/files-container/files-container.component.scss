@@ -59,7 +59,7 @@ $padding: rem(20px);
 		background-position: center;
 		width: 100%;
 		height: 60%;
-		align-self: end;
+		align-self: center;
 	}
 
 	&__input {
@@ -71,14 +71,15 @@ $padding: rem(20px);
 		text-align: center;
 		display: grid;
 		place-items: center;
-		grid-template-rows: repeat(2, 1fr);
+		grid-template-rows: 2fr 1fr;
 		row-gap: rem(10px);
 		padding: rem(5px);
 	}
 
 	&__description {
-		align-self: stretch;
 		font-size: rem(12px);
+		margin: 0px;
+		padding: 0px;
 	}
 
 	&__loader {
