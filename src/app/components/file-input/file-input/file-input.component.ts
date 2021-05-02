@@ -19,8 +19,6 @@ import {
 	TSupportedImgTypes,
 } from './injection-tokens';
 
-type TAttachment = File | Blob;
-
 const VALUE_ACCESSOR_PROVIDER: Provider = {
 	provide: NG_VALUE_ACCESSOR,
 	useExisting: forwardRef(() => FileInputComponent),
@@ -52,22 +50,20 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 	) {}
 
 	@Output('onRemove')
-	onRemove = new EventEmitter<TAttachment>();
+	onRemove = new EventEmitter<File>();
 
 	private readonly _reader = new FileReader();
 	private _isLoading = false;
 	private _base64: string;
-	private _attachment: TAttachment;
+	private _attachment: File;
 	public isDisabled = false;
 
-	onChange: (file: TAttachment) => void;
+	onChange: (file: File) => void;
 	onTouched: () => void;
 
-	writeValue(obj: any) {
-		if (obj instanceof File || obj instanceof Blob) {
-			this._attachment = obj;
-			this.loadFile(obj);
-		}
+	writeValue(obj: File) {
+		this._attachment = obj;
+		this.loadFile(obj);
 	}
 
 	registerOnChange(fn: any): void {
@@ -82,7 +78,7 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 		this.isDisabled = isDisabled;
 	}
 
-	loadFile(file: TAttachment) {
+	loadFile(file: File) {
 		this._reader.readAsDataURL(file);
 	}
 
