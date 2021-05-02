@@ -2,10 +2,13 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EventEmitter,
 	Input,
 	OnInit,
+	Output,
 } from '@angular/core';
 import { FormArray, FormControl } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'files',
@@ -24,7 +27,10 @@ export class FilesContainerComponent implements OnInit {
 	constructor(private readonly _changeDetector: ChangeDetectorRef) {}
 
 	@Input('formArray') formArray: FormArray;
+	@Output('onFileAdd') onFileAdd = new EventEmitter<File>();
+	@Output('onFileRemove') onFileRemove = new EventEmitter<File>();
 
+	private readonly _subscriptions = new Subscription();
 	isFileOver = false;
 
 	ngOnInit(): void {
@@ -32,9 +38,13 @@ export class FilesContainerComponent implements OnInit {
 			throw new Error('You have to pass a form array reference !');
 		}
 
-		this.formArray.valueChanges.subscribe(() =>
-			this._changeDetector.detectChanges()
+		this._subscriptions.add(
+			this.formArray.valueChanges.subscribe(() =>
+				this._changeDetector.detectChanges()
+			)
 		);
+
+		this.onFileAdd.subscribe(console.log);
 	}
 
 	onDrop($event: DragEvent) {
@@ -71,6 +81,7 @@ export class FilesContainerComponent implements OnInit {
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
 			this.formArray.insert(this.formArray.length, new FormControl(file));
+			this.onFileAdd.emit(file);
 		}
 	}
 }

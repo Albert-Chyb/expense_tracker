@@ -17,6 +17,7 @@
 		<file
 			*ngFor="let control of formArray.controls"
 			[formControl]="control"
+			(onRemove)="onFileRemove.emit($event)"
 		></file>
 	</div>
 </div>
