@@ -4,7 +4,8 @@
 			<input
 				class="add-files__input"
 				type="file"
-				multiple
+				[accept]="allowedTypes.join(',')"
+				[multiple]="multiple"
 				(change)="handleInputChange($event)"
 			/>
 
@@ -20,10 +21,7 @@
 	></file>
 </div>
 
-<div class="overlay" *ngIf="isOverlayShown">
-	<div class="overlay__container">
-		<i class="far fa-clone"></i>
-
-		<p>Upuść, aby dodać pliki.</p>
-	</div>
+<div class="overlay" [class.overlay--error]="false" *ngIf="isOverlayShown">
+	<i class="fas fa-file-upload overlay__icon"></i>
+	<p class="overlay__message">Upuść, aby dodać pliki.</p>
 </div>

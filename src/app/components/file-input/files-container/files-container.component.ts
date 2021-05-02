@@ -11,6 +11,10 @@ import {
 import { FormArray, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
+export const FilesContainerOverlayMessage = Symbol(
+	'FilesContainerOverlayMessage'
+);
+
 @Component({
 	selector: 'files',
 	templateUrl: './files-container.component.html',
@@ -28,11 +32,16 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 	constructor(private readonly _changeDetector: ChangeDetectorRef) {}
 
 	@Input('formArray') formArray: FormArray;
+	@Input('accept') allowedTypes: string[] = ['image/jpeg'];
+	@Input('multiple') multiple = true;
+	@Input('checkFirst') checkFirst = true;
+
 	@Output('onFileAdd') onFileAdd = new EventEmitter<File>();
+	@Output('onReject') onReject = new EventEmitter<any>();
 	@Output('onFileRemove') onFileRemove = new EventEmitter<File>();
 
 	private readonly _subscriptions = new Subscription();
-	isOverlayShown = false;
+	private _isOverlayShown = false;
 
 	ngOnInit(): void {
 		if (!this.formArray) {
@@ -52,23 +61,23 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 
 	onDrop($event: DragEvent) {
 		$event.preventDefault();
-		this.isOverlayShown = false;
+		const { files, types } = $event.dataTransfer;
 
-		this.addFiles($event.dataTransfer.files);
+		this._isOverlayShown = false;
+		if (types.every(type => type === 'Files')) this.addFiles(files);
 	}
 
 	onDragEnter($event: DragEvent) {
 		$event.preventDefault();
+		const { types } = $event.dataTransfer;
 
-		this.isOverlayShown = $event.dataTransfer.types.every(
-			type => type === 'Files'
-		);
+		this._isOverlayShown = types.every(type => type === 'Files');
 	}
 
 	onDragLeave($event: DragEvent) {
 		$event.preventDefault();
 
-		this.isOverlayShown = false;
+		this._isOverlayShown = false;
 	}
 
 	onDragOver($event: DragEvent) {
@@ -83,10 +92,26 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 	}
 
 	addFiles(files: FileList) {
-		for (let i = 0; i < files.length; i++) {
-			const file = files[i];
-			this.formArray.insert(this.formArray.length, new FormControl(file));
-			this.onFileAdd.emit(file);
+		const errors = this.checkFirst ? this._validateFiles(files) : null;
+
+		if (errors) {
+			return this.onReject.emit(errors);
 		}
+
+		Array.from(files).forEach(file => {
+			this.formArray.push(new FormControl(file));
+			this.onFileAdd.emit(file);
+		});
+	}
+
+	private _validateFiles(files: FileList): any {
+		const filesArray = Array.from(files);
+		const controls = filesArray.map(file => new FormControl(file));
+
+		return this.formArray.validator(new FormArray(controls));
+	}
+
+	get isOverlayShown() {
+		return this._isOverlayShown;
 	}
 }

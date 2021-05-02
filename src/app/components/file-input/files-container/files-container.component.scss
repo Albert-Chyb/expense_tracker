@@ -16,22 +16,29 @@ $padding: rem(20px);
 
 .overlay {
 	display: grid;
-	place-items: center;
+	row-gap: rem(20px);
 	position: absolute;
 	top: 0px;
 	left: 0px;
 	bottom: 0px;
 	right: 0px;
-	background-color: hsla(0, 0%, 0%, 0.4);
+	background-color: hsla(0, 0%, 0%, 0.5);
 	pointer-events: none;
 	text-align: center;
 	border-radius: $border-radius;
 	filter: blur(0.5);
 	backdrop-filter: blur(2px);
 
-	&__container {
-		display: grid;
-		row-gap: rem(30px);
+	&__message {
+		font-weight: bold;
+		font-size: rem(22px);
+		margin: 0px;
+		align-self: flex-start;
+	}
+
+	&__icon {
+		font-size: rem(36px);
+		align-self: flex-end;
 	}
 }
 
