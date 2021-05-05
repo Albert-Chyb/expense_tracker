@@ -19,6 +19,7 @@ export function sizeValidator(maxSize: number): ValidatorFn {
 			? null
 			: {
 					areFilesTooLarge: true,
+					maxSize,
 			  };
 	};
 }
@@ -38,6 +39,7 @@ export function singleSizeValidator(maxSize: number): ValidatorFn {
 			? null
 			: {
 					isFileTooLarge: true,
+					maxSize,
 			  };
 	};
 }

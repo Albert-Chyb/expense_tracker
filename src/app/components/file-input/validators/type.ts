@@ -10,6 +10,7 @@ export function typeValidator(types: string[]): ValidatorFn {
 			? null
 			: {
 					isNotAllowedType: true,
+					allowedTypes: types,
 			  };
 	};
 }
