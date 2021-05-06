@@ -11,6 +11,17 @@ import {
 import { FormArray, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
+// TODO: Prepare FireStorage
+/*
+	!--|| Rules to add ||--
+
+	* Single file cannot be larger than 3MB
+	* To perform read and write user must be signed in
+	* Each user has its own private folder
+*/
+// TODO: Make a directive that will help to work with FireStorage
+// TODO: Make a better loader.
+
 @Component({
 	selector: 'files',
 	templateUrl: './files-container.component.html',
@@ -28,7 +39,7 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 	constructor(private readonly _changeDetector: ChangeDetectorRef) {}
 
 	@Input('formArray') formArray: FormArray;
-	@Input('accept') allowedTypes: string[] = ['image/jpeg'];
+	@Input('accept') allowedTypes: string[] = [];
 	@Input('multiple') multiple = true;
 	@Input('checkFirst') checkFirst = true;
 
@@ -112,7 +123,10 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 
 	private _validateFiles(files: FileList): any {
 		const filesArray = Array.from(files);
-		const controls = filesArray.map(file => new FormControl(file));
+		const controls = [
+			...filesArray.map(file => new FormControl(file)),
+			...this.formArray.controls,
+		];
 
 		return this.formArray.validator(new FormArray(controls));
 	}
