@@ -10,15 +10,8 @@ import {
 } from '@angular/core';
 import { FormArray, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { FileInputEvent } from '../models/file-input-event';
 
-// TODO: Prepare FireStorage
-/*
-	!--|| Rules to add ||--
-
-	* Single file cannot be larger than 3MB
-	* To perform read and write user must be signed in
-	* Each user has its own private folder
-*/
 // TODO: Make a directive that will help to work with FireStorage
 // TODO: Make a better loader.
 
@@ -43,7 +36,7 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 	@Input('multiple') multiple = true;
 	@Input('checkFirst') checkFirst = true;
 
-	@Output('onFileAdd') onFileAdd = new EventEmitter<File>();
+	@Output('onFileAdd') onFileAdd = new EventEmitter<FileInputEvent>();
 	@Output('onReject') onReject = new EventEmitter<any>();
 	@Output('onFileRemove') onFileRemove = new EventEmitter<File>();
 
@@ -107,10 +100,15 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 			return this.onReject.emit(errors);
 		}
 
-		Array.from(files).forEach(file => {
+		Array.from(files).forEach(file => this.addFile(file));
+	}
+
+	addFile(file: File, emitEvent = true) {
+		const event = new FileInputEvent(file);
+		if (emitEvent) this.onFileAdd.emit(event);
+
+		if (!event.isDefaultBehaviorDisabled)
 			this.formArray.push(new FormControl(file));
-			this.onFileAdd.emit(file);
-		});
 	}
 
 	showOverlay() {
