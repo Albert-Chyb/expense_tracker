@@ -17,11 +17,11 @@
 	<file
 		*ngFor="let control of formArray.controls"
 		[formControl]="control"
-		(onRemove)="onFileRemove.emit($event)"
+		(onRemove)="removeFile($event)"
 	></file>
 </div>
 
-<div class="overlay" [class.overlay--error]="false" *ngIf="isOverlayShown">
+<section class="overlay" [class.overlay--error]="false" *ngIf="isOverlayShown">
 	<i class="fas fa-file-upload overlay__icon"></i>
-	<p class="overlay__message">Upuść, aby dodać pliki.</p>
-</div>
+	<h2 class="overlay__message">Upuść, aby dodać pliki.</h2>
+</section>

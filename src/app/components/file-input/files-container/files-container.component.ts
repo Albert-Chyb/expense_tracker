@@ -38,7 +38,7 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 
 	@Output('onFileAdd') onFileAdd = new EventEmitter<FileInputEvent>();
 	@Output('onReject') onReject = new EventEmitter<any>();
-	@Output('onFileRemove') onFileRemove = new EventEmitter<File>();
+	@Output('onFileRemove') onFileRemove = new EventEmitter<FileInputEvent>();
 
 	private readonly _subscriptions = new Subscription();
 	private _isOverlayShown = false;
@@ -104,11 +104,29 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 	}
 
 	addFile(file: File, emitEvent = true) {
-		const event = new FileInputEvent(file);
-		if (emitEvent) this.onFileAdd.emit(event);
+		if (emitEvent) {
+			var event = new FileInputEvent(file, this);
+			this.onFileAdd.emit(event);
+		}
 
-		if (!event.isDefaultBehaviorDisabled)
+		if (!event?.isDefaultBehaviorDisabled) {
 			this.formArray.push(new FormControl(file));
+		}
+	}
+
+	removeFile(file: File, emitEvent = true) {
+		if (emitEvent) {
+			var event = new FileInputEvent(file, this);
+			this.onFileRemove.emit(event);
+		}
+
+		if (!event?.isDefaultBehaviorDisabled) {
+			const fileIndex = this.formArray.controls.findIndex(
+				control => control.value === file
+			);
+
+			this.formArray.removeAt(fileIndex);
+		}
 	}
 
 	showOverlay() {
