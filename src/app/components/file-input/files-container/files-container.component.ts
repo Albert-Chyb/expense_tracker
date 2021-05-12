@@ -13,7 +13,6 @@ import { Subscription } from 'rxjs';
 import { FileInputEvent } from '../models/file-input-event';
 
 // TODO: Make a directive that will help to work with FireStorage
-// TODO: Make a better loader.
 
 @Component({
 	selector: 'files',

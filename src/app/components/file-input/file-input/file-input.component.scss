@@ -8,12 +8,30 @@
 	@extend .file;
 }
 
+:host(.file--loading) {
+	@extend .file--loading;
+}
+
 .file {
 	@include responsive-square;
 	display: block;
 	overflow: hidden;
 	border-radius: $border-radius;
 	border: $border;
+
+	&__overlay {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		bottom: 0px;
+		right: 0px;
+		display: grid;
+		place-content: center;
+
+		&--transparent {
+			background-color: hsla(0, 0%, 0%, 0.4);
+		}
+	}
 
 	&__actions {
 		position: absolute;
@@ -56,5 +74,9 @@
 			height: 60%;
 			width: 60%;
 		}
+	}
+
+	&__progress {
+		margin: 0px;
 	}
 }

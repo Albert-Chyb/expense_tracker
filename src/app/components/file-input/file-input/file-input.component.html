@@ -10,19 +10,26 @@
 </div>
 
 <div class="file__content">
-	<!-- Template when a file is present. -->
-	<ng-container *ngIf="hasFile; else noFile">
+	<!-- Template when the file is converted in base64 format.  -->
+	<ng-container *ngIf="!isReadingFile; else noFile">
 		<img
 			[src]="sanitize(preview)"
 			class="file__preview"
 			[class.file__preview--small]="needsPreview"
 		/>
+
+		<div
+			*ngIf="progress$ | async as progress"
+			class="file__overlay file__overlay--transparent"
+		>
+			<p class="file__progress">{{ progress + '%' }}</p>
+		</div>
 	</ng-container>
 
-	<!-- Template when a file is not present. -->
+	<!-- Template when the file is being converted to base64 format. -->
 	<ng-template #noFile>
 		<!-- TODO: Once a new loader is made, replace this text with it. -->
 
-		<div *ngIf="isLoading" class="file__loader">Ładowanie ...</div>
+		<div *ngIf="isReadingFile" class="file__overlay">Ładowanie</div>
 	</ng-template>
 </div>

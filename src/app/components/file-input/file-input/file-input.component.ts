@@ -11,6 +11,8 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
+import { finalize, map, takeWhile } from 'rxjs/operators';
 
 import {
 	PREVIEW_IMAGES,
@@ -25,6 +27,11 @@ const VALUE_ACCESSOR_PROVIDER: Provider = {
 	multi: true,
 };
 
+interface UploadTask {
+	file: File;
+	progress$: Observable<number>;
+}
+
 @Component({
 	selector: 'file',
 	styleUrls: ['./file-input.component.scss'],
@@ -32,8 +39,6 @@ const VALUE_ACCESSOR_PROVIDER: Provider = {
 	providers: [VALUE_ACCESSOR_PROVIDER],
 	templateUrl: './file-input.component.html',
 	host: {
-		'[class.file-input--loading]': 'isLoading',
-		'[class.file-input--has-file]': 'hasFile',
 		'(drop)': '$event.stopPropagation();',
 		'(dragover)': '$event.stopPropagation();',
 		'(dragleave)': '$event.stopPropagation();',
@@ -53,17 +58,31 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 	onRemove = new EventEmitter<File>();
 
 	private readonly _reader = new FileReader();
-	private _isLoading = false;
+	private _isReadingFile = true;
 	private _base64: string;
 	private _attachment: File;
+	public progress$: Observable<number>;
 	public isDisabled = false;
 
 	onChange: (file: File) => void;
 	onTouched: () => void;
 
-	writeValue(obj: File) {
-		this._attachment = obj;
-		this.loadFile(obj);
+	writeValue(obj: File | UploadTask) {
+		let file: File;
+
+		if (obj instanceof File) {
+			file = obj;
+		} else {
+			file = obj.file;
+			this.progress$ = obj.progress$.pipe(
+				takeWhile(progress => progress < 100, true),
+				map(progress => ~~progress),
+				finalize(() => (this.progress$ = null))
+			);
+		}
+
+		this.loadFile(file);
+		this._attachment = file;
 	}
 
 	registerOnChange(fn: any): void {
@@ -105,7 +124,8 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 	}
 
 	private _setLoadingState(isLoading: boolean) {
-		this._isLoading = isLoading;
+		this._isReadingFile = isLoading;
+		this._changeDetector.markForCheck();
 		this._changeDetector.detectChanges();
 	}
 
@@ -123,12 +143,8 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 		return this._base64.split(';', 1)[0].split(':', 2)[1] ?? '';
 	}
 
-	get isLoading() {
-		return this._isLoading;
-	}
-
-	get hasFile() {
-		return !!this._base64;
+	get isReadingFile() {
+		return this._isReadingFile;
 	}
 
 	get attachment() {

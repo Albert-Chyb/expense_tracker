@@ -66,6 +66,7 @@ import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
 import { SwipeActionsModule } from './components/swipe-actions/swipe-actions.module';
 import { FileInputModule } from './components/file-input/file-input.module';
+import { FirestorageFolderDirective } from './directives/firestorage-folder/firestorage-folder.directive';
 // import 'hammerjs';
 
 @NgModule({
@@ -98,6 +99,7 @@ import { FileInputModule } from './components/file-input/file-input.module';
 		ConfirmActionDirective,
 		DashboardComponent,
 		AbsPipe,
+		FirestorageFolderDirective,
 	],
 	imports: [
 		BrowserModule,
