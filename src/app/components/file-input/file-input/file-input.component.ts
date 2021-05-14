@@ -27,7 +27,7 @@ const VALUE_ACCESSOR_PROVIDER: Provider = {
 	multi: true,
 };
 
-interface UploadTask {
+export interface UploadTask {
 	file: File;
 	progress$: Observable<number>;
 }
@@ -48,8 +48,10 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 	constructor(
 		private readonly _changeDetector: ChangeDetectorRef,
 		private readonly _sanitizer: DomSanitizer,
+
 		@Inject(SUPPORTED_IMG_TYPES)
 		private readonly _supportedImgTypes: TSupportedImgTypes,
+
 		@Inject(PREVIEW_IMAGES)
 		private readonly _previewImages: TPreviewImages
 	) {}
@@ -61,43 +63,41 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 	private _isReadingFile = true;
 	private _base64: string;
 	private _attachment: File;
+
 	public progress$: Observable<number>;
 	public isDisabled = false;
-
-	onChange: (file: File) => void;
-	onTouched: () => void;
 
 	writeValue(obj: File | UploadTask) {
 		let file: File;
 
 		if (obj instanceof File) {
 			file = obj;
-		} else {
+		} else if (obj) {
 			file = obj.file;
 			this.progress$ = obj.progress$.pipe(
 				takeWhile(progress => progress < 100, true),
-				map(progress => ~~progress),
 				finalize(() => (this.progress$ = null))
 			);
 		}
 
-		this.loadFile(file);
 		this._attachment = file;
+
+		if (this._supportedImgTypes.includes(file.type)) {
+			this.loadPreview(file);
+		} else {
+			this._setLoadingState(false);
+		}
 	}
 
-	registerOnChange(fn: any): void {
-		this.onChange = fn;
-	}
+	registerOnChange(fn: any): void {}
 
-	registerOnTouched(fn: any): void {
-		this.onTouched = fn;
-	}
+	registerOnTouched(fn: any): void {}
 
 	setDisabledState(isDisabled: boolean): void {
 		this.isDisabled = isDisabled;
 	}
 
-	loadFile(file: File) {
+	loadPreview(file: File) {
 		this._reader.readAsDataURL(file);
 	}
 
@@ -118,8 +118,6 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 	private _onLoad() {
 		this._base64 = <string>this._reader.result;
 
-		this.onChange(this._attachment);
-		this.onTouched();
 		this._changeDetector.detectChanges();
 	}
 
@@ -140,7 +138,7 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 	}
 
 	get type() {
-		return this._base64.split(';', 1)[0].split(':', 2)[1] ?? '';
+		return this._attachment.type;
 	}
 
 	get isReadingFile() {

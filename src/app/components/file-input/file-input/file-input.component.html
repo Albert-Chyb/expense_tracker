@@ -22,7 +22,7 @@
 			*ngIf="progress$ | async as progress"
 			class="file__overlay file__overlay--transparent"
 		>
-			<p class="file__progress">{{ progress + '%' }}</p>
+			<p class="file__progress">{{ progress / 100 | percent }}</p>
 		</div>
 	</ng-container>
 
