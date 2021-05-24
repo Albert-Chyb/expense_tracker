@@ -12,7 +12,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
-import { finalize, map, takeWhile } from 'rxjs/operators';
+import { finalize, takeWhile } from 'rxjs/operators';
 
 import {
 	PREVIEW_IMAGES,

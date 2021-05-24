@@ -12,8 +12,6 @@ import { FormArray, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { FileInputEvent } from '../models/file-input-event';
 
-// TODO: Make a directive that will help to work with FireStorage
-
 @Component({
 	selector: 'files',
 	templateUrl: './files-container.component.html',
@@ -137,6 +135,8 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 	}
 
 	private _validateFiles(files: FileList): any {
+		if (!this.formArray.validator) return;
+
 		const filesArray = Array.from(files);
 		const controls = [
 			...filesArray.map(file => new FormControl(file)),
