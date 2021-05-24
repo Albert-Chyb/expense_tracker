@@ -77,6 +77,12 @@
 			Usuń
 		</button>
 	</div>
+
+	<files
+		(onFileRemove)="deleteAttachment($event)"
+		(onFileAdd)="addAttachment($event)"
+		[formArray]="attachments"
+	></files>
 </form>
 
 <ng-template #loader>

@@ -5,7 +5,6 @@ import {
 	LOCALE_ID,
 	NgModule,
 } from '@angular/core';
-import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
@@ -14,8 +13,9 @@ import {
 	USE_EMULATOR as USE_FIRESTORE_EMULATOR,
 } from '@angular/fire/firestore';
 import { USE_EMULATOR as USE_FUNCTIONS_EMULATOR } from '@angular/fire/functions';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule, HammerModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -33,6 +33,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { DashboardComponentsModule } from './components/dashboard/dashboard-components.module';
 import { DatepickerModule } from './components/datepicker/datepicker.module';
 import { DialogContainerComponent } from './components/dialog-container/dialog-container.component';
+import { FileInputModule } from './components/file-input/file-input.module';
 import { FormFieldModule } from './components/form-field/form-field.module';
 import { FormSelectModule } from './components/form-select/form-select.module';
 import { GroupIconComponent } from './components/group-icon/group-icon.component';
@@ -43,6 +44,7 @@ import { NotificationComponent } from './components/notification/notification.co
 import { OverlayComponent } from './components/overlay/overlay.component';
 import { RippleModule } from './components/ripple/ripple.module';
 import { SummaryCardComponent } from './components/summary-card/summary-card.component';
+import { SwipeActionsModule } from './components/swipe-actions/swipe-actions.module';
 import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
 import { TransactionGroupComponent } from './components/transaction-group/transaction-group.component';
 import { ZippyModule } from './components/zippy/zippy.module';
@@ -64,10 +66,6 @@ import { AbsPipe } from './pipes/abs/abs.pipe';
 import { DEFAULT_COLLECTIONS_SCOPE } from './services/collection-base/collection-base';
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
-import { SwipeActionsModule } from './components/swipe-actions/swipe-actions.module';
-import { FileInputModule } from './components/file-input/file-input.module';
-import { FirestorageFolderDirective } from './directives/firestorage-folder/firestorage-folder.directive';
-// import 'hammerjs';
 
 @NgModule({
 	declarations: [
@@ -99,7 +97,6 @@ import { FirestorageFolderDirective } from './directives/firestorage-folder/fire
 		ConfirmActionDirective,
 		DashboardComponent,
 		AbsPipe,
-		FirestorageFolderDirective,
 	],
 	imports: [
 		BrowserModule,

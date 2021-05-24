@@ -1,5 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
-import { DocumentReference } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { first, switchMap } from 'rxjs/operators';
 import {
@@ -9,13 +10,17 @@ import {
 } from 'src/app/services/collection-base/dynamic-queries/helpers';
 
 import { Cacheable } from '../../common/cash/cashable';
+import { AttachmentsService } from '../attachments/attachments.service';
 import { CRUDMixins } from '../collection-base/collection-base';
 import { CRUD } from '../collection-base/models';
+import { UserService } from '../user/user.service';
 import { ITransaction } from './../../common/models/transaction';
 import { PeriodsService } from './../periods/periods.service';
 import { TransactionsGroupsService } from './../transactions-groups/transactions-groups.service';
 
 interface AttachedMethods extends CRUD<ITransaction> {}
+
+// TODO: When a transaction is deleted, all attachments should be deleted as well.
 
 @Injectable({
 	providedIn: 'root',
@@ -24,7 +29,11 @@ export class TransactionsService extends CRUDMixins<AttachedMethods>() {
 	constructor(
 		private readonly _periods: PeriodsService,
 		private readonly _groups: TransactionsGroupsService,
-		private readonly injector: Injector
+		private readonly injector: Injector,
+		private readonly _afStorage: AngularFireStorage,
+		private readonly _afStore: AngularFirestore,
+		private readonly _user: UserService,
+		private readonly _attachments: AttachmentsService
 	) {
 		super('transactions', injector);
 	}
@@ -73,10 +82,23 @@ export class TransactionsService extends CRUDMixins<AttachedMethods>() {
 		populateLocally = true
 	): Promise<DocumentReference<ITransaction>> {
 		let data: ITransaction = transaction;
+		const attachments: File[] = (<File[]>(<any>data).attachments).map(a => a);
+		delete (<any>data).attachments;
+
 		if (populateLocally)
 			data = await this.populateTransactionGroup(transaction);
 
-		return super.add(data);
+		const docRef = await super.add(data);
+
+		if (attachments) {
+			const uploads = attachments.map(attachment => {
+				this._attachments.upload(docRef.id, attachment);
+			});
+
+			await Promise.all(uploads);
+		}
+
+		return docRef;
 	}
 
 	/**
@@ -107,7 +129,7 @@ export class TransactionsService extends CRUDMixins<AttachedMethods>() {
 		transaction: ITransaction
 	): Promise<ITransaction> {
 		const group = await this._groups
-			.get((transaction.group as any) as string)
+			.get(transaction.group as any as string)
 			.pipe(first())
 			.toPromise();
 
