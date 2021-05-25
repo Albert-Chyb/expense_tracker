@@ -153,4 +153,8 @@ export class FilesContainerComponent implements OnInit, OnDestroy {
 	get isOverlayShown() {
 		return this._isOverlayShown;
 	}
+
+	get isEmpty() {
+		return this.formArray.length === 0;
+	}
 }

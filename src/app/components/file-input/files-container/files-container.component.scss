@@ -14,6 +14,10 @@ $padding: rem(20px);
 	pointer-events: none;
 }
 
+:host(.drop-area--empty) {
+	@extend .drop-area--empty;
+}
+
 .overlay {
 	display: grid;
 	row-gap: rem(20px);
@@ -54,6 +58,11 @@ $padding: rem(20px);
 		grid-template-columns: repeat(auto-fit, minmax(#{rem(100px)}, 1fr));
 		gap: rem(20px);
 		padding: $padding;
+
+		&--empty {
+			grid-template-columns: rem(200px);
+			place-content: center;
+		}
 
 		& * {
 			pointer-events: all;
