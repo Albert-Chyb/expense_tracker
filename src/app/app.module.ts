@@ -64,6 +64,7 @@ import { DEFAULT_COLLECTIONS_SCOPE } from './services/collection-base/collection
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
 import { SwipeActionsModule } from './components/swipe-actions/swipe-actions.module';
+import { ProgressSpinnerModule } from './components/progress-spinner/progress-spinner.module';
 // import 'hammerjs';
 
 @NgModule({
@@ -123,6 +124,7 @@ import { SwipeActionsModule } from './components/swipe-actions/swipe-actions.mod
 		DashboardComponentsModule,
 		ZippyModule,
 		SwipeActionsModule,
+		ProgressSpinnerModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

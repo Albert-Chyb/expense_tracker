@@ -1,0 +1,61 @@
+$animation: 1.6s linear infinite;
+
+:host {
+	display: block;
+}
+
+.progress-spinner {
+	max-width: 300px;
+
+	&--infinity {
+		animation: rotate $animation;
+	}
+
+	&--infinity &__circle {
+		animation: circle-animation $animation;
+	}
+
+	&--progress &__circle {
+		transition: stroke-dashoffset 200ms linear;
+	}
+
+	&__circle {
+		--stroke-dasharray: 0;
+		--stroke-dashoffset: 0;
+
+		fill: transparent;
+		stroke: green;
+		stroke-linecap: round;
+		stroke-dasharray: var(--stroke-dasharray);
+		stroke-dashoffset: var(--stroke-dashoffset);
+		transform-origin: 50% 50%;
+	}
+}
+
+@keyframes circle-animation {
+	0%,
+	25% {
+		stroke-dashoffset: var(--stroke-dasharray);
+		transform: rotate(0);
+	}
+
+	50%,
+	75% {
+		stroke-dashoffset: var(--stroke-dashoffset);
+		transform: rotate(45deg);
+	}
+
+	100% {
+		stroke-dashoffset: var(--stroke-dasharray);
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes rotate {
+	from {
+		transform: rotateZ(0deg);
+	}
+	to {
+		transform: rotateZ(360deg);
+	}
+}
