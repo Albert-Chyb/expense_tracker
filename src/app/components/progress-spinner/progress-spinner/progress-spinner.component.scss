@@ -2,13 +2,21 @@ $animation: 1.6s linear infinite;
 
 :host {
 	display: block;
+	position: relative;
 }
 
 .progress-spinner {
-	max-width: 300px;
+	width: 100%;
 
 	&--infinity {
 		animation: rotate $animation;
+	}
+
+	&--copy {
+		z-index: -1;
+		top: 0px;
+		left: 0px;
+		position: absolute;
 	}
 
 	&--infinity &__circle {
@@ -19,12 +27,13 @@ $animation: 1.6s linear infinite;
 		transition: stroke-dashoffset 200ms linear;
 	}
 
-	&__circle {
-		--stroke-dasharray: 0;
-		--stroke-dashoffset: 0;
+	&--copy &__circle {
+		stroke: var(--bg-color-24);
+	}
 
+	&__circle {
 		fill: transparent;
-		stroke: green;
+		stroke: var(--color-secondary);
 		stroke-linecap: round;
 		stroke-dasharray: var(--stroke-dasharray);
 		stroke-dashoffset: var(--stroke-dashoffset);

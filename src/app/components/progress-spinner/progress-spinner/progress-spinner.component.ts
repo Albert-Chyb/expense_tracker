@@ -19,10 +19,6 @@ export class ProgressSpinnerComponent {
 
 	@Input('value')
 	set value(newValue: number) {
-		const offset = Math.abs((this.value - newValue) / this.maxValue);
-		if (offset > 0.1) {
-		}
-
 		this._value = newValue;
 	}
 	get value() {

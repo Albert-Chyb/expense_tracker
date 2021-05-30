@@ -18,3 +18,20 @@
 		[attr.r]="radius"
 	/>
 </svg>
+
+<svg
+	*ngIf="mode === 'progress'"
+	class="progress-spinner progress-spinner--progress progress-spinner--copy"
+	viewBox="0 0 100 100"
+	xmlns="http://www.w3.org/2000/svg"
+>
+	<circle
+		class="progress-spinner__circle"
+		[style.stroke-width]="strokeWidth"
+		[style.--stroke-dasharray]="strokeDasharray"
+		[style.--stroke-dashoffset]="0"
+		cx="50"
+		cy="50"
+		[attr.r]="radius"
+	/>
+</svg>
