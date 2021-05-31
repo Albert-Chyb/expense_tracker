@@ -1,33 +1,27 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 type TProgressSpinnerMode = 'progress' | 'infinity';
-
-// TODO: In progress mode, add background color for the unloaded part.
 
 @Component({
 	selector: 'progress-spinner',
 	templateUrl: './progress-spinner.component.html',
 	styleUrls: ['./progress-spinner.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	host: {
+		'[style.width]': `diagonal + 'px'`,
+	},
 })
 export class ProgressSpinnerComponent {
 	private _radius = 45;
-	private _value = 0;
 
 	@Input('mode') mode: TProgressSpinnerMode = 'infinity';
 	@Input('max') maxValue = 100;
-
-	@Input('value')
-	set value(newValue: number) {
-		this._value = newValue;
-	}
-	get value() {
-		return this._value;
-	}
+	@Input('diagonal') diagonal: number = 120;
+	@Input('value') value = 45;
 
 	@Input('radius')
 	set radius(value: number) {
-		this._radius = ~~Math.max(Math.min(value, 50), 0);
+		this._radius = ~~this._limitToRange(value, 0, 50);
 	}
 	get radius() {
 		return this._radius;
@@ -52,5 +46,9 @@ export class ProgressSpinnerComponent {
 		}
 
 		return Math.abs(~~offset);
+	}
+
+	private _limitToRange(value: number, min: number, max: number) {
+		return Math.max(Math.min(value, max), min);
 	}
 }
