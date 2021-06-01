@@ -43,6 +43,10 @@ $animation: 1.6s linear infinite;
 		stroke-dashoffset: var(--stroke-dashoffset);
 		transform-origin: 50% 50%;
 	}
+
+	&__percentage {
+		fill: var(--text-color-0);
+	}
 }
 
 @keyframes circle-animation {

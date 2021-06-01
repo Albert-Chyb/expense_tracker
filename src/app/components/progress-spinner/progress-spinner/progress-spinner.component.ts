@@ -26,6 +26,9 @@ export class ProgressSpinnerComponent {
 	/** Sets diagonal (width) of the spinner. */
 	@Input('diagonal') diagonal: number = 120;
 
+	/** Should the percentage be displayed in the center. */
+	@Input('displayProgress') displayProgress = true;
+
 	/** Sets radius of the inner circle. The lesser the radius, the bolder the border width. */
 	@Input('radius')
 	set radius(value: number) {
