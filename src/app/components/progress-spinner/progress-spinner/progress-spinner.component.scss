@@ -9,9 +9,14 @@ $animation: 1.6s linear infinite;
 	position: relative;
 }
 
-.progress-spinner {
-	width: 100%;
+:host(.progress-spinner--fixed) {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
 
+.progress-spinner {
 	&--infinity {
 		animation: rotate $animation;
 	}
