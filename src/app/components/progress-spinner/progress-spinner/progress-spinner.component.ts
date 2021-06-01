@@ -58,6 +58,18 @@ export class ProgressSpinnerComponent {
 		return Math.abs(~~offset);
 	}
 
+	get progress() {
+		return this.value / this.maxValue;
+	}
+
+	get isInProgressMode() {
+		return this.mode === 'progress';
+	}
+
+	get isInInfinityMode() {
+		return this.mode === 'infinity';
+	}
+
 	private _limitToRange(value: number, min: number, max: number) {
 		return Math.max(Math.min(value, max), min);
 	}

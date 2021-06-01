@@ -1,10 +1,5 @@
 <svg
-	class="progress-spinner"
-	[ngClass]="
-		mode === 'infinity'
-			? 'progress-spinner--infinity'
-			: 'progress-spinner--progress'
-	"
+	class="progress-spinner progress-spinner--{{ mode }}"
 	viewBox="0 0 100 100"
 	xmlns="http://www.w3.org/2000/svg"
 >
@@ -20,7 +15,7 @@
 </svg>
 
 <svg
-	*ngIf="mode === 'progress'"
+	*ngIf="isInProgressMode"
 	class="progress-spinner progress-spinner--progress progress-spinner--copy"
 	viewBox="0 0 100 100"
 	xmlns="http://www.w3.org/2000/svg"
@@ -43,6 +38,6 @@
 		alignment-baseline="middle"
 		class="progress-spinner__percentage"
 	>
-		{{ value / maxValue | percent }}
+		{{ progress | percent }}
 	</text>
 </svg>
