@@ -14,7 +14,7 @@ import {
 } from '@angular/fire/firestore';
 import { USE_EMULATOR as USE_FUNCTIONS_EMULATOR } from '@angular/fire/functions';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule, HammerModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -35,13 +35,14 @@ import { DialogContainerComponent } from './components/dialog-container/dialog-c
 import { FormFieldModule } from './components/form-field/form-field.module';
 import { FormSelectModule } from './components/form-select/form-select.module';
 import { GroupIconComponent } from './components/group-icon/group-icon.component';
-import { LoaderComponent } from './components/loader/loader.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
 import { MainNavComponent } from './components/main-nav/main-nav.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { OverlayComponent } from './components/overlay/overlay.component';
+import { ProgressSpinnerModule } from './components/progress-spinner/progress-spinner.module';
 import { RippleModule } from './components/ripple/ripple.module';
 import { SummaryCardComponent } from './components/summary-card/summary-card.component';
+import { SwipeActionsModule } from './components/swipe-actions/swipe-actions.module';
 import { TransactionCardComponent } from './components/transaction-card/transaction-card.component';
 import { TransactionGroupComponent } from './components/transaction-group/transaction-group.component';
 import { ZippyModule } from './components/zippy/zippy.module';
@@ -63,9 +64,6 @@ import { AbsPipe } from './pipes/abs/abs.pipe';
 import { DEFAULT_COLLECTIONS_SCOPE } from './services/collection-base/collection-base';
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
-import { SwipeActionsModule } from './components/swipe-actions/swipe-actions.module';
-import { ProgressSpinnerModule } from './components/progress-spinner/progress-spinner.module';
-// import 'hammerjs';
 
 @NgModule({
 	declarations: [
@@ -89,7 +87,6 @@ import { ProgressSpinnerModule } from './components/progress-spinner/progress-sp
 		CheckboxComponent,
 		ClueComponent,
 		MainNavComponent,
-		LoaderComponent,
 		NotificationComponent,
 		OverlayComponent,
 		ConfirmDialogComponent,
