@@ -18,7 +18,9 @@ import {
 	AngularFireAuthGuard,
 	redirectUnauthorizedTo,
 	redirectLoggedInTo,
+	canActivate,
 } from '@angular/fire/auth-guard';
+import { TransactionsComponent } from './pages/transactions/transactions.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['']);
@@ -104,6 +106,15 @@ const routes: Routes = [
 		component: DashboardComponent,
 		data: {
 			name: 'Statystyki',
+			authGuardPipe: redirectUnauthorizedToLogin,
+		},
+		canActivate: [DataAvailableGuard, AngularFireAuthGuard],
+	},
+	{
+		path: 'transactions',
+		component: TransactionsComponent,
+		data: {
+			name: 'Transakcje',
 			authGuardPipe: redirectUnauthorizedToLogin,
 		},
 		canActivate: [DataAvailableGuard, AngularFireAuthGuard],

@@ -81,6 +81,12 @@
 		border-radius: rem(15px);
 	}
 
+	&__heading-container {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+	}
+
 	h2#{&}__heading {
 		margin-bottom: rem(30px);
 		font-weight: 500;

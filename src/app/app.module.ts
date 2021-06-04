@@ -64,6 +64,7 @@ import { AbsPipe } from './pipes/abs/abs.pipe';
 import { DEFAULT_COLLECTIONS_SCOPE } from './services/collection-base/collection-base';
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
+import { TransactionsComponent } from './pages/transactions/transactions.component';
 
 @NgModule({
 	declarations: [
@@ -94,6 +95,7 @@ import { UserService } from './services/user/user.service';
 		ConfirmActionDirective,
 		DashboardComponent,
 		AbsPipe,
+		TransactionsComponent,
 	],
 	imports: [
 		BrowserModule,

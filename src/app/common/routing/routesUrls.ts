@@ -41,6 +41,9 @@ export enum Pages {
 	/** Page with dashboard */
 	Dashboard = '/dashboard',
 
+	/** Page that allows displaying all transactions, and querying them. */
+	Transactions = '/transactions',
+
 	/** 404 fallback */
 	NotFound = '**',
 }

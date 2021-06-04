@@ -49,7 +49,17 @@
 		class="transactions"
 		*ngIf="data.transactions.length; else noTransactionsClue"
 	>
-		<h2 class="transactions__heading">Wydatki w tym okresie</h2>
+		<div class="transactions__heading-container">
+			<h2 class="transactions__heading">Wydatki w tym okresie</h2>
+
+			<a
+				appButton
+				btnType="basic"
+				btnColor="secondary"
+				[routerLink]="Pages.Transactions"
+				>Wszystkie</a
+			>
+		</div>
 
 		<section
 			class="transactions__group"
