@@ -1,1 +1,152 @@
-<p>transactions works!</p>
+<ng-container *ngIf="data$ | async as data; else loader">
+	<zippy [autoToggle]="false" #zippy>
+		<section class="zippy-static-content">
+			<button
+				appButton
+				btnType="icon"
+				btnColor="secondary"
+				(click)="zippy.toggle()"
+			>
+				<i class="fas fa-filter"></i>
+			</button>
+		</section>
+
+		<zippy-content>
+			<form class="filters" [formGroup]="filters" (ngSubmit)="applyFilters()">
+				<ng-container formGroupName="date">
+					<form-field class="filters__date--start">
+						<input
+							[datepicker]="datepickerStart"
+							formFieldInput
+							type="text"
+							formControlName="earliest"
+						/>
+						<form-field-label>Data początkowa</form-field-label>
+						<form-field-prefix>
+							<button
+								appButton
+								btnType="icon"
+								[triggerDatepicker]="datepickerStart"
+							>
+								<i class="fas fa-calendar-alt"></i>
+							</button>
+						</form-field-prefix>
+
+						<datepicker #datepickerStart></datepicker>
+					</form-field>
+
+					<form-field class="filters__date--end">
+						<input
+							[datepicker]="datepickerEnd"
+							formFieldInput
+							type="text"
+							formControlName="latest"
+						/>
+						<form-field-label>Data końcowa</form-field-label>
+						<form-field-prefix>
+							<button
+								appButton
+								btnType="icon"
+								[triggerDatepicker]="datepickerEnd"
+							>
+								<i class="fas fa-calendar-alt"></i>
+							</button>
+						</form-field-prefix>
+
+						<datepicker #datepickerEnd></datepicker>
+					</form-field>
+				</ng-container>
+
+				<ng-container formGroupName="amount">
+					<form-field>
+						<form-field-label>Wartość od</form-field-label>
+						<input formFieldInput type="number" formControlName="lowest" />
+					</form-field>
+
+					<form-field>
+						<form-field-label>Wartość do</form-field-label>
+						<input formFieldInput type="number" formControlName="hightest" />
+					</form-field>
+				</ng-container>
+
+				<form-field>
+					<form-field-label> Grupa </form-field-label>
+
+					<app-select formControlName="group">
+						<select-option value="">Wszystkie</select-option>
+						<select-option
+							*ngFor="let group of data.groups"
+							[value]="group.id"
+							>{{ group.name }}</select-option
+						>
+					</app-select>
+				</form-field>
+
+				<form-field>
+					<form-field-label>Opis</form-field-label>
+					<input formFieldInput type="text" formControlName="description" />
+				</form-field>
+
+				<div>
+					<label class="filters__transaction-type">
+						<input
+							type="radio"
+							name="type"
+							formControlName="type"
+							value=""
+							checked
+						/>
+						Wszystkie
+					</label>
+
+					<label class="filters__transaction-type">
+						<input
+							type="radio"
+							name="type"
+							formControlName="type"
+							value="incomes"
+						/>
+						Tylko Wydatki
+					</label>
+
+					<label class="filters__transaction-type">
+						<input
+							type="radio"
+							name="type"
+							formControlName="type"
+							value="expenses"
+						/>
+						Tylko przychody
+					</label>
+				</div>
+
+				<div class="filters__actions">
+					<button class="filters__action" appButton btnColor="primary">
+						Gotowe
+					</button>
+					<button class="filters__action" type="reset" appButton>
+						Wyczyść
+					</button>
+				</div>
+			</form>
+		</zippy-content>
+	</zippy>
+
+	<ul
+		class="transactions"
+		*ngIf="transactions$ | async as transactions; else loader"
+	>
+		<li
+			class="transactions__transaction-container"
+			*ngFor="let transaction of transactions"
+		>
+			<transaction-card [transaction]="transaction"></transaction-card>
+		</li>
+	</ul>
+</ng-container>
+
+<ng-template #loader>
+	<progress-spinner fixed></progress-spinner>
+</ng-template>
+
+{{ filters.value | json }}

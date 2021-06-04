@@ -1,3 +1,52 @@
+@import '../../sass/utils/functions';
+@import '../../sass/utils/variables';
+@import '../../sass/utils/mixins';
+
 :host {
-  display: block;
+	display: block;
+}
+
+.transactions {
+	margin-top: rem(10px);
+
+	&__transaction-container {
+		border-radius: rem(15px);
+		overflow: hidden;
+
+		&:not(:last-child) {
+			margin-bottom: rem(10px);
+		}
+	}
+}
+
+.filters {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: rem(10px);
+	padding: rem(3px);
+
+	&__transaction-type {
+		display: block;
+
+		&:not(:last-child) {
+			margin-bottom: rem(10px);
+		}
+	}
+
+	&__actions {
+		grid-column: span 2;
+	}
+
+	&__action {
+		width: 100%;
+
+		&:not(:last-child) {
+			margin-bottom: rem(10px);
+		}
+	}
+}
+
+.zippy-static-content {
+	display: flex;
+	justify-content: flex-end;
 }
