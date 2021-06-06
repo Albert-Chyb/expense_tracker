@@ -44,6 +44,14 @@
 			margin-bottom: rem(10px);
 		}
 	}
+
+	@media (max-width: 425px) {
+		grid-template-columns: 1fr;
+
+		&__actions {
+			grid-column: span 1;
+		}
+	}
 }
 
 .zippy-static-content {

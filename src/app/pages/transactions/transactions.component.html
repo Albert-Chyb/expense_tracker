@@ -12,62 +12,63 @@
 		</section>
 
 		<zippy-content>
-			<form class="filters" [formGroup]="filters" (ngSubmit)="applyFilters()">
-				<ng-container formGroupName="date">
-					<form-field class="filters__date--start">
-						<input
-							[datepicker]="datepickerStart"
-							formFieldInput
-							type="text"
-							formControlName="earliest"
-						/>
-						<form-field-label>Data początkowa</form-field-label>
-						<form-field-prefix>
-							<button
-								appButton
-								btnType="icon"
-								[triggerDatepicker]="datepickerStart"
-							>
-								<i class="fas fa-calendar-alt"></i>
-							</button>
-						</form-field-prefix>
+			<form
+				class="filters"
+				[formGroup]="filters"
+				(ngSubmit)="applyFilters()"
+				(reset)="removeFilters()"
+			>
+				<form-field class="filters__date--start">
+					<input
+						[datepicker]="datepickerStart"
+						formFieldInput
+						type="text"
+						formControlName="earliestDate"
+					/>
+					<form-field-label>Data początkowa</form-field-label>
+					<form-field-prefix>
+						<button
+							appButton
+							btnType="icon"
+							[triggerDatepicker]="datepickerStart"
+						>
+							<i class="fas fa-calendar-alt"></i>
+						</button>
+					</form-field-prefix>
 
-						<datepicker #datepickerStart></datepicker>
-					</form-field>
+					<datepicker #datepickerStart></datepicker>
+				</form-field>
 
-					<form-field class="filters__date--end">
-						<input
-							[datepicker]="datepickerEnd"
-							formFieldInput
-							type="text"
-							formControlName="latest"
-						/>
-						<form-field-label>Data końcowa</form-field-label>
-						<form-field-prefix>
-							<button
-								appButton
-								btnType="icon"
-								[triggerDatepicker]="datepickerEnd"
-							>
-								<i class="fas fa-calendar-alt"></i>
-							</button>
-						</form-field-prefix>
+				<form-field class="filters__date--end">
+					<input
+						[datepicker]="datepickerEnd"
+						formFieldInput
+						type="text"
+						formControlName="latestDate"
+					/>
+					<form-field-label>Data końcowa</form-field-label>
+					<form-field-prefix>
+						<button
+							appButton
+							btnType="icon"
+							[triggerDatepicker]="datepickerEnd"
+						>
+							<i class="fas fa-calendar-alt"></i>
+						</button>
+					</form-field-prefix>
 
-						<datepicker #datepickerEnd></datepicker>
-					</form-field>
-				</ng-container>
+					<datepicker #datepickerEnd></datepicker>
+				</form-field>
 
-				<ng-container formGroupName="amount">
-					<form-field>
-						<form-field-label>Wartość od</form-field-label>
-						<input formFieldInput type="number" formControlName="lowest" />
-					</form-field>
+				<form-field>
+					<form-field-label>Wartość od</form-field-label>
+					<input formFieldInput type="number" formControlName="lowestAmount" />
+				</form-field>
 
-					<form-field>
-						<form-field-label>Wartość do</form-field-label>
-						<input formFieldInput type="number" formControlName="hightest" />
-					</form-field>
-				</ng-container>
+				<form-field>
+					<form-field-label>Wartość do</form-field-label>
+					<input formFieldInput type="number" formControlName="highestAmount" />
+				</form-field>
 
 				<form-field>
 					<form-field-label> Grupa </form-field-label>
@@ -80,11 +81,6 @@
 							>{{ group.name }}</select-option
 						>
 					</app-select>
-				</form-field>
-
-				<form-field>
-					<form-field-label>Opis</form-field-label>
-					<input formFieldInput type="text" formControlName="description" />
 				</form-field>
 
 				<div>
@@ -104,9 +100,9 @@
 							type="radio"
 							name="type"
 							formControlName="type"
-							value="incomes"
+							value="expenses"
 						/>
-						Tylko Wydatki
+						Tylko wydatki
 					</label>
 
 					<label class="filters__transaction-type">
@@ -114,18 +110,28 @@
 							type="radio"
 							name="type"
 							formControlName="type"
-							value="expenses"
+							value="incomes"
 						/>
 						Tylko przychody
 					</label>
 				</div>
 
 				<div class="filters__actions">
-					<button class="filters__action" appButton btnColor="primary">
-						Gotowe
+					<button
+						class="filters__action"
+						appButton
+						btnColor="primary"
+						[disabled]="!hasFilters"
+					>
+						Filtruj
 					</button>
-					<button class="filters__action" type="reset" appButton>
-						Wyczyść
+					<button
+						*ngIf="isFiltered"
+						class="filters__action"
+						type="reset"
+						appButton
+					>
+						Usuń filtry
 					</button>
 				</div>
 			</form>
@@ -148,5 +154,3 @@
 <ng-template #loader>
 	<progress-spinner fixed></progress-spinner>
 </ng-template>
-
-{{ filters.value | json }}
