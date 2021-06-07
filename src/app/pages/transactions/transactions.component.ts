@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { finalize, map, switchMap, tap } from 'rxjs/operators';
 import { ITransactionGroup } from 'src/app/common/models/group';
 import { ITransaction } from 'src/app/common/models/transaction';
 import { where } from 'src/app/services/collection-base/dynamic-queries/helpers';
@@ -50,6 +50,9 @@ const QUERIES = new Map<keyof FormValue, (value: any) => DynamicQuery>([
 	],
 ]);
 
+// TODO: Add loading indicator
+// TODO: Add infinite scroll
+
 @Component({
 	templateUrl: './transactions.component.html',
 	styleUrls: ['./transactions.component.scss'],
@@ -71,13 +74,18 @@ export class TransactionsComponent {
 		type: new FormControl(TransactionsType.All),
 	});
 
+	isLoading = true;
+
 	isFiltered$ = new BehaviorSubject(false);
 	groups$ = this._groups.getAll();
-	transactions$ = this.isFiltered$.pipe(
-		switchMap(isFiltered =>
-			isFiltered ? this.filteredTransactions$() : this._transactions.getAll()
+	transactions$ = this.isFiltered$
+		.pipe(
+			switchMap(isFiltered =>
+				isFiltered ? this.filteredTransactions$() : this._transactions.getAll()
+			),
+			tap(() => (this.isLoading = false))
 		)
-	);
+		.pipe();
 	data$: Observable<{
 		transactions: ITransaction[];
 		groups: ITransactionGroup[];
@@ -87,7 +95,6 @@ export class TransactionsComponent {
 
 	filteredTransactions$() {
 		const filters: FormValue = this.filters.value;
-
 		const queries = Object.entries(filters)
 			.filter(([key, value]) => !!value && QUERIES.has(<any>key))
 			.map(([key, value]) => QUERIES.get(<any>key)(value))
@@ -100,10 +107,12 @@ export class TransactionsComponent {
 
 	applyFilters() {
 		this.isFiltered$.next(true);
+		this.isLoading = true;
 	}
 
 	removeFilters() {
 		this.isFiltered$.next(false);
+		this.isLoading = true;
 	}
 
 	get hasFilters() {

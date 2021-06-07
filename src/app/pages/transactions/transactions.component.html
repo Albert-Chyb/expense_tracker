@@ -1,4 +1,4 @@
-<ng-container *ngIf="data$ | async as data; else loader">
+<ng-container *ngIf="data$ | async as data; else fixedLoader">
 	<zippy [autoToggle]="false" #zippy>
 		<section class="zippy-static-content">
 			<button
@@ -31,6 +31,7 @@
 							appButton
 							btnType="icon"
 							[triggerDatepicker]="datepickerStart"
+							type="button"
 						>
 							<i class="fas fa-calendar-alt"></i>
 						</button>
@@ -52,6 +53,7 @@
 							appButton
 							btnType="icon"
 							[triggerDatepicker]="datepickerEnd"
+							type="button"
 						>
 							<i class="fas fa-calendar-alt"></i>
 						</button>
@@ -138,19 +140,28 @@
 		</zippy-content>
 	</zippy>
 
-	<ul
-		class="transactions"
-		*ngIf="transactions$ | async as transactions; else loader"
-	>
-		<li
-			class="transactions__transaction-container"
-			*ngFor="let transaction of transactions"
+	<ul *ngIf="!isLoading; else loader" class="transactions">
+		<ng-container
+			*ngIf="data.transactions.length > 0; else transactionsNotFound"
 		>
-			<transaction-card [transaction]="transaction"></transaction-card>
-		</li>
+			<li
+				class="transactions__transaction-container"
+				*ngFor="let transaction of data.transactions"
+			>
+				<transaction-card [transaction]="transaction"></transaction-card>
+			</li>
+		</ng-container>
 	</ul>
 </ng-container>
 
-<ng-template #loader>
+<ng-template #fixedLoader>
 	<progress-spinner fixed></progress-spinner>
+</ng-template>
+
+<ng-template #loader>
+	<progress-spinner class="transactions__progress-spinner"></progress-spinner>
+</ng-template>
+
+<ng-template #transactionsNotFound>
+	<p style="text-align: center">Nie znaleziono żadnych transakcji.</p>
 </ng-template>
