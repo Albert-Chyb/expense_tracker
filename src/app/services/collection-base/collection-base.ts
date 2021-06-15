@@ -2,7 +2,9 @@ import { InjectionToken, Injector } from '@angular/core';
 import {
 	AngularFirestore,
 	AngularFirestoreCollection,
+	DocumentChangeAction,
 	DocumentReference,
+	QuerySnapshot,
 } from '@angular/fire/firestore';
 import { Constructor } from '@angular/material/core/common-behaviors/constructor';
 import firebase from 'firebase';
@@ -37,13 +39,12 @@ class FirebaseCollectionCRUD<T> {
 
 	private readonly _firestore = this._injector.get(AngularFirestore);
 	private readonly _userService: UserService = this._injector.get(UserService);
-	private _collection$: Observable<
-		AngularFirestoreCollection<T>
-	> = this._userService.user$.pipe(
-		switchMap(({ uid }) =>
-			of(this._firestore.collection<T>(`users/${uid}/${this._name}`))
-		)
-	);
+	private _collection$: Observable<AngularFirestoreCollection<T>> =
+		this._userService.user$.pipe(
+			switchMap(({ uid }) =>
+				of(this._firestore.collection<T>(`users/${uid}/${this._name}`))
+			)
+		);
 
 	/**
 	 * Adds a new document to the collection.
@@ -129,6 +130,32 @@ class FirebaseCollectionCRUD<T> {
 			)
 		);
 	}
+
+	/**
+	 * Queries the collection. Returns documents snapshots.
+	 *
+	 * @param queries Array of queries
+	 */
+	querySnapshots(
+		...queries: Array<DynamicQuery | DynamicQuery[]>
+	): Observable<DocumentChangeAction<T>[]> {
+		return this._userService.user$.pipe(
+			switchMap(user =>
+				this._firestore
+					.collection<T>(`users/${user.uid}/${this._name}`, ref => {
+						return queries
+							.flat(1)
+							.reduce(
+								(prev: firebase.firestore.Query, query: DynamicQuery) =>
+									prev[query.name](...query.args),
+								ref
+							);
+					})
+					.snapshotChanges()
+					.pipe(takeUntil(this._userService.isLoggedIn$.pipe(filter(i => !i))))
+			)
+		);
+	}
 }
 
 /**
@@ -160,9 +187,10 @@ export class CollectionBase {
 	private readonly _rootScope: Observable<string> =
 		this._scope ?? this._injector.get(DEFAULT_COLLECTIONS_SCOPE);
 
-	private readonly _collection$: Observable<AngularFirestoreCollection> = this._rootScope.pipe(
-		map(path => this._firestore.collection(path + '/' + this._name))
-	);
+	private readonly _collection$: Observable<AngularFirestoreCollection> =
+		this._rootScope.pipe(
+			map(path => this._firestore.collection(path + '/' + this._name))
+		);
 	protected get collection$() {
 		return this._collection$;
 	}
@@ -201,6 +229,15 @@ export function ReadMixin<TBase extends Constructor<CollectionBase>>(
 		 * @param queries Array of queries
 		 */
 		query(...queries: Array<DynamicQuery | DynamicQuery[]>): Observable<any[]> {
+			return this.querySnapshots(...queries).pipe(
+				map(data =>
+					data.docs.map(doc => ({
+						...doc.data(),
+						id: doc.id,
+					}))
+				)
+			);
+
 			return this.collection$.pipe(
 				switchMap(coll => {
 					return new Observable<
@@ -232,6 +269,40 @@ export function ReadMixin<TBase extends Constructor<CollectionBase>>(
 						id: doc.id,
 					}))
 				)
+			);
+		}
+
+		/**
+		 * Queries the collection.
+		 *
+		 * @param queries Array of queries
+		 */
+		querySnapshots(...queries: Array<DynamicQuery | DynamicQuery[]>) {
+			return this.collection$.pipe(
+				switchMap(coll => {
+					return new Observable<
+						firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>
+					>(subscriber => {
+						const close = queries
+							.flat(1)
+							.reduce<firebase.firestore.Query>(
+								(prev: firebase.firestore.Query, query: DynamicQuery) =>
+									prev[query.name](...query.args),
+								coll.ref
+							)
+							.onSnapshot(
+								snap => {
+									subscriber.next(snap);
+								},
+								error => subscriber.error(error),
+								() => subscriber.complete()
+							);
+
+						subscriber.add(() => {
+							close();
+						});
+					});
+				})
 			);
 		}
 	};

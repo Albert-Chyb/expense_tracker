@@ -16,11 +16,13 @@ export type OrderByDynamicQueryParams = [
 	FirestoreOrderByDirection
 ];
 export type LimitDynamicQueryParams = [number];
+export type StartAfterDynamicQueryParams = [any];
 
 export class DynamicQuery {
 	constructor(_name: 'where', _params: WhereDynamicQueryParams);
 	constructor(_name: 'orderBy', _params: OrderByDynamicQueryParams);
 	constructor(_name: 'limit', _params: LimitDynamicQueryParams);
+	constructor(_name: 'startAfter', _params: StartAfterDynamicQueryParams);
 	constructor(
 		private readonly _name: FirestoreQueries,
 		private readonly _params: any[]

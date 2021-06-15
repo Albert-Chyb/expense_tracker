@@ -1,4 +1,8 @@
-import { DocumentReference } from '@angular/fire/firestore';
+import {
+	DocumentChangeAction,
+	DocumentReference,
+	QuerySnapshot,
+} from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { DynamicQuery } from 'src/app/services/collection-base/dynamic-queries/models';
 
@@ -35,6 +39,15 @@ export interface Read<T> {
 	query(
 		...queries: Array<DynamicQuery | DynamicQuery[]>
 	): Observable<({ id: string } & T)[]>;
+
+	/**
+	 * Queries the collection.
+	 *
+	 * @param queries Array of queries
+	 */
+	querySnapshots(
+		...queries: Array<DynamicQuery | DynamicQuery[]>
+	): Observable<QuerySnapshot<T>>;
 }
 
 /** An interface for UpdateMixin */

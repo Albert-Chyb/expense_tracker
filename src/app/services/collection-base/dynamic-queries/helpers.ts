@@ -60,3 +60,7 @@ export function between(
 		new DynamicQuery('where', [field, endComparison, end]),
 	];
 }
+
+export function startAfter(offset: any) {
+	return new DynamicQuery('startAfter', [offset]);
+}
