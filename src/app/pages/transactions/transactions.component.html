@@ -1,5 +1,5 @@
 <ng-container *ngIf="data$ | async as data; else fixedLoader">
-	<zippy [autoToggle]="false" #zippy>
+	<zippy *ngIf="false" [autoToggle]="false" #zippy>
 		<section class="zippy-static-content">
 			<button
 				appButton
@@ -127,12 +127,7 @@
 					>
 						Filtruj
 					</button>
-					<button
-						*ngIf="isFiltered"
-						class="filters__action"
-						type="reset"
-						appButton
-					>
+					<button class="filters__action" type="reset" appButton>
 						Usuń filtry
 					</button>
 				</div>
@@ -140,17 +135,22 @@
 		</zippy-content>
 	</zippy>
 
-	<ul *ngIf="!isLoading; else loader" class="transactions">
-		<ng-container
+	<ul class="transactions">
+		<cdk-virtual-scroll-viewport
+			(scrolledIndexChange)="onScroll($event)"
 			*ngIf="data.transactions.length > 0; else transactionsNotFound"
+			itemSize="80"
 		>
 			<li
 				class="transactions__transaction-container"
-				*ngFor="let transaction of data.transactions"
+				*cdkVirtualFor="let transaction of data.transactions; trackBy: trackBy"
 			>
 				<transaction-card [transaction]="transaction"></transaction-card>
 			</li>
-		</ng-container>
+
+			<ng-container *ngIf="!isDownloadingNewTransactions; else loader">
+			</ng-container>
+		</cdk-virtual-scroll-viewport>
 	</ul>
 </ng-container>
 

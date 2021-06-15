@@ -6,6 +6,10 @@
 	display: block;
 }
 
+cdk-virtual-scroll-viewport {
+	height: calc(100vh - #{$globalVerticalPadding} * 2 - #{$mainNavHeight});
+}
+
 .transactions {
 	margin-top: rem(10px);
 

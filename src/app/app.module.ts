@@ -65,6 +65,7 @@ import { DEFAULT_COLLECTIONS_SCOPE } from './services/collection-base/collection
 import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
 import { TransactionsComponent } from './pages/transactions/transactions.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
 	declarations: [
@@ -124,6 +125,7 @@ import { TransactionsComponent } from './pages/transactions/transactions.compone
 		ZippyModule,
 		SwipeActionsModule,
 		ProgressSpinnerModule,
+		ScrollingModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },

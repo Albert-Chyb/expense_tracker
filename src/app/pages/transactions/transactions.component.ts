@@ -1,10 +1,22 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	OnInit,
+	ViewChild,
+} from '@angular/core';
+import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { finalize, map, switchMap, tap } from 'rxjs/operators';
+import { map, mergeMap, scan, tap } from 'rxjs/operators';
 import { ITransactionGroup } from 'src/app/common/models/group';
 import { ITransaction } from 'src/app/common/models/transaction';
-import { where } from 'src/app/services/collection-base/dynamic-queries/helpers';
+import {
+	limit,
+	orderBy,
+	startAfter,
+	where,
+} from 'src/app/services/collection-base/dynamic-queries/helpers';
 import { DynamicQuery } from 'src/app/services/collection-base/dynamic-queries/models';
 import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
 import { TransactionsService } from 'src/app/services/transactions/transactions.service';
@@ -50,19 +62,18 @@ const QUERIES = new Map<keyof FormValue, (value: any) => DynamicQuery>([
 	],
 ]);
 
-// TODO: Add loading indicator
-// TODO: Add infinite scroll
-
 @Component({
 	templateUrl: './transactions.component.html',
 	styleUrls: ['./transactions.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionsComponent {
+export class TransactionsComponent implements OnInit {
 	constructor(
 		private readonly _transactions: TransactionsService,
 		private readonly _groups: TransactionsGroupsService
 	) {}
+
+	@ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
 	filters = new FormGroup({
 		earliestDate: new FormControl(),
@@ -74,52 +85,100 @@ export class TransactionsComponent {
 		type: new FormControl(TransactionsType.All),
 	});
 
-	isLoading = true;
+	private readonly _transactionsPerCall = 20;
+	private _isDownloadingNewTransactions = false;
+	private _theEnd = false;
+	private _lastSeenDoc: QueryDocumentSnapshot<ITransaction>;
 
-	isFiltered$ = new BehaviorSubject(false);
+	offsetChange$ = new BehaviorSubject<void>(null);
+	transactions$: Observable<ITransaction[]>;
 	groups$ = this._groups.getAll();
-	transactions$ = this.isFiltered$
-		.pipe(
-			switchMap(isFiltered =>
-				isFiltered ? this.filteredTransactions$() : this._transactions.getAll()
-			),
-			tap(() => (this.isLoading = false))
-		)
-		.pipe();
 	data$: Observable<{
 		transactions: ITransaction[];
 		groups: ITransactionGroup[];
-	}> = combineLatest([this.transactions$, this.groups$]).pipe(
-		map(([transactions, groups]) => ({ transactions, groups }))
-	);
+	}>;
 
-	filteredTransactions$() {
-		const filters: FormValue = this.filters.value;
-		const queries = Object.entries(filters)
-			.filter(([key, value]) => !!value && QUERIES.has(<any>key))
-			.map(([key, value]) => QUERIES.get(<any>key)(value))
-			.filter(query => query !== null);
+	ngOnInit() {
+		const offsetChange = this.offsetChange$.pipe(
+			mergeMap(() => this.getNextTransactions()),
+			scan((acc, curr) => ({ ...acc, ...curr }), {})
+		);
 
-		if (queries.length > 0) {
-			return this._transactions.query(queries);
+		this.transactions$ = offsetChange.pipe(map(t => Object.values(t)));
+		this.data$ = combineLatest([this.transactions$, this.groups$]).pipe(
+			map(([transactions, groups]) => ({ transactions, groups }))
+		);
+	}
+
+	getNextTransactions(): Observable<{ [id: string]: ITransaction }> {
+		this._isDownloadingNewTransactions = true;
+
+		console.log(this.hasFilters, this.filters.value);
+
+		return this._transactions
+			.querySnapshots(
+				limit(this._transactionsPerCall),
+				orderBy('date', 'desc'),
+				this._lastSeenDoc ? startAfter(this._lastSeenDoc) : []
+			)
+			.pipe(
+				tap(({ docs }) => (this._lastSeenDoc = docs[docs.length - 1])),
+				map(({ docs }) =>
+					docs.map(doc => ({
+						id: doc.id,
+						...doc.data(),
+					}))
+				),
+				tap(r => (r.length ? null : (this._theEnd = true))),
+				map(docs =>
+					docs.reduce((prev, curr) => ({ ...prev, [curr.id]: curr }), {})
+				),
+				tap(() => (this._isDownloadingNewTransactions = false))
+			);
+	}
+
+	onScroll($event: number) {
+		if (this._theEnd) return;
+
+		const total = this.virtualScroll.getDataLength();
+		const { end } = this.virtualScroll.getRenderedRange();
+
+		if (total === end && !this._isDownloadingNewTransactions) {
+			this.offsetChange$.next();
 		}
 	}
 
+	trackBy(index: number, { id }: ITransaction) {
+		return id;
+	}
+
 	applyFilters() {
-		this.isFiltered$.next(true);
-		this.isLoading = true;
+		// Reset last seen document.
+		this._lastSeenDoc = null;
+		// Reset the end property.
+
+		this._theEnd = false;
+		// Call getNextTransactions method
+
+		this.offsetChange$.next();
 	}
 
 	removeFilters() {
-		this.isFiltered$.next(false);
-		this.isLoading = true;
+		// Reset last seen document.
+		this._lastSeenDoc = null;
+		// Reset the end property.
+
+		this._theEnd = false;
+		// Call getNextTransactions method
+
+		this.offsetChange$.next();
 	}
 
 	get hasFilters() {
 		return Object.values(this.filters.value).some(filter => !!filter);
 	}
 
-	get isFiltered() {
-		return this.isFiltered$.value;
+	get isDownloadingNewTransactions() {
+		return this._isDownloadingNewTransactions;
 	}
 }
