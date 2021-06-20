@@ -2,16 +2,39 @@
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
 
+$filters-zippy-height: rem(45px);
+
 :host {
 	display: block;
+	position: relative;
+	padding-top: $filters-zippy-height;
 }
 
 cdk-virtual-scroll-viewport {
-	height: calc(100vh - #{$globalVerticalPadding} * 2 - #{$mainNavHeight});
+	height: calc(
+		100vh - #{$globalVerticalPadding} * 2 - #{$mainHeaderHeight} - #{$filters-zippy-height}
+	);
+
+	@media (max-width: $mainNavVisibilityBreakpoint) {
+		height: calc(
+			100vh - #{$globalVerticalPadding} * 2 - #{$mainNavHeight} - #{$mainHeaderHeight} -
+				#{$filters-zippy-height}
+		);
+	}
+}
+
+.filters-zippy {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	z-index: 2;
+	height: $filters-zippy-height;
 }
 
 .transactions {
 	margin-top: rem(10px);
+	z-index: 1;
 
 	&__transaction-container {
 		border-radius: rem(15px);
@@ -32,6 +55,9 @@ cdk-virtual-scroll-viewport {
 	grid-template-columns: repeat(2, 1fr);
 	gap: rem(10px);
 	padding: rem(3px);
+	background-color: var(--bg-color-3);
+	padding: rem(10px);
+	border-radius: rem(3px);
 
 	&__transaction-type {
 		display: block;
@@ -64,5 +90,7 @@ cdk-virtual-scroll-viewport {
 
 .zippy-static-content {
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-between;
+	align-items: center;
+	padding-left: rem(10px);
 }

@@ -1,6 +1,7 @@
 <ng-container *ngIf="data$ | async as data; else fixedLoader">
-	<zippy *ngIf="false" [autoToggle]="false" #zippy>
+	<zippy class="filters-zippy" [autoToggle]="false" #zippy>
 		<section class="zippy-static-content">
+			<span>Filtruj transakcje &nbsp; <i class="fas fa-arrow-right"></i></span>
 			<button
 				appButton
 				btnType="icon"

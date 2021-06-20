@@ -88,7 +88,7 @@ export class TransactionsComponent implements OnInit {
 	private readonly _transactionsPerCall = 20;
 	private _isDownloadingNewTransactions = false;
 	private _theEnd = false;
-	private _lastSeenDoc: QueryDocumentSnapshot<ITransaction>;
+	private _lastSeen: QueryDocumentSnapshot<ITransaction>;
 
 	offsetChange$ = new BehaviorSubject<void>(null);
 	transactions$: Observable<ITransaction[]>;
@@ -119,10 +119,10 @@ export class TransactionsComponent implements OnInit {
 			.querySnapshots(
 				limit(this._transactionsPerCall),
 				orderBy('date', 'desc'),
-				this._lastSeenDoc ? startAfter(this._lastSeenDoc) : []
+				this._lastSeen ? startAfter(this._lastSeen) : []
 			)
 			.pipe(
-				tap(({ docs }) => (this._lastSeenDoc = docs[docs.length - 1])),
+				tap(({ docs }) => (this._lastSeen = docs[docs.length - 1])),
 				map(({ docs }) =>
 					docs.map(doc => ({
 						id: doc.id,
@@ -154,23 +154,22 @@ export class TransactionsComponent implements OnInit {
 
 	applyFilters() {
 		// Reset last seen document.
-		this._lastSeenDoc = null;
+		this._lastSeen = null;
 		// Reset the end property.
-
 		this._theEnd = false;
-		// Call getNextTransactions method
 
+		// Call getNextTransactions method
 		this.offsetChange$.next();
 	}
 
 	removeFilters() {
 		// Reset last seen document.
-		this._lastSeenDoc = null;
+		this._lastSeen = null;
+
 		// Reset the end property.
-
 		this._theEnd = false;
-		// Call getNextTransactions method
 
+		// Call getNextTransactions method
 		this.offsetChange$.next();
 	}
 
