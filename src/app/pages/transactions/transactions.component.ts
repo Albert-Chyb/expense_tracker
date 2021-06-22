@@ -7,8 +7,14 @@ import {
 } from '@angular/core';
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, mergeMap, scan, tap } from 'rxjs/operators';
+import {
+	BehaviorSubject,
+	combineLatest,
+	merge,
+	Observable,
+	Subject,
+} from 'rxjs';
+import { map, mapTo, mergeMap, scan, tap } from 'rxjs/operators';
 import { ITransactionGroup } from 'src/app/common/models/group';
 import { ITransaction } from 'src/app/common/models/transaction';
 import {
@@ -86,12 +92,14 @@ export class TransactionsComponent implements OnInit {
 	});
 
 	private readonly _transactionsPerCall = 20;
-	private _isDownloadingNewTransactions = false;
+	private _isDownloading = false;
 	private _theEnd = false;
 	private _lastSeen: QueryDocumentSnapshot<ITransaction>;
+	private _filtersEnabled = false;
 
 	offsetChange$ = new BehaviorSubject<void>(null);
 	transactions$: Observable<ITransaction[]>;
+	filtersChange$ = new Subject<boolean>();
 	groups$ = this._groups.getAll();
 	data$: Observable<{
 		transactions: ITransaction[];
@@ -99,27 +107,33 @@ export class TransactionsComponent implements OnInit {
 	}>;
 
 	ngOnInit() {
-		const offsetChange = this.offsetChange$.pipe(
+		const offsetChange$ = this.offsetChange$.pipe(
 			mergeMap(() => this.getNextTransactions()),
-			scan((acc, curr) => ({ ...acc, ...curr }), {})
+			map(current => previous => ({ ...previous, ...current }))
+		);
+		const filtersStatusChange$ = this.filtersChange$.pipe(
+			tap(status => (this._filtersEnabled = status)),
+			mapTo(() => ({}))
 		);
 
-		this.transactions$ = offsetChange.pipe(map(t => Object.values(t)));
+		this.transactions$ = merge(offsetChange$, filtersStatusChange$).pipe(
+			scan((acc, action) => action(acc), {}),
+			map(t => Object.values(t))
+		);
 		this.data$ = combineLatest([this.transactions$, this.groups$]).pipe(
 			map(([transactions, groups]) => ({ transactions, groups }))
 		);
 	}
 
 	getNextTransactions(): Observable<{ [id: string]: ITransaction }> {
-		this._isDownloadingNewTransactions = true;
-
-		console.log(this.hasFilters, this.filters.value);
+		this._isDownloading = true;
 
 		return this._transactions
 			.querySnapshots(
 				limit(this._transactionsPerCall),
 				orderBy('date', 'desc'),
-				this._lastSeen ? startAfter(this._lastSeen) : []
+				this._lastSeen ? startAfter(this._lastSeen) : [],
+				this._filtersEnabled ? this._buildQueries() : []
 			)
 			.pipe(
 				tap(({ docs }) => (this._lastSeen = docs[docs.length - 1])),
@@ -133,7 +147,7 @@ export class TransactionsComponent implements OnInit {
 				map(docs =>
 					docs.reduce((prev, curr) => ({ ...prev, [curr.id]: curr }), {})
 				),
-				tap(() => (this._isDownloadingNewTransactions = false))
+				tap(() => (this._isDownloading = false))
 			);
 	}
 
@@ -143,7 +157,7 @@ export class TransactionsComponent implements OnInit {
 		const total = this.virtualScroll.getDataLength();
 		const { end } = this.virtualScroll.getRenderedRange();
 
-		if (total === end && !this._isDownloadingNewTransactions) {
+		if (total === end && !this._isDownloading) {
 			this.offsetChange$.next();
 		}
 	}
@@ -152,25 +166,17 @@ export class TransactionsComponent implements OnInit {
 		return id;
 	}
 
-	applyFilters() {
-		// Reset last seen document.
+	setFiltersStatus(enabled: boolean) {
 		this._lastSeen = null;
-		// Reset the end property.
 		this._theEnd = false;
-
-		// Call getNextTransactions method
+		this.filtersChange$.next(enabled);
 		this.offsetChange$.next();
 	}
 
-	removeFilters() {
-		// Reset last seen document.
-		this._lastSeen = null;
-
-		// Reset the end property.
-		this._theEnd = false;
-
-		// Call getNextTransactions method
-		this.offsetChange$.next();
+	private _buildQueries() {
+		return Object.entries(this.filters.value)
+			.filter(([key, value]) => QUERIES.has(<any>key) && !!value)
+			.map(([key, value]) => QUERIES.get(<keyof FormValue>key)(value));
 	}
 
 	get hasFilters() {
@@ -178,6 +184,6 @@ export class TransactionsComponent implements OnInit {
 	}
 
 	get isDownloadingNewTransactions() {
-		return this._isDownloadingNewTransactions;
+		return this._isDownloading;
 	}
 }

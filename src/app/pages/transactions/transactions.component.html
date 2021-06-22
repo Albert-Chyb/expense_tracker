@@ -16,8 +16,8 @@
 			<form
 				class="filters"
 				[formGroup]="filters"
-				(ngSubmit)="applyFilters()"
-				(reset)="removeFilters()"
+				(ngSubmit)="setFiltersStatus(true); zippy.collapse()"
+				(reset)="setFiltersStatus(false); zippy.collapse()"
 			>
 				<form-field class="filters__date--start">
 					<input
