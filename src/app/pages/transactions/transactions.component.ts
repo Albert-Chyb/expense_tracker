@@ -91,7 +91,7 @@ export class TransactionsComponent implements OnInit {
 		type: new FormControl(TransactionsType.All),
 	});
 
-	private readonly _transactionsPerCall = 20;
+	private readonly _callLimit = 20;
 	private _isDownloading = false;
 	private _theEnd = false;
 	private _lastSeen: QueryDocumentSnapshot<ITransaction>;
@@ -99,7 +99,7 @@ export class TransactionsComponent implements OnInit {
 
 	offsetChange$ = new BehaviorSubject<void>(null);
 	transactions$: Observable<ITransaction[]>;
-	filtersChange$ = new Subject<boolean>();
+	filtersStatusChange$ = new Subject<boolean>();
 	groups$ = this._groups.getAll();
 	data$: Observable<{
 		transactions: ITransaction[];
@@ -111,7 +111,7 @@ export class TransactionsComponent implements OnInit {
 			mergeMap(() => this.getNextTransactions()),
 			map(current => previous => ({ ...previous, ...current }))
 		);
-		const filtersStatusChange$ = this.filtersChange$.pipe(
+		const filtersStatusChange$ = this.filtersStatusChange$.pipe(
 			tap(status => (this._filtersEnabled = status)),
 			mapTo(() => ({}))
 		);
@@ -130,7 +130,8 @@ export class TransactionsComponent implements OnInit {
 
 		return this._transactions
 			.querySnapshots(
-				limit(this._transactionsPerCall),
+				limit(this._callLimit),
+				orderBy('amount', 'desc'),
 				orderBy('date', 'desc'),
 				this._lastSeen ? startAfter(this._lastSeen) : [],
 				this._filtersEnabled ? this._buildQueries() : []
@@ -143,7 +144,7 @@ export class TransactionsComponent implements OnInit {
 						...doc.data(),
 					}))
 				),
-				tap(r => (r.length ? null : (this._theEnd = true))),
+				tap(r => (r.length > 0 ? null : (this._theEnd = true))),
 				map(docs =>
 					docs.reduce((prev, curr) => ({ ...prev, [curr.id]: curr }), {})
 				),
@@ -169,7 +170,7 @@ export class TransactionsComponent implements OnInit {
 	setFiltersStatus(enabled: boolean) {
 		this._lastSeen = null;
 		this._theEnd = false;
-		this.filtersChange$.next(enabled);
+		this.filtersStatusChange$.next(enabled);
 		this.offsetChange$.next();
 	}
 
