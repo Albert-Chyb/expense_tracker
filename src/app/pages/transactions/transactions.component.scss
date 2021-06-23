@@ -6,8 +6,6 @@ $filters-zippy-height: rem(45px);
 
 :host {
 	display: block;
-	position: relative;
-	padding-top: $filters-zippy-height;
 }
 
 cdk-virtual-scroll-viewport {
@@ -21,15 +19,6 @@ cdk-virtual-scroll-viewport {
 				#{$filters-zippy-height}
 		);
 	}
-}
-
-.filters-zippy {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	z-index: 2;
-	height: $filters-zippy-height;
 }
 
 .transactions {
@@ -51,44 +40,6 @@ cdk-virtual-scroll-viewport {
 }
 
 .filters {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: rem(10px);
-	padding: rem(3px);
-	background-color: var(--bg-color-6);
-	padding: rem(10px);
-	border-radius: rem(3px);
-
-	&__transaction-type {
-		display: block;
-
-		&:not(:last-child) {
-			margin-bottom: rem(10px);
-		}
-	}
-
-	&__actions {
-		grid-column: span 2;
-	}
-
-	&__action {
-		width: 100%;
-
-		&:not(:last-child) {
-			margin-bottom: rem(10px);
-		}
-	}
-
-	@media (max-width: 425px) {
-		grid-template-columns: 1fr;
-
-		&__actions {
-			grid-column: span 1;
-		}
-	}
-}
-
-.zippy-static-content {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;

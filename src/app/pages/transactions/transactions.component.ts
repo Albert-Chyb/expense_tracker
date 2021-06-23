@@ -6,7 +6,6 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
-import { FormControl, FormGroup } from '@angular/forms';
 import {
 	BehaviorSubject,
 	combineLatest,
@@ -14,7 +13,7 @@ import {
 	Observable,
 	Subject,
 } from 'rxjs';
-import { map, mapTo, mergeMap, scan, tap } from 'rxjs/operators';
+import { filter, first, map, mapTo, mergeMap, scan, tap } from 'rxjs/operators';
 import { ITransactionGroup } from 'src/app/common/models/group';
 import { ITransaction } from 'src/app/common/models/transaction';
 import {
@@ -24,25 +23,20 @@ import {
 	where,
 } from 'src/app/services/collection-base/dynamic-queries/helpers';
 import { DynamicQuery } from 'src/app/services/collection-base/dynamic-queries/models';
+import { DialogService } from 'src/app/services/dialog/dialog.service';
+import { OverlayService } from 'src/app/services/overlay/overlay.service';
 import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
 import { TransactionsService } from 'src/app/services/transactions/transactions.service';
 
-enum TransactionsType {
-	All = '',
-	Expenses = 'expenses',
-	Incomes = 'incomes',
-}
+import {
+	FiltersIntention,
+	IFilters,
+	IFiltersMetadata,
+	TransactionsFilterComponent,
+	TransactionsType,
+} from './transactions-filter.component';
 
-interface FormValue {
-	earliestDate: Date;
-	latestDate: Date;
-	lowestAmount: number;
-	highestAmount: number;
-	group: string;
-	type: TransactionsType;
-}
-
-const QUERIES = new Map<keyof FormValue, (value: any) => DynamicQuery>([
+const QUERIES = new Map<keyof IFilters, (value: any) => DynamicQuery>([
 	['earliestDate', (date: Date) => where('date', '>=', date)],
 	['latestDate', (date: Date) => where('date', '<=', date)],
 	['lowestAmount', (amount: number) => where('amount', '>=', amount)],
@@ -76,30 +70,23 @@ const QUERIES = new Map<keyof FormValue, (value: any) => DynamicQuery>([
 export class TransactionsComponent implements OnInit {
 	constructor(
 		private readonly _transactions: TransactionsService,
-		private readonly _groups: TransactionsGroupsService
+		private readonly _groups: TransactionsGroupsService,
+		private readonly _dialog: DialogService,
+		private readonly _overlay: OverlayService
 	) {}
 
 	@ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
-
-	filters = new FormGroup({
-		earliestDate: new FormControl(),
-		latestDate: new FormControl(),
-		lowestAmount: new FormControl(),
-		highestAmount: new FormControl(),
-		group: new FormControl(),
-		description: new FormControl(),
-		type: new FormControl(TransactionsType.All),
-	});
 
 	private readonly _callLimit = 20;
 	private _isDownloading = false;
 	private _theEnd = false;
 	private _lastSeen: QueryDocumentSnapshot<ITransaction>;
-	private _filtersEnabled = false;
 
-	offsetChange$ = new BehaviorSubject<void>(null);
+	offset$ = new BehaviorSubject<void>(null);
 	transactions$: Observable<ITransaction[]>;
-	filtersStatusChange$ = new Subject<boolean>();
+	transactionsReset$ = new Subject<void>();
+	filters$ = new BehaviorSubject<IFilters>(null);
+
 	groups$ = this._groups.getAll();
 	data$: Observable<{
 		transactions: ITransaction[];
@@ -107,16 +94,20 @@ export class TransactionsComponent implements OnInit {
 	}>;
 
 	ngOnInit() {
-		const offsetChange$ = this.offsetChange$.pipe(
+		const offset$ = this.offset$.pipe(
 			mergeMap(() => this.getNextTransactions()),
 			map(current => previous => ({ ...previous, ...current }))
 		);
-		const filtersStatusChange$ = this.filtersStatusChange$.pipe(
-			tap(status => (this._filtersEnabled = status)),
+		const transactionsReset$ = this.transactionsReset$.pipe(
+			tap(() => {
+				this._theEnd = false;
+				this._lastSeen = null;
+				this.offset$.next();
+			}),
 			mapTo(() => ({}))
 		);
 
-		this.transactions$ = merge(offsetChange$, filtersStatusChange$).pipe(
+		this.transactions$ = merge(offset$, transactionsReset$).pipe(
 			scan((acc, action) => action(acc), {}),
 			map(t => Object.values(t))
 		);
@@ -134,17 +125,21 @@ export class TransactionsComponent implements OnInit {
 				orderBy('amount', 'desc'),
 				orderBy('date', 'desc'),
 				this._lastSeen ? startAfter(this._lastSeen) : [],
-				this._filtersEnabled ? this._buildQueries() : []
+				this.filters ? this._buildQueries(this.filters) : []
 			)
 			.pipe(
+				// Save last received document for startAfter query.
 				tap(({ docs }) => (this._lastSeen = docs[docs.length - 1])),
+				// Convert snapshots into document data
 				map(({ docs }) =>
 					docs.map(doc => ({
 						id: doc.id,
 						...doc.data(),
 					}))
 				),
+				// Receiving no items, means no further calls should be made.
 				tap(r => (r.length > 0 ? null : (this._theEnd = true))),
+				// Transform data into object with id as a key and transaction as a value
 				map(docs =>
 					docs.reduce((prev, curr) => ({ ...prev, [curr.id]: curr }), {})
 				),
@@ -159,7 +154,7 @@ export class TransactionsComponent implements OnInit {
 		const { end } = this.virtualScroll.getRenderedRange();
 
 		if (total === end && !this._isDownloading) {
-			this.offsetChange$.next();
+			this.offset$.next();
 		}
 	}
 
@@ -167,24 +162,49 @@ export class TransactionsComponent implements OnInit {
 		return id;
 	}
 
-	setFiltersStatus(enabled: boolean) {
-		this._lastSeen = null;
-		this._theEnd = false;
-		this.filtersStatusChange$.next(enabled);
-		this.offsetChange$.next();
+	setFilters(filters: IFilters) {
+		this.filters$.next(filters);
+		this.transactionsReset$.next();
 	}
 
-	private _buildQueries() {
-		return Object.entries(this.filters.value)
-			.filter(([key, value]) => QUERIES.has(<any>key) && !!value)
-			.map(([key, value]) => QUERIES.get(<keyof FormValue>key)(value));
+	openFilters() {
+		const dialogRef = this._dialog.open(TransactionsFilterComponent, {
+			filters: this.filters$.value,
+		});
+		this._overlay.onClick$.subscribe(() => {
+			const action: IFiltersMetadata = {
+				filters: null,
+				intention: FiltersIntention.NoChange,
+			};
+
+			return dialogRef.closeWith(action);
+		});
+
+		dialogRef.afterClosed
+			.pipe(
+				first(),
+				filter(
+					(action: IFiltersMetadata) =>
+						action.intention !== FiltersIntention.NoChange
+				)
+			)
+			.subscribe((action: IFiltersMetadata) => this.setFilters(action.filters));
 	}
 
-	get hasFilters() {
-		return Object.values(this.filters.value).some(filter => !!filter);
+	private _buildQueries(filters: IFilters) {
+		return Object.entries(filters)
+			.filter(
+				([key, value]) =>
+					QUERIES.has(<any>key) && !!value && value !== '#ignore#'
+			)
+			.map(([key, value]) => QUERIES.get(<keyof IFilters>key)(value));
 	}
 
 	get isDownloadingNewTransactions() {
 		return this._isDownloading;
+	}
+
+	get filters() {
+		return this.filters$.value;
 	}
 }
