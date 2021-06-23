@@ -44,12 +44,7 @@ export class DialogContainerComponent implements OnInit {
 		this._afterClosed.next(data);
 	}
 
-	ngOnInit() {
-		const s = this._afterClosed.subscribe(() => {
-			this._afterClosed.unsubscribe();
-			s.unsubscribe();
-		});
-	}
+	ngOnInit() {}
 	/**
 	 * Allows attaching callbacks when the dialog is closed.
 	 */
