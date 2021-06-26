@@ -6,15 +6,8 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
-import {
-	BehaviorSubject,
-	combineLatest,
-	merge,
-	Observable,
-	Subject,
-} from 'rxjs';
+import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
 import { filter, first, map, mapTo, mergeMap, scan, tap } from 'rxjs/operators';
-import { ITransactionGroup } from 'src/app/common/models/group';
 import { ITransaction } from 'src/app/common/models/transaction';
 import {
 	limit,
@@ -25,16 +18,15 @@ import {
 import { DynamicQuery } from 'src/app/services/collection-base/dynamic-queries/models';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { OverlayService } from 'src/app/services/overlay/overlay.service';
-import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
 import { TransactionsService } from 'src/app/services/transactions/transactions.service';
 
 import {
 	FiltersIntention,
 	IFilters,
 	IFiltersMetadata,
-	TransactionsFilterComponent,
+	TransactionsFiltersDialogComponent,
 	TransactionsType,
-} from './transactions-filter.component';
+} from '../../components/transactions-filters-dialog/transactions-filters-dialog.component';
 
 const QUERIES = new Map<keyof IFilters, (value: any) => DynamicQuery>([
 	['earliestDate', (date: Date) => where('date', '>=', date)],
@@ -70,58 +62,61 @@ const QUERIES = new Map<keyof IFilters, (value: any) => DynamicQuery>([
 export class TransactionsComponent implements OnInit {
 	constructor(
 		private readonly _transactions: TransactionsService,
-		private readonly _groups: TransactionsGroupsService,
 		private readonly _dialog: DialogService,
 		private readonly _overlay: OverlayService
 	) {}
 
+	/** (Angular Material CDK) Virtual scroll container reference. */
 	@ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
-	private readonly _callLimit = 20;
+	/** How many documents should be included in a single batch. */
+	private readonly _batchSize = 20;
+	/** Indicates if new batch is being downloaded. */
 	private _isDownloading = false;
+	/** Indicates if the end of the collection has been reached. */
 	private _theEnd = false;
+	/** Last document in the last batch. */
 	private _lastSeen: QueryDocumentSnapshot<ITransaction>;
-
-	offset$ = new BehaviorSubject<void>(null);
+	/** Gets next transactions */
+	private readonly _offset$ = new BehaviorSubject<void>(null);
+	/** Resets all stored transactions */
+	private readonly _reset$ = new Subject<void>();
+	/** Contains all transactions stored so far */
 	transactions$: Observable<ITransaction[]>;
-	transactionsReset$ = new Subject<void>();
+	/** Whenever filters change */
 	filters$ = new BehaviorSubject<IFilters>(null);
 
-	groups$ = this._groups.getAll();
-	data$: Observable<{
-		transactions: ITransaction[];
-		groups: ITransactionGroup[];
-	}>;
-
 	ngOnInit() {
-		const offset$ = this.offset$.pipe(
+		const offset$ = this._offset$.pipe(
+			tap(() => (this._isDownloading = true)),
 			mergeMap(() => this.getNextTransactions()),
 			map(current => previous => ({ ...previous, ...current }))
 		);
-		const transactionsReset$ = this.transactionsReset$.pipe(
+		const reset$ = this._reset$.pipe(
 			tap(() => {
 				this._theEnd = false;
 				this._lastSeen = null;
-				this.offset$.next();
+				this._offset$.next();
 			}),
 			mapTo(() => ({}))
 		);
 
-		this.transactions$ = merge(offset$, transactionsReset$).pipe(
+		this.transactions$ = merge(offset$, reset$).pipe(
 			scan((acc, action) => action(acc), {}),
 			map(t => Object.values(t))
 		);
-		this.data$ = combineLatest([this.transactions$, this.groups$]).pipe(
-			map(([transactions, groups]) => ({ transactions, groups }))
-		);
 	}
 
+	/**
+	 * Returns next batch of transactions, relative to the last seen document.
+	 * If any filters are set, it will apply them.
+	 *
+	 * @returns Object with transaction id as key and transaction object as a value.
+	 */
 	getNextTransactions(): Observable<{ [id: string]: ITransaction }> {
-		this._isDownloading = true;
-
 		return this._transactions
 			.querySnapshots(
-				limit(this._callLimit),
+				limit(this._batchSize),
 				orderBy('amount', 'desc'),
 				orderBy('date', 'desc'),
 				this._lastSeen ? startAfter(this._lastSeen) : [],
@@ -154,7 +149,7 @@ export class TransactionsComponent implements OnInit {
 		const { end } = this.virtualScroll.getRenderedRange();
 
 		if (total === end && !this._isDownloading) {
-			this.offset$.next();
+			this._offset$.next();
 		}
 	}
 
@@ -164,11 +159,12 @@ export class TransactionsComponent implements OnInit {
 
 	setFilters(filters: IFilters) {
 		this.filters$.next(filters);
-		this.transactionsReset$.next();
+		this._reset$.next();
 	}
 
+	/** Opens dialog with filters. */
 	openFilters() {
-		const dialogRef = this._dialog.open(TransactionsFilterComponent, {
+		const dialogRef = this._dialog.open(TransactionsFiltersDialogComponent, {
 			filters: this.filters$.value,
 		});
 		this._overlay.onClick$.subscribe(() => {
@@ -200,10 +196,12 @@ export class TransactionsComponent implements OnInit {
 			.map(([key, value]) => QUERIES.get(<keyof IFilters>key)(value));
 	}
 
-	get isDownloadingNewTransactions() {
+	/** Indicates if new batch is being downloaded. */
+	get isDownloading() {
 		return this._isDownloading;
 	}
 
+	/** Currently set filters. */
 	get filters() {
 		return this.filters$.value;
 	}

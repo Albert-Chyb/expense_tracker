@@ -66,7 +66,7 @@ import { ExposedInjector } from './services/dialog/dialog.service';
 import { UserService } from './services/user/user.service';
 import { TransactionsComponent } from './pages/transactions/transactions.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { TransactionsFilterComponent } from './pages/transactions/transactions-filter.component';
+import { TransactionsFiltersDialogComponent } from './components/transactions-filters-dialog/transactions-filters-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -98,7 +98,7 @@ import { TransactionsFilterComponent } from './pages/transactions/transactions-f
 		DashboardComponent,
 		AbsPipe,
 		TransactionsComponent,
-		TransactionsFilterComponent,
+		TransactionsFiltersDialogComponent,
 	],
 	imports: [
 		BrowserModule,

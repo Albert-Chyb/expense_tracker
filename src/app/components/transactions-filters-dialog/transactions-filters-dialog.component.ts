@@ -29,7 +29,7 @@ interface IDialogData {
 }
 
 export enum FiltersIntention {
-	/** Filters should applied */
+	/** Filters should be applied */
 	Apply = 'apply',
 
 	/** Filters should be removed */
@@ -45,11 +45,11 @@ export interface IFiltersMetadata {
 }
 
 @Component({
-	templateUrl: `./transactions-filter.component.html`,
-	styleUrls: [`./transactions-filter.component.scss`],
+	templateUrl: `./transactions-filters-dialog.component.html`,
+	styleUrls: [`./transactions-filters-dialog.component.scss`],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionsFilterComponent implements OnInit {
+export class TransactionsFiltersDialogComponent implements OnInit {
 	constructor(
 		@Inject(DIALOG_REF) private readonly _dialogRef: DialogContainerComponent,
 		@Inject(DIALOG_DATA) private readonly _dialogData: IDialogData,
