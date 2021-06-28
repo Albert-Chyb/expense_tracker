@@ -5,6 +5,7 @@ import {
 } from './select/select.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
 	declarations: [
@@ -12,7 +13,7 @@ import { CommonModule } from '@angular/common';
 		SelectOptionComponent,
 		SelectComponentControlDirective,
 	],
-	imports: [CommonModule],
+	imports: [CommonModule, OverlayModule],
 	exports: [
 		SelectComponent,
 		SelectOptionComponent,

@@ -1,6 +1,12 @@
-import { first } from 'rxjs/operators';
-import { OverlayService } from '../../../services/overlay/overlay.service';
 import { transition, trigger, useAnimation } from '@angular/animations';
+import {
+	ConnectedPosition,
+	ConnectionPositionPair,
+	Overlay,
+	OverlayConfig,
+	OverlayRef,
+} from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 import {
 	AfterContentInit,
 	ChangeDetectorRef,
@@ -14,9 +20,9 @@ import {
 	OnDestroy,
 	OnInit,
 	QueryList,
-	Renderer2,
 	TemplateRef,
 	ViewChild,
+	ViewContainerRef,
 } from '@angular/core';
 import {
 	ControlValueAccessor,
@@ -24,6 +30,7 @@ import {
 	NgControl,
 } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 import { fadeIn, fadeOut } from '../../../animations';
 import {
@@ -65,16 +72,18 @@ export class SelectComponent
 		FormFieldControl,
 		ControlValueAccessor,
 		AfterContentInit,
-		OnDestroy {
+		OnDestroy
+{
 	constructor(
 		private readonly _injector: Injector,
 		private readonly _changeDetector: ChangeDetectorRef,
-		private readonly _overlay: OverlayService,
 		private readonly _hostRef: ElementRef<HTMLElement>,
-		private readonly _renderer: Renderer2
+		private readonly _cdkOverlay: Overlay,
+		private readonly _viewContainerRef: ViewContainerRef
 	) {}
 
 	@ViewChild('selectDropdown') dropdownRef: TemplateRef<HTMLElement>;
+	@ViewChild('toggleButton') toggleButton: ElementRef<HTMLButtonElement>;
 
 	@ContentChildren(SelectOptionComponent)
 	options: QueryList<SelectOptionComponent>;
@@ -88,6 +97,7 @@ export class SelectComponent
 	private _isDisabled: boolean = false;
 	private _initialValue: string = '';
 	private _labelId: string = '';
+	private _overlayRef: OverlayRef;
 
 	/** Id of the element that displays currently selected option. Mainly for aria attributes. */
 	private _selectedOptionElID: string = `select-btn-${window[
@@ -129,7 +139,6 @@ export class SelectComponent
 	}
 
 	onStateChange = new Subject<void>();
-
 	ngControl: NgControl;
 
 	onContainerClick(): void {
@@ -145,15 +154,16 @@ export class SelectComponent
 	open() {
 		if (!this._isOpened && !this._isDisabled) {
 			this._isOpened = true;
+			const [overlayRef, attachment] = this._openOverlay();
+
 			this.focusOption(this.currentOption);
-			const dropdownViewRef = this._overlay.open(this.dropdownRef, null, {
-				transparent: true,
-			}) as EmbeddedViewRef<HTMLElement>;
+			this._overlayRef = overlayRef;
+			this._overlayRef
+				.backdropClick()
+				.pipe(take(1))
+				.subscribe(() => this.close());
 
-			this._positionDropdown(dropdownViewRef.rootNodes[0] as HTMLElement);
-			this._scrollToCurrentOption(dropdownViewRef.rootNodes[0] as HTMLElement);
-
-			this._overlay.onClick$.pipe(first()).subscribe(() => this.close());
+			this._scrollToCurrentOption(attachment.rootNodes[0] as HTMLElement);
 			this.onStateChange.next();
 		}
 	}
@@ -163,7 +173,8 @@ export class SelectComponent
 		if (this._isOpened) {
 			this._isOpened = false;
 			this._currentlyFocusedOption.blur();
-			this._overlay.close();
+			this._overlayRef.dispose();
+			this._overlayRef = null;
 			this.onStateChange.next();
 		}
 	}
@@ -312,23 +323,6 @@ export class SelectComponent
 		);
 	}
 
-	/** Positions dropdown element */
-	private _positionDropdown(dropdownElement: HTMLElement) {
-		const hostPosition = this._hostRef.nativeElement.getBoundingClientRect();
-		const offscreenInfo = this._fallsOffScreen(hostPosition);
-		const offset = offscreenInfo.offscreenTop
-			? offscreenInfo.offsetTop
-			: -offscreenInfo.offsetBottom;
-
-		[
-			['width', `${hostPosition.width}px`],
-			['top', `${hostPosition.top + offset}px`],
-			['left', `${hostPosition.left}px`],
-		].forEach(([style, value]) =>
-			this._renderer.setStyle(dropdownElement, style, value)
-		);
-	}
-
 	/** Scrolls currently chosen option into the view. */
 	private _scrollToCurrentOption(dropdownElement: HTMLElement) {
 		const currentOptionIndex = this.options
@@ -339,26 +333,6 @@ export class SelectComponent
 			0,
 			this._transformEmToPx(SELECT_OPTION_HEIGHT_EM) * currentOptionIndex
 		);
-	}
-
-	/** Checks if dropdown falls off screen. */
-	private _fallsOffScreen(hostRect: DOMRect) {
-		const dropdownHeight: number =
-			this._transformEmToPx(SELECT_OPTION_HEIGHT_EM) *
-			SELECT_OPTION_VISIBLE_COUNT;
-		const offscreenTop: boolean = hostRect.top < 0;
-		const offscreenBottom: boolean =
-			hostRect.top + dropdownHeight > window.outerHeight;
-
-		return {
-			offscreen: offscreenBottom || offscreenTop,
-			offsetTop: offscreenTop ? Math.abs(hostRect.top) : 0,
-			offsetBottom: offscreenBottom
-				? Math.abs(hostRect.top + dropdownHeight - window.outerHeight)
-				: 0,
-			offscreenBottom,
-			offscreenTop,
-		};
 	}
 
 	/** Transforms css em unit to px based on host font-size value. */
@@ -402,6 +376,40 @@ export class SelectComponent
 				this.close();
 				break;
 		}
+	}
+
+	private _openOverlay(): [OverlayRef, EmbeddedViewRef<HTMLElement>] {
+		const overlay = this._cdkOverlay.create(this._buildOverlayConfig());
+		const attachment = overlay.attach(
+			new TemplatePortal(this.dropdownRef, this._viewContainerRef)
+		);
+
+		return [overlay, attachment];
+	}
+
+	private _buildOverlayConfig(): OverlayConfig {
+		const positions: ConnectedPosition[] = [
+			new ConnectionPositionPair(
+				{ originX: 'start', originY: 'bottom' },
+				{ overlayX: 'start', overlayY: 'top' }
+			),
+			new ConnectionPositionPair(
+				{ originX: 'start', originY: 'top' },
+				{ overlayX: 'start', overlayY: 'bottom' }
+			),
+		];
+		const positionStrategy = this._cdkOverlay
+			.position()
+			.flexibleConnectedTo(this.toggleButton)
+			.withPositions(positions)
+			.withPush(true);
+		const scrollStrategy = this._cdkOverlay.scrollStrategies.close();
+
+		return {
+			hasBackdrop: true,
+			positionStrategy,
+			scrollStrategy,
+		};
 	}
 }
 
