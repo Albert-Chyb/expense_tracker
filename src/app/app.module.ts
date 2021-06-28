@@ -67,6 +67,7 @@ import { UserService } from './services/user/user.service';
 import { TransactionsComponent } from './pages/transactions/transactions.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { TransactionsFiltersDialogComponent } from './components/transactions-filters-dialog/transactions-filters-dialog.component';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
 	declarations: [
@@ -128,6 +129,7 @@ import { TransactionsFiltersDialogComponent } from './components/transactions-fi
 		SwipeActionsModule,
 		ProgressSpinnerModule,
 		ScrollingModule,
+		OverlayModule,
 	],
 	providers: [
 		{ provide: LOCALE_ID, useValue: 'pl-PL' },
