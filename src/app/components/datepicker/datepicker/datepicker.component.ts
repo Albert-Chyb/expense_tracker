@@ -1,5 +1,8 @@
+import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
 import {
 	Component,
+	ComponentRef,
 	Directive,
 	HostListener,
 	Inject,
@@ -11,7 +14,7 @@ import {
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 import {
 	ChooseDayPage,
@@ -19,7 +22,6 @@ import {
 	DatepickerPages,
 	IDatepickerPage,
 } from '../datepicker-pages';
-import { OverlayService } from './../../../services/overlay/overlay.service';
 
 interface DateParts {
 	year?: number;
@@ -309,8 +311,8 @@ export class TriggerDatepickerDirective {
 })
 export class DatepickerManager {
 	constructor(
-		private readonly _overlay: OverlayService,
-		private readonly _injector: Injector
+		private readonly _injector: Injector,
+		private readonly _cdkOverlay: Overlay
 	) {}
 
 	private readonly _inputs: IDatepickerInputs = {
@@ -320,6 +322,7 @@ export class DatepickerManager {
 	};
 	private _isOpened = false;
 	private _datepickerRef: DatepickerComponent;
+	private _overlayRef: OverlayRef;
 
 	set minDate(minDate: Date) {
 		this._target.minDate = minDate;
@@ -338,23 +341,24 @@ export class DatepickerManager {
 		if (this._isOpened) return;
 
 		this._isOpened = true;
-		this._datepickerRef = (this._overlay.open(
-			DatepickerComponent,
-			this._createInjector()
-		) as any).instance;
-		this._overlay.onClick$.pipe(first()).subscribe(() => this.close());
+
+		const [overlay, attachment] = this._createOverlay();
+		this._overlayRef = overlay;
+		this._datepickerRef = attachment.instance;
+
+		overlay
+			.backdropClick()
+			.pipe(take(1))
+			.subscribe(() => this.close());
 	}
 
 	close() {
 		if (this._isClosed) return;
 
 		this._isOpened = false;
-		this._overlay.close();
+		this._overlayRef.dispose();
+		this._overlayRef = null;
 		this._datepickerRef = null;
-	}
-
-	private get _isClosed() {
-		return !this._isOpened;
 	}
 
 	private _createInjector() {
@@ -362,6 +366,32 @@ export class DatepickerManager {
 			providers: [{ provide: DATEPICKER_INPUTS, useValue: this._inputs }],
 			parent: this._injector,
 		});
+	}
+
+	private _createOverlay(): [OverlayRef, ComponentRef<DatepickerComponent>] {
+		const overlay = this._cdkOverlay.create(this._buildOverlayConfig());
+
+		const attachment = overlay.attach(
+			new ComponentPortal(DatepickerComponent, null, this._createInjector())
+		);
+
+		return [overlay, attachment];
+	}
+
+	private _buildOverlayConfig(): OverlayConfig {
+		return {
+			hasBackdrop: true,
+			positionStrategy: this._cdkOverlay
+				.position()
+				.global()
+				.centerHorizontally()
+				.centerVertically(),
+			scrollStrategy: this._cdkOverlay.scrollStrategies.block(),
+		};
+	}
+
+	private get _isClosed() {
+		return !this._isOpened;
 	}
 
 	private get _target() {

@@ -9,6 +9,7 @@ import {
 	DatepickerManager,
 	TriggerDatepickerDirective,
 } from './datepicker/datepicker.component';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
 	declarations: [
@@ -17,7 +18,7 @@ import {
 		DatepickerManager,
 		TriggerDatepickerDirective,
 	],
-	imports: [CommonModule, ButtonModule, RippleModule],
+	imports: [CommonModule, ButtonModule, RippleModule, OverlayModule],
 	exports: [
 		DatepickerComponent,
 		DatepickerInputDirective,
