@@ -1,12 +1,10 @@
-import { first } from 'rxjs/operators';
-import { ConfirmDialogData } from './../../components/confirm-dialog/confirm-dialog.component';
-import { DIALOG_SERVICE } from './../../common/models/dialog';
-import { ComponentType } from '@angular/cdk/portal';
+import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
 import { ComponentRef, Injectable, Injector } from '@angular/core';
-
+import { first } from 'rxjs/operators';
 import { DIALOG_DATA } from '../../common/models/dialog';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
-import { OverlayService } from '../overlay/overlay.service';
+import { ConfirmDialogData } from './../../components/confirm-dialog/confirm-dialog.component';
 import { DialogContainerComponent } from './../../components/dialog-container/dialog-container.component';
 
 @Injectable({
@@ -14,8 +12,8 @@ import { DialogContainerComponent } from './../../components/dialog-container/di
 })
 export class DialogService {
 	constructor(
-		private readonly _overlay: OverlayService,
-		private readonly _injector: Injector
+		private readonly _injector: Injector,
+		private readonly _cdkOverlay: Overlay
 	) {}
 
 	/**
@@ -31,21 +29,13 @@ export class DialogService {
 		DialogComponent: ComponentType<T>,
 		data?: any
 	): DialogContainerComponent {
-		const injector = Injector.create({
-			parent: this._injector,
-			providers: [
-				{ provide: DIALOG_DATA, useValue: data },
-				{ provide: DIALOG_SERVICE, useValue: this },
-			],
-		});
-		const dialogContainer = (this._overlay.open(
-			DialogContainerComponent,
-			injector
-		) as any) as ComponentRef<DialogContainerComponent>;
+		const injector = this._buildInjectorForDialog(data);
+		const [overlay, { instance: dialogContainer }] =
+			this._buildOverlay(injector);
 
-		dialogContainer.instance.insertContent(DialogComponent);
+		dialogContainer.insertComponent(DialogComponent, overlay);
 
-		return dialogContainer.instance;
+		return dialogContainer;
 	}
 
 	/**
@@ -58,8 +48,50 @@ export class DialogService {
 		return this.open(ConfirmDialogComponent, { title, description });
 	}
 
-	close() {
-		return this._overlay.close();
+	/**
+	 * Creates overlay.
+	 *
+	 * @param injector Injector that will be used to create DialogContainerComponent
+	 * @returns Array with OverlayRef as a first element and ComponentRef as a second
+	 */
+	private _buildOverlay(
+		injector: Injector
+	): [OverlayRef, ComponentRef<DialogContainerComponent>] {
+		const overlay = this._cdkOverlay.create(this._buildOverlayConfig());
+		const attachment = overlay.attach(
+			new ComponentPortal(DialogContainerComponent, null, injector)
+		);
+
+		return [overlay, attachment];
+	}
+
+	/**
+	 * Builds config for the overlay.
+	 *
+	 * @returns Overlay config
+	 */
+	private _buildOverlayConfig(): OverlayConfig {
+		return {
+			hasBackdrop: true,
+			positionStrategy: this._cdkOverlay
+				.position()
+				.global()
+				.centerHorizontally()
+				.centerVertically(),
+			scrollStrategy: this._cdkOverlay.scrollStrategies.block(),
+		};
+	}
+
+	/**
+	 * Creates injector with additional providers for dialog container component.
+	 *
+	 * @param data Data to make available in dialog component.
+	 */
+	private _buildInjectorForDialog(data: any): Injector {
+		return Injector.create({
+			parent: this._injector,
+			providers: [{ provide: DIALOG_DATA, useValue: data }],
+		});
 	}
 }
 
