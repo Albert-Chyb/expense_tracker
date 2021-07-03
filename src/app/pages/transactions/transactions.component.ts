@@ -6,8 +6,20 @@ import {
 	ViewChild,
 } from '@angular/core';
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
-import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
-import { filter, first, map, mapTo, mergeMap, scan, tap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject, merge, Observable } from 'rxjs';
+import {
+	distinctUntilChanged,
+	filter,
+	first,
+	map,
+	mapTo,
+	mergeMap,
+	pairwise,
+	scan,
+	switchMapTo,
+	tap,
+} from 'rxjs/operators';
 import { ITransaction } from 'src/app/common/models/transaction';
 import {
 	limit,
@@ -17,42 +29,49 @@ import {
 } from 'src/app/services/collection-base/dynamic-queries/helpers';
 import { DynamicQuery } from 'src/app/services/collection-base/dynamic-queries/models';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
-import { OverlayService } from 'src/app/services/overlay/overlay.service';
 import { TransactionsService } from 'src/app/services/transactions/transactions.service';
 
 import {
 	FiltersIntention,
 	IFilters,
-	IFiltersMetadata,
+	IFiltersAction,
 	TransactionsFiltersDialogComponent,
 	TransactionsType,
 } from '../../components/transactions-filters-dialog/transactions-filters-dialog.component';
 
-const QUERIES = new Map<keyof IFilters, (value: any) => DynamicQuery>([
+const SERVER_QUERIES = new Map<keyof IFilters, (value: any) => DynamicQuery>([
 	['earliestDate', (date: Date) => where('date', '>=', date)],
 	['latestDate', (date: Date) => where('date', '<=', date)],
-	['lowestAmount', (amount: number) => where('amount', '>=', amount)],
-	['highestAmount', (amount: number) => where('amount', '<=', amount)],
 	['group', (group: string) => where('group.id', '==', group)],
+]);
+
+const LOCAL_QUERIES = new Map<
+	keyof IFilters,
+	(v: any) => (t: ITransaction) => boolean
+>([
+	['lowestAmount', (amount: number) => (t: ITransaction) => t.amount >= amount],
+	[
+		'highestAmount',
+		(amount: number) => (t: ITransaction) => t.amount <= amount,
+	],
 	[
 		'type',
 		(type: TransactionsType) => {
-			let query: DynamicQuery;
-
 			switch (type) {
 				case TransactionsType.Expenses:
-					query = where('amount', '<', 0);
-					break;
+					return ({ amount }: ITransaction) => amount < 0;
 
 				case TransactionsType.Incomes:
-					query = where('amount', '>', 0);
-					break;
-			}
+					return ({ amount }: ITransaction) => amount > 0;
 
-			return query;
+				default:
+					return () => true;
+			}
 		},
 	],
 ]);
+
+const FILTERS_KEYS = [...SERVER_QUERIES.keys(), ...LOCAL_QUERIES.keys()];
 
 @Component({
 	templateUrl: './transactions.component.html',
@@ -63,7 +82,8 @@ export class TransactionsComponent implements OnInit {
 	constructor(
 		private readonly _transactions: TransactionsService,
 		private readonly _dialog: DialogService,
-		private readonly _overlay: OverlayService
+		private readonly _route: ActivatedRoute,
+		private readonly _router: Router
 	) {}
 
 	/** (Angular Material CDK) Virtual scroll container reference. */
@@ -79,20 +99,23 @@ export class TransactionsComponent implements OnInit {
 	private _lastSeen: QueryDocumentSnapshot<ITransaction>;
 	/** Gets next transactions */
 	private readonly _offset$ = new BehaviorSubject<void>(null);
-	/** Resets all stored transactions */
-	private readonly _reset$ = new Subject<void>();
 	/** Contains all transactions stored so far */
 	transactions$: Observable<ITransaction[]>;
-	/** Whenever filters change */
-	filters$ = new BehaviorSubject<IFilters>(null);
 
 	ngOnInit() {
+		const filters$: Observable<IFilters> = this._route.queryParams as any;
 		const offset$ = this._offset$.pipe(
 			tap(() => (this._isDownloading = true)),
-			mergeMap(() => this.getNextTransactions()),
+			switchMapTo(filters$),
+			mergeMap((filters: IFilters) => this.getNextTransactions(filters)),
 			map(current => previous => ({ ...previous, ...current }))
 		);
-		const reset$ = this._reset$.pipe(
+		const reset$ = filters$.pipe(
+			distinctUntilChanged((prev, curr) =>
+				FILTERS_KEYS.map(
+					watchedKey => prev[watchedKey] === curr[watchedKey]
+				).every(isTheSame => isTheSame)
+			),
 			tap(() => {
 				this._theEnd = false;
 				this._lastSeen = null;
@@ -113,25 +136,35 @@ export class TransactionsComponent implements OnInit {
 	 *
 	 * @returns Object with transaction id as key and transaction object as a value.
 	 */
-	getNextTransactions(): Observable<{ [id: string]: ITransaction }> {
+	getNextTransactions(
+		filters: IFilters
+	): Observable<{ [id: string]: ITransaction }> {
 		return this._transactions
 			.querySnapshots(
 				limit(this._batchSize),
-				orderBy('amount', 'desc'),
 				orderBy('date', 'desc'),
 				this._lastSeen ? startAfter(this._lastSeen) : [],
-				this.filters ? this._buildQueries(this.filters) : []
+				filters ? this._buildQueries(filters, SERVER_QUERIES) : []
 			)
 			.pipe(
 				// Save last received document for startAfter query.
 				tap(({ docs }) => (this._lastSeen = docs[docs.length - 1])),
 				// Convert snapshots into document data
-				map(({ docs }) =>
-					docs.map(doc => ({
+				map(({ docs }) => {
+					const queries = this._buildQueries(filters, LOCAL_QUERIES);
+					let transactions = docs.map(doc => ({
 						id: doc.id,
 						...doc.data(),
-					}))
-				),
+					}));
+
+					if (queries.length) {
+						transactions = transactions.filter(transaction =>
+							queries.map(query => query(transaction)).every(isValid => isValid)
+						);
+					}
+
+					return transactions;
+				}),
 				// Receiving no items, means no further calls should be made.
 				tap(r => (r.length > 0 ? null : (this._theEnd = true))),
 				// Transform data into object with id as a key and transaction as a value
@@ -158,51 +191,53 @@ export class TransactionsComponent implements OnInit {
 	}
 
 	setFilters(filters: IFilters) {
-		this.filters$.next(filters);
-		this._reset$.next();
+		this._router.navigate([], {
+			relativeTo: this._route,
+			queryParams: Object.fromEntries(this._removeUnnecessaryFilters(filters)),
+			replaceUrl: true,
+		});
 	}
 
-	/** Opens dialog with filters. */
+	/** Opens dialog containing filters. */
 	openFilters() {
 		const dialogRef = this._dialog.open(TransactionsFiltersDialogComponent, {
-			filters: this.filters$.value,
-		});
-		this._overlay.onClick$.subscribe(() => {
-			const action: IFiltersMetadata = {
-				filters: null,
-				intention: FiltersIntention.NoChange,
-			};
-
-			return dialogRef.closeWith(action);
+			filters: this._route.snapshot.queryParams,
 		});
 
 		dialogRef.afterClosed
 			.pipe(
 				first(),
 				filter(
-					(action: IFiltersMetadata) =>
+					(action: IFiltersAction) =>
 						action.intention !== FiltersIntention.NoChange
 				)
 			)
-			.subscribe((action: IFiltersMetadata) => this.setFilters(action.filters));
+			.subscribe((action: IFiltersAction) => this.setFilters(action.filters));
 	}
 
-	private _buildQueries(filters: IFilters) {
-		return Object.entries(filters)
-			.filter(
-				([key, value]) =>
-					QUERIES.has(<any>key) && !!value && value !== '#ignore#'
-			)
-			.map(([key, value]) => QUERIES.get(<keyof IFilters>key)(value));
+	private _buildQueries(filters: IFilters, builders: Map<any, any>) {
+		return this._removeUnnecessaryFilters(filters)
+			.filter(([key]) => builders.has(key))
+			.map(([key, value]) => builders.get(key)(value));
 	}
 
-	/** Indicates if new batch is being downloaded. */
+	/** Removes filters that does not exist in the QUERIES_BUILDERS, or does not have a value. */
+	private _removeUnnecessaryFilters(filters: IFilters) {
+		return this._filtersToEntries(filters).filter(([key, value]) =>
+			this._isValidFilterValue(value)
+		);
+	}
+
+	private _filtersToEntries(filters: IFilters): [keyof IFilters, any][] {
+		return Object.entries(filters ?? {}) as any;
+	}
+
+	private _isValidFilterValue(value: any) {
+		return value !== null && value !== '' && value !== '#ignore#';
+	}
+
+	/** Indicates if a new batch is being downloaded. */
 	get isDownloading() {
 		return this._isDownloading;
-	}
-
-	/** Currently set filters. */
-	get filters() {
-		return this.filters$.value;
 	}
 }
