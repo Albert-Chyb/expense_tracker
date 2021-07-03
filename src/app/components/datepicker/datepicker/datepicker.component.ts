@@ -64,7 +64,7 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 		if (date >= this.maxDate)
 			throw new Error('Tried to set min date that is later than max date !');
 
-		this._rangeDates.min = date;
+		if (date instanceof Date) this._rangeDates.min = date;
 	}
 	/** The earliest date that can be selected. */
 	get minDate() {
@@ -77,7 +77,7 @@ export class DatepickerComponent implements OnInit, OnDestroy {
 		if (date <= this.minDate)
 			throw new Error('Tried to set max date that is earlier than min date !');
 
-		this._rangeDates.max = date;
+		if (date instanceof Date) this._rangeDates.max = date;
 	}
 	get maxDate() {
 		return this._rangeDates.max;
