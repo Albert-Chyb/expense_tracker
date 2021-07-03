@@ -39,7 +39,7 @@ export enum FiltersIntention {
 	NoChange = 'no-change',
 }
 
-export interface IFiltersMetadata {
+export interface IFiltersAction {
 	filters: IFilters | null;
 	intention: FiltersIntention;
 }
@@ -79,7 +79,7 @@ export class TransactionsFiltersDialogComponent implements OnInit {
 	}
 
 	apply() {
-		const action: IFiltersMetadata = {
+		const action: IFiltersAction = {
 			filters: this.filters.value,
 			intention: FiltersIntention.Apply,
 		};
@@ -88,7 +88,7 @@ export class TransactionsFiltersDialogComponent implements OnInit {
 	}
 
 	reset() {
-		const action: IFiltersMetadata = {
+		const action: IFiltersAction = {
 			filters: null,
 			intention: FiltersIntention.Reset,
 		};
@@ -97,7 +97,7 @@ export class TransactionsFiltersDialogComponent implements OnInit {
 	}
 
 	close() {
-		const action: IFiltersMetadata = {
+		const action: IFiltersAction = {
 			filters: null,
 			intention: FiltersIntention.NoChange,
 		};

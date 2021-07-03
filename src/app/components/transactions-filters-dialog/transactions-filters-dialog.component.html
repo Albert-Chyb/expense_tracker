@@ -13,6 +13,7 @@
 		<form-field class="filters__date--start">
 			<input
 				[datepicker]="datepickerStart"
+				[max]="filters.get('latestDate').value"
 				formFieldInput
 				type="text"
 				formControlName="earliestDate"
@@ -35,6 +36,7 @@
 		<form-field class="filters__date--end">
 			<input
 				[datepicker]="datepickerEnd"
+				[min]="filters.get('earliestDate').value"
 				formFieldInput
 				type="text"
 				formControlName="latestDate"

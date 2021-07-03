@@ -7,13 +7,11 @@
 	grid-template-columns: repeat(2, 1fr);
 	gap: rem(10px);
 	padding: rem(3px);
-	background-color: var(--bg-color-6);
+	background-color: var(--bg-color-1);
 	padding: rem(10px);
 	border-radius: rem(3px);
 	width: min(#{rem(700px)}, 100%);
-	position: fixed;
-	left: 50%;
-	transform: translateX(-50%);
+	min-width: rem(300px);
 	min-height: rem(300px);
 
 	progress-spinner {
