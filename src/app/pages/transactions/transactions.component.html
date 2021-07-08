@@ -37,7 +37,10 @@
 </ng-template>
 
 <ng-template #loader>
-	<progress-spinner class="transactions__progress-spinner"></progress-spinner>
+	<progress-spinner
+		[diagonal]="30"
+		class="transactions__progress-spinner"
+	></progress-spinner>
 </ng-template>
 
 <ng-template #transactionsNotFound>
