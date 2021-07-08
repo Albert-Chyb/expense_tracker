@@ -10,12 +10,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, merge, Observable } from 'rxjs';
 import {
 	distinctUntilChanged,
-	filter,
 	first,
 	map,
 	mapTo,
 	mergeMap,
-	pairwise,
 	scan,
 	switchMapTo,
 	tap,
@@ -32,9 +30,7 @@ import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { TransactionsService } from 'src/app/services/transactions/transactions.service';
 
 import {
-	FiltersIntention,
 	IFilters,
-	IFiltersAction,
 	TransactionsFiltersDialogComponent,
 	TransactionsType,
 } from '../../components/transactions-filters-dialog/transactions-filters-dialog.component';
@@ -103,7 +99,11 @@ export class TransactionsComponent implements OnInit {
 	transactions$: Observable<ITransaction[]>;
 
 	ngOnInit() {
-		const filters$: Observable<IFilters> = this._route.queryParams as any;
+		const filters$: Observable<IFilters> = this._route.queryParams.pipe(
+			distinctUntilChanged<IFilters>((prev, curr) =>
+				FILTERS_KEYS.every(watchedKey => prev[watchedKey] === curr[watchedKey])
+			)
+		);
 		const offset$ = this._offset$.pipe(
 			tap(() => (this._isDownloading = true)),
 			switchMapTo(filters$),
@@ -111,11 +111,6 @@ export class TransactionsComponent implements OnInit {
 			map(current => previous => ({ ...previous, ...current }))
 		);
 		const reset$ = filters$.pipe(
-			distinctUntilChanged((prev, curr) =>
-				FILTERS_KEYS.map(
-					watchedKey => prev[watchedKey] === curr[watchedKey]
-				).every(isTheSame => isTheSame)
-			),
 			tap(() => {
 				this._theEnd = false;
 				this._lastSeen = null;
@@ -150,21 +145,12 @@ export class TransactionsComponent implements OnInit {
 				// Save last received document for startAfter query.
 				tap(({ docs }) => (this._lastSeen = docs[docs.length - 1])),
 				// Convert snapshots into document data
-				map(({ docs }) => {
-					const queries = this._buildQueries(filters, LOCAL_QUERIES);
-					let transactions = docs.map(doc => ({
+				map(({ docs }) =>
+					docs.map(doc => ({
 						id: doc.id,
 						...doc.data(),
-					}));
-
-					if (queries.length) {
-						transactions = transactions.filter(transaction =>
-							queries.map(query => query(transaction)).every(isValid => isValid)
-						);
-					}
-
-					return transactions;
-				}),
+					}))
+				),
 				// Receiving no items, means no further calls should be made.
 				tap(r => (r.length > 0 ? null : (this._theEnd = true))),
 				// Transform data into object with id as a key and transaction as a value
@@ -193,7 +179,7 @@ export class TransactionsComponent implements OnInit {
 	setFilters(filters: IFilters) {
 		this._router.navigate([], {
 			relativeTo: this._route,
-			queryParams: Object.fromEntries(this._removeUnnecessaryFilters(filters)),
+			queryParams: filters,
 			replaceUrl: true,
 		});
 	}
@@ -205,35 +191,14 @@ export class TransactionsComponent implements OnInit {
 		});
 
 		dialogRef.afterClosed
-			.pipe(
-				first(),
-				filter(
-					(action: IFiltersAction) =>
-						action.intention !== FiltersIntention.NoChange
-				)
-			)
-			.subscribe((action: IFiltersAction) => this.setFilters(action.filters));
+			.pipe(first())
+			.subscribe((filters: IFilters) => this.setFilters(filters));
 	}
 
 	private _buildQueries(filters: IFilters, builders: Map<any, any>) {
-		return this._removeUnnecessaryFilters(filters)
+		return Object.entries(filters)
 			.filter(([key]) => builders.has(key))
 			.map(([key, value]) => builders.get(key)(value));
-	}
-
-	/** Removes filters that does not exist in the QUERIES_BUILDERS, or does not have a value. */
-	private _removeUnnecessaryFilters(filters: IFilters) {
-		return this._filtersToEntries(filters).filter(([key, value]) =>
-			this._isValidFilterValue(value)
-		);
-	}
-
-	private _filtersToEntries(filters: IFilters): [keyof IFilters, any][] {
-		return Object.entries(filters ?? {}) as any;
-	}
-
-	private _isValidFilterValue(value: any) {
-		return value !== null && value !== '' && value !== '#ignore#';
 	}
 
 	/** Indicates if a new batch is being downloaded. */

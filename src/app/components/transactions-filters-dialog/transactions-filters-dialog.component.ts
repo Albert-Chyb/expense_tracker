@@ -14,7 +14,6 @@ export enum TransactionsType {
 	Expenses = 'expenses',
 	Incomes = 'incomes',
 }
-
 export interface IFilters {
 	earliestDate: Date;
 	latestDate: Date;
@@ -23,25 +22,10 @@ export interface IFilters {
 	group: string;
 	type: TransactionsType;
 }
+export type TFiltersEntries = [keyof IFilters, any][];
 
 interface IDialogData {
 	filters: Partial<IFilters>;
-}
-
-export enum FiltersIntention {
-	/** Filters should be applied */
-	Apply = 'apply',
-
-	/** Filters should be removed */
-	Reset = 'reset',
-
-	/** No change in filters should be made. */
-	NoChange = 'no-change',
-}
-
-export interface IFiltersAction {
-	filters: IFilters | null;
-	intention: FiltersIntention;
 }
 
 @Component({
@@ -78,30 +62,25 @@ export class TransactionsFiltersDialogComponent implements OnInit {
 		this.filters.patchValue(this._dialogData.filters, { emitEvent: false });
 	}
 
-	apply() {
-		const action: IFiltersAction = {
-			filters: this.filters.value,
-			intention: FiltersIntention.Apply,
-		};
-
-		this._dialogRef.closeWith(action);
+	closeWithFilters() {
+		this._dialogRef.closeWith(
+			this._removeUnnecessaryFilters(this.filters.value)
+		);
 	}
 
-	reset() {
-		const action: IFiltersAction = {
-			filters: null,
-			intention: FiltersIntention.Reset,
-		};
+	private _removeUnnecessaryFilters(filters: IFilters): IFilters {
+		const entries = this._filtersToEntries(filters).filter(([key, value]) =>
+			this._isValidFilterValue(value)
+		);
 
-		this._dialogRef.closeWith(action);
+		return Object.fromEntries(entries) as any;
 	}
 
-	close() {
-		const action: IFiltersAction = {
-			filters: null,
-			intention: FiltersIntention.NoChange,
-		};
+	private _filtersToEntries(filters: IFilters): [keyof IFilters, any][] {
+		return Object.entries(filters ?? {}) as any;
+	}
 
-		this._dialogRef.closeWith(action);
+	private _isValidFilterValue(value: any) {
+		return value !== null && value !== '' && value !== '#ignore#';
 	}
 }

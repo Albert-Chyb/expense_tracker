@@ -1,12 +1,17 @@
 <form
 	class="filters"
 	[formGroup]="filters"
-	(reset)="reset()"
-	(ngSubmit)="apply()"
+	(reset)="closeWithFilters()"
+	(ngSubmit)="closeWithFilters()"
 >
 	<ng-container *ngIf="groups$ | async as groups; else progressSpinner">
 		<div class="filters__dialog-actions">
-			<button type="button" appButton btnType="icon" (click)="close()">
+			<button
+				type="button"
+				appButton
+				btnType="icon"
+				(click)="closeWithFilters()"
+			>
 				<i class="far fa-times-circle"></i>
 			</button>
 		</div>
