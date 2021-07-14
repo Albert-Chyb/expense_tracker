@@ -10,13 +10,14 @@ $filters-zippy-height: rem(45px);
 
 cdk-virtual-scroll-viewport {
 	height: calc(
-		100vh - #{$globalVerticalPadding} * 2 - #{$mainHeaderHeight} - #{$filters-zippy-height}
+		100vh - #{$globalVerticalPadding} * 2 - #{$mainHeaderHeight} - #{$filters-zippy-height} -
+			env(safe-area-inset-bottom)
 	);
 
 	@media (max-width: $mainNavVisibilityBreakpoint) {
 		height: calc(
 			100vh - #{$globalVerticalPadding} * 2 - #{$mainNavHeight} - #{$mainHeaderHeight} -
-				#{$filters-zippy-height}
+				#{$filters-zippy-height} - env(safe-area-inset-bottom)
 		);
 	}
 }
