@@ -13,7 +13,7 @@
 
 	<ul class="transactions">
 		<cdk-virtual-scroll-viewport
-			(scrolledIndexChange)="onScroll($event)"
+			(scrolledIndexChange)="onScroll()"
 			*ngIf="
 				transactions.length > 0 || isDownloading;
 				else transactionsNotFound
