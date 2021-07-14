@@ -15,7 +15,7 @@
 				<i class="far fa-times-circle"></i>
 			</button>
 		</div>
-		<form-field class="filters__date--start">
+		<form-field class="filters__date">
 			<input
 				[datepicker]="datepickerStart"
 				[max]="filters.get('latestDate').value"
@@ -38,7 +38,7 @@
 			<datepicker #datepickerStart></datepicker>
 		</form-field>
 
-		<form-field class="filters__date--end">
+		<form-field class="filters__date">
 			<input
 				[datepicker]="datepickerEnd"
 				[min]="filters.get('earliestDate').value"

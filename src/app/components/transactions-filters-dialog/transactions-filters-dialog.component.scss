@@ -2,10 +2,12 @@
 @import '../../sass/utils/variables';
 @import '../../sass/utils/mixins';
 
+$grid-gap: rem(10px);
+
 .filters {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	gap: rem(10px);
+	gap: $grid-gap;
 	padding: rem(3px);
 	background-color: var(--bg-color-1);
 	padding: rem(10px);
@@ -35,22 +37,20 @@
 
 	&__actions {
 		grid-column: span 2;
+		display: flex;
 	}
 
 	&__action {
 		width: 100%;
 
 		&:not(:last-child) {
-			margin-bottom: rem(10px);
+			margin-right: $grid-gap;
 		}
 	}
 
 	@media (max-width: 425px) {
-		grid-template-columns: 1fr;
-		margin-top: rem(10px);
-
-		&__actions {
-			grid-column: span 1;
+		&__date {
+			grid-column: span 2;
 		}
 	}
 }
