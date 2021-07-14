@@ -11,7 +11,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, fromEvent, merge, Observable, Subject } from 'rxjs';
 import {
 	debounceTime,
-	distinctUntilChanged,
 	first,
 	map,
 	mapTo,
