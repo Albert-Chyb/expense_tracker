@@ -92,7 +92,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 			tap(() => (this._isDownloading = true)),
 			switchMapTo(serverFilters$),
 			mergeMap((filters: IFilters) => this.getNextTransactions(filters)),
-			map(current => previous => ({ ...previous, ...current }))
+			map(current => (previous: any) => ({ ...previous, ...current }))
 		);
 		const reset$ = serverFilters$.pipe(
 			tap(() => {

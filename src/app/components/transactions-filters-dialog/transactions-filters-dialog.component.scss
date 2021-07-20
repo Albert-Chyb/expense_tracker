@@ -30,14 +30,14 @@ $grid-gap: rem(10px);
 	}
 
 	&__dialog-actions {
-		grid-column: span 2;
 		display: flex;
 		justify-content: flex-end;
+		grid-column: span 2;
 	}
 
 	&__actions {
-		grid-column: span 2;
 		display: flex;
+		grid-column: span 2;
 	}
 
 	&__action {
@@ -46,6 +46,12 @@ $grid-gap: rem(10px);
 		&:not(:last-child) {
 			margin-right: $grid-gap;
 		}
+	}
+
+	&__error {
+		font-size: rem(14px);
+		color: var(--color-danger);
+		grid-column: 1 / -1;
 	}
 
 	@media (max-width: 425px) {

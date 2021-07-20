@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DIALOG_DATA, DIALOG_REF } from 'src/app/common/models/dialog';
+import { lesserThanValidator } from 'src/app/common/validators/lesserThanValidator';
 import { DialogContainerComponent } from 'src/app/components/dialog-container/dialog-container.component';
 import { TransactionsGroupsService } from 'src/app/services/transactions-groups/transactions-groups.service';
 
@@ -25,7 +26,7 @@ export interface IFilters {
 export type TFiltersEntries = [keyof IFilters, any][];
 
 interface IDialogData {
-	filters: Partial<IFilters>;
+	filters: IFilters;
 }
 
 @Component({
@@ -43,17 +44,26 @@ export class TransactionsFiltersDialogComponent implements OnInit {
 	groups$ = this._groups.getAll();
 
 	filters = new FormGroup({
-		earliestDate: new FormControl(),
-		latestDate: new FormControl(),
-		lowestAmount: new FormControl(),
-		highestAmount: new FormControl(),
+		date: new FormGroup(
+			{
+				earliestDate: new FormControl(),
+				latestDate: new FormControl(),
+			},
+			lesserThanValidator('earliestDate', 'latestDate')
+		),
+		amount: new FormGroup(
+			{
+				lowestAmount: new FormControl(),
+				highestAmount: new FormControl(),
+			},
+			lesserThanValidator('lowestAmount', 'highestAmount')
+		),
 		group: new FormControl(),
-		description: new FormControl(),
 		type: new FormControl(TransactionsType.All),
 	});
 
 	get hasFilters() {
-		return Object.values(this.filters.value).some(
+		return Object.values(this.getFilters()).some(
 			filter => !!filter || filter === 0
 		);
 	}
@@ -62,10 +72,34 @@ export class TransactionsFiltersDialogComponent implements OnInit {
 		this.filters.patchValue(this._dialogData.filters, { emitEvent: false });
 	}
 
+	close() {
+		this._dialogRef.closeWith(
+			this._removeUnnecessaryFilters(this._dialogData.filters)
+		);
+	}
+
 	closeWithFilters() {
 		this._dialogRef.closeWith(
-			this._removeUnnecessaryFilters(this.filters.value)
+			this._removeUnnecessaryFilters(this.getFilters())
 		);
+	}
+
+	getFilters() {
+		const {
+			group,
+			type,
+			date: { earliestDate, latestDate },
+			amount: { lowestAmount, highestAmount },
+		} = this.filters.value;
+
+		return {
+			group,
+			type,
+			earliestDate,
+			latestDate,
+			lowestAmount,
+			highestAmount,
+		};
 	}
 
 	private _removeUnnecessaryFilters(filters: IFilters): IFilters {

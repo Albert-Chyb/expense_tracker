@@ -6,70 +6,88 @@
 >
 	<ng-container *ngIf="groups$ | async as groups; else progressSpinner">
 		<div class="filters__dialog-actions">
-			<button
-				type="button"
-				appButton
-				btnType="icon"
-				(click)="closeWithFilters()"
-			>
+			<button type="button" appButton btnType="icon" (click)="close()">
 				<i class="far fa-times-circle"></i>
 			</button>
 		</div>
-		<form-field class="filters__date">
-			<input
-				[datepicker]="datepickerStart"
-				[max]="filters.get('latestDate').value"
-				formFieldInput
-				type="text"
-				formControlName="earliestDate"
-			/>
-			<form-field-label>Data początkowa</form-field-label>
-			<form-field-prefix>
-				<button
-					appButton
-					btnType="icon"
-					[triggerDatepicker]="datepickerStart"
-					type="button"
-				>
-					<i class="fas fa-calendar-alt"></i>
-				</button>
-			</form-field-prefix>
 
-			<datepicker #datepickerStart></datepicker>
-		</form-field>
+		<ng-container formGroupName="date">
+			<form-field class="filters__date">
+				<input
+					[datepicker]="datepickerStart"
+					[max]="filters.get('date.latestDate').value"
+					formFieldInput
+					type="text"
+					formControlName="earliestDate"
+				/>
+				<form-field-label>Data początkowa</form-field-label>
+				<form-field-prefix>
+					<button
+						appButton
+						btnType="icon"
+						[triggerDatepicker]="datepickerStart"
+						type="button"
+					>
+						<i class="fas fa-calendar-alt"></i>
+					</button>
+				</form-field-prefix>
 
-		<form-field class="filters__date">
-			<input
-				[datepicker]="datepickerEnd"
-				[min]="filters.get('earliestDate').value"
-				formFieldInput
-				type="text"
-				formControlName="latestDate"
-			/>
-			<form-field-label>Data końcowa</form-field-label>
-			<form-field-prefix>
-				<button
-					appButton
-					btnType="icon"
-					[triggerDatepicker]="datepickerEnd"
-					type="button"
-				>
-					<i class="fas fa-calendar-alt"></i>
-				</button>
-			</form-field-prefix>
+				<datepicker #datepickerStart></datepicker>
+			</form-field>
 
-			<datepicker #datepickerEnd></datepicker>
-		</form-field>
+			<form-field class="filters__date">
+				<input
+					[datepicker]="datepickerEnd"
+					[min]="filters.get('date.earliestDate').value"
+					formFieldInput
+					type="text"
+					formControlName="latestDate"
+				/>
+				<form-field-label>Data końcowa</form-field-label>
+				<form-field-prefix>
+					<button
+						appButton
+						btnType="icon"
+						[triggerDatepicker]="datepickerEnd"
+						type="button"
+					>
+						<i class="fas fa-calendar-alt"></i>
+					</button>
+				</form-field-prefix>
 
-		<form-field>
-			<form-field-label>Wartość od</form-field-label>
-			<input formFieldInput type="number" formControlName="lowestAmount" />
-		</form-field>
+				<datepicker #datepickerEnd></datepicker>
+			</form-field>
 
-		<form-field>
-			<form-field-label>Wartość do</form-field-label>
-			<input formFieldInput type="number" formControlName="highestAmount" />
-		</form-field>
+			<p
+				class="filters__error"
+				*ngIf="filters.get('date').hasError('isTooLarge')"
+			>
+				Data w polu <b>Data początkowa</b>
+				<strong>nie może być późniejsza niż data w polu</strong>
+				<b>Data końcowa</b>.
+			</p>
+		</ng-container>
+
+		<ng-container formGroupName="amount">
+			<form-field>
+				<form-field-label>Wartość od</form-field-label>
+				<input formFieldInput type="number" formControlName="lowestAmount" />
+			</form-field>
+
+			<form-field>
+				<form-field-label>Wartość do</form-field-label>
+				<input formFieldInput type="number" formControlName="highestAmount" />
+			</form-field>
+
+			<p
+				class="filters__error"
+				*ngIf="filters.get('amount').hasError('isTooLarge')"
+			>
+				Liczba w polu <b>Wartość od </b>
+				<strong>nie może być większa</strong> od liczby w polu
+				<b>Wartość do</b>.
+			</p>
+		</ng-container>
 
 		<form-field>
 			<form-field-label> Grupa </form-field-label>
@@ -120,7 +138,7 @@
 				class="filters__action"
 				appButton
 				btnColor="primary"
-				[disabled]="!hasFilters && filters.pristine"
+				[disabled]="filters.invalid"
 			>
 				Filtruj
 			</button>
@@ -135,6 +153,7 @@
 		</div>
 	</ng-container>
 </form>
+
 <ng-template #progressSpinner>
 	<progress-spinner></progress-spinner>
 </ng-template>
