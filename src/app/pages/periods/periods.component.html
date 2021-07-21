@@ -64,6 +64,18 @@
 								</summary-card>
 							</li>
 						</ul>
+						<div class="period__see-transactions">
+							<a
+								appButton
+								btnType="basic"
+								routerLink="/transactions"
+								[queryParams]="{
+									earliestDate: period.date.start.toDate(),
+									latestDate: period.date.end.toDate()
+								}"
+								>Zobacz transakcje w tym okresie</a
+							>
+						</div>
 					</zippy-content>
 				</zippy>
 			</section>

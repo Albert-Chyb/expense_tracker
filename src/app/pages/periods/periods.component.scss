@@ -41,6 +41,11 @@
 		padding: 0px rem(20px);
 	}
 
+	&__see-transactions {
+		padding-top: rem(20px);
+		text-align: center;
+	}
+
 	@include respondTo('mobile-l', 'max') {
 		&__details {
 			grid-template-columns: 1fr;
