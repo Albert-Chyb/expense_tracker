@@ -71,6 +71,10 @@
 	& i[class^='fa'] {
 		pointer-events: none;
 	}
+
+	&:is(a) {
+		display: inline-block;
+	}
 }
 
 // A button that is completely empty with no special effects.
