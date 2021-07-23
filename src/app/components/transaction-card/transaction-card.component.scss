@@ -18,14 +18,6 @@
 
 	@include elevation(2);
 
-	&:hover {
-		@include elevation(4);
-	}
-
-	&:active {
-		@include elevation(1);
-	}
-
 	padding: rem(15px);
 
 	&__icon {
