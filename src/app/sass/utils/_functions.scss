@@ -1,6 +1,8 @@
+@use 'sass:math';
+
 @function strip-unit($number) {
 	@if type-of($number) == 'number' and not unitless($number) {
-		@return $number / ($number * 0 + 1);
+		@return math.div($number, $number * 0 + 1);
 	}
 
 	@return $number;
@@ -9,7 +11,7 @@
 @function rem($value, $rootFontSize: 16) {
 	$value: strip-unit($value);
 
-	@return #{$value / $rootFontSize}rem;
+	@return math.div($value, $rootFontSize) * 1rem;
 }
 
 @function map-deep-get($map, $keys...) {
