@@ -8,7 +8,8 @@ export type ButtonType =
 	| 'filled'
 	| 'fab'
 	| 'icon'
-	| 'none';
+	| 'none'
+	| 'google';
 export type ButtonColor =
 	| 'primary'
 	| 'secondary'

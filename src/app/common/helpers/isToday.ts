@@ -8,7 +8,7 @@
  */
 
 export default function isToday(
-	timestamp: number,
+	timestamp: number | string,
 	todayTimestamp?: number
 ): boolean {
 	const today = todayTimestamp ? new Date(todayTimestamp) : new Date();

@@ -2,7 +2,7 @@
 	<input
 		[(ngModel)]="isChecked"
 		[disabled]="isDisabled"
-		(change)="check($event.target.checked)"
+		(change)="onInputChange($event)"
 		type="checkbox"
 		[id]="id"
 		class="checkbox__vanilla-checkbox"

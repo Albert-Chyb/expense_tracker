@@ -105,7 +105,7 @@
 <ng-template #loadingPlaceholder>
 	<div class="summary-cards">
 		<summary-card
-			displayPlaceholder="true"
+			[displayPlaceholder]="true"
 			theme="primary"
 			type="big"
 			class="summary-cards__balance"
@@ -113,7 +113,7 @@
 		</summary-card>
 
 		<summary-card
-			displayPlaceholder="true"
+			[displayPlaceholder]="true"
 			theme="danger"
 			type="small"
 			class="summary-cards__outcomes"
@@ -124,7 +124,7 @@
 		</summary-card>
 
 		<summary-card
-			displayPlaceholder="true"
+			[displayPlaceholder]="true"
 			theme="success"
 			type="small"
 			class="summary-cards__incomes"
@@ -135,7 +135,7 @@
 		</summary-card>
 
 		<summary-card
-			displayPlaceholder="true"
+			[displayPlaceholder]="true"
 			theme="secondary"
 			type="small"
 			class="summary-cards__savings"

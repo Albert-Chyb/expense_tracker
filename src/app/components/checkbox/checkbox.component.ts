@@ -42,4 +42,9 @@ export class CheckboxComponent implements ControlValueAccessor {
 		this.onChange(isChecked);
 		this.onTouched();
 	}
+
+	onInputChange($event: Event) {
+		const el = $event.target as HTMLInputElement;
+		this.check(el.checked);
+	}
 }

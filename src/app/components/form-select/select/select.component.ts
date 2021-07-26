@@ -92,7 +92,7 @@ export class SelectComponent
 	private readonly _optionsSubscriptions = new Subscription();
 	private _isOpened = false;
 	private _currentlyFocusedOption: SelectOptionComponent;
-	private _onChange: (value: string) => void;
+	private _onChange: (value: any) => void;
 	private _onTouched: () => void;
 	private _isDisabled: boolean = false;
 	private _initialValue: string = '';

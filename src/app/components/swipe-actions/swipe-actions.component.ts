@@ -59,7 +59,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 		this._maxDistance = width * this.threshold;
 	}
 
-	onPanMove($event: HammerInput) {
+	onPanMove($event: HammerInput | any) {
 		if ($event.isFinal) {
 			this._ghostClick = true;
 		}
@@ -76,7 +76,7 @@ export class SwipeActionsComponent implements AfterContentInit {
 		);
 	}
 
-	onPanEnd($event: HammerInput) {
+	onPanEnd($event: HammerInput | any) {
 		let deltaX = $event.deltaX;
 		let distance = this._distance;
 		let newDistance = distance + deltaX;

@@ -36,7 +36,7 @@ export class SelectOptionComponent {
 	id: string = `select-option-${window['uniqueNumber']++}`;
 
 	/** Value of the option */
-	@Input('value') value: string = '';
+	@Input('value') value: string | number = '';
 
 	/** Fired when clicked on the option */
 	@Output('onChoose') onChoose = new EventEmitter<SelectOptionComponent>();
